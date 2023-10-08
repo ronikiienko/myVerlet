@@ -41,7 +41,7 @@ private:
             for (int j{i + 1}; j < objectsCount; j++) {
                 VerletObject &obj2 = objects[j];
                 const Vector2 vectorBetween = obj1.posCurr - obj2.posCurr;
-                const float dist2 = vectorBetween.x * vectorBetween.x + vectorBetween.y * vectorBetween.y;
+                const float dist2 = vectorBetween.magnitude2();
                 const float min_dist = obj1.radius + obj2.radius;
                 // Check overlapping
                 if (dist2 < min_dist * min_dist) {
