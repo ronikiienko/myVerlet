@@ -55,8 +55,6 @@ void testCustomVectorSubtractionSpeed() {
 
 
 int main() {
-    std::cout << "Hello, World!" << '\n';
-
     testVectorSubtractionSpeed();
     testCustomVectorSubtractionSpeed();
 
@@ -77,9 +75,6 @@ int main() {
                 gen.getInRange(2, 8)
         );
     }
-    std::vector<VerletObject> &objects = world.getObjects();
-    VerletObject &obj1 = objects[0];
-    obj1.setPull(PullConfig{-100, 1000, true});
 
     sf::Clock clock;
 
