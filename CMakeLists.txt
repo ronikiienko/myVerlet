@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 3.26)
 
 set(PROJECT_NAME myVerlet)
-set(SOURCES main.cpp)
+set(SOURCES main.cpp
+        modules/Vector.h)
 
 project(${PROJECT_NAME})
 
