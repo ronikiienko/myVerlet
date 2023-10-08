@@ -1,7 +1,12 @@
 #include <iostream>
-#include <SFML/Graphics.hpp>
+#include "SFML/Graphics.hpp"
 #include <chrono>
 #include "modules/Vector.h"
+#include "consts.h"
+#include "modules/World.h"
+#include "modules/Graphics.h"
+#include "modules/Physics.h"
+#include "modules/Rand.h"
 
 int iterations = 100000000;
 
@@ -28,9 +33,10 @@ void testVectorSubtractionSpeed() {
 
 
 void testCustomVectorSubtractionSpeed() {
-    Vector2 a(1.0f, 2.0f), b(3.0f, 4.0f);
+    Vector2 a = Vector2::fromCartesian(1.0f, 2.0f);
+    Vector2 b = Vector2::fromCartesian(3.0f, 4.0f);
 
-    Vector2 result(0.0f, 0.0f);
+    Vector2 result = Vector2::fromCartesian(0.0f, 0.0f);
 
     auto start = std::chrono::high_resolution_clock::now();
 
@@ -54,6 +60,33 @@ int main() {
 
     testVectorSubtractionSpeed();
     testCustomVectorSubtractionSpeed();
+
+    sf::ContextSettings settings;
+    settings.antialiasingLevel = 1;
+    sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "Verlet", sf::Style::Default, settings);
+    window.setFramerateLimit(60);
+
+    World world{};
+    Graphics graphics{world, window};
+    Physics physics{world};
+
+    RNGf gen = RNGf(1000);
+
+    for (int i = 0; i < 1000; i++) {
+        world.addObject(Vector2::fromCartesian(gen.getInRange(0, windowWidth), gen.getInRange(0, windowHeight)),
+                        gen.getInRange(3, 5));
+    }
+
+    while (window.isOpen()) {
+        sf::Event event{};
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
+                window.close();
+            }
+        }
+        physics.update();
+        graphics.update();
+    }
 
     return 0;
 }

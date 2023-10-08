@@ -1,8 +1,16 @@
 cmake_minimum_required(VERSION 3.26)
 
 set(PROJECT_NAME myVerlet)
-set(SOURCES main.cpp
-        modules/Vector.h)
+set(SOURCES src/main.cpp
+        src/modules/Vector.h
+        src/modules/Graphics.h
+        src/modules/World.h
+        src/modules/VerletObject.h
+        src/consts.h
+        src/modules/Physics.h
+        src/modules/Rand.h
+        src/modules/Rectangle.h
+        src/modules/Angle.h)
 
 project(${PROJECT_NAME})
 
