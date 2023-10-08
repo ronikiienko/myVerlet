@@ -7,6 +7,27 @@ class Physics {
 private:
     World &world;
 
+    void solvePulls() {
+        std::vector<VerletObject> &objects = world.getObjects();
+        for (VerletObject &object: objects) {
+            if (object.pull.on) {
+                for (VerletObject &otherObject: objects) {
+                    if (&object == &otherObject) continue;  // Skip self
+
+                    Vector2 diff = otherObject.posCurr - object.posCurr;
+                    float dist = diff.magnitude();
+
+                    if (dist < object.pull.maxDistance && dist != 0) {
+                        float scale = 1.0f - (dist / object.pull.maxDistance);
+                        Vector2 pullDir = diff.normalize();
+                        Vector2 pullForce = pullDir * object.pull.force * scale;
+                        otherObject.accelerate(pullForce);
+                    }
+                }
+            }
+        }
+    }
+
     void applyConstraints() {
         const Rectangle bounds = world.getBounds();
         std::vector<VerletObject> &objects = world.getObjects();
@@ -80,6 +101,7 @@ public:
         const float subStepDt = physicsInterval / physicsSubSteps;
         for (int i = 0; i < physicsSubSteps; i++) {
             applyGravity();
+            solvePulls();
             solveCollisions();
             applyConstraints();
             updatePositions(subStepDt);

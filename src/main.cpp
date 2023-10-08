@@ -69,14 +69,17 @@ int main() {
     Graphics graphics{world, window};
     Physics physics{world};
 
-    RNGf gen = RNGf(1002);
+    RNGf gen = RNGf();
 
     for (int i = 0; i < 2500; i++) {
         world.addObject(
                 Vector2::fromCartesian(gen.getInRange(0, windowWidth), gen.getInRange(0, windowHeight)),
-                gen.getInRange(2, 14)
+                gen.getInRange(2, 8)
         );
     }
+    std::vector<VerletObject> &objects = world.getObjects();
+    VerletObject &obj1 = objects[0];
+    obj1.setPull(PullConfig{-100, 1000, true});
 
     sf::Clock clock;
 
