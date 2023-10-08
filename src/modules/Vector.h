@@ -59,4 +59,18 @@ public:
     void log() const {
         std::cout << '\n' << "X: " << x << " " << "Y: " << y << '\n';
     }
+
+    // Add the += operator
+    constexpr Vector2 &operator+=(const Vector2 &other) {
+        x += other.x;
+        y += other.y;
+        return *this;
+    }
+
+    // Add the -= operator
+    constexpr Vector2 &operator-=(const Vector2 &other) {
+        x -= other.x;
+        y -= other.y;
+        return *this;
+    }
 };

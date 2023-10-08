@@ -51,8 +51,8 @@ private:
                     const float massRatio2 = obj2.radius / (obj1.radius + obj2.radius);
                     const float delta = 0.5f * collisionsDamping * (dist - min_dist);
                     // Update positions
-                    obj1.posCurr = obj1.posCurr - normal * (massRatio2 * delta);
-                    obj2.posCurr = obj2.posCurr + normal * (massRatio1 * delta);
+                    obj1.posCurr -= normal * (massRatio2 * delta);
+                    obj2.posCurr += normal * (massRatio1 * delta);
                 }
             }
         }

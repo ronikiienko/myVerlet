@@ -71,10 +71,10 @@ int main() {
 
     RNGf gen = RNGf(1000);
 
-    for (int i = 0; i < 5000; i++) {
+    for (int i = 0; i < 3000; i++) {
         world.addObject(
                 Vector2::fromCartesian(gen.getInRange(0, windowWidth), gen.getInRange(0, windowHeight)),
-                gen.getInRange(3, 5)
+                gen.getInRange(2, 8)
         );
     }
 
