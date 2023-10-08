@@ -73,4 +73,18 @@ public:
         y -= other.y;
         return *this;
     }
+
+    // Add the -= operator
+    constexpr Vector2 &operator/=(const float scalar) {
+        x /= scalar;
+        y /= scalar;
+        return *this;
+    }
+
+    // Add the -= operator
+    constexpr Vector2 &operator*=(const float scalar) {
+        x *= scalar;
+        y *= scalar;
+        return *this;
+    }
 };

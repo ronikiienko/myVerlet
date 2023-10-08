@@ -58,6 +58,7 @@ private:
         }
     }
 
+
     void applyGravity() {
         std::vector<VerletObject> &objects = world.getObjects();
         for (VerletObject &object: objects) {
