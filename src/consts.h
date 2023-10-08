@@ -2,7 +2,7 @@
 
 #include "modules/Vector.h"
 
-constexpr Vector2 gravity = Vector2::fromCartesian(0, 50);
+constexpr Vector2 gravity = Vector2::fromCartesian(0, 1000);
 
 const int windowWidth = 1000;
 const int windowHeight = 1000;

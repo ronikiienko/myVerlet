@@ -69,7 +69,7 @@ int main() {
 
     RNGf gen = RNGf();
 
-    for (int i = 0; i < 2500; i++) {
+    for (int i = 0; i < 4000; i++) {
         world.addObject(
                 Vector2::fromCartesian(gen.getInRange(0, windowWidth), gen.getInRange(0, windowHeight)),
                 gen.getInRange(2, 8)
