@@ -2,11 +2,14 @@
 
 #include <vector>
 #include "VerletObject.h"
+#include "Rectangle.h"
 
 class World {
 private:
     std::vector<VerletObject> objects;
+    Rectangle bounds;
 public:
+    explicit World(Rectangle bounds) : bounds(bounds) {};
     VerletObject &addObject(Vector2 position, float radius) {
         return objects.emplace_back(position, radius);
     }
@@ -17,5 +20,9 @@ public:
 
     [[nodiscard]] int getObjectsCount() {
         return static_cast<int>(objects.size());
+    }
+
+    [[nodiscard]] Rectangle &getBounds() {
+        return bounds;
     }
 };

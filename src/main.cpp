@@ -54,7 +54,6 @@ void testCustomVectorSubtractionSpeed() {
 }
 
 
-
 int main() {
     std::cout << "Hello, World!" << '\n';
 
@@ -66,16 +65,20 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "Verlet", sf::Style::Default, settings);
     window.setFramerateLimit(60);
 
-    World world{};
+    World world{Rectangle::fromSize(0, 0, windowWidth, windowHeight)};
     Graphics graphics{world, window};
     Physics physics{world};
 
     RNGf gen = RNGf(1000);
 
-    for (int i = 0; i < 1000; i++) {
-        world.addObject(Vector2::fromCartesian(gen.getInRange(0, windowWidth), gen.getInRange(0, windowHeight)),
-                        gen.getInRange(3, 5));
+    for (int i = 0; i < 5000; i++) {
+        world.addObject(
+                Vector2::fromCartesian(gen.getInRange(0, windowWidth), gen.getInRange(0, windowHeight)),
+                gen.getInRange(3, 5)
+        );
     }
+
+    sf::Clock clock;
 
     while (window.isOpen()) {
         sf::Event event{};
@@ -84,9 +87,14 @@ int main() {
                 window.close();
             }
         }
+
+        const double elapsed = clock.restart().asMilliseconds();
+        std::cout << "FPS: " << 1000 / elapsed << '\n';
+
         physics.update();
         graphics.update();
     }
+
 
     return 0;
 }
