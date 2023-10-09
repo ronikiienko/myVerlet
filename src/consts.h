@@ -4,6 +4,8 @@
 
 constexpr Vector2 gravity = Vector2::fromCartesian(0, 1);
 
+const Vector2 windowDims = Vector2::fromCartesian(1000, 1000);
+const Vector2 worldDims = Vector2::fromCartesian(500, 500);
 const int windowWidth = 1000;
 const int windowHeight = 1000;
 

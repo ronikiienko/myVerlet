@@ -2,7 +2,7 @@
 
 #include <vector>
 #include "VerletObject.h"
-#include "Rectangle.h"
+#include "../modules/Rectangle.h"
 
 class World {
 private:

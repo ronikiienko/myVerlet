@@ -3,15 +3,17 @@ cmake_minimum_required(VERSION 3.26)
 set(PROJECT_NAME myVerlet)
 set(SOURCES src/main.cpp
         src/modules/Vector.h
-        src/modules/Graphics.h
-        src/modules/World.h
-        src/modules/VerletObject.h
+        src/Graphics/Graphics.h
+        src/World/World.h
+        src/World/VerletObject.h
         src/consts.h
-        src/modules/Physics.h
+        src/Physics/Physics.h
         src/modules/Rand.h
         src/modules/Rectangle.h
         src/modules/Angle.h
-        src/modules/ThreadsTest.h)
+        src/modules/ThreadsTest.h
+        src/modules/Grid.h
+        src/Physics/CollisionGrid.h)
 
 project(${PROJECT_NAME})
 

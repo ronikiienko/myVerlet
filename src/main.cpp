@@ -3,9 +3,9 @@
 #include <chrono>
 #include "modules/Vector.h"
 #include "consts.h"
-#include "modules/World.h"
-#include "modules/Graphics.h"
-#include "modules/Physics.h"
+#include "World/World.h"
+#include "Graphics/Graphics.h"
+#include "Physics/Physics.h"
 #include "modules/Rand.h"
 #include "modules/ThreadsTest.h"
 
@@ -31,8 +31,6 @@ void testVectorSubtractionSpeed() {
     std::cout << "Final result: (" << result.x << ", " << result.y << ")"
               << std::endl;  // Output result to prevent optimization
 }
-
-
 void testCustomVectorSubtractionSpeed() {
     Vector2 a = Vector2::fromCartesian(1.0f, 2.0f);
     Vector2 b = Vector2::fromCartesian(3.0f, 4.0f);
@@ -64,7 +62,7 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "Verlet", sf::Style::Default, settings);
 //    window.setFramerateLimit(60);
 
-    World world{Rectangle::fromSize(0, 0, windowWidth, windowHeight)};
+    World world{Rectangle::fromSize(0, 0, worldDims.x, worldDims.y)};
     Graphics graphics{world, window};
     Physics physics{world};
 

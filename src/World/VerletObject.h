@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Vector.h"
+#include "../modules/Vector.h"
 #include "SFML/Graphics/Color.hpp"
 
 struct PullConfig {
