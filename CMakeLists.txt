@@ -10,7 +10,8 @@ set(SOURCES src/main.cpp
         src/modules/Physics.h
         src/modules/Rand.h
         src/modules/Rectangle.h
-        src/modules/Angle.h)
+        src/modules/Angle.h
+        src/modules/ThreadsTest.h)
 
 project(${PROJECT_NAME})
 

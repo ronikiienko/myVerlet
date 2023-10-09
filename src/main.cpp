@@ -7,6 +7,7 @@
 #include "modules/Graphics.h"
 #include "modules/Physics.h"
 #include "modules/Rand.h"
+#include "modules/ThreadsTest.h"
 
 int iterations = 100000000;
 
@@ -61,7 +62,7 @@ int main() {
     sf::ContextSettings settings;
     settings.antialiasingLevel = 1;
     sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "Verlet", sf::Style::Default, settings);
-    window.setFramerateLimit(60);
+//    window.setFramerateLimit(60);
 
     World world{Rectangle::fromSize(0, 0, windowWidth, windowHeight)};
     Graphics graphics{world, window};
@@ -69,7 +70,7 @@ int main() {
 
     RNGf gen = RNGf();
 
-    for (int i = 0; i < 4000; i++) {
+    for (int i = 0; i < 5000; i++) {
         world.addObject(
                 Vector2::fromCartesian(gen.getInRange(0, windowWidth), gen.getInRange(0, windowHeight)),
                 gen.getInRange(2, 8)
