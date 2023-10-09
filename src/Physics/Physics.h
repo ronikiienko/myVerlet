@@ -2,10 +2,12 @@
 
 #include "../World/World.h"
 #include "SFML/Graphics/RenderWindow.hpp"
+#include "CollisionGrid.h"
 
 class Physics {
 private:
     World &world;
+    CollisionGrid grid;
 
     void applyConstraints() {
         const Rectangle bounds = world.getBounds();
@@ -73,12 +75,27 @@ private:
         }
     }
 
+    void rebuildGrid() {
+        grid.clear();
+
+        int objectsCount = world.getObjectsCount();
+        std::vector<VerletObject> &objects = world.getObjects();
+
+        for (int i = 0; i < objectsCount; i++) {
+            VerletObject object = objects[i];
+            grid.addObject(static_cast<int>(object.posCurr.x), static_cast<int>(object.posCurr.y), i);
+        }
+    }
+
 public:
-    explicit Physics(World &world) : world(world) {};
+    explicit Physics(World &world)
+    : world(world)
+    , grid(static_cast<int>(world.getBounds().getWidth()), static_cast<int>(world.getBounds().getHeight())) {};
 
     void update() {
         const float subStepDt = physicsInterval / physicsSubSteps;
         for (int i = 0; i < physicsSubSteps; i++) {
+            rebuildGrid();
             applyGravity();
             solveCollisions();
             applyConstraints();
