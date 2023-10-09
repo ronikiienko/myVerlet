@@ -59,8 +59,6 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "Verlet", sf::Style::Default, settings);
     window.setFramerateLimit(60);
 
-    CollisionGrid grid{10, 10};
-    grid.addObject(0, 0, 2);
 
     World world{Rectangle::fromSize(0, 0, worldDims.x, worldDims.y)};
     Graphics graphics{world, window};
@@ -68,9 +66,9 @@ int main() {
 
     RNGf gen = RNGf();
 
-    for (int i = 0; i < 500; i++) {
+    for (int i = 0; i < 2500; i++) {
         world.addObject(
-                Vector2::fromCartesian(gen.getInRange(0, windowWidth), gen.getInRange(0, windowHeight)),
+                Vector2::fromCartesian(gen.getInRange(0, worldDims.x), gen.getInRange(0, worldDims.y)),
                 gen.getInRange(2, 8)
         );
     }
