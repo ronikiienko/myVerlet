@@ -24,8 +24,9 @@ struct CollisionCell {
 struct CollisionGrid : public Grid<CollisionCell> {
     CollisionGrid(int width, int height) : Grid<CollisionCell>(width, height) {};
 
-    bool addObject(int cellX, int cellY, int objectId) {
+    void addObject(int cellX, int cellY, int objectId) {
         const int cellIndex = cellX * height + cellY;
+        std::cout << cellIndex;
         cells[cellIndex].addObject(objectId);
     }
 

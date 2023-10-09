@@ -54,13 +54,13 @@ void testCustomVectorSubtractionSpeed() {
 
 
 int main() {
-    testVectorSubtractionSpeed();
-    testCustomVectorSubtractionSpeed();
-
     sf::ContextSettings settings;
     settings.antialiasingLevel = 1;
     sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "Verlet", sf::Style::Default, settings);
-//    window.setFramerateLimit(60);
+    window.setFramerateLimit(60);
+
+    CollisionGrid grid{10, 10};
+    grid.addObject(0, 0, 2);
 
     World world{Rectangle::fromSize(0, 0, worldDims.x, worldDims.y)};
     Graphics graphics{world, window};
