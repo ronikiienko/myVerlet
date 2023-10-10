@@ -16,6 +16,11 @@ public:
         return {x1, y1, x1 + width, y1 + height};
     }
 
+    template<typename U>
+    static Rectangle fromOther(Rectangle<U>& other) {
+        return {static_cast<T>(other.getX1()), static_cast<T>(other.getY1()), static_cast<T>(other.getX2()), static_cast<T>(other.getY2())};
+    }
+
     [[nodiscard]] T getX1() const {
         return x1;
     }
