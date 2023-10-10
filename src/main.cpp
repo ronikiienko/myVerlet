@@ -56,11 +56,10 @@ void testCustomVectorSubtractionSpeed() {
 int main() {
     sf::ContextSettings settings;
     settings.antialiasingLevel = 1;
-    sf::RenderWindow window(sf::VideoMode(windowWidth, windowHeight), "Verlet", sf::Style::Default, settings);
+    sf::RenderWindow window(sf::VideoMode(windowDims.x, windowDims.y), "Verlet", sf::Style::Default, settings);
     window.setFramerateLimit(60);
 
-
-    World world{Rectangle::fromSize(0, 0, worldDims.x, worldDims.y)};
+    World world{RectangleF::fromSize(0, 0, worldDims.x, worldDims.y)};
     Graphics graphics{world, window};
     Physics physics{world};
 
@@ -69,7 +68,7 @@ int main() {
     for (int i = 0; i < 2500; i++) {
         world.addObject(
                 Vector2::fromCartesian(gen.getInRange(0, worldDims.x), gen.getInRange(0, worldDims.y)),
-                gen.getInRange(2, 8)
+                gen.getInRange(2, 5)
         );
     }
 

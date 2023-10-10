@@ -2,12 +2,10 @@
 
 #include "../World/World.h"
 #include "SFML/Graphics/RenderWindow.hpp"
-#include "CollisionGrid.h"
 
 class Physics {
 private:
     World &world;
-    CollisionGrid grid;
 
     void applyConstraints() {
         const Rectangle bounds = world.getBounds();
@@ -33,15 +31,14 @@ private:
         }
     }
 
-    void solveCollisions() {
+
+    void solveCollisionsNoGrid() {
         std::vector<VerletObject> &objects = world.getObjects();
-        const int objectsCount = world.getObjectsCount();
-        // Iterate on all objects
-        for (int i{0}; i < objectsCount; i++) {
-            VerletObject &obj1 = objects[i];
-            // Iterate on object involved in new collision pairs
-            for (int j{i + 1}; j < objectsCount; j++) {
-                VerletObject &obj2 = objects[j];
+        int objectsCount = world.getObjectsCount();
+        for (int i = 0; i < objectsCount; i++) {
+            VerletObject& obj1 = objects[i];
+            for (int j = i + 1; j < objectsCount; j++) {
+                VerletObject& obj2 = objects[j];
                 const Vector2 vectorBetween = obj1.posCurr - obj2.posCurr;
                 const float dist2 = vectorBetween.magnitude2();
                 const float min_dist = obj1.radius + obj2.radius;
@@ -49,17 +46,14 @@ private:
                 if (dist2 < min_dist * min_dist) {
                     const float dist = sqrt(dist2);
                     const Vector2 normal = vectorBetween / dist;
-                    const float massRatio1 = obj1.radius / (obj1.radius + obj2.radius);
-                    const float massRatio2 = obj2.radius / (obj1.radius + obj2.radius);
                     const float delta = 0.5f * collisionsDamping * (dist - min_dist);
                     // Update positions
-                    obj1.posCurr -= normal * (massRatio2 * delta);
-                    obj2.posCurr += normal * (massRatio1 * delta);
+                    obj1.posCurr -= normal * delta;
+                    obj2.posCurr += normal * delta;
                 }
             }
         }
     }
-
 
     void applyGravity() {
         std::vector<VerletObject> &objects = world.getObjects();
@@ -75,30 +69,16 @@ private:
         }
     }
 
-    void rebuildGrid() {
-        grid.clear();
-
-        int objectsCount = world.getObjectsCount();
-        std::vector<VerletObject> &objects = world.getObjects();
-
-        for (int i = 0; i < objectsCount; i++) {
-            VerletObject object = objects[i];
-            grid.addObject(static_cast<int>(object.posCurr.x), static_cast<int>(object.posCurr.y), i);
-        }
-    }
-
 public:
     explicit Physics(World &world)
-    : world(world)
-    , grid(static_cast<int>(world.getBounds().getWidth()), static_cast<int>(world.getBounds().getHeight())) {};
+            : world(world) {};
 
     void update() {
         const float subStepDt = physicsInterval / physicsSubSteps;
         for (int i = 0; i < physicsSubSteps; i++) {
-            rebuildGrid();
             applyGravity();
-            solveCollisions();
             applyConstraints();
+            solveCollisionsNoGrid();
             updatePositions(subStepDt);
         }
     }

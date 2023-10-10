@@ -1,41 +1,45 @@
 #pragma once
 
+template <typename T>
 class Rectangle {
 private:
-    float x1, x2, y1, y2;
+    T x1, x2, y1, y2;
 
-    Rectangle(float x1, float y1, float x2, float y2) : x1(x1), x2(x2), y1(y1), y2(y2) {};
+    Rectangle(T x1, T y1, T x2, T y2) : x1(x1), x2(x2), y1(y1), y2(y2) {};
 public:
 
-    static Rectangle fromCoords(float x1, float y1, float x2, float y2) {
+    static Rectangle fromCoords(T x1, T y1, T x2, T y2) {
         return {x1, y1, x2, y2};
     }
 
-    static Rectangle fromSize(float x1, float y1, float width, float height) {
+    static Rectangle fromSize(T x1, T y1, T width, T height) {
         return {x1, y1, x1 + width, y1 + height};
     }
 
-    [[nodiscard]] float getX1() const {
+    [[nodiscard]] T getX1() const {
         return x1;
     }
 
-    [[nodiscard]] float getX2() const {
+    [[nodiscard]] T getX2() const {
         return x2;
     }
 
-    [[nodiscard]] float getY1() const {
+    [[nodiscard]] T getY1() const {
         return y1;
     }
 
-    [[nodiscard]] float getY2() const {
+    [[nodiscard]] T getY2() const {
         return y2;
     }
 
-    [[nodiscard]] float getWidth() const {
+    [[nodiscard]] T getWidth() const {
         return x2 - x1;
     }
 
-    [[nodiscard]] float getHeight() const {
+    [[nodiscard]] T getHeight() const {
         return y2 - y1;
     }
 };
+
+using RectangleF = Rectangle<float>;
+using RectangleI = Rectangle<int>;
