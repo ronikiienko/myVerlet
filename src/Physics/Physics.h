@@ -1,5 +1,6 @@
 #pragma once
 
+#include <thread>
 #include "../World/World.h"
 #include "SFML/Graphics/RenderWindow.hpp"
 #include "../modules/Grid.h"
@@ -33,7 +34,7 @@ private:
         }
     }
 
-    void solveContact(VerletObject& obj1, VerletObject& obj2) {
+    void solveContact(VerletObject &obj1, VerletObject &obj2) {
         const Vector2 vectorBetween = obj1.posCurr - obj2.posCurr;
         const float dist2 = vectorBetween.magnitude2();
         const float min_dist = obj1.radius + obj2.radius;
@@ -48,9 +49,9 @@ private:
         }
     }
 
-    void solveCollisionsTwoCells(const Cell<int>& cell1, const Cell<int>& cell2, std::vector<VerletObject> &objects) {
-        for (int index1 : cell1.ids) {
-            for (int index2 : cell2.ids) {
+    void solveCollisionsTwoCells(const Cell<int> &cell1, const Cell<int> &cell2, std::vector<VerletObject> &objects) {
+        for (int index1: cell1.ids) {
+            for (int index2: cell2.ids) {
                 if (index1 == index2) continue;
 
                 solveContact(objects[index1], objects[index2]);
@@ -58,10 +59,10 @@ private:
         }
     }
 
-    void solveCollisionsGrid() {
+    void solveCollisionsSubgrid(int startX, int endX, int startY, int endY) {
         std::vector<VerletObject> &objects = world.getObjects();
-        for (int i = 0; i < grid.width; i++) {
-            for (int j = 0; j < grid.height; j++) {
+        for (int i = startX; i < endX; i++) {
+            for (int j = startY; j < endY; j++) {
                 const Cell<int> cell1 = grid.get(i, j);
                 solveCollisionsTwoCells(cell1, cell1, objects);
                 if (i + 1 < grid.width && j - 1 >= 0) {
@@ -80,13 +81,17 @@ private:
         }
     }
 
+    void solveCollisionsGrid() {
+        solveCollisionsSubgrid(0, grid.width, 0, grid.height);
+    }
+
     void solveCollisionsNoGrid() {
         std::vector<VerletObject> &objects = world.getObjects();
         int objectsCount = world.getObjectsCount();
         for (int i = 0; i < objectsCount; i++) {
-            VerletObject& obj1 = objects[i];
+            VerletObject &obj1 = objects[i];
             for (int j = i + 1; j < objectsCount; j++) {
-                VerletObject& obj2 = objects[j];
+                VerletObject &obj2 = objects[j];
                 solveContact(obj1, obj2);
             }
         }
@@ -114,10 +119,10 @@ private:
             grid.insert(i, objects[i].posCurr.x, objects[i].posCurr.y);
         }
     }
+
 public:
     explicit Physics(World &world)
-            : world(world)
-            , grid(125, 125, world.getBoundsI()) {}
+            : world(world), grid(120, 120, world.getBoundsI()) {}
 
     void update() {
         const float subStepDt = physicsInterval / physicsSubSteps;
