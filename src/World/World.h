@@ -7,9 +7,10 @@
 class World {
 private:
     std::vector<VerletObject> objects;
-    RectangleF bounds;
+    RectangleF boundsF;
+    RectangleI boundsI;
 public:
-    explicit World(RectangleF bounds) : bounds(bounds) {};
+    explicit World(RectangleI bounds) : boundsF(RectangleF::fromOther(bounds)), boundsI(bounds) {}
     VerletObject &addObject(Vector2 position, float radius) {
         return objects.emplace_back(position, radius);
     }
@@ -22,7 +23,11 @@ public:
         return static_cast<int>(objects.size());
     }
 
-    [[nodiscard]] RectangleF &getBounds() {
-        return bounds;
+    [[nodiscard]] RectangleF &getBoundsF() {
+        return boundsF;
+    }
+
+    [[nodiscard]] RectangleI &getBoundsI() {
+        return boundsI;
     }
 };

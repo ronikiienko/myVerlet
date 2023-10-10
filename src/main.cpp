@@ -59,7 +59,7 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(windowDims.x, windowDims.y), "Verlet", sf::Style::Default, settings);
     window.setFramerateLimit(60);
 
-    World world{RectangleF::fromSize(0, 0, worldDims.x, worldDims.y)};
+    World world{RectangleI::fromSize(0, 0, worldDims.x, worldDims.y)};
     Graphics graphics{world, window};
     Physics physics{world};
 

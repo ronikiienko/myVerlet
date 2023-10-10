@@ -2,13 +2,15 @@
 
 #include "../World/World.h"
 #include "SFML/Graphics/RenderWindow.hpp"
+#include "../modules/Grid.h"
 
 class Physics {
 private:
     World &world;
+    IdGrid<int> grid;
 
     void applyConstraints() {
-        const Rectangle bounds = world.getBounds();
+        const Rectangle bounds = world.getBoundsF();
         std::vector<VerletObject> &objects = world.getObjects();
         for (VerletObject &object: objects) {
             const Vector2 velocity = (object.posCurr - object.posOld) * wallsDamping;
@@ -46,6 +48,10 @@ private:
         }
     }
 
+    void solveCollisionsGrid() {
+
+    }
+
     void solveCollisionsNoGrid() {
         std::vector<VerletObject> &objects = world.getObjects();
         int objectsCount = world.getObjectsCount();
@@ -74,7 +80,8 @@ private:
 
 public:
     explicit Physics(World &world)
-            : world(world) {};
+            : world(world)
+            , grid(10, 10, world.getBoundsI()) {}
 
     void update() {
         const float subStepDt = physicsInterval / physicsSubSteps;
