@@ -48,10 +48,6 @@ private:
         }
     }
 
-    void solveCollisionsGrid() {
-
-    }
-
     void solveCollisionsNoGrid() {
         std::vector<VerletObject> &objects = world.getObjects();
         int objectsCount = world.getObjectsCount();
@@ -78,6 +74,14 @@ private:
         }
     }
 
+    void rebuildGrid() {
+        grid.clear();
+        std::vector<VerletObject> &objects = world.getObjects();
+        const int objectsCount = world.getObjectsCount();
+        for (int i = 0; i < objectsCount; i++) {
+            grid.insert(i, objects[i].posCurr.x, objects[i].posCurr.y);
+        }
+    }
 public:
     explicit Physics(World &world)
             : world(world)
@@ -88,6 +92,7 @@ public:
         for (int i = 0; i < physicsSubSteps; i++) {
             applyGravity();
             applyConstraints();
+            rebuildGrid();
             solveCollisionsNoGrid();
             updatePositions(subStepDt);
         }
