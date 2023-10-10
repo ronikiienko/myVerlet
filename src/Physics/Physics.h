@@ -48,6 +48,38 @@ private:
         }
     }
 
+    void solveCollisionsTwoCells(const Cell<int>& cell1, const Cell<int>& cell2, std::vector<VerletObject> &objects) {
+        for (int index1 : cell1.ids) {
+            for (int index2 : cell2.ids) {
+                if (index1 == index2) continue;
+
+                solveContact(objects[index1], objects[index2]);
+            }
+        }
+    }
+
+    void solveCollisionsGrid() {
+        std::vector<VerletObject> &objects = world.getObjects();
+        for (int i = 0; i < grid.width; i++) {
+            for (int j = 0; j < grid.height; j++) {
+                const Cell<int> cell1 = grid.get(i, j);
+                solveCollisionsTwoCells(cell1, cell1, objects);
+                if (i + 1 < grid.width && j - 1 >= 0) {
+                    solveCollisionsTwoCells(cell1, grid.get(i + 1, j - 1), objects);
+                }
+                if (i + 1 < grid.width) {
+                    solveCollisionsTwoCells(cell1, grid.get(i + 1, j), objects);
+                }
+                if (i + 1 < grid.width && j + 1 < grid.height) {
+                    solveCollisionsTwoCells(cell1, grid.get(i + 1, j + 1), objects);
+                }
+                if (j + 1 < grid.height) {
+                    solveCollisionsTwoCells(cell1, grid.get(i, j + 1), objects);
+                }
+            }
+        }
+    }
+
     void solveCollisionsNoGrid() {
         std::vector<VerletObject> &objects = world.getObjects();
         int objectsCount = world.getObjectsCount();
@@ -85,7 +117,7 @@ private:
 public:
     explicit Physics(World &world)
             : world(world)
-            , grid(10, 10, world.getBoundsI()) {}
+            , grid(100, 100, world.getBoundsI()) {}
 
     void update() {
         const float subStepDt = physicsInterval / physicsSubSteps;
@@ -93,7 +125,8 @@ public:
             applyGravity();
             applyConstraints();
             rebuildGrid();
-            solveCollisionsNoGrid();
+            solveCollisionsGrid();
+//            solveCollisionsNoGrid();
             updatePositions(subStepDt);
         }
     }

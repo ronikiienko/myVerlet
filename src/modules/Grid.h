@@ -65,4 +65,12 @@ struct IdGrid {
             cell.clear();
         }
     }
+
+    const Cell<idType>& get(int gridX, int gridY) const {
+        if (gridX < 0 || gridX >= width || gridY < 0 || gridY >= height) {
+            throw std::runtime_error("Trying to get outside the grid.");
+        }
+        int index = gridY * width + gridX;
+        return data[index];
+    }
 };
