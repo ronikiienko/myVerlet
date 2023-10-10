@@ -12,6 +12,7 @@ set(SOURCES src/main.cpp
         src/modules/Rectangle.h
         src/modules/Angle.h
         src/modules/ThreadsTest.h
+        src/modules/Grid.h
 )
 
 project(${PROJECT_NAME})

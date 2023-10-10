@@ -78,7 +78,7 @@ public:
         for (int i = 0; i < physicsSubSteps; i++) {
             applyGravity();
             applyConstraints();
-            solveCollisionsNoGrid();
+//            solveCollisionsNoGrid();
             updatePositions(subStepDt);
         }
     }
