@@ -129,7 +129,7 @@ private:
 
 public:
     explicit Physics(World &world)
-            : world(world), grid(120, 120, world.getBoundsI()) {}
+            : world(world), grid(gridX, gridY, world.getBoundsI()) {}
 
     void update() {
         const float subStepDt = physicsInterval / physicsSubSteps;
