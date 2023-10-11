@@ -7,6 +7,7 @@
 template<typename T>
 struct Cell {
     // when looping, you can't just loop through ids because there are old id's too - you need to loop between 0 and activeCount
+    // this optimisation doesn't give very much boost, but gives..
     std::vector<T> ids;
     int activeCount = 0;  // Keeps track of how many ids are currently active.
 
