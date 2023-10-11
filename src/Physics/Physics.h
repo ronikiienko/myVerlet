@@ -100,6 +100,7 @@ private:
         }
     }
 
+    // TODO when all grid filled with objects, you can see that some start falling faster and some slower (on lower gravity levels like 10)
     void applyGravity() {
         std::vector<VerletObject> &objects = world.getObjects();
         for (VerletObject &object: objects) {
