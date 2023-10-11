@@ -3,15 +3,13 @@
 #include "../modules/Vector.h"
 #include "SFML/Graphics/Color.hpp"
 
-struct PullConfig {
-    float force = 0, maxDistance = 0, on = false;
-};
 
 class VerletObject {
 public:
     Vector2 posCurr, posOld, acceleration = Vector2::fromCartesian();
     sf::Color color = sf::Color::White;
     float radius;
+    bool isPinned;
 
     VerletObject(Vector2 position, float radius) : posCurr(position), posOld(position), radius(radius) {};
 
@@ -21,6 +19,13 @@ public:
 
     void accelerate(Vector2 a) {
         acceleration = acceleration + a;
+    }
+
+    void pin() {
+        isPinned = true;
+    }
+    void unpin() {
+        isPinned = false;
     }
 
     void update(float dt) {

@@ -44,8 +44,8 @@ private:
             const Vector2 normal = vectorBetween / dist;
             const float delta = 0.5f * collisionsDamping * (dist - min_dist);
             // Update positions
-            obj1.posCurr -= normal * delta;
-            obj2.posCurr += normal * delta;
+            if (!obj1.isPinned) obj1.posCurr -= normal * delta;
+            if (!obj2.isPinned) obj2.posCurr += normal * delta;
         }
     }
 
@@ -100,14 +100,14 @@ private:
     void applyGravity() {
         std::vector<VerletObject> &objects = world.getObjects();
         for (VerletObject &object: objects) {
-            object.accelerate(gravity);
+            if (!object.isPinned) object.accelerate(gravity);
         }
     }
 
     void updatePositions(float dt) {
         std::vector<VerletObject> &objects = world.getObjects();
         for (VerletObject &object: objects) {
-            object.update(dt);
+            if (!object.isPinned) object.update(dt);
         }
     }
 
