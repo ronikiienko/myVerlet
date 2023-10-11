@@ -11,8 +11,8 @@ constexpr Vector2 gravity = Vector2::fromCartesian(0, 100);
 const RectangleI worldBounds = RectangleI::fromSize(0,0,1000,1000);
 const RectangleI windowBounds = RectangleI::fromSize(0,0,1000,1000);
 
-const int gridX = 250;
-const int gridY = 250;
+const int collisionGridWidth = 250;
+const int collisionGridHeight = 250;
 
 const float physicsInterval = 0.016f;
 const int physicsSubSteps = 8;
