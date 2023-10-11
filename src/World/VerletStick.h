@@ -1,0 +1,27 @@
+#pragma once
+
+#include "VerletObject.h"
+
+class VerletStick {
+private:
+    VerletObject &obj1;
+    VerletObject &obj2;
+    float length;
+public:
+    VerletStick(VerletObject &obj1, VerletObject &obj2) : obj1(obj1), obj2(obj2) {
+        length = obj1.posCurr.distanceTo(obj2.posCurr);
+    }
+
+    void constraint() const {
+        const Vector2 vectorBetween = obj2.posCurr - obj1.posCurr;
+        const float distanceBetween = vectorBetween.magnitude();
+
+        const float diff = distanceBetween - length;
+        const float moveRatio = (diff / distanceBetween) / 2;
+
+        const Vector2 offset = vectorBetween * moveRatio;
+
+        obj1.posCurr += offset;
+        obj2.posCurr -= offset;
+    }
+};

@@ -120,6 +120,13 @@ private:
         }
     }
 
+    void constraintSticks() {
+        std::vector<VerletStick> &sticks = world.getSticks();
+        for (VerletStick &stick: sticks) {
+            stick.constraint();
+        }
+    }
+
 public:
     explicit Physics(World &world)
             : world(world), grid(120, 120, world.getBoundsI()) {}
@@ -131,7 +138,7 @@ public:
             applyConstraints();
             rebuildGrid();
             solveCollisionsGrid();
-//            solveCollisionsNoGrid();
+            constraintSticks();
             updatePositions(subStepDt);
         }
     }

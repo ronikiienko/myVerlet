@@ -13,6 +13,7 @@ set(SOURCES src/main.cpp
         src/modules/Angle.h
         src/modules/ThreadsTest.h
         src/modules/Grid.h
+        src/World/VerletStick.h
 )
 
 project(${PROJECT_NAME})
