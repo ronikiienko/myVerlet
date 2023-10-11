@@ -18,7 +18,7 @@ public:
     }
 
     void accelerate(Vector2 a) {
-        acceleration = acceleration + a;
+        acceleration += a;
     }
 
     void pin() {

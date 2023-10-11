@@ -84,6 +84,7 @@ private:
     }
 
     void solveCollisionsGrid() {
+        rebuildGrid();
         solveCollisionsSubgrid(0, grid.width, 0, grid.height);
     }
 
@@ -138,7 +139,6 @@ public:
         for (int i = 0; i < physicsSubSteps; i++) {
             applyGravity();
             applyConstraints();
-            rebuildGrid();
             solveCollisionsGrid();
             constraintSticks();
             updatePositions(subStepDt);

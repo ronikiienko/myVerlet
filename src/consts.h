@@ -6,7 +6,7 @@
 const int maxObjectNum = 30000;
 const int maxSticksNum = 100;
 
-constexpr Vector2 gravity = Vector2::fromCartesian(0, 100);
+constexpr Vector2 gravity = Vector2::fromCartesian(0, 1);
 
 const RectangleI worldBounds = RectangleI::fromSize(0,0,1000,1000);
 const RectangleI windowBounds = RectangleI::fromSize(0,0,1000,1000);
@@ -19,3 +19,6 @@ const int physicsSubSteps = 8;
 
 const float wallsDamping = 0.8f;
 const float collisionsDamping = 0.8f;
+
+const Vector2 pointGravityPoint = Vector2::fromCartesian(500,500);
+const float pointGravityStrength = 10;
