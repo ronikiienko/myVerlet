@@ -6,14 +6,21 @@
 
 template<typename T>
 struct Cell {
+    // when looping, you can't just loop through ids because there are old id's too - you need to loop between 0 and activeCount
     std::vector<T> ids;
+    int activeCount = 0;  // Keeps track of how many ids are currently active.
 
     void insert(T id) {
-        ids.push_back(id);
+        if (activeCount < ids.size()) {
+            ids[activeCount] = id;  // Overwrite existing space.
+        } else {
+            ids.push_back(id);  // Add new space if needed.
+        }
+        activeCount++;
     }
 
     void clear() {
-        ids.clear();
+        activeCount = 0;  // Reset counter. No need to actually clear the vector.
     }
 };
 
