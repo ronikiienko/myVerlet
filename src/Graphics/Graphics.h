@@ -13,7 +13,7 @@ public:
     void update() {
         window.clear(sf::Color::Black);
         sf::CircleShape circle{1.0f};
-        circle.setPointCount(32);
+        circle.setPointCount(6);
         circle.setOrigin(1.0f, 1.0f);
         const std::vector<VerletObject> &objects = world.getObjects();
         for (const VerletObject &object: objects) {
