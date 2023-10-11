@@ -50,8 +50,8 @@ private:
     }
 
     void solveCollisionsTwoCells(const Cell<int> &cell1, const Cell<int> &cell2, std::vector<VerletObject> &objects) {
-        for (int index1: cell1.ids) {
-            for (int index2: cell2.ids) {
+        for (auto index1: cell1.ids) {
+            for (auto index2: cell2.ids) {
                 if (index1 == index2) continue;
 
                 solveContact(objects[index1], objects[index2]);
