@@ -3,22 +3,24 @@
 #include "modules/Vector.h"
 #include "modules/Rectangle.h"
 
-const int maxObjectNum = 30000;
+const int maxObjectNum = 60000;
 const int maxSticksNum = 100;
 
-constexpr Vector2 gravity = Vector2::fromCartesian(0, 1);
+constexpr Vector2 gravity = Vector2::fromCartesian(0, 100);
 
-const RectangleI worldBounds = RectangleI::fromSize(0,0,1000,1000);
-const RectangleI windowBounds = RectangleI::fromSize(0,0,1000,1000);
+const RectangleI worldBounds = RectangleI::fromSize(0,0,3500,1000);
+const RectangleI windowBounds = RectangleI::fromSize(0,0,3500,1000);
 
-const int collisionGridWidth = 250;
-const int collisionGridHeight = 250;
+const int minRadius = 2;
+const int maxRadius = 6;
+
+const int collisionGridWidth = worldBounds.getWidth() / (maxRadius * 2);
+const int collisionGridHeight = worldBounds.getHeight() / (maxRadius * 2);
 
 const float physicsInterval = 0.016f;
-const int physicsSubSteps = 8;
+const int physicsSubSteps = 4;
 
-const float wallsDamping = 0.8f;
-const float collisionsDamping = 0.8f;
+const float wallsDamping = 0.2f;
+const float collisionsDamping = 0.2f;
 
-const Vector2 pointGravityPoint = Vector2::fromCartesian(500,500);
-const float pointGravityStrength = 10;
+const int seed = 401;
