@@ -63,7 +63,7 @@ private:
         std::vector<VerletObject> &objects = world.getObjects();
         for (int i = startX; i < endX; i++) {
             for (int j = startY; j < endY; j++) {
-                const Cell<int> cell1 = grid.get(i, j);
+                const Cell<int>& cell1 = grid.get(i, j);
                 solveCollisionsTwoCells(cell1, cell1, objects);
                 if (i + 1 < grid.width && j - 1 >= 0) {
                     solveCollisionsTwoCells(cell1, grid.get(i + 1, j - 1), objects);

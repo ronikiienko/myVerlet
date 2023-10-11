@@ -61,7 +61,7 @@ struct IdGrid {
     }
 
     void clear() {
-        for (Cell<idType> &cell: data) {
+        for (auto &cell: data) {
             cell.clear();
         }
     }
