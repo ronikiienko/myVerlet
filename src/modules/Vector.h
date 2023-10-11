@@ -51,6 +51,11 @@ public:
         return x * x + y * y;
     }
 
+    [[nodiscard]] constexpr float distanceTo(const Vector2 &other) const {
+        Vector2 diff = *this - other;
+        return diff.magnitude();
+    }
+
     [[nodiscard]] constexpr Vector2 normalize() const {
         float mag = magnitude();
         return Vector2{x / mag, y / mag};
