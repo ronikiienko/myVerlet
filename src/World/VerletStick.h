@@ -3,11 +3,11 @@
 #include "VerletObject.h"
 
 class VerletStick {
-private:
+public:
     VerletObject &obj1;
     VerletObject &obj2;
     float length;
-public:
+
     VerletStick(VerletObject &obj1, VerletObject &obj2) : obj1(obj1), obj2(obj2) {
         length = (obj1.posCurr - obj2.posCurr).magnitude();
     }

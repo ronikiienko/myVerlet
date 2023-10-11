@@ -72,10 +72,6 @@ int main() {
         );
     }
 
-//    VerletObject& object1 = world.addObject(Vector2::fromCartesian(100, 100), 5);
-//    object1.pin();
-//    VerletObject& object2 = world.addObject(Vector2::fromCartesian(200, 100), 5);
-//    world.addStick(object1, object2);
 
     sf::Clock clock;
 
