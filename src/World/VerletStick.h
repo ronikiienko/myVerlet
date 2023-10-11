@@ -21,7 +21,7 @@ public:
 
         const Vector2 offset = vectorBetween * moveRatio;
 
-        if (!obj1.isPinned) obj1.posCurr += offset;
-        if (!obj2.isPinned) obj2.posCurr -= offset;
+        if (!obj1.isPinned) obj1.posCurr -= offset;
+        if (!obj2.isPinned) obj2.posCurr += offset;
     }
 };
