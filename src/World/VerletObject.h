@@ -9,7 +9,7 @@ public:
     Vector2 posCurr, posOld, acceleration = Vector2::fromCartesian();
     sf::Color color = sf::Color::White;
     float radius;
-    bool isPinned;
+    bool isPinned = false;
 
     VerletObject(Vector2 position, float radius) : posCurr(position), posOld(position), radius(radius) {};
 

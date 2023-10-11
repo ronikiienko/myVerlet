@@ -63,12 +63,12 @@ int main() {
     Graphics graphics{world, window};
     Physics physics{world};
 
-    RNGf gen = RNGf();
+    RNGf gen = RNGf(100);
 
     for (int i = 0; i < maxObjectNum; i++) {
         world.addObject(
                 Vector2::fromCartesian(gen.getInRange(0, worldBounds.getWidth()), gen.getInRange(0, worldBounds.getHeight())),
-                gen.getInRange(2, 3)
+                gen.getInRange(2, 2)
         );
     }
 
