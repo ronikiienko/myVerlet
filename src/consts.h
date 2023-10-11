@@ -3,6 +3,9 @@
 #include "modules/Vector.h"
 #include "modules/Rectangle.h"
 
+const int maxObjectNum = 100;
+const int maxSticksNum = 100;
+
 constexpr Vector2 gravity = Vector2::fromCartesian(0, 1);
 
 const RectangleI worldBounds = RectangleI::fromSize(0,0,1400,1400);

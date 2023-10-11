@@ -9,11 +9,11 @@ private:
     float length;
 public:
     VerletStick(VerletObject &obj1, VerletObject &obj2) : obj1(obj1), obj2(obj2) {
-        length = obj1.posCurr.distanceTo(obj2.posCurr);
+        length = (obj1.posCurr - obj2.posCurr).magnitude();
     }
 
     void constraint() const {
-        const Vector2 vectorBetween = obj2.posCurr - obj1.posCurr;
+        const Vector2 vectorBetween = obj1.posCurr - obj2.posCurr;
         const float distanceBetween = vectorBetween.magnitude();
 
         const float diff = distanceBetween - length;

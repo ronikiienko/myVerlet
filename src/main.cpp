@@ -65,12 +65,16 @@ int main() {
 
     RNGf gen = RNGf();
 
-    for (int i = 0; i < 30000; i++) {
-        world.addObject(
-                Vector2::fromCartesian(gen.getInRange(0, worldBounds.getWidth()), gen.getInRange(0, worldBounds.getHeight())),
-                gen.getInRange(2, 3)
-        );
-    }
+//    for (int i = 0; i < maxObjectNum; i++) {
+//        world.addObject(
+//                Vector2::fromCartesian(gen.getInRange(0, worldBounds.getWidth()), gen.getInRange(0, worldBounds.getHeight())),
+//                gen.getInRange(2, 3)
+//        );
+//    }
+
+    VerletObject& object1 = world.addObject(Vector2::fromCartesian(100, 100), 5);
+    VerletObject& object2 = world.addObject(Vector2::fromCartesian(200, 100), 5);
+    world.addStick(object1, object2);
 
     sf::Clock clock;
 

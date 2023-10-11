@@ -12,11 +12,14 @@ private:
     RectangleF boundsF;
     RectangleI boundsI;
 public:
-    explicit World(RectangleI bounds) : boundsF(RectangleF::fromOther(bounds)), boundsI(bounds) {}
+    explicit World(RectangleI bounds) : boundsF(RectangleF::fromOther(bounds)), boundsI(bounds) {
+        objects.reserve(maxObjectNum);
+        sticks.reserve(maxSticksNum);
+    }
     VerletObject &addObject(Vector2 position, float radius) {
         return objects.emplace_back(position, radius);
     }
-    VerletStick &addStick(VerletObject obj1, VerletObject obj2) {
+    VerletStick &addStick(VerletObject& obj1, VerletObject& obj2) {
         return sticks.emplace_back(obj1, obj2);
     }
 
