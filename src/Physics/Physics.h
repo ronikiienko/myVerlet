@@ -65,7 +65,7 @@ private:
         std::vector<VerletObject> &objects = world.getObjects();
         for (int i = startX; i < endX; i++) {
             for (int j = startY; j < endY; j++) {
-                const Cell<int>& cell1 = grid.get(i, j);
+                const Cell<int> &cell1 = grid.get(i, j);
                 solveCollisionsTwoCells(cell1, cell1, objects);
                 if (i + 1 < grid.width && j - 1 >= 0) {
                     solveCollisionsTwoCells(cell1, grid.get(i + 1, j - 1), objects);
@@ -83,22 +83,30 @@ private:
         }
     }
 
-    void solveCollisionsGrid() {
+    void solveCollisions() {
         rebuildGrid();
-        solveCollisionsSubgrid(0, grid.width, 0, grid.height);
-    }
+        int segment = grid.width / static_cast<int>(numThreads);
 
-    void solveCollisionsNoGrid() {
-        std::vector<VerletObject> &objects = world.getObjects();
-        int objectsCount = world.getObjectsCount();
-        for (int i = 0; i < objectsCount; i++) {
-            VerletObject &obj1 = objects[i];
-            for (int j = i + 1; j < objectsCount; j++) {
-                VerletObject &obj2 = objects[j];
-                solveContact(obj1, obj2);
-            }
+        std::vector<std::thread> threads;
+
+        for (int i = 0; i < numThreads; i++) {
+            int startX = segment * i;
+            int endX = i + 1 == numThreads ? grid.width : segment * (i + 1);
+
+            threads.emplace_back([startX, endX, this]() {
+                solveCollisionsSubgrid(startX, endX, 0, grid.height);
+            });
+        }
+
+        for (auto& thread : threads) {
+            thread.join();
         }
     }
+//    void solveCollisions() {
+//        rebuildGrid();
+//        solveCollisionsSubgrid(0, grid.width, 0, grid.height);
+//    }
+
 
     // TODO when all grid filled with objects, you can see that some start falling faster and some slower (on lower gravity levels like 10)
     void applyGravity() {
@@ -140,7 +148,7 @@ public:
         for (int i = 0; i < physicsSubSteps; i++) {
             applyGravity();
             applyConstraints();
-            solveCollisionsGrid();
+            solveCollisions();
             constraintSticks();
             updatePositions(subStepDt);
         }
