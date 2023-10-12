@@ -145,11 +145,12 @@ public:
 
     void update() {
         const float subStepDt = physicsInterval / physicsSubSteps;
+
         for (int i = 0; i < physicsSubSteps; i++) {
             applyGravity();
             applyConstraints();
-            solveCollisions();
             constraintSticks();
+            solveCollisions();
             updatePositions(subStepDt);
         }
     }
