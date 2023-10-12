@@ -84,13 +84,12 @@ int main() {
             }
         }
 
+        const double elapsed = clock.restart().asMilliseconds();
+        std::cout << "FPS: " << 1000 / elapsed << '\n';
 
         physics.update();
-        const double elapsedPhysics = clock.restart().asMilliseconds();
-        std::cout << "FPS p: " << elapsedPhysics << '\n';
         graphics.update();
-        const double elapsedGraphics = clock.restart().asMilliseconds();
-        std::cout << "FPS g: " << elapsedGraphics << '\n';
+
     }
 
 
