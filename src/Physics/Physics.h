@@ -20,16 +20,15 @@ private:
             if (object.posCurr.x < bounds.getX1() + object.radius) {
                 object.posCurr.x = bounds.getX1() + object.radius;
                 object.posOld.x = object.posCurr.x + velocity.x;
-            }
-            if (object.posCurr.x > bounds.getX2() - object.radius) {
+            } else if (object.posCurr.x > bounds.getX2() - object.radius) {
                 object.posCurr.x = bounds.getX2() - object.radius;
                 object.posOld.x = object.posCurr.x + velocity.x;
             }
+
             if (object.posCurr.y < bounds.getY1() + object.radius) {
                 object.posCurr.y = bounds.getY1() + object.radius;
                 object.posOld.y = object.posCurr.y + velocity.y;
-            }
-            if (object.posCurr.y > bounds.getY2() - object.radius) {
+            } else if (object.posCurr.y > bounds.getY2() - object.radius) {
                 object.posCurr.y = bounds.getY2() - object.radius;
                 object.posOld.y = object.posCurr.y + velocity.y;
             }
