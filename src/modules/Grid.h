@@ -4,23 +4,42 @@
 #include <vector>
 #include "Rectangle.h"
 
+//struct Cell {
+//    // when looping, you can't just loop through ids because there are old id's too - you need to loop between 0 and activeCount
+//    // this optimisation doesn't give very much boost, but gives..
+//    std::vector<int> ids;
+//    int activeCount = 0;  // Keeps track of how many ids are currently active.
+//
+//    void insert(int id) {
+//        if (activeCount < ids.size()) {
+//            ids[activeCount] = id;  // Overwrite existing space.
+//        } else {
+//            ids.push_back(id);  // Add new space if needed.
+//        }
+//        activeCount++;
+//    }
+//
+//    void clear() {
+//        activeCount = 0;  // Reset counter. No need to actually clear the vector.
+//    }
+//};
+
+// this cell  uses fixed size array - more performant. but it relies on fact that only 4 objects can fit in one cell (all should have same radius). Commented one - vector, which allows different radiuses.
 struct Cell {
-    // when looping, you can't just loop through ids because there are old id's too - you need to loop between 0 and activeCount
-    // this optimisation doesn't give very much boost, but gives..
-    std::vector<int> ids;
+    std::array<int, 4> ids = {0,0,0,0};  // Fixed-size array
     int activeCount = 0;  // Keeps track of how many ids are currently active.
 
     void insert(int id) {
         if (activeCount < ids.size()) {
-            ids[activeCount] = id;  // Overwrite existing space.
+            ids[activeCount] = id;
         } else {
-            ids.push_back(id);  // Add new space if needed.
+            // Handle overflow, maybe throw an exception or ignore
         }
         activeCount++;
     }
 
     void clear() {
-        activeCount = 0;  // Reset counter. No need to actually clear the vector.
+        activeCount = 0;  // Reset counter
     }
 };
 
