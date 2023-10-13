@@ -85,9 +85,10 @@ int main() {
                 window.close();
             }
         }
-
-        const double elapsed = clock.restart().asMilliseconds();
-        std::cout << "FPS: " << 1000 / elapsed << '\n';
+        if (logFps) {
+            const double elapsed = clock.restart().asMilliseconds();
+            std::cout << "FPS: " << 1000 / elapsed << '\n';
+        }
 
         physics.update();
 //        sf::Clock clock1;
