@@ -6,10 +6,10 @@
 const int maxObjectNum = 100000;
 const int maxSticksNum = 100;
 
-constexpr Vector2 gravity = Vector2::fromCartesian(0, 100);
+constexpr Vector2 gravity = Vector2::fromCartesian(0, 50);
 
-const RectangleI worldBounds = RectangleI::fromSize(0,0,2000,1000);
-const RectangleI windowBounds = RectangleI::fromSize(0,0,2000,1000);
+const RectangleI worldBounds = RectangleI::fromSize(0,0,1200,1200);
+const RectangleI windowBounds = RectangleI::fromSize(0,0,1200,1200);
 
 const int minRadius = 2;
 const int maxRadius = 2;

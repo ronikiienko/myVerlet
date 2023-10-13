@@ -84,15 +84,10 @@ private:
     }
 
     void solveCollisions() {
-//        sf::Clock clock;
         rebuildGrid();
-//        const long long elapsed = clock.restart().asMicroseconds();
-//        std::cout << "elapsed: " << elapsed * physicsSubSteps << '\n';
 
         int segment = grid.width / static_cast<int>(numThreads);
-
         std::vector<std::thread> threads;
-
         for (int i = 0; i < numThreads; i++) {
             int startX = segment * i;
             int endX = i + 1 == numThreads ? grid.width : segment * (i + 1);

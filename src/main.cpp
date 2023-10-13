@@ -87,7 +87,10 @@ int main() {
         const double elapsed = clock.restart().asMilliseconds();
         std::cout << "FPS: " << 1000 / elapsed << '\n';
 
+        sf::Clock clock;
         physics.update();
+        const long long elapsedk = clock.restart().asMicroseconds();
+        std::cout << "elapsed: " << elapsedk << '\n';
         graphics.update();
 
     }
