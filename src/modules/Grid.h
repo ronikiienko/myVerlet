@@ -33,7 +33,8 @@ struct Cell {
         if (activeCount < ids.size()) {
             ids[activeCount] = id;
         } else {
-            // Handle overflow, maybe throw an exception or ignore
+            // TODO throw if cell overflow happens. For now i spawn many objects randomly and one can be in other, so overflow will initially happen
+//            throw std::runtime_error("cell overflow");
         }
         activeCount++;
     }
