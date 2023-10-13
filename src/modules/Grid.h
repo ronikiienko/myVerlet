@@ -4,14 +4,13 @@
 #include <vector>
 #include "Rectangle.h"
 
-template<typename T>
 struct Cell {
     // when looping, you can't just loop through ids because there are old id's too - you need to loop between 0 and activeCount
     // this optimisation doesn't give very much boost, but gives..
-    std::vector<T> ids;
+    std::vector<int> ids;
     int activeCount = 0;  // Keeps track of how many ids are currently active.
 
-    void insert(T id) {
+    void insert(int id) {
         if (activeCount < ids.size()) {
             ids[activeCount] = id;  // Overwrite existing space.
         } else {
@@ -25,7 +24,6 @@ struct Cell {
     }
 };
 
-template<typename idType>
 struct IdGrid {
     int width;
     int height;
@@ -37,7 +35,7 @@ struct IdGrid {
     int realHeight;
     float widthRatio;
     float heightRatio;
-    std::vector<Cell<idType>> data;
+    std::vector<Cell> data;
 
     IdGrid(int width, int height, RectangleI realBounds) : width(width), height(height) {
         realX1 = realBounds.getX1();
@@ -53,7 +51,7 @@ struct IdGrid {
         data.resize(width * height);
     }
 
-    void insert(idType id, int realX, int realY) {
+    void insert(int id, int realX, int realY) {
         // Convert real-world coordinates to grid coordinates
         int gridX = static_cast<int>((realX - realX1) / widthRatio);
         int gridY = static_cast<int>((realY - realY1) / heightRatio);
@@ -74,7 +72,7 @@ struct IdGrid {
         }
     }
 
-    const Cell<idType>& get(int gridX, int gridY) const {
+    [[nodiscard]] const Cell& get(int gridX, int gridY) const {
         if (gridX < 0 || gridX >= width || gridY < 0 || gridY >= height) {
             throw std::runtime_error("Trying to get outside the grid.");
         }

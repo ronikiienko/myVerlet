@@ -8,7 +8,7 @@
 class Physics {
 private:
     World &world;
-    IdGrid<int> grid;
+    IdGrid grid;
 
     void applyConstraints() {
         const Rectangle bounds = world.getBoundsF();
@@ -49,7 +49,7 @@ private:
         }
     }
 
-    void solveCollisionsTwoCells(const Cell<int> &cell1, const Cell<int> &cell2, std::vector<VerletObject> &objects) {
+    void solveCollisionsTwoCells(const Cell &cell1, const Cell &cell2, std::vector<VerletObject> &objects) {
         for (int i = 0; i < cell1.activeCount; ++i) {
             int index1 = cell1.ids[i];
             for (int j = 0; j < cell2.activeCount; ++j) {
@@ -65,7 +65,7 @@ private:
         std::vector<VerletObject> &objects = world.getObjects();
         for (int i = startX; i < endX; i++) {
             for (int j = startY; j < endY; j++) {
-                const Cell<int> &cell1 = grid.get(i, j);
+                const Cell &cell1 = grid.get(i, j);
                 solveCollisionsTwoCells(cell1, cell1, objects);
                 if (i + 1 < grid.width && j - 1 >= 0) {
                     solveCollisionsTwoCells(cell1, grid.get(i + 1, j - 1), objects);
@@ -84,7 +84,10 @@ private:
     }
 
     void solveCollisions() {
+        sf::Clock clock;
         rebuildGrid();
+        const long long elapsed = clock.restart().asMicroseconds();
+        std::cout << "elapsed: " << elapsed * physicsSubSteps << '\n';
         int segment = grid.width / static_cast<int>(numThreads);
 
         std::vector<std::thread> threads;
