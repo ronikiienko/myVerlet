@@ -87,7 +87,6 @@ private:
     void solveCollisions() {
 
 //        sf::Clock clock;
-        rebuildGrid();
 //        const long long elapsed = clock.restart().asMicroseconds();
 //        std::cout << "elapsed: " << elapsed * 8 << '\n';
         int segment = grid.width / static_cast<int>(numThreads);
@@ -149,6 +148,7 @@ public:
             applyGravity();
             applyConstraints();
             constraintSticks();
+            rebuildGrid();
             solveCollisions();
             updatePositions(subStepDt);
         }
