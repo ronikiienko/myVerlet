@@ -4,11 +4,13 @@
 #include "../World/World.h"
 #include "SFML/Graphics/RenderWindow.hpp"
 #include "../modules/Grid.h"
+#include "../modules/thread_pool.hpp"
 
 class Physics {
 private:
     World &world;
     IdGrid grid;
+    tp::ThreadPool &threadPool;
 
     void applyConstraints() {
         const Rectangle bounds = world.getBoundsF();
@@ -92,19 +94,13 @@ private:
             int startX = segment * i;
             int endX = i + 1 == numThreads ? grid.width : segment * (i + 1);
 
-            threads.emplace_back([startX, endX, this]() {
+            threadPool.addTask([startX, endX, this]() {
                 solveCollisionsSubgrid(startX, endX, 0, grid.height);
             });
         }
 
-        for (auto& thread : threads) {
-            thread.join();
-        }
+        threadPool.waitForCompletion();
     }
-//    void solveCollisions() {
-//        rebuildGrid();
-//        solveCollisionsSubgrid(0, grid.width, 0, grid.height);
-//    }
 
 
     // TODO when all grid filled with objects, you can see that some start falling faster and some slower (on lower gravity levels like 10)
@@ -139,8 +135,8 @@ private:
     }
 
 public:
-    explicit Physics(World &world)
-            : world(world), grid(collisionGridWidth, collisionGridHeight, world.getBoundsI()) {}
+    explicit Physics(World &world, tp::ThreadPool& threadPool)
+            : world(world), grid(collisionGridWidth, collisionGridHeight, world.getBoundsI()), threadPool(threadPool) {}
 
     void update() {
         const float subStepDt = physicsInterval / physicsSubSteps;

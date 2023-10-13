@@ -8,6 +8,7 @@
 #include "Physics/Physics.h"
 #include "modules/Rand.h"
 #include "modules/ThreadsTest.h"
+#include "modules/thread_pool.hpp"
 
 int iterations = 100000000;
 
@@ -59,9 +60,10 @@ int main() {
     sf::RenderWindow window(sf::VideoMode(windowBounds.getWidth(), windowBounds.getHeight()), "Verlet", sf::Style::Default, settings);
     window.setFramerateLimit(60);
 
+    tp::ThreadPool threadPool{numThreads};
     World world{worldBounds};
-    Graphics graphics{world, window};
-    Physics physics{world};
+    Graphics graphics{world, window, threadPool};
+    Physics physics{world, threadPool};
 
     RNGf gen = RNGf(seed);
 
@@ -87,11 +89,11 @@ int main() {
         const double elapsed = clock.restart().asMilliseconds();
         std::cout << "FPS: " << 1000 / elapsed << '\n';
 
-        sf::Clock clock;
         physics.update();
-        const long long elapsedk = clock.restart().asMicroseconds();
-        std::cout << "elapsed: " << elapsedk << '\n';
+        sf::Clock clock1;
         graphics.update();
+        const long long elapsedk = clock1.restart().asMicroseconds();
+        std::cout << "elapsed: " << elapsedk << '\n';
 
     }
 

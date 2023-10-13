@@ -14,6 +14,7 @@ set(SOURCES src/main.cpp
         src/modules/ThreadsTest.h
         src/modules/Grid.h
         src/World/VerletStick.h
+        src/modules/thread_pool.hpp
 )
 
 project(${PROJECT_NAME})

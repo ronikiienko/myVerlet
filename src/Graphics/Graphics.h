@@ -31,15 +31,17 @@
 #include "../World/World.h"
 #include "SFML/Graphics/RenderWindow.hpp"
 #include "SFML/Graphics/VertexArray.hpp"
+#include "../modules/thread_pool.hpp"
 
 class Graphics {
 private:
     World &world;
     sf::RenderWindow &window;
     sf::VertexArray vertexArray;  // Added this line
+    tp::ThreadPool &threadPool;
 public:
-    explicit Graphics(World &world, sf::RenderWindow &window)
-            : world(world), window(window) {
+    explicit Graphics(World &world, sf::RenderWindow &window, tp::ThreadPool &threadPool)
+            : world(world), window(window), threadPool(threadPool) {
         vertexArray.setPrimitiveType(sf::Quads);  // Initialize with Quads
     };
 
