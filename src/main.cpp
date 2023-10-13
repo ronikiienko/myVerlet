@@ -90,10 +90,10 @@ int main() {
         std::cout << "FPS: " << 1000 / elapsed << '\n';
 
         physics.update();
-        sf::Clock clock1;
+//        sf::Clock clock1;
         graphics.update();
-        const long long elapsedk = clock1.restart().asMicroseconds();
-        std::cout << "elapsed: " << elapsedk << '\n';
+//        const long long elapsedk = clock1.restart().asMicroseconds();
+//        std::cout << "elapsed: " << elapsedk << '\n';
 
     }
 
