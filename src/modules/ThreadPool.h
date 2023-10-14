@@ -123,5 +123,7 @@ struct ThreadPool {
 //                callback(start, end);
 //            });
         }
+
+        waitForCompletion();
     }
 };
