@@ -118,16 +118,13 @@ private:
 
     void updatePositions(float dt) {
         std::vector<VerletObject> &objects = world.getObjects();
-        for (VerletObject& object : objects) {
-            if (!object.isPinned) object.update(dt);
-        }
-//        const int objectsCount = world.getObjectsCount();
-//        threadPool.dispatch(objectsCount, [&objects, dt](int start, int end) {
-//            for (int i = start; i < end; i++) {
-//                VerletObject& object = objects[i];
-//                if (!object.isPinned) object.update(dt);
-//            }
-//        });
+        const int objectsCount = world.getObjectsCount();
+        threadPool.dispatch(objectsCount, [&objects, dt](int start, int end) {
+            for (int i = start; i < end; i++) {
+                VerletObject& object = objects[i];
+                if (!object.isPinned) object.update(dt);
+            }
+        });
     }
 
     void rebuildGrid() {
