@@ -118,13 +118,16 @@ private:
 
     void updatePositions(float dt) {
         std::vector<VerletObject> &objects = world.getObjects();
-        const int objectsCount = world.getObjectsCount();
-        threadPool.dispatch(objectsCount, [&objects, dt](int start, int end) {
-            for (int i = start; i < end; i++) {
-                VerletObject& object = objects[i];
-                if (!object.isPinned) object.update(dt);
-            }
-        });
+        for (VerletObject& object : objects) {
+            if (!object.isPinned) object.update(dt);
+        }
+//        const int objectsCount = world.getObjectsCount();
+//        threadPool.dispatch(objectsCount, [&objects, dt](int start, int end) {
+//            for (int i = start; i < end; i++) {
+//                VerletObject& object = objects[i];
+//                if (!object.isPinned) object.update(dt);
+//            }
+//        });
     }
 
     void rebuildGrid() {
@@ -156,10 +159,10 @@ public:
             constraintSticks();
             rebuildGrid();
             solveCollisions();
-            sf::Clock clock;
             updatePositions(subStepDt);
-            const long long elapsed = clock.restart().asMicroseconds();
-            std::cout << "elapsed: " << elapsed * 8 << '\n';
+//            sf::Clock clock;
+//            const long long elapsed = clock.restart().asMicroseconds();
+//            std::cout << "elapsed: " << elapsed * 8 << '\n';
         }
     }
 };
