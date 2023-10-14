@@ -111,9 +111,13 @@ private:
     // TODO when all grid filled with objects, you can see that some start falling faster and some slower (on lower gravity levels like 10)
     void applyGravity() {
         std::vector<VerletObject> &objects = world.getObjects();
-        for (VerletObject &object: objects) {
-            if (!object.isPinned) object.accelerate(gravity);
-        }
+        const int objectsCount = world.getObjectsCount();
+        threadPool.dispatch(objectsCount, [&objects](int start, int end) {
+            for (int i = start; i < end; i++) {
+                VerletObject& object = objects[i];
+                if (!object.isPinned) object.accelerate(gravity);
+            }
+        });
     }
 
     void updatePositions(float dt) {
@@ -151,15 +155,15 @@ public:
         const float subStepDt = physicsInterval / physicsSubSteps;
 
         for (int i = 0; i < physicsSubSteps; i++) {
+            sf::Clock clock;
             applyGravity();
+            const long long elapsed = clock.restart().asMicroseconds();
+            std::cout << "elapsed: " << elapsed * 8 << '\n';
             applyConstraints();
             constraintSticks();
             rebuildGrid();
             solveCollisions();
             updatePositions(subStepDt);
-//            sf::Clock clock;
-//            const long long elapsed = clock.restart().asMicroseconds();
-//            std::cout << "elapsed: " << elapsed * 8 << '\n';
         }
     }
 };
