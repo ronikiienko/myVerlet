@@ -14,24 +14,29 @@ private:
     void applyConstraints() {
         const Rectangle bounds = world.getBoundsF();
         std::vector<VerletObject> &objects = world.getObjects();
-        for (VerletObject &object: objects) {
-            const Vector2 velocity = (object.posCurr - object.posOld) * wallsDamping;
-            if (object.posCurr.x < bounds.getX1() + object.radius) {
-                object.posCurr.x = bounds.getX1() + object.radius;
-                object.posOld.x = object.posCurr.x + velocity.x;
-            } else if (object.posCurr.x > bounds.getX2() - object.radius) {
-                object.posCurr.x = bounds.getX2() - object.radius;
-                object.posOld.x = object.posCurr.x + velocity.x;
-            }
+        const int objectsCount = world.getObjectsCount();
+        threadPool.dispatch(objectsCount, [&objects, &bounds](int start, int end) {
+            for (int i = start; i < end; i++) {
+                VerletObject &object = objects[i];
+                const Vector2 velocity = (object.posCurr - object.posOld) * wallsDamping;
+                if (object.posCurr.x < bounds.getX1() + object.radius) {
+                    object.posCurr.x = bounds.getX1() + object.radius;
+                    object.posOld.x = object.posCurr.x + velocity.x;
+                } else if (object.posCurr.x > bounds.getX2() - object.radius) {
+                    object.posCurr.x = bounds.getX2() - object.radius;
+                    object.posOld.x = object.posCurr.x + velocity.x;
+                }
 
-            if (object.posCurr.y < bounds.getY1() + object.radius) {
-                object.posCurr.y = bounds.getY1() + object.radius;
-                object.posOld.y = object.posCurr.y + velocity.y;
-            } else if (object.posCurr.y > bounds.getY2() - object.radius) {
-                object.posCurr.y = bounds.getY2() - object.radius;
-                object.posOld.y = object.posCurr.y + velocity.y;
+                if (object.posCurr.y < bounds.getY1() + object.radius) {
+                    object.posCurr.y = bounds.getY1() + object.radius;
+                    object.posOld.y = object.posCurr.y + velocity.y;
+                } else if (object.posCurr.y > bounds.getY2() - object.radius) {
+                    object.posCurr.y = bounds.getY2() - object.radius;
+                    object.posOld.y = object.posCurr.y + velocity.y;
+                }
             }
-        }
+        });
+
     }
 
     void solveContact(VerletObject &obj1, VerletObject &obj2) {
@@ -85,9 +90,7 @@ private:
 
     void solveCollisions() {
 
-//        sf::Clock clock;
-//        const long long elapsed = clock.restart().asMicroseconds();
-//        std::cout << "elapsed: " << elapsed * 8 << '\n';
+
         int segment = grid.width / static_cast<int>(numThreads);
 
         for (int i = 0; i < numThreads; i++) {
@@ -137,7 +140,7 @@ private:
     }
 
 public:
-    explicit Physics(World &world, ThreadPool& threadPool)
+    explicit Physics(World &world, ThreadPool &threadPool)
             : world(world), grid(collisionGridWidth, collisionGridHeight, world.getBoundsI()), threadPool(threadPool) {}
 
     void update() {
@@ -145,7 +148,10 @@ public:
 
         for (int i = 0; i < physicsSubSteps; i++) {
             applyGravity();
+            sf::Clock clock;
             applyConstraints();
+            const long long elapsed = clock.restart().asMicroseconds();
+            std::cout << "elapsed: " << elapsed * 8 << '\n';
             constraintSticks();
             rebuildGrid();
             solveCollisions();
