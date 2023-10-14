@@ -78,7 +78,7 @@ struct IdGrid {
 
         // TODO remove checks - they are for debuggin
         if (gridX < 0 || gridX >= width || gridY < 0 || gridY >= height) {
-            throw std::runtime_error("Trying to set outside the grid. Grid x: " + std::to_string(gridX) + " Grid y: " + std::to_string(gridY));;
+            throw std::runtime_error("Trying to set outside the grid. Grid x: " + std::to_string(gridX) + " Grid y: " + std::to_string(gridY) + " Id: " + std::to_string(id));
         }
 
         int index = gridY * width + gridX;
