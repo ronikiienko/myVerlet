@@ -92,22 +92,27 @@ private:
     }
 
     void solveCollisions() {
-
-
-        int segment = grid.width / static_cast<int>(numThreads);
-
-        for (int i = 0; i < numThreads; i++) {
-            int startX = segment * i;
-            int endX = i + 1 == numThreads ? grid.width : segment * (i + 1);
-
-            threadPool.addTask([startX, endX, this]() {
-                solveCollisionsSubgrid(startX, endX, 0, grid.height);
+        const int threadCount = threadPool.threadsNum;
+        const int sliceCount = threadCount * 2;
+        const int sliceSize = grid.width / sliceCount;
+        //  to avoid data races - process in two passes. So that no threads are assigned to neighbouring columns
+        for (int i = 0; i < threadCount; i++) {
+            threadPool.addTask([i, sliceSize, this](){
+                int startCol = (i * 2) * sliceSize;
+                int endCol = startCol + sliceSize;
+                solveCollisionsSubgrid(startCol, endCol, 0, grid.height);
             });
         }
-
-
         threadPool.waitForCompletion();
 
+        for (int i = 0; i < threadCount; i++) {
+            threadPool.addTask([i, sliceSize, this]() {
+                int startCol = (i * 2 + 1) * sliceSize;
+                int endCol = startCol + sliceSize;
+                solveCollisionsSubgrid(startCol, endCol, 0, grid.height);
+            });
+        };
+        threadPool.waitForCompletion();
     }
 
 
