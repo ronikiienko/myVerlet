@@ -46,34 +46,29 @@ public:
     };
 
     void update() {
+        vertexArray.resize(world.getObjectsCount() * 4);
         window.clear(sf::Color::Black);
 
-        // Clear previous vertex data
-        vertexArray.clear();
-
         const std::vector<VerletObject> &objects = world.getObjects();
+        const int objectsCount = world.getObjectsCount();
+        threadPool.dispatch(objectsCount, [this, &objects](int start, int end) {
+            for (int i = start; i < end; i++) {
+                const VerletObject &object = objects[i];
 
-        for (const VerletObject &object: objects) {
-            // Compute the four corners of the square representing the circle
-            sf::Vertex one, two, three, four;
+                const int ind = i * 4;
 
-            one.position = {object.posCurr.x - object.radius, object.posCurr.y};
-            two.position = {object.posCurr.x, object.posCurr.y - object.radius};
-            three.position = {object.posCurr.x + object.radius, object.posCurr.y};
-            four.position = {object.posCurr.x, object.posCurr.y + object.radius};
+                vertexArray[ind].position = {object.posCurr.x - object.radius, object.posCurr.y};
+                vertexArray[ind+1].position = {object.posCurr.x, object.posCurr.y - object.radius};
+                vertexArray[ind+2].position = {object.posCurr.x + object.radius, object.posCurr.y};
+                vertexArray[ind+3].position = {object.posCurr.x, object.posCurr.y + object.radius};
 
-            // Set the color for each vertex
-            one.color = object.color;
-            two.color = object.color;
-            three.color = object.color;
-            four.color = object.color;
-
-            // Append the vertices to the vertex array
-            vertexArray.append(one);
-            vertexArray.append(two);
-            vertexArray.append(three);
-            vertexArray.append(four);
-        }
+                // Set the color for each vertex
+                vertexArray[ind].color = object.color;
+                vertexArray[ind + 1].color = object.color;
+                vertexArray[ind + 2].color = object.color;
+                vertexArray[ind + 3].color = object.color;
+            };
+        });
 
         // Draw all objects in one go!
         window.draw(vertexArray);
