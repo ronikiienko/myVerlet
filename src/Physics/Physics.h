@@ -155,10 +155,10 @@ public:
         const float subStepDt = physicsInterval / physicsSubSteps;
 
         for (int i = 0; i < physicsSubSteps; i++) {
-            sf::Clock clock;
             applyGravity();
-            const long long elapsed = clock.restart().asMicroseconds();
-            std::cout << "elapsed: " << elapsed * 8 << '\n';
+//            sf::Clock clock;
+//            const long long elapsed = clock.restart().asMicroseconds();
+//            std::cout << "elapsed: " << elapsed * 8 << '\n';
             applyConstraints();
             constraintSticks();
             rebuildGrid();

@@ -3,7 +3,7 @@
 #include "modules/Vector.h"
 #include "modules/Rectangle.h"
 
-const int maxObjectNum = 100000;
+const int maxObjectNum = 140000;
 const int maxSticksNum = 100000;
 
 constexpr Vector2 gravity = Vector2::fromCartesian(0, 50);
