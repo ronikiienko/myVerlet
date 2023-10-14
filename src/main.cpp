@@ -8,7 +8,7 @@
 #include "Physics/Physics.h"
 #include "modules/Rand.h"
 #include "modules/ThreadsTest.h"
-#include "modules/thread_pool.hpp"
+#include "modules/ThreadPool.h"
 
 int iterations = 100000000;
 
@@ -54,13 +54,20 @@ void testCustomVectorSubtractionSpeed() {
 }
 
 
+
+
 int main() {
+    TaskQueue tq;
+    tq.addTask([]() {
+        std::cout << "hellooooooo" << '\n';
+    });
+
     sf::ContextSettings settings;
     settings.antialiasingLevel = 1;
     sf::RenderWindow window(sf::VideoMode(windowBounds.getWidth(), windowBounds.getHeight()), "Verlet", sf::Style::Default, settings);
     window.setFramerateLimit(60);
 
-    tp::ThreadPool threadPool{numThreads};
+    ThreadPool threadPool{numThreads};
     World world{worldBounds};
     Graphics graphics{world, window, threadPool};
     Physics physics{world, threadPool};

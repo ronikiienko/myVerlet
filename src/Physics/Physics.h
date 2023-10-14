@@ -1,16 +1,15 @@
 #pragma once
 
-#include <thread>
 #include "../World/World.h"
 #include "SFML/Graphics/RenderWindow.hpp"
 #include "../modules/Grid.h"
-#include "../modules/thread_pool.hpp"
+#include "../modules/ThreadPool.h"
 
 class Physics {
 private:
     World &world;
     IdGrid grid;
-    tp::ThreadPool &threadPool;
+    ThreadPool &threadPool;
 
     void applyConstraints() {
         const Rectangle bounds = world.getBoundsF();
@@ -138,7 +137,7 @@ private:
     }
 
 public:
-    explicit Physics(World &world, tp::ThreadPool& threadPool)
+    explicit Physics(World &world, ThreadPool& threadPool)
             : world(world), grid(collisionGridWidth, collisionGridHeight, world.getBoundsI()), threadPool(threadPool) {}
 
     void update() {

@@ -38,6 +38,6 @@ void testThreads(int numThreads) {
     auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stopTime - startTime);
 
 
-    std::cout << "Time taken: " << duration.count() << " microseconds; " << "Num threads: " << numThreads << std::endl;
+    std::cout << "Time taken: " << duration.count() << " microseconds; " << "Num workers: " << numThreads << std::endl;
     std::cout << "Final sum: " << finalSum << std::endl;
 }
