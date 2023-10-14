@@ -46,16 +46,18 @@ public:
     };
 
     void update() {
-        vertexArray.resize(world.getObjectsCount() * 4);
         window.clear(sf::Color::Black);
 
         const std::vector<VerletObject> &objects = world.getObjects();
         const int objectsCount = world.getObjectsCount();
+
+        vertexArray.resize(world.getObjectsCount() * 4);
+
         threadPool.dispatch(objectsCount, [this, &objects](int start, int end) {
             for (int i = start; i < end; i++) {
                 const VerletObject &object = objects[i];
 
-                const int ind = i << 2;
+                const int ind = i * 4;
 
                 vertexArray[ind].position = {object.posCurr.x - object.radius, object.posCurr.y};
                 vertexArray[ind+1].position = {object.posCurr.x, object.posCurr.y - object.radius};
