@@ -118,7 +118,7 @@ struct ThreadPool {
         if (batchSize * threadsNum < maxCount) {
             const int start = batchSize * threadsNum;
             const int end = maxCount;
-//            callback(start, end);
+            callback(start, end);
 //            addTask([&callback, start, end]() {
 //                callback(start, end);
 //            });
