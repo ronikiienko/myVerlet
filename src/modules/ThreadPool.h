@@ -106,7 +106,7 @@ struct ThreadPool {
     void dispatch(int maxCount, TCallback &&callback) {
         const int batchSize = maxCount / threadsNum;
 
-        for (int i = 0; i < numThreads; i++) {
+        for (int i = 0; i < threadsNum; i++) {
             const int start = batchSize * i;
             const int end = start + batchSize;
 
@@ -115,12 +115,13 @@ struct ThreadPool {
             });
         }
 
-        if (batchSize * numThreads < maxCount) {
-            const int start = batchSize * numThreads;
+        if (batchSize * threadsNum < maxCount) {
+            const int start = batchSize * threadsNum;
             const int end = maxCount;
-            addTask([&callback, start, end]() {
-                callback(start, end);
-            });
+//            callback(start, end);
+//            addTask([&callback, start, end]() {
+//                callback(start, end);
+//            });
         }
     }
 };
