@@ -18,6 +18,9 @@ private:
         threadPool.dispatch(objectsCount, [&objects, &bounds](int start, int end) {
             for (int i = start; i < end; i++) {
                 VerletObject &object = objects[i];
+                if (object.posCurr.x < -100000) {
+                    throw std::runtime_error("hi, out of)");
+                }
                 const Vector2 velocity = (object.posCurr - object.posOld) * wallsDamping;
                 if (object.posCurr.x < bounds.getX1() + object.radius) {
                     object.posCurr.x = bounds.getX1() + object.radius;
