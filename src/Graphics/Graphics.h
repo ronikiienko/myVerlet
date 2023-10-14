@@ -55,7 +55,7 @@ public:
             for (int i = start; i < end; i++) {
                 const VerletObject &object = objects[i];
 
-                const int ind = i * 4;
+                const int ind = i << 2;
 
                 vertexArray[ind].position = {object.posCurr.x - object.radius, object.posCurr.y};
                 vertexArray[ind+1].position = {object.posCurr.x, object.posCurr.y - object.radius};
