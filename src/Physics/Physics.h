@@ -14,7 +14,7 @@ private:
     void applyConstraints() {
         const Rectangle bounds = world.getBoundsF();
         std::vector<VerletObject> &objects = world.getObjects();
-        objects[2563].posCurr.log();
+//        objects[2563].posCurr.log();
         const int objectsCount = world.getObjectsCount();
         threadPool.dispatch(objectsCount, [&objects, &bounds](int start, int end) {
             for (int i = start; i < end; i++) {

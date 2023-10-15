@@ -37,7 +37,7 @@ public:
 
     constexpr Vector2 operator/(float scalar) const {
         if (scalar == 0) {
-            throw std::runtime_error("Trying to divide by 0");
+            throw std::runtime_error("Trying to divide by 0 (/)");
         }
         return Vector2{x / scalar, y / scalar};
     }
@@ -80,7 +80,7 @@ public:
     // Add the -= operator
     constexpr Vector2 &operator/=(const float scalar) {
         if (scalar == 0) {
-            throw std::runtime_error("Trying to divide by 0");
+            throw std::runtime_error("Trying to divide by 0 (/=)");
         }
         x /= scalar;
         y /= scalar;
