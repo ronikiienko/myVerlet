@@ -6,7 +6,7 @@
 const int maxObjectNum = 140000;
 const int maxSticksNum = 100000;
 
-constexpr Vector2 gravity = Vector2::fromCartesian(0, 100);
+constexpr Vector2 gravity = Vector2::fromCartesian(0, 200);
 
 constexpr RectangleI worldBounds = RectangleI::fromSize(0,0,1600,1200);
 constexpr RectangleI windowBounds = RectangleI::fromSize(0,0,1600,1200);

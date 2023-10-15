@@ -21,23 +21,24 @@ private:
                 if (object.posCurr.x < -100000) {
                     throw std::runtime_error("hi, out of)");
                 }
-
                 // problem was that for example: world is 100x100. Then both objects are outside of field on same direction, like obj1(101.256, 102.399) and obj2(105.936, 110.87). both will be pushed to (100,100) resulting in zero distance.
+                // offset is trying to fix this problem
+                const float offset = static_cast<float>(i) * 1e-6f;
 
                 const Vector2 velocity = (object.posCurr - object.posOld) * wallsDamping;
                 if (object.posCurr.x < bounds.getX1() + object.radius) {
-                    object.posCurr.x = bounds.getX1() + object.radius;
+                    object.posCurr.x = bounds.getX1() + object.radius + offset;
                     object.posOld.x = object.posCurr.x + velocity.x;
                 } else if (object.posCurr.x > bounds.getX2() - object.radius) {
-                    object.posCurr.x = bounds.getX2() - object.radius;
+                    object.posCurr.x = bounds.getX2() - object.radius - offset;
                     object.posOld.x = object.posCurr.x + velocity.x;
                 }
 
                 if (object.posCurr.y < bounds.getY1() + object.radius) {
-                    object.posCurr.y = bounds.getY1() + object.radius;
+                    object.posCurr.y = bounds.getY1() + object.radius + offset;
                     object.posOld.y = object.posCurr.y + velocity.y;
                 } else if (object.posCurr.y > bounds.getY2() - object.radius) {
-                    object.posCurr.y = bounds.getY2() - object.radius;
+                    object.posCurr.y = bounds.getY2() - object.radius - offset;
                     object.posOld.y = object.posCurr.y + velocity.y;
                 }
             }
