@@ -23,11 +23,12 @@ constexpr int collisionGridHeight = worldBounds.getHeight() / (maxRadius * 2);
 const float physicsInterval = 0.016f;
 const int physicsSubSteps = 8;
 
+// how much speed is damped when hitting wall
 const float wallsDamping = 0.2f;
-
 // doesn't actually change speed when collision happens, but rather how much objects will be "splitted" when resolving collisions. 0 - not splitted no collision resolving happens. 1 - objects are fully splitted
 const float collisionsDamping = 0.75f;
 
+// when same - whole simulation goes same way each time you launch it
 const int seed = 40;
 
 const int numThreads = 10;
