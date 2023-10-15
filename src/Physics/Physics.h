@@ -117,6 +117,15 @@ private:
             });
         };
         threadPool.waitForCompletion();
+
+        if (sliceSize * sliceCount < grid.width) {
+            threadPool.addTask([sliceSize, sliceCount, this](){
+                int startCol = sliceSize * sliceCount;
+                int endCol = grid.width;
+                solveCollisionsSubgrid(startCol, endCol, 0, grid.height);
+            });
+        }
+        threadPool.waitForCompletion();
     }
 
 
