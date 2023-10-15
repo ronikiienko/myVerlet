@@ -23,7 +23,7 @@ const int physicsSubSteps = 8;
 const float wallsDamping = 0.2f;
 const float collisionsDamping = 0.2f;
 
-const int seed = 401;
+const int seed = 4010;
 
 const int numThreads = 10;
 
