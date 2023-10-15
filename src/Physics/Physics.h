@@ -155,6 +155,12 @@ private:
     void rebuildGrid() {
         grid.clear();
         std::vector<VerletObject> &objects = world.getObjects();
+//        const int objectsCount = world.getObjectsCount();
+//        threadPool.dispatch(objectsCount, [this, &objects](int start, int end){
+//            for (int i = start; i < end; i++) {
+//                grid.insert(i, objects[i].posCurr.x, objects[i].posCurr.y);
+//            };
+//        });
         const int objectsCount = world.getObjectsCount();
         for (int i = 0; i < objectsCount; i++) {
             grid.insert(i, objects[i].posCurr.x, objects[i].posCurr.y);
