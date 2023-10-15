@@ -18,9 +18,6 @@ private:
         threadPool.dispatch(objectsCount, [&objects, &bounds](int start, int end) {
             for (int i = start; i < end; i++) {
                 VerletObject &object = objects[i];
-                if (object.posCurr.x < -100000) {
-                    throw std::runtime_error("hi, out of)");
-                }
                 // problem was that for example: world is 100x100. Then both objects are outside of field on same direction, like obj1(101.256, 102.399) and obj2(105.936, 110.87). both will be pushed to (100,100) resulting in zero distance.
                 // offset is trying to fix this problem
                 const float offset = static_cast<float>(i) * 1e-6f;
