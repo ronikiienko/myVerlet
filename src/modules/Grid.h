@@ -93,6 +93,7 @@ struct IdGrid {
     }
 
     [[nodiscard]] const Cell& get(int gridX, int gridY) const {
+        // TODO remove safety checks
         if (gridX < 0 || gridX >= width || gridY < 0 || gridY >= height) {
             throw std::runtime_error("Trying to get outside the grid.");
         }

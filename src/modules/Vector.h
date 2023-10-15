@@ -36,6 +36,7 @@ public:
     }
 
     constexpr Vector2 operator/(float scalar) const {
+        // TODO remove safety checks
         if (scalar == 0) {
             throw std::runtime_error("Trying to divide by 0 (/)");
         }
@@ -79,6 +80,7 @@ public:
 
     // Add the -= operator
     constexpr Vector2 &operator/=(const float scalar) {
+        // TODO remove safety checks
         if (scalar == 0) {
             throw std::runtime_error("Trying to divide by 0 (/=)");
         }
