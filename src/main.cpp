@@ -13,7 +13,8 @@
 int main() {
     sf::ContextSettings settings;
     settings.antialiasingLevel = 1;
-    sf::RenderWindow window(sf::VideoMode(windowBounds.getWidth(), windowBounds.getHeight()), "Verlet", sf::Style::Default, settings);
+    sf::RenderWindow window(sf::VideoMode(windowBounds.getWidth(), windowBounds.getHeight()), "Verlet",
+                            sf::Style::Default, settings);
     window.setFramerateLimit(60);
 
     ThreadPool threadPool{numThreads};
@@ -24,11 +25,13 @@ int main() {
     RNGf gen = RNGf(seed);
 
     for (int i = 0; i < maxObjectNum; i++) {
-        VerletObject& object = world.addObject(
-                Vector2::fromCartesian(gen.getInRange(0, worldBounds.getWidth()), gen.getInRange(0, worldBounds.getHeight())),
+        VerletObject &object = world.addObject(
+                Vector2::fromCartesian(gen.getInRange(0, worldBounds.getWidth()),
+                                       gen.getInRange(0, worldBounds.getHeight())),
                 gen.getInRange(minRadius, maxRadius)
         );
-         object.color = sf::Color(static_cast<int>(object.posCurr.x / worldBounds.getWidth() * 255), static_cast<int>(object.posCurr.y / worldBounds.getHeight() * 255), 255);
+        object.color = sf::Color(static_cast<int>(object.posCurr.x / worldBounds.getWidth() * 255),
+                                 static_cast<int>(object.posCurr.y / worldBounds.getHeight() * 255), 255);
     }
 
 
@@ -40,6 +43,22 @@ int main() {
             if (event.type == sf::Event::Closed) {
                 window.close();
             }
+//            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::S) {
+//                for (int i = 0; i < 50; i++) {
+//                    const int centerX = worldBounds.getX2() / 2;
+//                    const int centerY = worldBounds.getY2() / 2;
+//                    VerletObject &newObject = world.addObject(
+//                            Vector2::fromCartesian(
+//                                    centerX + gen.getInRange(-20, 20),
+//                                    centerY + gen.getInRange(-20, 20)
+//                            ),
+//                            gen.getInRange(minRadius, maxRadius)
+//                    );
+//                    float velocityX = gen.getInRange(-5, 5);
+//                    float velocityY = gen.getInRange(-5, 5);
+//                    newObject.setVelocity(Vector2::fromCartesian(velocityX, velocityY));
+//                }
+//            }
         }
         if (logFps) {
             const double elapsed = clock.restart().asMilliseconds();
