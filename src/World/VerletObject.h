@@ -32,7 +32,7 @@ public:
         const Vector2 velocity = posCurr - posOld;
 
         posOld = posCurr;
-        posCurr = posCurr + velocity + (acceleration * (dt * dt));
+        posCurr += velocity + (acceleration * (dt * dt));
 
         acceleration = Vector2::fromCartesian();
     }
