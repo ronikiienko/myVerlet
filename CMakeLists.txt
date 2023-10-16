@@ -16,6 +16,7 @@ set(SOURCES src/main.cpp
         src/World/VerletStick.h
         src/modules/thread_pool.hpp
         src/modules/ThreadPool.h
+        src/PerformanceMonitor/PerformanceMonitor.h
 )
 
 project(${PROJECT_NAME})

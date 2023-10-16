@@ -9,6 +9,7 @@
 #include "modules/Rand.h"
 #include "modules/ThreadsTest.h"
 #include "modules/ThreadPool.h"
+#include "PerformanceMonitor/PerformanceMonitor.h"
 
 int main() {
     sf::ContextSettings settings;
@@ -21,6 +22,7 @@ int main() {
     World world{worldBounds};
     Graphics graphics{world, window, threadPool};
     Physics physics{world, threadPool};
+    PerformanceMonitor performanceMonitor = PerformanceMonitor{window};
 
     RNGf gen = RNGf(seed);
 
@@ -38,27 +40,28 @@ int main() {
     sf::Clock clock;
 
     while (window.isOpen()) {
+
         sf::Event event{};
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
                 window.close();
             }
-//            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::S) {
-//                for (int i = 0; i < 50; i++) {
-//                    const int centerX = worldBounds.getX2() / 2;
-//                    const int centerY = worldBounds.getY2() / 2;
-//                    VerletObject &newObject = world.addObject(
-//                            Vector2::fromCartesian(
-//                                    centerX + gen.getInRange(-20, 20),
-//                                    centerY + gen.getInRange(-20, 20)
-//                            ),
-//                            gen.getInRange(minRadius, maxRadius)
-//                    );
-//                    float velocityX = gen.getInRange(-5, 5);
-//                    float velocityY = gen.getInRange(-5, 5);
-//                    newObject.setVelocity(Vector2::fromCartesian(velocityX, velocityY));
-//                }
-//            }
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::S) {
+                for (int i = 0; i < 50; i++) {
+                    const int centerX = worldBounds.getX2() / 2;
+                    const int centerY = worldBounds.getY2() / 2;
+                    VerletObject &newObject = world.addObject(
+                            Vector2::fromCartesian(
+                                    centerX + gen.getInRange(-20, 20),
+                                    centerY + gen.getInRange(-20, 20)
+                            ),
+                            gen.getInRange(minRadius, maxRadius)
+                    );
+                    float velocityX = gen.getInRange(-5, 5);
+                    float velocityY = gen.getInRange(-5, 5);
+                    newObject.setVelocity(Vector2::fromCartesian(velocityX, velocityY));
+                }
+            }
         }
         if (logFps) {
             const double elapsed = clock.restart().asMilliseconds();
@@ -68,6 +71,7 @@ int main() {
         physics.update();
         graphics.update();
 //        sf::Clock clock1;
+//        performanceMonitor.draw();
 //        const long long elapsedk = clock1.restart().asMicroseconds();
 //        std::cout << "elapsed: " << elapsedk << '\n';
 
