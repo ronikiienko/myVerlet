@@ -37,7 +37,7 @@ public:
             throw std::runtime_error("Trying to end timer that wasn't started (PerformanceMonitor)" + label);
         }
         sf::Clock& clock = clocks.find(label)->second;
-        const long long elapsed = clock.restart().asMilliseconds();
+        const long long elapsed = clock.restart().asMicroseconds();
 
         if (!times.count(label)) {
             times.insert({label, 0.0f});
@@ -52,7 +52,8 @@ public:
     void draw() {
         std::string textString;
         for (auto& it : times) {
-            textString += it.first + ":   " + std::to_string(it.second)  + '\n';
+            double milliseconds = static_cast<double>(it.second) / 1000;
+            textString += it.first + ":   " + std::to_string(milliseconds)  + '\n';
         }
         text.setString(textString);
         window.draw(text);
