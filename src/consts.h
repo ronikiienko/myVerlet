@@ -32,5 +32,3 @@ const float collisionsDamping = 0.75f;
 const int seed = 40;
 
 const int numThreads = 10;
-
-bool logFps = true;

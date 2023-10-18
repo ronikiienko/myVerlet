@@ -46,8 +46,6 @@ public:
     };
 
     void update() {
-        window.clear(sf::Color::Black);
-
         const std::vector<VerletObject> &objects = world.getObjects();
         const int objectsCount = world.getObjectsCount();
 
@@ -74,7 +72,5 @@ public:
 
         // Draw all objects in one go!
         window.draw(vertexArray);
-
-        window.display();
     }
 };

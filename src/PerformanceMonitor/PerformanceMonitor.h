@@ -22,10 +22,8 @@ public:
         }
         text.setFont(font);
         text.setFillColor(sf::Color::White);
-        text.setCharacterSize(10);
-        text.setPosition(200.0f, 200.0f);
-        text.setString("hiii");
-
+        text.setCharacterSize(12);
+        text.setPosition(5.0f, 5.0f);
     }
     void start(const std::string& label) {
         if (!clocks.count(label)) {
@@ -52,8 +50,12 @@ public:
     }
 
     void draw() {
+        std::string textString;
+        for (auto& it : times) {
+            textString += it.first + ":   " + std::to_string(it.second)  + '\n';
+        }
+        text.setString(textString);
         window.draw(text);
-        window.display();
     }
 };
 

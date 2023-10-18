@@ -44,7 +44,7 @@ int main() {
     }
 
 
-    sf::Clock clock;
+
 
     while (window.isOpen()) {
 
@@ -70,18 +70,17 @@ int main() {
                 }
             }
         }
-        if (logFps) {
-            const double elapsed = clock.restart().asMilliseconds();
-            std::cout << "FPS: " << 1000 / elapsed << '\n';
-        }
 
+        performanceMonitor.start("physics");
         physics.update();
-        graphics.update();
-//        sf::Clock clock1;
-//        performanceMonitor.draw();
-//        const long long elapsedk = clock1.restart().asMicroseconds();
-//        std::cout << "elapsed: " << elapsedk << '\n';
+        performanceMonitor.end("physics");
 
+        performanceMonitor.start("graphics");
+        window.clear(sf::Color::Black);
+        graphics.update();
+        performanceMonitor.draw();
+        window.display();
+        performanceMonitor.end("graphics");
     }
 
 
