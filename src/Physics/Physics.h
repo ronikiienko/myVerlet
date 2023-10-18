@@ -180,9 +180,6 @@ public:
 
         for (int i = 0; i < physicsSubSteps; i++) {
             applyGravity();
-//            sf::Clock clock;
-//            const long long elapsed = clock.restart().asMicroseconds();
-//            std::cout << "elapsed: " << elapsed * 8 << '\n';
             applyConstraints();
             constraintSticks();
             rebuildGrid();
