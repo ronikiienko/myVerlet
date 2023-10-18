@@ -19,10 +19,10 @@ int main() {
     window.setFramerateLimit(60);
 
     ThreadPool threadPool{numThreads};
+    PerformanceMonitor performanceMonitor = PerformanceMonitor{window};
     World world{worldBounds};
     Graphics graphics{world, window, threadPool};
-    Physics physics{world, threadPool};
-    PerformanceMonitor performanceMonitor = PerformanceMonitor{window};
+    Physics physics{world, threadPool, performanceMonitor};
 
     RNGf gen = RNGf(seed);
 

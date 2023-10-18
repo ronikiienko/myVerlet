@@ -4,12 +4,14 @@
 #include "SFML/Graphics/RenderWindow.hpp"
 #include "../modules/Grid.h"
 #include "../modules/ThreadPool.h"
+#include "../PerformanceMonitor/PerformanceMonitor.h"
 
 class Physics {
 private:
     World &world;
     IdGrid grid;
     ThreadPool &threadPool;
+    PerformanceMonitor &performanceMonitor;
 
     void applyConstraints() {
         const Rectangle bounds = world.getBoundsF();
@@ -172,8 +174,8 @@ private:
     }
 
 public:
-    explicit Physics(World &world, ThreadPool &threadPool)
-            : world(world), grid(collisionGridWidth, collisionGridHeight, world.getBoundsI()), threadPool(threadPool) {}
+    explicit Physics(World &world, ThreadPool &threadPool, PerformanceMonitor& performanceMonitor)
+            : world(world), grid(collisionGridWidth, collisionGridHeight, world.getBoundsI()), threadPool(threadPool), performanceMonitor(performanceMonitor) {}
 
     void update() {
         const float subStepDt = physicsInterval / physicsSubSteps;
