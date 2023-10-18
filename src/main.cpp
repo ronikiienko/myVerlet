@@ -12,13 +12,6 @@
 #include "PerformanceMonitor/PerformanceMonitor.h"
 
 int main() {
-    float num1 = 0.00001;
-    float num2 = 832.569568;
-    float num3 = 102.569568;
-    float sum = num1 + num2;
-    float sum1 = num1 + num3;
-
-
     sf::ContextSettings settings;
     settings.antialiasingLevel = 1;
     sf::RenderWindow window(sf::VideoMode(windowBounds.getWidth(), windowBounds.getHeight()), "Verlet",
