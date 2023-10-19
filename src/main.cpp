@@ -16,25 +16,25 @@ int main() {
     settings.antialiasingLevel = 1;
     sf::RenderWindow window(sf::VideoMode(windowBounds.getWidth(), windowBounds.getHeight()), "Verlet",
                             sf::Style::Default, settings);
-    window.setFramerateLimit(60);
+//    window.setFramerateLimit(60);
 
     ThreadPool threadPool{numThreads};
-    PerformanceMonitor performanceMonitor = PerformanceMonitor{window};
     World world{worldBounds};
+    PerformanceMonitor performanceMonitor = PerformanceMonitor{window, world};
     Graphics graphics{world, window, threadPool};
     Physics physics{world, threadPool, performanceMonitor};
 
     RNGf gen = RNGf(seed);
 
-    for (int i = 0; i < maxObjectNum; i++) {
-        VerletObject &object = world.addObject(
-                Vector2::fromCartesian(gen.getInRange(0, worldBounds.getWidth()),
-                                       gen.getInRange(0, worldBounds.getHeight())),
-                gen.getInRange(minRadius, maxRadius)
-        );
-        object.color = sf::Color(static_cast<int>(object.posCurr.x / worldBounds.getWidth() * 255),
-                                 static_cast<int>(object.posCurr.y / worldBounds.getHeight() * 255), 255);
-    }
+//    for (int i = 0; i < maxObjectNum; i++) {
+//        VerletObject &object = world.addObject(
+//                Vector2::fromCartesian(gen.getInRange(0, worldBounds.getWidth()),
+//                                       gen.getInRange(0, worldBounds.getHeight())),
+//                gen.getInRange(minRadius, maxRadius)
+//        );
+//        object.color = sf::Color(static_cast<int>(object.posCurr.x / worldBounds.getWidth() * 255),
+//                                 static_cast<int>(object.posCurr.y / worldBounds.getHeight() * 255), 255);
+//    }
 
 
 

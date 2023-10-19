@@ -10,13 +10,14 @@
 
 class PerformanceMonitor {
 private:
+    World& world;
     sf::RenderWindow& window;
     std::unordered_map<std::string, sf::Clock> clocks;
     std::unordered_map<std::string, long long> times;
     sf::Font font;
     sf::Text text;
 public:
-    explicit PerformanceMonitor(sf::RenderWindow& window): window(window) {
+    explicit PerformanceMonitor(sf::RenderWindow& window, World& world): window(window), world(world) {
         if(!font.loadFromFile("../res/Roboto-Medium.ttf")) {
             throw std::runtime_error("Font could not load. Perhaps it doesn't exist?");
         }
@@ -51,9 +52,10 @@ public:
 
     void draw() {
         std::string textString;
+        textString += "Objects count:  " + std::to_string(world.getObjectsCount());
         for (auto& it : times) {
             double milliseconds = static_cast<double>(it.second) / 1000;
-            textString += it.first + ":   " + std::to_string(milliseconds)  + '\n';
+            textString += '\n' + it.first + ":   " + std::to_string(milliseconds);
         }
         text.setString(textString);
         window.draw(text);
