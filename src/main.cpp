@@ -64,6 +64,8 @@ int main() {
             }
         }
 
+        performanceMonitor.start("total");
+
         performanceMonitor.start("physics");
         physics.update();
         performanceMonitor.end("physics");
@@ -74,6 +76,8 @@ int main() {
         performanceMonitor.draw();
         window.display();
         performanceMonitor.end("graphics");
+
+        performanceMonitor.end("total");
     }
 
 
