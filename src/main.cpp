@@ -47,13 +47,13 @@ int main() {
                 window.close();
             }
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::S) {
-                for (int i = 0; i < 50; i++) {
+                for (int i = 0; i < 300; i++) {
                     const int centerX = worldBounds.getX2() / 2;
                     const int centerY = worldBounds.getY2() / 2;
                     VerletObject &newObject = world.addObject(
                             Vector2::fromCartesian(
-                                    centerX + gen.getInRange(-20, 20),
-                                    centerY + gen.getInRange(-20, 20)
+                                    centerX + gen.getInRange(-120, 120),
+                                    centerY + gen.getInRange(-60, 60)
                             ),
                             gen.getInRange(minRadius, maxRadius)
                     );
