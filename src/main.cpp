@@ -57,8 +57,8 @@ int main() {
                             ),
                             gen.getInRange(minRadius, maxRadius)
                     );
-                    float velocityX = gen.getInRange(-5, 5);
-                    float velocityY = gen.getInRange(-5, 5);
+                    float velocityX = gen.getInRange(-1, 1);
+                    float velocityY = gen.getInRange(-1,0);
                     newObject.setVelocity(Vector2::fromCartesian(velocityX, velocityY));
                 }
             }

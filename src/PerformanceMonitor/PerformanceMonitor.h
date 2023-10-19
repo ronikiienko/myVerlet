@@ -56,7 +56,7 @@ public:
         for (auto& it : times) {
             double milliseconds = static_cast<double>(it.second) / 1000;
             short fps = 1000 / milliseconds;
-            textString += '\n' + it.first + ":   " + std::to_string(milliseconds) + " / FPS:   " + std::to_string(fps);
+            textString += '\n' + it.first + ":   " + std::to_string(milliseconds) + " ms" + "    /    " + std::to_string(fps) + " FPS";
         }
         text.setString(textString);
         window.draw(text);
