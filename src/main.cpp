@@ -16,7 +16,7 @@ int main() {
     settings.antialiasingLevel = 1;
     sf::RenderWindow window(sf::VideoMode(windowBounds.getWidth(), windowBounds.getHeight()), "Verlet",
                             sf::Style::Default, settings);
-//    window.setFramerateLimit(60);
+    window.setFramerateLimit(60);
 
     ThreadPool threadPool{numThreads};
     World world{worldBounds};
