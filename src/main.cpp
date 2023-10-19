@@ -37,14 +37,33 @@ int main() {
 //    }
 
 
-
-
+    VerletObject* objectHold;
+    bool wasPinned;
     while (window.isOpen()) {
 
         sf::Event event{};
         while (window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
                 window.close();
+            }
+            if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+                const Vector2 clickPoint = Vector2::fromCartesian(static_cast<float>(event.mouseButton.x), static_cast<float>(event.mouseButton.y));
+                for (VerletObject& object : world.getObjects()) {
+                    if ((clickPoint - object.posCurr).magnitude() < object.radius) {
+                        objectHold = &object;
+                        wasPinned = object.isPinned;
+                        object.isPinned = true;
+                    }
+                }
+            }
+            if (event.type == sf::Event::MouseMoved && objectHold != nullptr) {
+                // Mouse was moved and there's an object being held
+                objectHold->posCurr = Vector2::fromCartesian(static_cast<float>(event.mouseMove.x), static_cast<float>(event.mouseMove.y));
+            }
+            if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left && objectHold != nullptr) {
+                objectHold->isPinned = wasPinned;
+                objectHold->posOld = objectHold->posCurr;
+                objectHold = nullptr;
             }
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::S) {
                 for (int i = 0; i < 300; i++) {
