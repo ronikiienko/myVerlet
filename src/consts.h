@@ -32,4 +32,4 @@ const float collisionsDamping = 0.75f;
 // when same - whole simulation goes same way each time you launch it
 const int seed = 40;
 
-const int numThreads = static_cast<int>(std::thread::hardware_concurrency());
+const short numThreads = static_cast<short>(std::thread::hardware_concurrency());
