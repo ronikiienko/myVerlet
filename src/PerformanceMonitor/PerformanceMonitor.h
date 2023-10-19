@@ -55,7 +55,8 @@ public:
         textString += "Objects count:  " + std::to_string(world.getObjectsCount());
         for (auto& it : times) {
             double milliseconds = static_cast<double>(it.second) / 1000;
-            textString += '\n' + it.first + ":   " + std::to_string(milliseconds);
+            short fps = 1000 / milliseconds;
+            textString += '\n' + it.first + ":   " + std::to_string(milliseconds) + " / FPS:   " + std::to_string(fps);
         }
         text.setString(textString);
         window.draw(text);
