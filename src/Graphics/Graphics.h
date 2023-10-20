@@ -39,10 +39,19 @@ private:
     sf::RenderWindow &window;
     sf::VertexArray vertexArray;  // Added this line
     ThreadPool &threadPool;
+    sf::Texture objectTexture;
+    float textureSize;
 public:
     explicit Graphics(World &world, sf::RenderWindow &window, ThreadPool &threadPool)
             : world(world), window(window), threadPool(threadPool) {
         vertexArray.setPrimitiveType(sf::Quads);  // Initialize with Quads
+
+        if (!objectTexture.loadFromFile("../res/circle.png")) {
+            throw std::runtime_error("Could not load circle texture file");
+        }
+        objectTexture.generateMipmap();
+        objectTexture.setSmooth(true);
+        textureSize = 1024.0f;
     };
 
     void update() {
@@ -57,12 +66,16 @@ public:
 
                 const int ind = i * 4;
 
-                vertexArray[ind].position = {object.posCurr.x - object.radius, object.posCurr.y};
-                vertexArray[ind+1].position = {object.posCurr.x, object.posCurr.y - object.radius};
-                vertexArray[ind+2].position = {object.posCurr.x + object.radius, object.posCurr.y};
-                vertexArray[ind+3].position = {object.posCurr.x, object.posCurr.y + object.radius};
+                vertexArray[ind].position = {object.posCurr.x - object.radius, object.posCurr.y - object.radius};
+                vertexArray[ind+1].position = {object.posCurr.x + object.radius, object.posCurr.y - object.radius};
+                vertexArray[ind+2].position = {object.posCurr.x + object.radius, object.posCurr.y + object.radius};
+                vertexArray[ind+3].position = {object.posCurr.x - object.radius, object.posCurr.y + object.radius};
 
-                // Set the color for each vertex
+                vertexArray[ind].texCoords = {0.0f, 0.0f};
+                vertexArray[ind+1].texCoords = {textureSize, 0.0f};
+                vertexArray[ind+2].texCoords = {textureSize, textureSize};
+                vertexArray[ind+3].texCoords = {0.0f, textureSize};
+
                 vertexArray[ind].color = object.color;
                 vertexArray[ind + 1].color = object.color;
                 vertexArray[ind + 2].color = object.color;
@@ -70,7 +83,6 @@ public:
             };
         });
 
-        // Draw all objects in one go!
-        window.draw(vertexArray);
+        window.draw(vertexArray, &objectTexture);
     }
 };
