@@ -18,6 +18,7 @@ private:
     std::uniform_real_distribution<T> distribution{0, 1};
 public:
     explicit RealNumberGenerator(int seed) : NumberGenerator(seed) {}
+    RealNumberGenerator() : NumberGenerator() {}
 
     T get() {
         return distribution(gen);
@@ -32,6 +33,7 @@ template<typename T>
 class IntNumberGenerator : NumberGenerator {
 public:
     explicit IntNumberGenerator(int seed) : NumberGenerator(seed) {}
+    IntNumberGenerator() : NumberGenerator() {}
 
     T getInRange(T min, T max) {
         std::uniform_int_distribution<T> distribution(min, max);
