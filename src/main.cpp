@@ -93,8 +93,8 @@ int main() {
         window.clear(sf::Color::Black);
         graphics.update();
         performanceMonitor.draw();
-        window.display();
         performanceMonitor.end("graphics");
+        window.display();
 
         performanceMonitor.end("total");
     }
