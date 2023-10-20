@@ -45,7 +45,7 @@ public:
     explicit Graphics(World &world, sf::RenderWindow &window, ThreadPool &threadPool)
             : world(world), window(window), threadPool(threadPool) {
         vertexArray.setPrimitiveType(sf::Quads);  // Initialize with Quads
-
+        // TODO somehow organise resources, because now path depends on where executable is. Same for fonts in performance monitor
         if (!objectTexture.loadFromFile("../res/circle.png")) {
             throw std::runtime_error("Could not load circle texture file");
         }
