@@ -37,7 +37,7 @@ int main() {
 //    }
 
 
-    VerletObject* objectHold;
+    VerletObject* objectHold = nullptr;
     bool wasPinned;
     while (window.isOpen()) {
 
