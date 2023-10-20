@@ -12,19 +12,34 @@ protected:
     explicit NumberGenerator(int seed) : gen(seed) {};
 };
 
-class RNGf : NumberGenerator {
+template<typename T>
+class RealNumberGenerator : NumberGenerator {
 private:
-    std::uniform_real_distribution<float> distribution;
+    std::uniform_real_distribution<T> distribution{0, 1};
 public:
-    RNGf() : NumberGenerator(), distribution(0.0f, 1.0f) {};
+    explicit RealNumberGenerator(int seed) : NumberGenerator(seed) {}
 
-    explicit RNGf(int seed) : NumberGenerator(seed), distribution(0.0f, 1.0f) {};
-
-    float get() {
+    T get() {
         return distribution(gen);
     }
 
-    float getInRange(float min, float max) {
+    T getInRange(T min, T max) {
         return min + get() * (max - min);
     }
 };
+
+template<typename T>
+class IntNumberGenerator : NumberGenerator {
+public:
+    explicit IntNumberGenerator(int seed) : NumberGenerator(seed) {}
+
+    T getInRange(T min, T max) {
+        std::uniform_int_distribution<T> distribution(min, max);
+        return distribution(gen);
+    }
+};
+
+using RNGf = RealNumberGenerator<float>;
+using RNGd = RealNumberGenerator<double>;
+using RNGi = IntNumberGenerator<int>;
+using RNGs = IntNumberGenerator<short>;
