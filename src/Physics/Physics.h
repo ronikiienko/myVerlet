@@ -59,6 +59,19 @@ private:
             if (!obj2.isPinned) obj2.posCurr += normal * delta;
         }
     }
+//    void solveContact(VerletObject &obj1, VerletObject &obj2) {
+//        Vector2 move = obj1.posCurr - obj2.posCurr;
+//        const float dist2 = move.magnitude2();
+//        const float min_dist = obj1.radius + obj2.radius;
+//        // Check overlapping
+//        if (dist2 < min_dist * min_dist) {
+//            const float dist = sqrt(dist2);
+//            move *= 0.5f * collisionsDamping * (dist - min_dist) / dist;
+//            // Update positions
+//            if (!obj1.isPinned) obj1.posCurr -= move;
+//            if (!obj2.isPinned) obj2.posCurr += move;
+//        }
+//    }
 
     void solveCollisionsTwoCells(const Cell &cell1, const Cell &cell2, std::vector<VerletObject> &objects) {
         for (int i = 0; i < cell1.activeCount; ++i) {
