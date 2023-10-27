@@ -197,7 +197,10 @@ public:
             applyGravity();
             applyConstraints();
             constraintSticks();
+            performanceMonitor.start("grid");
             rebuildGrid();
+            performanceMonitor.end("grid");
+
             performanceMonitor.start("collisions");
             solveCollisions();
             performanceMonitor.end("collisions");

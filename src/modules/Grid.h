@@ -49,6 +49,8 @@ struct IdGrid {
     int height;
     int realX1;
     int realY1;
+    float realX1f;
+    float realY1f;
     int realX2;
     int realY2;
     int realWidth;
@@ -60,6 +62,8 @@ struct IdGrid {
     IdGrid(int width, int height, RectangleI realBounds) : width(width), height(height) {
         realX1 = realBounds.getX1();
         realY1 = realBounds.getY1();
+        realX1f = static_cast<float>(realX1);
+        realY1f = static_cast<float>(realY1);
         realX2 = realBounds.getX2();
         realY2 = realBounds.getY2();
         realWidth = realBounds.getWidth();
@@ -71,10 +75,10 @@ struct IdGrid {
         data.resize(width * height);
     }
 
-    void insert(int id, int realX, int realY) {
+    void insert(int id, float realX, float realY) {
         // Convert real-world coordinates to grid coordinates
-        int gridX = static_cast<int>((realX - realX1) / widthRatio);
-        int gridY = static_cast<int>((realY - realY1) / heightRatio);
+        int gridX = static_cast<int>((realX - realX1f) / widthRatio);
+        int gridY = static_cast<int>((realY - realY1f) / heightRatio);
 
         // TODO remove checks - they are for debuggin
         if (gridX < 0 || gridX >= width || gridY < 0 || gridY >= height) {
