@@ -6,4 +6,4 @@ Lowering number of substeps to 2 and pushing it's limits on 30fps+ can handle ar
 Handles gravity, collisions, wall constraints  
 Using SFML library.  
 Not using GPU for physics calculations.  
-![myVerlet_pqiWjUpu5l](https://github.com/ronikiienko/myVerlet/assets/106737540/c1514a35-24f9-4faa-a32c-e3ca8824cdc1)
+![myVerlet_pqiWjUpu5l](https://github.com/ronikiienko/myVerlet/assets/106737540/fadf1ffc-47d6-4a30-97c9-e7726acefb3e)
