@@ -185,7 +185,10 @@ public:
             applyConstraints();
             constraintSticks();
             rebuildGrid();
+            performanceMonitor.start("collisions");
             solveCollisions();
+            performanceMonitor.end("collisions");
+
             updatePositions(subStepDt);
         }
     }

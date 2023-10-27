@@ -26,15 +26,15 @@ int main() {
 
     RNGf gen = RNGf(seed);
 
-//    for (int i = 0; i < maxObjectNum; i++) {
-//        VerletObject &object = world.addObject(
-//                Vector2::fromCartesian(gen.getInRange(0, worldBounds.getWidth()),
-//                                       gen.getInRange(0, worldBounds.getHeight())),
-//                gen.getInRange(minRadius, maxRadius)
-//        );
-//        object.color = sf::Color(static_cast<int>(object.posCurr.x / worldBounds.getWidth() * 255),
-//                                 static_cast<int>(object.posCurr.y / worldBounds.getHeight() * 255), 255);
-//    }
+    for (int i = 0; i < maxObjectNum; i++) {
+        VerletObject &object = world.addObject(
+                Vector2::fromCartesian(gen.getInRange(0, worldBounds.getWidth()),
+                                       gen.getInRange(0, worldBounds.getHeight())),
+                gen.getInRange(minRadius, maxRadius)
+        );
+        object.color = sf::Color(static_cast<int>(object.posCurr.x / worldBounds.getWidth() * 255),
+                                 static_cast<int>(object.posCurr.y / worldBounds.getHeight() * 255), 255);
+    }
 
 
     VerletObject* objectHold = nullptr;
