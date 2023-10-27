@@ -77,15 +77,15 @@ struct IdGrid {
 
     void insert(int id, float realX, float realY) {
         // Convert real-world coordinates to grid coordinates
-        int gridX = static_cast<int>((realX - realX1f) / widthRatio);
-        int gridY = static_cast<int>((realY - realY1f) / heightRatio);
+        const int gridX = static_cast<int>((realX - realX1f) / widthRatio);
+        const int gridY = static_cast<int>((realY - realY1f) / heightRatio);
 
         // TODO remove checks - they are for debuggin
         if (gridX < 0 || gridX >= width || gridY < 0 || gridY >= height) {
             throw std::runtime_error("Trying to set outside the grid. Grid x: " + std::to_string(gridX) + " Grid y: " + std::to_string(gridY) + " Id: " + std::to_string(id));
         }
 
-        int index = gridY * width + gridX;
+        const int index = gridY * width + gridX;
 
         data[index].insert(id);
     }
