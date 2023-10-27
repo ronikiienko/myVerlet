@@ -51,7 +51,7 @@ private:
         const float min_dist = obj1.radius + obj2.radius;
         // Check overlapping
         if (dist2 < min_dist * min_dist) {
-            const float dist = sqrt(dist2);
+            const float dist = std::sqrt(dist2);
             const Vector2 normal = vectorBetween / dist;
             const float delta = 0.5f * collisionsDamping * (dist - min_dist);
             // Update positions
