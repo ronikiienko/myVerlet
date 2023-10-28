@@ -7,7 +7,7 @@
 const int maxObjectNum = 100000;
 const int maxSticksNum = 100000;
 
-constexpr Vector2 gravity = Vector2::fromCartesian(0, 400);
+constexpr Vector2 gravity = Vector2::fromCartesian(0, 0);
 
 constexpr RectangleI worldBounds = RectangleI::fromSize(0,0,2400,1800);
 constexpr RectangleI windowBounds = RectangleI::fromSize(0,0,2400,1800);
@@ -30,7 +30,7 @@ const float wallsDamping = 0.8f;
 const float collisionRestitution = 0.75f;
 
 // we limit velocity of each object on each update() call. This can prevent full chaos.
-const float maxVelocity = 3;
+const float maxVelocity = 4;
 // we just multiply velocity of each object by this value on each substep. Can help a bit if simulation goes to chaos
 const float linearDamping = 0.9992f;
 

@@ -10,6 +10,7 @@
 #include "modules/ThreadsTest.h"
 #include "modules/ThreadPool.h"
 #include "PerformanceMonitor/PerformanceMonitor.h"
+#include "World/ExplosionHandler.h"
 
 int main() {
     sf::ContextSettings settings;
@@ -23,6 +24,7 @@ int main() {
     PerformanceMonitor performanceMonitor = PerformanceMonitor{window, world};
     Graphics graphics{world, window, threadPool};
     Physics physics{world, threadPool, performanceMonitor};
+    ExplosionHandler explosionHandler{world};
 
     RNGf gen = RNGf(seed);
 
@@ -80,6 +82,10 @@ int main() {
                     float velocityY = gen.getInRange(-1,0);
                     newObject.setVelocity(Vector2::fromCartesian(velocityX, velocityY));
                 }
+            }
+
+            if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Right) {
+                explosionHandler.launch(Vector2::fromCartesian(static_cast<float>(event.mouseButton.x) , static_cast<float>(event.mouseButton.y)), 4, 500);
             }
         }
 
