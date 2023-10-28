@@ -29,7 +29,7 @@ int main() {
     Graphics graphics{world, window, threadPool};
     Physics physics{world, threadPool, performanceMonitor};
     ExplosionHandler explosionHandler{world};
-    Shooter shooter{Vector2::fromCartesian(200, 200), Angle::fromDegrees(45), 4, 10, 4, world, 3};
+    Shooter shooter{Vector2::fromCartesian(200, 200), Angle::fromDegrees(45), 4, 10, 4, world, 6};
     RNGf gen = RNGf(seed);
     RandomSpawner randomSpawner{world, gen};
 
@@ -90,7 +90,15 @@ int main() {
             }
 
             if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Right) {
-                explosionHandler.launch(Vector2::fromCartesian(static_cast<float>(event.mouseButton.x) , static_cast<float>(event.mouseButton.y)), 4, 500);
+                explosionHandler.launch(Vector2::fromCartesian(static_cast<float>(event.mouseButton.x) , static_cast<float>(event.mouseButton.y)), 4, 150);
+            }
+
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::BackSpace) {
+                world.removeObjects();
+            }
+
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::M) {
+                randomSpawner.spawn(5000);
             }
         }
         if (isSpacePressed) {
