@@ -9,19 +9,36 @@ private:
     constexpr explicit Angle(float degrees) : degrees(degrees) {}
 
 public:
-    static Angle fromDegrees(float degrees) {
+    constexpr static Angle fromDegrees(float degrees) {
         return Angle{degrees};
     }
 
-    static Angle fromRadians(float radians) {
+    constexpr static Angle fromRadians(float radians) {
         return Angle{radians * 180.0f / static_cast<float>(M_PI)};
     }
 
-    [[nodiscard]] float getDegrees() const {
+    [[nodiscard]] constexpr float getDegrees() const {
         return degrees;
     }
 
-    [[nodiscard]] float getRadians() const {
+    [[nodiscard]] constexpr float getRadians() const {
         return degrees * static_cast<float>(M_PI) / 180.0f;
     }
+
+    constexpr void operator+=(const Angle &other) {
+        degrees += other.degrees;
+    }
+
+    constexpr Angle operator+(const Angle &other)const {
+        return Angle::fromDegrees(degrees + other.degrees);
+    }
+
+    constexpr void operator-=(const Angle &other) {
+        degrees -= other.degrees;
+    }
+
+    constexpr Angle operator-(const Angle &other)const {
+        return Angle::fromDegrees(degrees - other.degrees);
+    }
 };
+
