@@ -14,7 +14,7 @@ public:
             Vector2 direction = object.posCurr - position;
             float distance = direction.magnitude();
             if (distance <= radius) {
-                const float individualStrength = strength * distance / radius;
+                const float individualStrength = strength * (1 - distance / radius);
                 Vector2 addedVelocity = direction / distance * individualStrength;
                 object.addVelocity(addedVelocity);
             }
