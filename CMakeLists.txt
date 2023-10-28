@@ -14,7 +14,6 @@ set(SOURCES src/main.cpp
         src/modules/ThreadsTest.h
         src/modules/Grid.h
         src/World/VerletStick.h
-        src/modules/thread_pool.hpp
         src/modules/ThreadPool.h
         src/PerformanceMonitor/PerformanceMonitor.h
 )
