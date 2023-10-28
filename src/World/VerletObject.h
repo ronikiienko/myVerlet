@@ -17,6 +17,14 @@ public:
         posOld = posCurr - v;
     }
 
+    [[nodiscard]] Vector2 getVelocity()const {
+        return posCurr - posOld;
+    }
+
+    void addVelocity(Vector2 v) {
+        setVelocity(getVelocity() + v);
+    }
+
     void accelerate(Vector2 a) {
         acceleration += a;
     }
