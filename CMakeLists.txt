@@ -16,6 +16,7 @@ set(SOURCES src/main.cpp
         src/World/VerletStick.h
         src/modules/ThreadPool.h
         src/PerformanceMonitor/PerformanceMonitor.h
+        src/World/ExplosionHandler.h
 )
 
 project(${PROJECT_NAME})
