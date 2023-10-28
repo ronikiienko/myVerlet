@@ -30,6 +30,7 @@ public:
 
     void update(float dt) {
         Vector2 velocity = posCurr - posOld;
+        velocity *= linearDamping;
         // TODO review maby limiting not needed
         velocity.limitMagnitude(maxVelocity);
 
