@@ -13,6 +13,8 @@
 #include "World/ExplosionHandler.h"
 #include "World/Shooter.h"
 
+bool isSpacePressed = false;
+
 int main() {
     sf::ContextSettings settings;
     settings.antialiasingLevel = 1;
@@ -26,19 +28,19 @@ int main() {
     Graphics graphics{world, window, threadPool};
     Physics physics{world, threadPool, performanceMonitor};
     ExplosionHandler explosionHandler{world};
-    Shooter shooter{Vector2::fromCartesian(200, 200), Angle::fromDegrees(45), 4, 100, 4, world};
+    Shooter shooter{Vector2::fromCartesian(200, 200), Angle::fromDegrees(45), 4, 10, 4, world};
 
     RNGf gen = RNGf(seed);
 
-    for (int i = 0; i < maxObjectNum; i++) {
-        VerletObject &object = world.addObject(
-                Vector2::fromCartesian(gen.getInRange(0, worldBounds.getWidth()),
-                                       gen.getInRange(0, worldBounds.getHeight())),
-                gen.getInRange(minRadius, maxRadius)
-        );
-        object.color = sf::Color(static_cast<int>(object.posCurr.x / worldBounds.getWidth() * 255),
-                                 static_cast<int>(object.posCurr.y / worldBounds.getHeight() * 255), 255);
-    }
+//    for (int i = 0; i < maxObjectNum; i++) {
+//        VerletObject &object = world.addObject(
+//                Vector2::fromCartesian(gen.getInRange(0, worldBounds.getWidth()),
+//                                       gen.getInRange(0, worldBounds.getHeight())),
+//                gen.getInRange(minRadius, maxRadius)
+//        );
+//        object.color = sf::Color(static_cast<int>(object.posCurr.x / worldBounds.getWidth() * 255),
+//                                 static_cast<int>(object.posCurr.y / worldBounds.getHeight() * 255), 255);
+//    }
 
 
     VerletObject* objectHold = nullptr;
@@ -70,13 +72,16 @@ int main() {
                 objectHold = nullptr;
             }
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space) {
-                shooter.shoot();
+                isSpacePressed = true;
+            }
+            if (event.type == sf::Event::KeyReleased && event.key.code == sf::Keyboard::Space) {
+                isSpacePressed = false;
             }
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Right) {
-                shooter.rotate(Angle::fromDegrees(-5));
+                shooter.rotate(Angle::fromDegrees(5));
             }
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Left) {
-                shooter.rotate(Angle::fromDegrees(5));
+                shooter.rotate(Angle::fromDegrees(-5));
             }
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::W) {
                 shooter.move(Vector2::fromCartesian(0, -40));
@@ -94,6 +99,9 @@ int main() {
             if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Right) {
                 explosionHandler.launch(Vector2::fromCartesian(static_cast<float>(event.mouseButton.x) , static_cast<float>(event.mouseButton.y)), 4, 500);
             }
+        }
+        if (isSpacePressed) {
+            shooter.shoot();
         }
 
         performanceMonitor.start("total");
