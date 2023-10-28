@@ -12,6 +12,7 @@
 #include "PerformanceMonitor/PerformanceMonitor.h"
 #include "addons/ExplosionHandler.h"
 #include "addons/Shooter.h"
+#include "addons/RandomSpawner.h"
 
 bool isSpacePressed = false;
 
@@ -29,18 +30,10 @@ int main() {
     Physics physics{world, threadPool, performanceMonitor};
     ExplosionHandler explosionHandler{world};
     Shooter shooter{Vector2::fromCartesian(200, 200), Angle::fromDegrees(45), 4, 10, 4, world};
-
     RNGf gen = RNGf(seed);
+    RandomSpawner randomSpawner{world, gen};
 
-//    for (int i = 0; i < maxObjectNum; i++) {
-//        VerletObject &object = world.addObject(
-//                Vector2::fromCartesian(gen.getInRange(0, worldBounds.getWidth()),
-//                                       gen.getInRange(0, worldBounds.getHeight())),
-//                gen.getInRange(minRadius, maxRadius)
-//        );
-//        object.color = sf::Color(static_cast<int>(object.posCurr.x / worldBounds.getWidth() * 255),
-//                                 static_cast<int>(object.posCurr.y / worldBounds.getHeight() * 255), 255);
-//    }
+    randomSpawner.spawn(20000);
 
 
     VerletObject* objectHold = nullptr;
