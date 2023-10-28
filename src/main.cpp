@@ -29,7 +29,7 @@ int main() {
     Graphics graphics{world, window, threadPool};
     Physics physics{world, threadPool, performanceMonitor};
     ExplosionHandler explosionHandler{world};
-    Shooter shooter{Vector2::fromCartesian(200, 200), Angle::fromDegrees(45), 4, 10, 4, world};
+    Shooter shooter{Vector2::fromCartesian(200, 200), Angle::fromDegrees(45), 4, 10, 4, world, 3};
     RNGf gen = RNGf(seed);
     RandomSpawner randomSpawner{world, gen};
 
