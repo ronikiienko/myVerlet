@@ -29,7 +29,8 @@ public:
     }
 
     void update(float dt) {
-        const Vector2 velocity = posCurr - posOld;
+        Vector2 velocity = posCurr - posOld;
+        velocity.limitMagnitude(3);
 
         posOld = posCurr;
         posCurr += velocity + (acceleration * (dt * dt));
