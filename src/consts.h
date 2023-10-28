@@ -29,6 +29,7 @@ const float wallsDamping = 0.2f;
 // doesn't actually change speed when collision happens, but rather how much objects will be "splitted" when resolving collisions. 0 - not splitted no collision resolving happens. 1 - objects are fully splitted
 const float collisionsDamping = 0.75f;
 
+// we limit velocity of each object on each update() call. This can prevent full chaos.
 const float maxVelocity = 3;
 
 // when same - whole simulation goes same way each time you launch it
