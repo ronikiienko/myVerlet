@@ -54,7 +54,7 @@ private:
             const float dist = std::sqrt(dist2);
             if (dist == 0) return;
             const Vector2 normal = vectorBetween / dist;
-            const float delta = 0.5f * collisionsDamping * (dist - min_dist);
+            const float delta = 0.5f * collisionRestitution * (dist - min_dist);
             // Update positions
             if (!obj1.isPinned) obj1.posCurr -= normal * delta;
             if (!obj2.isPinned) obj2.posCurr += normal * delta;
@@ -67,7 +67,7 @@ private:
 //        // Check overlapping
 //        if (dist2 < min_dist * min_dist) {
 //            const float dist = sqrt(dist2);
-//            move *= 0.5f * collisionsDamping * (dist - min_dist) / dist;
+//            move *= 0.5f * collisionRestitution * (dist - min_dist) / dist;
 //            // Update positions
 //            if (!obj1.isPinned) obj1.posCurr -= move;
 //            if (!obj2.isPinned) obj2.posCurr += move;
