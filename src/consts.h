@@ -31,8 +31,8 @@ const float collisionsDamping = 0.75f;
 
 // we limit velocity of each object on each update() call. This can prevent full chaos.
 const float maxVelocity = 3;
-// we just multiply velocity of each object by this value on each substep
-const float linearDamping = 0.999f;
+// we just multiply velocity of each object by this value on each substep. Can help a bit if simulation goes to chaos
+const float linearDamping = 1.0f;
 
 // when same - whole simulation goes same way each time you launch it
 const int seed = 40;
