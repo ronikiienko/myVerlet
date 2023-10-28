@@ -100,8 +100,7 @@ public:
     constexpr void limitMagnitude(float limit) {
         const float mag2 = magnitude2();
         if (mag2 > limit * limit) {
-            const float magnitude = std::sqrt(mag2);
-            const float scale = magnitude / limit;
+            const float scale = limit / std::sqrt(mag2);
             x *= scale;
             y *= scale;
         }
