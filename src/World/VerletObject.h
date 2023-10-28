@@ -30,6 +30,7 @@ public:
 
     void update(float dt) {
         Vector2 velocity = posCurr - posOld;
+        // TODO review maby limiting not needed
         velocity.limitMagnitude(3);
 
         posOld = posCurr;
