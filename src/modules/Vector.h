@@ -7,6 +7,7 @@
 class Vector2 {
 private:
     constexpr explicit Vector2(float x = 0, float y = 0) : x(x), y(y) {}
+
 public:
     float x, y;
 
@@ -97,12 +98,12 @@ public:
     }
 
     constexpr void limitMagnitude(float limit) {
-        const float currentMagnitude = magnitude();
-        if (currentMagnitude > limit) {
-            x /= currentMagnitude;
-            y /= currentMagnitude;
-            x *= limit;
-            y *= limit;
+        const float mag2 = magnitude2();
+        if (mag2 > limit * limit) {
+            const float magnitude = std::sqrt(mag2);
+            const float scale = magnitude / limit;
+            x *= scale;
+            y *= scale;
         }
     }
 };
