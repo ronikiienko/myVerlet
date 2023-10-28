@@ -46,4 +46,8 @@ public:
     [[nodiscard]] RectangleI &getBoundsI() {
         return boundsI;
     }
+
+    void removeObjects() {
+        objects.clear();
+    }
 };
