@@ -34,6 +34,7 @@ struct Cell {
             ids[activeCount] = id;
         } else {
             // TODO throw if cell overflow happens. For now i spawn many objects randomly and one can be in other, so overflow will initially happen
+            // TODO overflow can happen also if many object are dense and "smashed" together. It happens pretty rare so probably can ignore that
 //            throw std::runtime_error("cell overflow");
         }
         activeCount++;
