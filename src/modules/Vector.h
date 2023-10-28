@@ -95,4 +95,14 @@ public:
         y *= scalar;
         return *this;
     }
+
+    constexpr void limitMagnitude(float limit) {
+        const float currentMagnitude = magnitude();
+        if (currentMagnitude > limit) {
+            x /= currentMagnitude;
+            y /= currentMagnitude;
+            x *= limit;
+            y *= limit;
+        }
+    }
 };
