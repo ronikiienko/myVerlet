@@ -11,6 +11,7 @@
 #include "modules/ThreadPool.h"
 #include "PerformanceMonitor/PerformanceMonitor.h"
 #include "World/ExplosionHandler.h"
+#include "World/Shooter.h"
 
 int main() {
     sf::ContextSettings settings;
@@ -25,6 +26,7 @@ int main() {
     Graphics graphics{world, window, threadPool};
     Physics physics{world, threadPool, performanceMonitor};
     ExplosionHandler explosionHandler{world};
+    Shooter shooter{Vector2::fromCartesian(200, 200), Angle::fromDegrees(45), 4, 100, 4, world};
 
     RNGf gen = RNGf(seed);
 
@@ -67,21 +69,26 @@ int main() {
                 objectHold->posOld = objectHold->posCurr;
                 objectHold = nullptr;
             }
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space) {
+                shooter.shoot();
+            }
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Right) {
+                shooter.rotate(Angle::fromDegrees(-5));
+            }
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Left) {
+                shooter.rotate(Angle::fromDegrees(5));
+            }
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::W) {
+                shooter.move(Vector2::fromCartesian(0, -40));
+            }
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::S) {
-                for (int i = 0; i < 300; i++) {
-                    const int centerX = worldBounds.getX2() / 2;
-                    const int centerY = worldBounds.getY2() / 2;
-                    VerletObject &newObject = world.addObject(
-                            Vector2::fromCartesian(
-                                    centerX + gen.getInRange(-120, 120),
-                                    centerY + gen.getInRange(-60, 60)
-                            ),
-                            gen.getInRange(minRadius, maxRadius)
-                    );
-                    float velocityX = gen.getInRange(-1, 1);
-                    float velocityY = gen.getInRange(-1,0);
-                    newObject.setVelocity(Vector2::fromCartesian(velocityX, velocityY));
-                }
+                shooter.move(Vector2::fromCartesian(0, 40));
+            }
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::A) {
+                shooter.move(Vector2::fromCartesian(-40, 0));
+            }
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::D) {
+                shooter.move(Vector2::fromCartesian(40, 0));
             }
 
             if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Right) {

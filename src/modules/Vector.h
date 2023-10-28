@@ -15,11 +15,11 @@ public:
         return Vector2{x, y};
     }
 
-    constexpr static Vector2 fromPolar(float radius, const Angle &angle) {
+    constexpr static Vector2 fromPolar(float magnitude, const Angle &angle) {
         float angleRadians = angle.getRadians();
 
-        float x = radius * std::cos(angleRadians);
-        float y = radius * std::sin(angleRadians);
+        float x = magnitude * std::cos(angleRadians);
+        float y = magnitude * std::sin(angleRadians);
 
         return Vector2{x, y};
     }
