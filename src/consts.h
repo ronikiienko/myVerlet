@@ -27,7 +27,7 @@ const int physicsSubSteps = 8;
 // how much speed is damped when hitting wall
 const float wallsDamping = 0.8f;
 // doesn't actually change speed when collision happens, but rather how much objects will be "splitted" when resolving collisions. 0 - not splitted no collision resolving happens. 1 - objects are fully splitted
-const float collisionRestitution = 0.75f;
+const float collisionRestitution = 0.45f;
 
 // we limit velocity of each object on each update() call. This can prevent full chaos.
 const float maxVelocity = 4;
