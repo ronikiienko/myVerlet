@@ -10,8 +10,8 @@
 #include "modules/ThreadsTest.h"
 #include "modules/ThreadPool.h"
 #include "PerformanceMonitor/PerformanceMonitor.h"
-#include "World/ExplosionHandler.h"
-#include "World/Shooter.h"
+#include "addons/ExplosionHandler.h"
+#include "addons/Shooter.h"
 
 bool isSpacePressed = false;
 

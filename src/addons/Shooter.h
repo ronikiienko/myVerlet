@@ -2,7 +2,7 @@
 
 #include "../modules/Angle.h"
 #include "../modules/Vector.h"
-#include "World.h"
+#include "../World/World.h"
 #include "../consts.h"
 
 class Shooter {
