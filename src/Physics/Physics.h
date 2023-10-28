@@ -52,6 +52,7 @@ private:
         // Check overlapping
         if (dist2 < min_dist * min_dist) {
             const float dist = std::sqrt(dist2);
+            if (dist == 0) return;
             const Vector2 normal = vectorBetween / dist;
             const float delta = 0.5f * collisionsDamping * (dist - min_dist);
             // Update positions
