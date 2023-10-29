@@ -33,6 +33,8 @@ int main() {
     RNGf gen = RNGf(seed);
     RandomSpawner randomSpawner{world, gen};
 
+    randomSpawner.spawn(150000);
+
 
     VerletObject* objectHold = nullptr;
     bool wasPinned;
