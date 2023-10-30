@@ -72,15 +72,12 @@ private:
 //    }
 
     void solveCollisionsTwoCells(const Cell &cell1, const Cell &cell2) {
-        for (int i = 0; i < cell1.activeCount; ++i) {
-            int index1 = cell1.ids[i];
-            for (int j = 0; j < cell2.activeCount; ++j) {
-                int index2 = cell2.ids[j];
-                if (index1 == index2) continue;
-
-                solveContact(world.getObject(index1), world.getObject(index2));
-            }
-        }
+        cell1.forEachId([&](int id1, int i){
+            cell2.forEachId([&](int id2, int i){
+                if (id1 == id2) return;
+                solveContact(world.getObject(id1), world.getObject(id2));
+            });
+        });
     }
 
     void solveCollisionsSubgrid(int startX, int endX, int startY, int endY) {
