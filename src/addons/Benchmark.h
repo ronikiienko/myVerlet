@@ -39,6 +39,7 @@ public:
     void sample() {
         if (firstSample) {
             clock.restart();
+            firstSample = false;
             return;
         }
         if (nextSampleIndex < samplesNum) {
