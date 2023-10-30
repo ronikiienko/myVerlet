@@ -37,7 +37,7 @@ int main() {
         Chain chain{world, Vector2::fromCartesian(100, 200 + i * 10), Vector2::fromCartesian(2300, 200 + i * 10), 100};
     }
 
-    randomSpawner.spawn(150000);
+//    randomSpawner.spawn(150000);
 
 
     VerletObject* objectHold = nullptr;
