@@ -191,7 +191,10 @@ public:
 
         for (int i = 0; i < physicsSubSteps; i++) {
             applyGravity();
+            performanceMonitor.start("sticks");
             applyConstraints();
+            performanceMonitor.end("sticks");
+
             constraintSticks();
             performanceMonitor.start("grid");
             rebuildGrid();
