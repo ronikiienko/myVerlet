@@ -40,8 +40,19 @@ public:
         return sticks.emplace_back(obj1, obj2);
     }
 
-    [[nodiscard]] std::vector<VerletStick> &getSticks() {
-        return sticks;
+    template <typename Func>
+    void forEachStick(Func &&callback, int start = 0, int end = -1) {
+        if (end == -1) {
+            end = static_cast<int>(sticks.size());
+        }
+
+        for (int i = start; i < end; i++) {
+            callback(sticks[i], i);
+        }
+    }
+
+    VerletStick &getStick(int id) {
+        return sticks[id];
     }
 
     [[nodiscard]] int getObjectsCount() {
