@@ -4,6 +4,7 @@
 #include "VerletObject.h"
 #include "../modules/Rectangle.h"
 #include "VerletStick.h"
+#include <functional>
 
 class World {
 private:
@@ -19,12 +20,27 @@ public:
     VerletObject &addObject(Vector2 position, float radius) {
         return objects.emplace_back(position, radius);
     }
-    VerletStick &addStick(VerletObject& obj1, VerletObject& obj2) {
-        return sticks.emplace_back(obj1, obj2);
-    }
-
     [[nodiscard]] std::vector<VerletObject> &getObjects() {
         return objects;
+    }
+
+    template <typename Func>
+    void forEachObject(Func &&callback, int start = 0, int end = -1) {
+        if (end == -1) {
+            end = static_cast<int>(objects.size());
+        }
+
+        for (int i = start; i < end; i++) {
+            callback(objects[i], i);
+        }
+    }
+
+    VerletObject& getObject(int id) {
+        return objects[id];
+    }
+
+    VerletStick &addStick(VerletObject& obj1, VerletObject& obj2) {
+        return sticks.emplace_back(obj1, obj2);
     }
 
     [[nodiscard]] std::vector<VerletStick> &getSticks() {

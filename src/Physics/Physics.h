@@ -142,42 +142,63 @@ private:
     }
 
 
+//    void applyGravity() {
+//        std::vector<VerletObject> &objects = world.getObjects();
+//        const int objectsCount = world.getObjectsCount();
+//        threadPool.dispatch(objectsCount, [&objects](int start, int end) {
+//            for (int i = start; i < end; i++) {
+//                VerletObject& object = objects[i];
+//                if (!object.isPinned) object.accelerate(gravity);
+//            }
+//        });
+//    }
     // TODO when all grid filled with objects, you can see that some start falling faster and some slower (on lower gravity levels like 10)
     void applyGravity() {
-        std::vector<VerletObject> &objects = world.getObjects();
-        const int objectsCount = world.getObjectsCount();
-        threadPool.dispatch(objectsCount, [&objects](int start, int end) {
-            for (int i = start; i < end; i++) {
-                VerletObject& object = objects[i];
+        threadPool.dispatch(world.getObjectsCount(), [this](int start, int end) {
+            world.forEachObject([](VerletObject& object, int i) {
                 if (!object.isPinned) object.accelerate(gravity);
-            }
+            }, start, end);
         });
     }
+
+//    void updatePositions(float dt) {
+//        std::vector<VerletObject> &objects = world.getObjects();
+//        const int objectsCount = world.getObjectsCount();
+//        threadPool.dispatch(objectsCount, [&objects, dt](int start, int end) {
+//            for (int i = start; i < end; i++) {
+//                VerletObject& object = objects[i];
+//                if (!object.isPinned) object.update(dt);
+//            }
+//        });
+//    }
 
     void updatePositions(float dt) {
-        std::vector<VerletObject> &objects = world.getObjects();
-        const int objectsCount = world.getObjectsCount();
-        threadPool.dispatch(objectsCount, [&objects, dt](int start, int end) {
-            for (int i = start; i < end; i++) {
-                VerletObject& object = objects[i];
+        threadPool.dispatch(world.getObjectsCount(), [this, dt](int start, int end) {
+            world.forEachObject([dt](VerletObject& object, int i) {
                 if (!object.isPinned) object.update(dt);
-            }
+            }, start, end);
         });
     }
 
+//    void rebuildGrid() {
+//        grid.clear();
+//        std::vector<VerletObject> &objects = world.getObjects();
+////        const int objectsCount = world.getObjectsCount();
+////        threadPool.dispatch(objectsCount, [this, &objects](int start, int end){
+////            for (int i = start; i < end; i++) {
+////                grid.insert(i, objects[i].posCurr.x, objects[i].posCurr.y);
+////            };
+////        });
+//        const int objectsCount = world.getObjectsCount();
+//        for (int i = 0; i < objectsCount; i++) {
+//            grid.insert(i, objects[i].posCurr.x, objects[i].posCurr.y);
+//        }
+//    }
     void rebuildGrid() {
         grid.clear();
-        std::vector<VerletObject> &objects = world.getObjects();
-//        const int objectsCount = world.getObjectsCount();
-//        threadPool.dispatch(objectsCount, [this, &objects](int start, int end){
-//            for (int i = start; i < end; i++) {
-//                grid.insert(i, objects[i].posCurr.x, objects[i].posCurr.y);
-//            };
-//        });
-        const int objectsCount = world.getObjectsCount();
-        for (int i = 0; i < objectsCount; i++) {
-            grid.insert(i, objects[i].posCurr.x, objects[i].posCurr.y);
-        }
+        world.forEachObject([this](VerletObject& object, int i) {
+            grid.insert(i, object.posCurr.x, object.posCurr.y);
+        });
     }
 
     void constraintSticks() {
