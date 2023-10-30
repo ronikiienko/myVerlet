@@ -15,6 +15,7 @@ public:
             if (distance <= radius) {
                 const float individualStrength = strength * (1 - distance / radius);
                 Vector2 addedVelocity = direction / distance * individualStrength;
+                // TODO use acceleration instead of setting velocity
                 object.addVelocity(addedVelocity);
             }
         });
