@@ -7,6 +7,7 @@
 
 class Benchmark {
 private:
+    bool firstSample = true;
     bool resultShown = false;
     int samplesNum;
     int nextSampleIndex = 0;
@@ -16,11 +17,6 @@ public:
     explicit Benchmark(int samplesNum) : samplesNum(samplesNum) {
         samples.resize(samplesNum);
     };
-
-
-    void start() {
-        clock.restart();
-    }
 
     void outputResults() {
         if (resultShown) return;
@@ -32,7 +28,7 @@ public:
 
         avg = sum /  static_cast<long long>(samples.size());
 
-        double avgFloat = static_cast<double>(avg);
+        auto avgFloat = static_cast<double>(avg);
 
         std::cout << "Avg time per frame is: " << avgFloat / 1000 << " MS";
         std::cout << "Avg FPS is: " << 1000000 / avgFloat << " MS";
@@ -41,6 +37,10 @@ public:
     }
 
     void sample() {
+        if (firstSample) {
+            clock.restart();
+            return;
+        }
         if (nextSampleIndex < samplesNum) {
             const long long elapsed = clock.restart().asMicroseconds();
             samples[nextSampleIndex] = elapsed;
