@@ -96,7 +96,7 @@ int main() {
             }
 
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::BackSpace) {
-                world.removeObjects();
+                world.clear();
             }
 
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::M) {

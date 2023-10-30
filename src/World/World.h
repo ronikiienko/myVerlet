@@ -59,6 +59,11 @@ public:
         return sticks[id];
     }
 
+    void clear() {
+        objects.clear();
+        sticks.clear();
+    }
+
     [[nodiscard]] int getObjectsCount() {
         return static_cast<int>(objects.size());
     }
