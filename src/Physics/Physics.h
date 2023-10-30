@@ -15,11 +15,9 @@ private:
 
     void applyConstraints() {
         const Rectangle bounds = world.getBoundsF();
-        std::vector<VerletObject> &objects = world.getObjects();
         const int objectsCount = world.getObjectsCount();
-        threadPool.dispatch(objectsCount, [&objects, &bounds](int start, int end) {
-            for (int i = start; i < end; i++) {
-                VerletObject &object = objects[i];
+        threadPool.dispatch(objectsCount, [this, &bounds](int start, int end) {
+            world.forEachObject([&bounds](VerletObject& object, int i) {
                 // problem was that for example: world is 100x100. Then both objects are outside of field on same direction, like obj1(101.256, 102.399) and obj2(105.936, 110.87). both will be pushed to (100,100) resulting in zero distance.
                 // offset is trying to fix this problem
                 const float offset = static_cast<float>(i) * 1e-6f;
@@ -40,9 +38,8 @@ private:
                     object.posCurr.y = bounds.getY2() - object.radius - offset;
                     object.posOld.y = object.posCurr.y + velocity.y;
                 }
-            }
+            }, start, end);
         });
-
     }
 
     void solveContact(VerletObject &obj1, VerletObject &obj2) {
@@ -74,35 +71,34 @@ private:
 //        }
 //    }
 
-    void solveCollisionsTwoCells(const Cell &cell1, const Cell &cell2, std::vector<VerletObject> &objects) {
+    void solveCollisionsTwoCells(const Cell &cell1, const Cell &cell2) {
         for (int i = 0; i < cell1.activeCount; ++i) {
             int index1 = cell1.ids[i];
             for (int j = 0; j < cell2.activeCount; ++j) {
                 int index2 = cell2.ids[j];
                 if (index1 == index2) continue;
 
-                solveContact(objects[index1], objects[index2]);
+                solveContact(world.getObject(index1), world.getObject(index2));
             }
         }
     }
 
     void solveCollisionsSubgrid(int startX, int endX, int startY, int endY) {
-        std::vector<VerletObject> &objects = world.getObjects();
         for (int i = startX; i < endX; i++) {
             for (int j = startY; j < endY; j++) {
                 const Cell &cell1 = grid.get(i, j);
-                solveCollisionsTwoCells(cell1, cell1, objects);
+                solveCollisionsTwoCells(cell1, cell1);
                 if (i + 1 < grid.width && j - 1 >= 0) {
-                    solveCollisionsTwoCells(cell1, grid.get(i + 1, j - 1), objects);
+                    solveCollisionsTwoCells(cell1, grid.get(i + 1, j - 1));
                 }
                 if (i + 1 < grid.width) {
-                    solveCollisionsTwoCells(cell1, grid.get(i + 1, j), objects);
+                    solveCollisionsTwoCells(cell1, grid.get(i + 1, j));
                 }
                 if (i + 1 < grid.width && j + 1 < grid.height) {
-                    solveCollisionsTwoCells(cell1, grid.get(i + 1, j + 1), objects);
+                    solveCollisionsTwoCells(cell1, grid.get(i + 1, j + 1));
                 }
                 if (j + 1 < grid.height) {
-                    solveCollisionsTwoCells(cell1, grid.get(i, j + 1), objects);
+                    solveCollisionsTwoCells(cell1, grid.get(i, j + 1));
                 }
             }
         }
