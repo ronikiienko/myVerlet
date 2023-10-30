@@ -20,9 +20,6 @@ public:
     VerletObject &addObject(Vector2 position, float radius) {
         return objects.emplace_back(position, radius);
     }
-    [[nodiscard]] std::vector<VerletObject> &getObjects() {
-        return objects;
-    }
 
     template <typename Func>
     void forEachObject(Func &&callback, int start = 0, int end = -1) {
