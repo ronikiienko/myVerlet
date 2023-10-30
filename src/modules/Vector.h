@@ -105,4 +105,11 @@ public:
             y *= scale;
         }
     }
+
+    void addX(float xAdd) {
+        x += xAdd;
+    }
+    void addY(float yAdd) {
+        y += yAdd;
+    }
 };
