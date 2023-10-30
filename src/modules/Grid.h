@@ -34,10 +34,10 @@
 // this cell  uses fixed size array - more performant. but it relies on fact that only 4 objects can fit in one cell (all should have same radius). Commented one - vector, which allows different radiuses.
 struct Cell {
     std::array<int, 4> ids = {0,0,0,0};  // Fixed-size array
-    short activeCount = 0;  // Keeps track of how many ids are currently active.
+    char activeCount = 0;  // Keeps track of how many ids are currently active.
 
     void insert(int id) {
-        if (activeCount < ids.size()) {
+        if (activeCount < 4) {
             ids[activeCount] = id;
         } else {
             // TODO throw if cell overflow happens. For now i spawn many objects randomly and one can be in other, so overflow will initially happen

@@ -160,10 +160,16 @@ private:
 //        });
 //    }
     void rebuildGrid() {
+        performanceMonitor.start("grid clear");
         grid.clear();
+        performanceMonitor.end("grid clear");
+
+        performanceMonitor.start("grid build");
         world.forEachObject([this](VerletObject& object, int i) {
             grid.insert(i, object.posCurr.x, object.posCurr.y);
         });
+        performanceMonitor.end("grid build");
+
     }
 
     void constraintSticks() {
