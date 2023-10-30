@@ -55,7 +55,6 @@ public:
     };
 
     void update() {
-        const std::vector<VerletObject> &objects = world.getObjects();
         const int objectsCount = world.getObjectsCount();
 
         vertexArray.resize(world.getObjectsCount() * 4);
