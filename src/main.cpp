@@ -47,13 +47,13 @@ int main() {
             }
             if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
                 const Vector2 clickPoint = Vector2::fromCartesian(static_cast<float>(event.mouseButton.x), static_cast<float>(event.mouseButton.y));
-                for (VerletObject& object : world.getObjects()) {
+                world.forEachObject([&](VerletObject& object, int i){
                     if ((clickPoint - object.posCurr).magnitude() < object.radius) {
                         objectHold = &object;
                         wasPinned = object.isPinned;
                         object.isPinned = true;
                     }
-                }
+                });
             }
             if (event.type == sf::Event::MouseMoved && objectHold != nullptr) {
                 // Mouse was moved and there's an object being held
