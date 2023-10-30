@@ -60,10 +60,8 @@ public:
 
         vertexArray.resize(world.getObjectsCount() * 4);
 
-        threadPool.dispatch(objectsCount, [this, &objects](int start, int end) {
-            for (int i = start; i < end; i++) {
-                const VerletObject &object = objects[i];
-
+        threadPool.dispatch(objectsCount, [this](int start, int end) {
+            world.forEachObject([this](VerletObject& object, int i){
                 const int ind = i * 4;
 
                 vertexArray[ind].position = {object.posCurr.x - object.radius, object.posCurr.y - object.radius};
@@ -80,7 +78,7 @@ public:
                 vertexArray[ind + 1].color = object.color;
                 vertexArray[ind + 2].color = object.color;
                 vertexArray[ind + 3].color = object.color;
-            };
+            }, start, end);
         });
 
         window.draw(vertexArray, &objectTexture);
