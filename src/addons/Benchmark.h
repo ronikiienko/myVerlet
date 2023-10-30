@@ -31,7 +31,7 @@ public:
         auto avgFloat = static_cast<double>(avg);
 
         std::cout << "Avg time per frame is: " << avgFloat / 1000 << " MS";
-        std::cout << "Avg FPS is: " << 1000000 / avgFloat << " MS";
+        std::cout << "Avg FPS is: " << 1000000 / avgFloat << " FPS";
 
         resultShown = true;
     }
