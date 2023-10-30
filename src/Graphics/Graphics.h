@@ -37,14 +37,16 @@ class Graphics {
 private:
     World &world;
     sf::RenderWindow &window;
-    sf::VertexArray vertexArray;  // Added this line
+    sf::VertexArray objectVertexArray;
+    sf::VertexArray sticksVertexArray;
     ThreadPool &threadPool;
     sf::Texture objectTexture;
     float textureSize;
 public:
     explicit Graphics(World &world, sf::RenderWindow &window, ThreadPool &threadPool)
             : world(world), window(window), threadPool(threadPool) {
-        vertexArray.setPrimitiveType(sf::Quads);  // Initialize with Quads
+        objectVertexArray.setPrimitiveType(sf::Quads);  // Initialize with Quads
+        sticksVertexArray.setPrimitiveType(sf::Lines);
         // TODO somehow organise resources, because now path depends on where executable is. Same for fonts in performance monitor
         if (!objectTexture.loadFromFile("../res/circle.png")) {
             throw std::runtime_error("Could not load circle texture file");
@@ -55,31 +57,43 @@ public:
     };
 
     void update() {
-        const int objectsCount = world.getObjectsCount();
+        objectVertexArray.resize(world.getObjectsCount() * 4);
+        sticksVertexArray.resize(world.getSticksCount() * 2);
 
-        vertexArray.resize(world.getObjectsCount() * 4);
-
-        threadPool.dispatch(objectsCount, [this](int start, int end) {
+        threadPool.dispatch(world.getObjectsCount(), [this](int start, int end) {
             world.forEachObject([this](VerletObject& object, int i){
                 const int ind = i * 4;
 
-                vertexArray[ind].position = {object.posCurr.x - object.radius, object.posCurr.y - object.radius};
-                vertexArray[ind+1].position = {object.posCurr.x + object.radius, object.posCurr.y - object.radius};
-                vertexArray[ind+2].position = {object.posCurr.x + object.radius, object.posCurr.y + object.radius};
-                vertexArray[ind+3].position = {object.posCurr.x - object.radius, object.posCurr.y + object.radius};
+                objectVertexArray[ind].position = {object.posCurr.x - object.radius, object.posCurr.y - object.radius};
+                objectVertexArray[ind + 1].position = {object.posCurr.x + object.radius, object.posCurr.y - object.radius};
+                objectVertexArray[ind + 2].position = {object.posCurr.x + object.radius, object.posCurr.y + object.radius};
+                objectVertexArray[ind + 3].position = {object.posCurr.x - object.radius, object.posCurr.y + object.radius};
 
-                vertexArray[ind].texCoords = {0.0f, 0.0f};
-                vertexArray[ind+1].texCoords = {textureSize, 0.0f};
-                vertexArray[ind+2].texCoords = {textureSize, textureSize};
-                vertexArray[ind+3].texCoords = {0.0f, textureSize};
+                objectVertexArray[ind].texCoords = {0.0f, 0.0f};
+                objectVertexArray[ind + 1].texCoords = {textureSize, 0.0f};
+                objectVertexArray[ind + 2].texCoords = {textureSize, textureSize};
+                objectVertexArray[ind + 3].texCoords = {0.0f, textureSize};
 
-                vertexArray[ind].color = object.color;
-                vertexArray[ind + 1].color = object.color;
-                vertexArray[ind + 2].color = object.color;
-                vertexArray[ind + 3].color = object.color;
+                objectVertexArray[ind].color = object.color;
+                objectVertexArray[ind + 1].color = object.color;
+                objectVertexArray[ind + 2].color = object.color;
+                objectVertexArray[ind + 3].color = object.color;
             }, start, end);
         });
 
-        window.draw(vertexArray, &objectTexture);
+        threadPool.dispatch(world.getSticksCount(), [this](int start, int end) {
+            world.forEachStick([this](VerletStick& stick, int i){
+                const int ind = i * 2;
+
+                sticksVertexArray[ind].position = {stick.obj1.posCurr.x, stick.obj1.posCurr.y};
+                sticksVertexArray[ind + 1].position = {stick.obj2.posCurr.x, stick.obj2.posCurr.y};
+
+                objectVertexArray[ind].color = stick.obj1.color;
+                objectVertexArray[ind + 1].color = stick.obj2.color;
+            }, start, end);
+        });
+
+        window.draw(objectVertexArray, &objectTexture);
+        window.draw(sticksVertexArray);
     }
 };
