@@ -33,9 +33,6 @@ int main() {
     Shooter shooter{Vector2::fromCartesian(200, 200), Angle::fromDegrees(45), 4, 1, 4, world, 6};
     RNGf gen = RNGf(seed);
     RandomSpawner randomSpawner{world, gen};
-    for (int i = 0; i < 1; i++) {
-        Chain chain{world, Vector2::fromCartesian(100, 200 + i * 10), Vector2::fromCartesian(2300, 200 + i * 10), 100};
-    }
 
     randomSpawner.spawn(150000);
 
