@@ -172,11 +172,14 @@ private:
     }
 
     void constraintSticks() {
-        threadPool.dispatch(world.getSticksCount(), [this](int start, int end) {
-            world.forEachStick([](VerletStick& stick, int i) {
-                stick.constraint();
-            }, start, end);
+        world.forEachStick([](VerletStick& stick, int i) {
+            stick.constraint();
         });
+//        threadPool.dispatch(world.getSticksCount(), [this](int start, int end) {
+//            world.forEachStick([](VerletStick& stick, int i) {
+//                stick.constraint();
+//            }, start, end);
+//        });
     }
 
 public:
