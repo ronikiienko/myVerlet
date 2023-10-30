@@ -13,6 +13,7 @@
 #include "addons/ExplosionHandler.h"
 #include "addons/Shooter.h"
 #include "addons/RandomSpawner.h"
+#include "addons/Chain.h"
 
 bool isSpacePressed = false;
 
@@ -29,11 +30,12 @@ int main() {
     Graphics graphics{world, window, threadPool};
     Physics physics{world, threadPool, performanceMonitor};
     ExplosionHandler explosionHandler{world};
-    Shooter shooter{Vector2::fromCartesian(200, 200), Angle::fromDegrees(45), 4, 10, 4, world, 6};
+    Shooter shooter{Vector2::fromCartesian(200, 200), Angle::fromDegrees(45), 4, 1, 4, world, 6};
     RNGf gen = RNGf(seed);
     RandomSpawner randomSpawner{world, gen};
+    Chain chain{world, Vector2::fromCartesian(100,1500), Vector2::fromCartesian(500, 1500), 100};
 
-    randomSpawner.spawn(150000);
+//    randomSpawner.spawn(150000);
 
 
     VerletObject* objectHold = nullptr;

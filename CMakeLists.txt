@@ -19,6 +19,7 @@ set(SOURCES src/main.cpp
         src/addons/ExplosionHandler.h
         src/addons/Shooter.h
         src/addons/RandomSpawner.h
+        src/addons/Chain.h
 )
 
 project(${PROJECT_NAME})

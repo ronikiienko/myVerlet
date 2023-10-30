@@ -49,8 +49,8 @@ public:
             const int leftOffset = width / 2;
             Vector2 currentPosition = position - (move * static_cast<float>(leftOffset)) + rowOffset;
             for (int i = 0; i < width; i++) {
-                VerletObject& object = world.addObject(currentPosition, maxRadius);
-                object.setVelocity(initialVelocity);
+                int objInd = world.addObject(currentPosition, maxRadius);
+                world.getObject(objInd).setVelocity(initialVelocity);
                 currentPosition += move;
             }
             rowOffset += Vector2::fromPolar(interval, direction);

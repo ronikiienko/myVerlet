@@ -17,8 +17,9 @@ public:
         objects.reserve(maxObjectNum);
         sticks.reserve(maxSticksNum);
     }
-    VerletObject &addObject(Vector2 position, float radius) {
-        return objects.emplace_back(position, radius);
+    int addObject(Vector2 position, float radius) {
+        objects.emplace_back(position, radius);
+        return getObjectsCount() - 1;
     }
 
     template <typename Func>
@@ -32,12 +33,15 @@ public:
         }
     }
 
-    VerletObject& getObject(int id) {
-        return objects[id];
+    VerletObject& getObject(int ind) {
+        return objects[ind];
     }
 
     VerletStick &addStick(VerletObject& obj1, VerletObject& obj2) {
         return sticks.emplace_back(obj1, obj2);
+    }
+    VerletStick &addStick(int ind1, int ind2) {
+        return sticks.emplace_back(getObject(ind1), getObject(ind2));
     }
 
     template <typename Func>
