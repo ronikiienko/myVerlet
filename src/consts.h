@@ -4,7 +4,7 @@
 #include "modules/Vector.h"
 #include "modules/Rectangle.h"
 
-const int maxObjectNum = 100000;
+const int maxObjectNum = 200000;
 const int maxSticksNum = 100000;
 
 constexpr Vector2 gravity = Vector2::fromCartesian(0, 200);
@@ -31,7 +31,7 @@ const float collisionRestitution = 0.45f;
 
 // we limit velocity of each object on each update() call. This can prevent full chaos.
 // changes chains behaviours
-const float maxVelocity = 4;
+const float maxVelocity = 20;
 // we just multiply velocity of each object by this value on each substep. Can help a bit if simulation goes to chaos
 const float linearDamping = 0.9992f;
 
