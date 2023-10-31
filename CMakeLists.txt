@@ -31,6 +31,7 @@ set(BUILD_SHARED_LIBS OFF)
 fetchcontent_declare(SFML GIT_REPOSITORY https://github.com/SFML/SFML.git GIT_TAG 2.5.1)
 fetchcontent_makeavailable(SFML)
 
+set(CMAKE_CXX_FLAGS_RELEASE  "-Ofast -frename-registers -funroll-loops -fprofile-use -fprofile-correction")
 set(CMAKE_CXX_STANDARD 23)
 
 add_executable(${PROJECT_NAME} ${SOURCES})
