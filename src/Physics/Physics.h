@@ -71,13 +71,23 @@ private:
 //        }
 //    }
 
+//    void solveCollisionsTwoCells(const Cell &cell1, const Cell &cell2) {
+//        cell1.forEachId([&](int id1, int i){
+//            cell2.forEachId([&](int id2, int i){
+//                if (id1 == id2) return;
+//                solveContact(world.getObject(id1), world.getObject(id2));
+//            });
+//        });
+//    }
     void solveCollisionsTwoCells(const Cell &cell1, const Cell &cell2) {
-        cell1.forEachId([&](int id1, int i){
-            cell2.forEachId([&](int id2, int i){
-                if (id1 == id2) return;
+        for (int i = 0; i < cell1.activeCount; i++) {
+            const int id1 = cell1.ids[i];
+            for (int j = 0; j < cell2.activeCount; j++) {
+                const int id2 = cell2.ids[j];
+                if (id1 == id2) continue;
                 solveContact(world.getObject(id1), world.getObject(id2));
-            });
-        });
+            }
+        }
     }
 
     void solveCollisionsSubgrid(int startX, int endX, int startY, int endY) {
@@ -160,15 +170,15 @@ private:
 //        });
 //    }
     void rebuildGrid() {
-        performanceMonitor.start("grid clear");
+//        performanceMonitor.start("grid clear");
         grid.clear();
-        performanceMonitor.end("grid clear");
+//        performanceMonitor.end("grid clear");
 
-        performanceMonitor.start("grid build");
+//        performanceMonitor.start("grid build");
         world.forEachObject([this](VerletObject& object, int i) {
             grid.insert(i, object.posCurr.x, object.posCurr.y);
         });
-        performanceMonitor.end("grid build");
+//        performanceMonitor.end("grid build");
 
     }
 
