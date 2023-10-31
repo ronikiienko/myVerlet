@@ -14,6 +14,7 @@
 #include "addons/Shooter.h"
 #include "addons/RandomSpawner.h"
 #include "addons/Chain.h"
+#include "addons/Benchmark.h"
 
 bool isSpacePressed = false;
 
@@ -33,7 +34,7 @@ int main() {
     Shooter shooter{Vector2::fromCartesian(200, 200), Angle::fromDegrees(45), 4, 1, 4, world, 6};
     RNGf gen = RNGf(seed);
     RandomSpawner randomSpawner{world, gen};
-
+    Benchmark benchmark{60 * 30};
     randomSpawner.spawn(150000);
 
 
@@ -120,6 +121,8 @@ int main() {
         window.display();
 
         performanceMonitor.end("total");
+
+        benchmark.sample();
     }
 
 
