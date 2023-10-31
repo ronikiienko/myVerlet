@@ -47,12 +47,13 @@ struct Cell {
         activeCount++;
     }
 
-    template<typename Func>
-    void forEachId(Func&& callback)const {
-        for (int i = 0; i < activeCount; i++) {
-            callback(ids[i], i);
-        }
-    }
+    // good thing but affects performance. Because should be called for each cell.
+//    template<typename Func>
+//    void forEachId(Func&& callback)const {
+//        for (int i = 0; i < activeCount; i++) {
+//            callback(ids[i], i);
+//        }
+//    }
 
     void clear() {
         activeCount = 0;  // Reset counter
