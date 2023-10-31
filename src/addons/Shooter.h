@@ -49,7 +49,7 @@ public:
             const int leftOffset = width / 2;
             Vector2 currentPosition = position - (move * static_cast<float>(leftOffset)) + rowOffset;
             for (int i = 0; i < width; i++) {
-                int objInd = world.addObject(currentPosition, maxRadius);
+                int objInd = world.addObject(currentPosition, objectsRadius);
                 world.getObject(objInd).setVelocity(initialVelocity);
                 currentPosition += move;
             }

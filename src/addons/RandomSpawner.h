@@ -16,7 +16,7 @@ public:
             int objInt = world.addObject(
                     Vector2::fromCartesian(gen.getInRange(0, world.getBoundsF().getWidth()),
                                            gen.getInRange(0, world.getBoundsF().getHeight())),
-                    gen.getInRange(minRadius, maxRadius)
+                    objectsRadius
             );
             VerletObject& object = world.getObject(objInt);
             object.color = sf::Color(static_cast<int>(object.posCurr.x / worldBounds.getWidth() * 255),
