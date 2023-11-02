@@ -22,6 +22,7 @@ set(SOURCES src/main.cpp
         src/addons/Chain.h
         src/addons/Square.h
         src/addons/Benchmark.h
+        src/World/ComplexObject.h
 )
 
 project(${PROJECT_NAME})

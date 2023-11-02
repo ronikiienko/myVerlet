@@ -15,9 +15,9 @@ public:
         for (int i = 0; i < length; i++) {
             int newInd;
             if (lastInd == -1) {
-                newInd = world.addObject(startPos, objectsRadius);
+                newInd = world.addObject(startPos);
             } else {
-                newInd = world.addObject(world.getObject(lastInd).posCurr + move, objectsRadius);
+                newInd = world.addObject(world.getObject(lastInd).posCurr + move);
             }
             if (lastInd != -1) world.addStick(lastInd, newInd);
             if (i == 0 || i == length - 1) {

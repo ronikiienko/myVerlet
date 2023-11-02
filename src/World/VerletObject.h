@@ -8,10 +8,9 @@ class VerletObject {
 public:
     Vector2 posCurr, posOld, acceleration = Vector2::fromCartesian();
     sf::Color color = sf::Color::White;
-    float radius;
     bool isPinned = false;
 
-    VerletObject(Vector2 position, float radius) : posCurr(position), posOld(position), radius(radius) {};
+    explicit VerletObject(Vector2 position) : posCurr(position), posOld(position) {};
 
     void setVelocity(Vector2 v) {
         posOld = posCurr - v;

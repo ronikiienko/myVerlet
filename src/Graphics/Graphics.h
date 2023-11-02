@@ -18,7 +18,7 @@
 //        const std::vector<VerletObject> &objects = world.getObjects();
 //        for (const VerletObject &object: objects) {
 //            circle.setPosition(object.posCurr.x, object.posCurr.y);
-//            circle.setScale(object.radius, object.radius);
+//            circle.setScale(objectsRadius, object.radius);
 //            circle.setFillColor(object.color);
 //            window.draw(circle);
 //        }
@@ -64,10 +64,10 @@ public:
             world.forEachObject([this](VerletObject& object, int i){
                 const int ind = i * 4;
 
-                objectVertexArray[ind].position = {object.posCurr.x - object.radius, object.posCurr.y - object.radius};
-                objectVertexArray[ind + 1].position = {object.posCurr.x + object.radius, object.posCurr.y - object.radius};
-                objectVertexArray[ind + 2].position = {object.posCurr.x + object.radius, object.posCurr.y + object.radius};
-                objectVertexArray[ind + 3].position = {object.posCurr.x - object.radius, object.posCurr.y + object.radius};
+                objectVertexArray[ind].position = {object.posCurr.x - objectsRadius, object.posCurr.y - objectsRadius};
+                objectVertexArray[ind + 1].position = {object.posCurr.x + objectsRadius, object.posCurr.y - objectsRadius};
+                objectVertexArray[ind + 2].position = {object.posCurr.x + objectsRadius, object.posCurr.y + objectsRadius};
+                objectVertexArray[ind + 3].position = {object.posCurr.x - objectsRadius, object.posCurr.y + objectsRadius};
 
                 objectVertexArray[ind].texCoords = {0.0f, 0.0f};
                 objectVertexArray[ind + 1].texCoords = {textureSize, 0.0f};

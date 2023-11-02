@@ -50,7 +50,7 @@ int main() {
             if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
                 const Vector2 clickPoint = Vector2::fromCartesian(static_cast<float>(event.mouseButton.x), static_cast<float>(event.mouseButton.y));
                 world.forEachObject([&](VerletObject& object, int i){
-                    if ((clickPoint - object.posCurr).magnitude() < object.radius) {
+                    if ((clickPoint - object.posCurr).magnitude() < objectsRadius) {
                         objectHold = &object;
                         wasPinned = object.isPinned;
                         object.isPinned = true;

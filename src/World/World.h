@@ -17,8 +17,8 @@ public:
         objects.reserve(maxObjectNum);
         sticks.reserve(maxSticksNum);
     }
-    int addObject(Vector2 position, float radius) {
-        objects.emplace_back(position, radius);
+    int addObject(Vector2 position) {
+        objects.emplace_back(position);
         return getObjectsCount() - 1;
     }
 
