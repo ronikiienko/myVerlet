@@ -40,8 +40,9 @@ public:
     VerletStick &addStick(VerletObject& obj1, VerletObject& obj2) {
         return sticks.emplace_back(obj1, obj2);
     }
-    VerletStick &addStick(int ind1, int ind2) {
-        return sticks.emplace_back(getObject(ind1), getObject(ind2));
+    int addStick(int ind1, int ind2) {
+        sticks.emplace_back(getObject(ind1), getObject(ind2));
+        return getSticksCount() - 1;
     }
 
     template <typename Func>
