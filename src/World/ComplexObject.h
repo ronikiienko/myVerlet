@@ -8,7 +8,7 @@ public:
     std::vector<int> objects;
     std::vector<int> sticks;
 
-    ComplexObject(World& world) : world(world) {
-
-    }
+    explicit ComplexObject(World& world) : world(world) {};
 };
+
+
