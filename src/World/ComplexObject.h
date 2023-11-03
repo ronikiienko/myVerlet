@@ -9,6 +9,8 @@ public:
     std::vector<int> sticks;
 
     explicit ComplexObject(World& world) : world(world) {};
+
+    void update() {};
 };
 
 

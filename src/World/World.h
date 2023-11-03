@@ -4,12 +4,14 @@
 #include "VerletObject.h"
 #include "../modules/Rectangle.h"
 #include "VerletStick.h"
+#include "ComplexObject.h"
 #include <functional>
 
 class World {
 private:
     std::vector<VerletObject> objects;
     std::vector<VerletStick> sticks;
+    std::vector<ComplexObject> complexObjects;
     RectangleF boundsF;
     RectangleI boundsI;
 public:
@@ -17,6 +19,12 @@ public:
         objects.reserve(maxObjectNum);
         sticks.reserve(maxSticksNum);
     }
+
+    int addComplexObject(ComplexObject&& complexObject) {
+        complexObjects.push_back(std::move(complexObject));
+        return getComplexObjectsCount() - 1;
+    }
+
     int addObject(Vector2 position) {
         objects.emplace_back(position);
         return getObjectsCount() - 1;
@@ -67,6 +75,9 @@ public:
 
     [[nodiscard]] int getObjectsCount() {
         return static_cast<int>(objects.size());
+    }
+    [[nodiscard]] int getComplexObjectsCount() {
+        return static_cast<int>(complexObjects.size());
     }
 
     [[nodiscard]] int getSticksCount() {
