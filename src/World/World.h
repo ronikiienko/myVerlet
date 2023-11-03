@@ -11,7 +11,7 @@ class World {
 private:
     std::vector<VerletObject> objects;
     std::vector<VerletStick> sticks;
-    std::vector<ComplexObject> complexObjects;
+//    std::vector<ComplexObject> complexObjects;
     RectangleF boundsF;
     RectangleI boundsI;
 public:
@@ -20,10 +20,10 @@ public:
         sticks.reserve(maxSticksNum);
     }
 
-    int addComplexObject(ComplexObject&& complexObject) {
-        complexObjects.push_back(std::move(complexObject));
-        return getComplexObjectsCount() - 1;
-    }
+//    int addComplexObject(ComplexObject&& complexObject) {
+//        complexObjects.push_back(std::move(complexObject));
+//        return getComplexObjectsCount() - 1;
+//    }
 
     int addObject(Vector2 position) {
         objects.emplace_back(position);
@@ -76,9 +76,9 @@ public:
     [[nodiscard]] int getObjectsCount() {
         return static_cast<int>(objects.size());
     }
-    [[nodiscard]] int getComplexObjectsCount() {
-        return static_cast<int>(complexObjects.size());
-    }
+//    [[nodiscard]] int getComplexObjectsCount() {
+//        return static_cast<int>(complexObjects.size());
+//    }
 
     [[nodiscard]] int getSticksCount() {
         return static_cast<int>(sticks.size());

@@ -38,7 +38,7 @@ int main() {
     randomSpawner.spawn(150000);
 
 
-    VerletObject* objectHold = nullptr;
+    VerletObject *objectHold = nullptr;
     bool wasPinned;
     while (window.isOpen()) {
 
@@ -48,8 +48,9 @@ int main() {
                 window.close();
             }
             if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
-                const Vector2 clickPoint = Vector2::fromCartesian(static_cast<float>(event.mouseButton.x), static_cast<float>(event.mouseButton.y));
-                world.forEachObject([&](VerletObject& object, int i){
+                const Vector2 clickPoint = Vector2::fromCartesian(static_cast<float>(event.mouseButton.x),
+                                                                  static_cast<float>(event.mouseButton.y));
+                world.forEachObject([&](VerletObject &object, int i) {
                     if ((clickPoint - object.posCurr).magnitude() < objectsRadius) {
                         objectHold = &object;
                         wasPinned = object.isPinned;
@@ -59,9 +60,11 @@ int main() {
             }
             if (event.type == sf::Event::MouseMoved && objectHold != nullptr) {
                 // Mouse was moved and there's an object being held
-                objectHold->posCurr = Vector2::fromCartesian(static_cast<float>(event.mouseMove.x), static_cast<float>(event.mouseMove.y));
+                objectHold->posCurr = Vector2::fromCartesian(static_cast<float>(event.mouseMove.x),
+                                                             static_cast<float>(event.mouseMove.y));
             }
-            if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left && objectHold != nullptr) {
+            if (event.type == sf::Event::MouseButtonReleased && event.mouseButton.button == sf::Mouse::Left &&
+                objectHold != nullptr) {
                 objectHold->isPinned = wasPinned;
                 objectHold->posOld = objectHold->posCurr;
                 objectHold = nullptr;
@@ -92,7 +95,8 @@ int main() {
             }
 
             if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Right) {
-                explosionHandler.launch(Vector2::fromCartesian(static_cast<float>(event.mouseButton.x) , static_cast<float>(event.mouseButton.y)), 4, 150);
+                explosionHandler.launch(Vector2::fromCartesian(static_cast<float>(event.mouseButton.x),
+                                                               static_cast<float>(event.mouseButton.y)), 4, 150);
             }
 
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::BackSpace) {
