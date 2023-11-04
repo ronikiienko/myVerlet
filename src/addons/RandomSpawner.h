@@ -1,15 +1,15 @@
 #pragma once
 
-#include "../World/World.h"
+#include "../World/AtomWorld.h"
 #include "../modules/Rand.h"
 #include "../consts.h"
 
 class RandomSpawner {
 private:
-    World &world;
+    AtomWorld &world;
     RNGf &gen;
 public:
-    RandomSpawner(World &world, RNGf &gen) : world(world), gen(gen) {}
+    RandomSpawner(AtomWorld &world, RNGf &gen) : world(world), gen(gen) {}
 
     void spawn(int number) {
         for (int i = 0; i < number; i++) {

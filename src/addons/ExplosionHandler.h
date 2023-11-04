@@ -1,12 +1,12 @@
 #pragma once
 
-#include "../World/World.h"
+#include "../World/AtomWorld.h"
 
 class ExplosionHandler {
 private:
-    World& world;
+    AtomWorld& world;
 public:
-    explicit ExplosionHandler(World& world) : world(world) {}
+    explicit ExplosionHandler(AtomWorld& world) : world(world) {}
 
     void launch(Vector2 position, float strength, float radius) {
         world.forEachObject([&position, &strength, &radius](VerletObject& object, int i){

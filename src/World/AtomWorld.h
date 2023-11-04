@@ -7,7 +7,7 @@
 #include "ComplexObject.h"
 #include <functional>
 
-class World {
+class AtomWorld {
 private:
     std::vector<VerletObject> objects;
     std::vector<VerletStick> sticks;
@@ -15,7 +15,7 @@ private:
     RectangleF boundsF;
     RectangleI boundsI;
 public:
-    explicit World(RectangleI bounds) : boundsF(RectangleF::fromOther(bounds)), boundsI(bounds) {
+    explicit AtomWorld(RectangleI bounds) : boundsF(RectangleF::fromOther(bounds)), boundsI(bounds) {
         objects.reserve(maxObjectNum);
         sticks.reserve(maxSticksNum);
     }

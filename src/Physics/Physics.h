@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../World/World.h"
+#include "../World/AtomWorld.h"
 #include "SFML/Graphics/RenderWindow.hpp"
 #include "../modules/Grid.h"
 #include "../modules/ThreadPool.h"
@@ -8,7 +8,7 @@
 
 class Physics {
 private:
-    World &world;
+    AtomWorld &world;
     IdGrid grid;
     ThreadPool &threadPool;
     PerformanceMonitor &performanceMonitor;
@@ -194,7 +194,7 @@ private:
     }
 
 public:
-    explicit Physics(World &world, ThreadPool &threadPool, PerformanceMonitor& performanceMonitor)
+    explicit Physics(AtomWorld &world, ThreadPool &threadPool, PerformanceMonitor& performanceMonitor)
             : world(world), grid(collisionGridWidth, collisionGridHeight, world.getBoundsI()), threadPool(threadPool), performanceMonitor(performanceMonitor) {}
 
     void update() {

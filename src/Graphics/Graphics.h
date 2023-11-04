@@ -1,14 +1,14 @@
 //#pragma once
 //
-//#include "../World/World.h"
+//#include "../AtomWorld/AtomWorld.h"
 //#include "SFML/Graphics/RenderWindow.hpp"
 //
 //class Graphics {
 //private:
-//    World &world;
+//    AtomWorld &world;
 //    sf::RenderWindow &window;
 //public:
-//    explicit Graphics(World &world, sf::RenderWindow &window) : world(world), window(window) {};
+//    explicit Graphics(AtomWorld &world, sf::RenderWindow &window) : world(world), window(window) {};
 //
 //    void update() {
 //        window.clear(sf::Color::Black);
@@ -28,14 +28,14 @@
 
 #pragma once
 
-#include "../World/World.h"
+#include "../World/AtomWorld.h"
 #include "SFML/Graphics/RenderWindow.hpp"
 #include "SFML/Graphics/VertexArray.hpp"
 #include "../modules/ThreadPool.h"
 
 class Graphics {
 private:
-    World &world;
+    AtomWorld &world;
     sf::RenderWindow &window;
     sf::VertexArray objectVertexArray;
     sf::VertexArray sticksVertexArray;
@@ -43,7 +43,7 @@ private:
     sf::Texture objectTexture;
     float textureSize;
 public:
-    explicit Graphics(World &world, sf::RenderWindow &window, ThreadPool &threadPool)
+    explicit Graphics(AtomWorld &world, sf::RenderWindow &window, ThreadPool &threadPool)
             : world(world), window(window), threadPool(threadPool) {
         objectVertexArray.setPrimitiveType(sf::Quads);  // Initialize with Quads
         sticksVertexArray.setPrimitiveType(sf::Lines);

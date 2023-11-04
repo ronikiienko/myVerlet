@@ -1,14 +1,14 @@
 //#pragma once
 //
-//#include "World.h"
+//#include "AtomWorld.h"
 //
 //class ComplexObject {
 //public:
-//    World& world;
+//    AtomWorld& world;
 //    std::vector<int> objects;
 //    std::vector<int> sticks;
 //
-//    explicit ComplexObject(World& world) : world(world) {};
+//    explicit ComplexObject(AtomWorld& world) : world(world) {};
 //
 //    void update() {};
 //};

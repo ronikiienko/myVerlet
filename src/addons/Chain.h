@@ -1,12 +1,12 @@
 #pragma once
 
 #include "../modules/Vector.h"
-#include "../World/World.h"
+#include "../World/AtomWorld.h"
 #include "../consts.h"
 
 class Chain {
 public:
-    Chain(World& world, Vector2 startPos, Vector2 endPos, int length) {
+    Chain(AtomWorld& world, Vector2 startPos, Vector2 endPos, int length) {
         const Vector2 vectorBetween = endPos - startPos;
         const Vector2 move = vectorBetween / static_cast<float>(length - 1);
 

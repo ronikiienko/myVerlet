@@ -10,14 +10,14 @@
 
 class PerformanceMonitor {
 private:
-    World& world;
+    AtomWorld& world;
     sf::RenderWindow& window;
     std::unordered_map<std::string, sf::Clock> clocks;
     std::unordered_map<std::string, long long> times;
     sf::Font font;
     sf::Text text;
 public:
-    explicit PerformanceMonitor(sf::RenderWindow& window, World& world): window(window), world(world) {
+    explicit PerformanceMonitor(sf::RenderWindow& window, AtomWorld& world): window(window), world(world) {
         if(!font.loadFromFile("../res/Roboto-Medium.ttf")) {
             throw std::runtime_error("Font could not load. Perhaps it doesn't exist?");
         }

@@ -2,7 +2,7 @@
 
 #include "../modules/Angle.h"
 #include "../modules/Vector.h"
-#include "../World/World.h"
+#include "../World/AtomWorld.h"
 #include "../consts.h"
 
 class Shooter {
@@ -13,11 +13,11 @@ private:
     int width;
     int rowsNum;
     float interval;
-    World& world;
+    AtomWorld& world;
 public:
 
 
-    Shooter(Vector2 position, Angle direction, float speed, int width, float interval, World& world, int rowsNum) : position(position), direction(direction), speed(speed), width(width), interval(interval), world(world), rowsNum(rowsNum) {}
+    Shooter(Vector2 position, Angle direction, float speed, int width, float interval, AtomWorld& world, int rowsNum) : position(position), direction(direction), speed(speed), width(width), interval(interval), world(world), rowsNum(rowsNum) {}
 
     void rotate(Angle angle) {
         direction += angle;

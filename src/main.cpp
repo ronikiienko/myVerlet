@@ -3,7 +3,7 @@
 #include <chrono>
 #include "modules/Vector.h"
 #include "consts.h"
-#include "World/World.h"
+#include "World/AtomWorld.h"
 #include "Graphics/Graphics.h"
 #include "Physics/Physics.h"
 #include "modules/Rand.h"
@@ -26,7 +26,7 @@ int main() {
     window.setFramerateLimit(60);
 
     ThreadPool threadPool{numThreads};
-    World world{worldBounds};
+    AtomWorld world{worldBounds};
     PerformanceMonitor performanceMonitor = PerformanceMonitor{window, world};
     Graphics graphics{world, window, threadPool};
     Physics physics{world, threadPool, performanceMonitor};

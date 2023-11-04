@@ -1,12 +1,12 @@
 #pragma once
 
 #include "../modules/Vector.h"
-#include "../World/World.h"
+#include "../World/AtomWorld.h"
 #include "../consts.h"
 
 class Square {
 public:
-    Square(World& world, Vector2 startPos, float size) {
+    Square(AtomWorld& world, Vector2 startPos, float size) {
         int ind1 = world.addObject(startPos);
         int ind2 = world.addObject(startPos + Vector2::fromCartesian(size,0));
         int ind3 = world.addObject(startPos + Vector2::fromCartesian(size,size));
