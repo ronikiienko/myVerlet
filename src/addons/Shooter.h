@@ -13,11 +13,11 @@ private:
     int width;
     int rowsNum;
     float interval;
-    AtomWorld& world;
+    AtomWorld& atomWorld;
 public:
 
 
-    Shooter(Vector2 position, Angle direction, float speed, int width, float interval, AtomWorld& world, int rowsNum) : position(position), direction(direction), speed(speed), width(width), interval(interval), world(world), rowsNum(rowsNum) {}
+    Shooter(Vector2 position, Angle direction, float speed, int width, float interval, AtomWorld& atomWorld, int rowsNum) : position(position), direction(direction), speed(speed), width(width), interval(interval), atomWorld(atomWorld), rowsNum(rowsNum) {}
 
     void rotate(Angle angle) {
         direction += angle;
@@ -49,8 +49,8 @@ public:
             const int leftOffset = width / 2;
             Vector2 currentPosition = position - (move * static_cast<float>(leftOffset)) + rowOffset;
             for (int i = 0; i < width; i++) {
-                int objInd = world.addObject(currentPosition);
-                world.getObject(objInd).setVelocity(initialVelocity);
+                int objInd = atomWorld.addObject(currentPosition);
+                atomWorld.getObject(objInd).setVelocity(initialVelocity);
                 currentPosition += move;
             }
             rowOffset += Vector2::fromPolar(interval, direction);

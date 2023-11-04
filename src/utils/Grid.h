@@ -92,7 +92,7 @@ struct IdGrid {
     }
 
     void insert(int id, float realX, float realY) {
-        // Convert real-world coordinates to grid coordinates
+        // Convert real-atomWorld coordinates to grid coordinates
         const int gridX = static_cast<int>((realX - realX1f) / widthRatio);
         const int gridY = static_cast<int>((realY - realY1f) / heightRatio);
 

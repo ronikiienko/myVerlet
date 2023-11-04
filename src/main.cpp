@@ -26,14 +26,14 @@ int main() {
     window.setFramerateLimit(60);
 
     ThreadPool threadPool{numThreads};
-    AtomWorld world{worldBounds};
-    PerformanceMonitor performanceMonitor = PerformanceMonitor{window, world};
-    Graphics graphics{world, window, threadPool};
-    Physics physics{world, threadPool, performanceMonitor};
-    ExplosionHandler explosionHandler{world};
-    Shooter shooter{Vector2::fromCartesian(200, 200), Angle::fromDegrees(45), 4, 1, 4, world, 6};
+    AtomWorld atomWorld{worldBounds};
+    PerformanceMonitor performanceMonitor = PerformanceMonitor{window, atomWorld};
+    Graphics graphics{atomWorld, window, threadPool};
+    Physics physics{atomWorld, threadPool, performanceMonitor};
+    ExplosionHandler explosionHandler{atomWorld};
+    Shooter shooter{Vector2::fromCartesian(200, 200), Angle::fromDegrees(45), 4, 1, 4, atomWorld, 6};
     RNGf gen = RNGf(seed);
-    RandomSpawner randomSpawner{world, gen};
+    RandomSpawner randomSpawner{atomWorld, gen};
     Benchmark benchmark{60 * 30};
     randomSpawner.spawn(150000);
 
@@ -50,7 +50,7 @@ int main() {
             if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
                 const Vector2 clickPoint = Vector2::fromCartesian(static_cast<float>(event.mouseButton.x),
                                                                   static_cast<float>(event.mouseButton.y));
-                world.forEachObject([&](VerletObject &object, int i) {
+                atomWorld.forEachObject([&](VerletObject &object, int i) {
                     if ((clickPoint - object.posCurr).magnitude() < objectsRadius) {
                         objectHold = &object;
                         wasPinned = object.isPinned;
@@ -100,7 +100,7 @@ int main() {
             }
 
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::BackSpace) {
-                world.clear();
+                atomWorld.clear();
             }
 
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::M) {

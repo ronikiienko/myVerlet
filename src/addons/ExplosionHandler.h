@@ -4,12 +4,12 @@
 
 class ExplosionHandler {
 private:
-    AtomWorld& world;
+    AtomWorld& atomWorld;
 public:
-    explicit ExplosionHandler(AtomWorld& world) : world(world) {}
+    explicit ExplosionHandler(AtomWorld& atomWorld) : atomWorld(atomWorld) {}
 
     void launch(Vector2 position, float strength, float radius) {
-        world.forEachObject([&position, &strength, &radius](VerletObject& object, int i){
+        atomWorld.forEachObject([&position, &strength, &radius](VerletObject& object, int i){
             Vector2 direction = object.posCurr - position;
             float distance = direction.magnitude();
             if (distance <= radius) {

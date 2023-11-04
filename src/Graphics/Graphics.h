@@ -5,17 +5,17 @@
 //
 //class Graphics {
 //private:
-//    AtomWorld &world;
+//    AtomWorld &atomWorld;
 //    sf::RenderWindow &window;
 //public:
-//    explicit Graphics(AtomWorld &world, sf::RenderWindow &window) : world(world), window(window) {};
+//    explicit Graphics(AtomWorld &atomWorld, sf::RenderWindow &window) : atomWorld(atomWorld), window(window) {};
 //
 //    void update() {
 //        window.clear(sf::Color::Black);
 //        sf::CircleShape circle{1.0f};
 //        circle.setPointCount(6);
 //        circle.setOrigin(1.0f, 1.0f);
-//        const std::vector<VerletObject> &objects = world.getObjects();
+//        const std::vector<VerletObject> &objects = atomWorld.getObjects();
 //        for (const VerletObject &object: objects) {
 //            circle.setPosition(object.posCurr.x, object.posCurr.y);
 //            circle.setScale(objectsRadius, object.radius);
@@ -35,7 +35,7 @@
 
 class Graphics {
 private:
-    AtomWorld &world;
+    AtomWorld &atomWorld;
     sf::RenderWindow &window;
     sf::VertexArray objectVertexArray;
     sf::VertexArray sticksVertexArray;
@@ -43,8 +43,8 @@ private:
     sf::Texture objectTexture;
     float textureSize;
 public:
-    explicit Graphics(AtomWorld &world, sf::RenderWindow &window, ThreadPool &threadPool)
-            : world(world), window(window), threadPool(threadPool) {
+    explicit Graphics(AtomWorld &atomWorld, sf::RenderWindow &window, ThreadPool &threadPool)
+            : atomWorld(atomWorld), window(window), threadPool(threadPool) {
         objectVertexArray.setPrimitiveType(sf::Quads);  // Initialize with Quads
         sticksVertexArray.setPrimitiveType(sf::Lines);
         // TODO somehow organise resources, because now path depends on where executable is. Same for fonts in performance monitor
@@ -57,11 +57,11 @@ public:
     };
 
     void update() {
-        objectVertexArray.resize(world.getObjectsCount() * 4);
-        sticksVertexArray.resize(world.getSticksCount() * 2);
+        objectVertexArray.resize(atomWorld.getObjectsCount() * 4);
+        sticksVertexArray.resize(atomWorld.getSticksCount() * 2);
 
-        threadPool.dispatch(world.getObjectsCount(), [this](int start, int end) {
-            world.forEachObject([this](VerletObject& object, int i){
+        threadPool.dispatch(atomWorld.getObjectsCount(), [this](int start, int end) {
+            atomWorld.forEachObject([this](VerletObject& object, int i){
                 const int ind = i * 4;
 
                 objectVertexArray[ind].position = {object.posCurr.x - objectsRadius, object.posCurr.y - objectsRadius};
@@ -81,8 +81,8 @@ public:
             }, start, end);
         });
 
-        threadPool.dispatch(world.getSticksCount(), [this](int start, int end) {
-            world.forEachStick([this](VerletStick& stick, int i){
+        threadPool.dispatch(atomWorld.getSticksCount(), [this](int start, int end) {
+            atomWorld.forEachStick([this](VerletStick& stick, int i){
                 const int ind = i * 2;
 
                 sticksVertexArray[ind].position = {stick.obj1.posCurr.x, stick.obj1.posCurr.y};
