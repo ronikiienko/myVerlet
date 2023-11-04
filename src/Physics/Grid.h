@@ -2,7 +2,7 @@
 
 #include <stdexcept>
 #include <vector>
-#include "Rectangle.h"
+#include "../utils/Rectangle.h"
 
 //struct Cell {
 //    // when looping, you can't just loop through ids because there are old id's too - you need to loop between 0 and activeCount

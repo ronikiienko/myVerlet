@@ -12,7 +12,7 @@ set(SOURCES src/main.cpp
         src/utils/Rectangle.h
         src/utils/Angle.h
         src/utils/ThreadsTest.h
-        src/utils/Grid.h
+        src/Physics/Grid.h
         src/AtomWorld/VerletStick.h
         src/utils/ThreadPool.h
         src/PerformanceMonitor/PerformanceMonitor.h
