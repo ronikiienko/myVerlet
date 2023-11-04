@@ -2,6 +2,7 @@
 
 #include <stdexcept>
 #include <vector>
+#include <array>
 #include "../utils/Rectangle.h"
 
 //struct Cell {
