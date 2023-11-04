@@ -2,9 +2,10 @@
 
 #include <vector>
 #include "VerletObject.h"
-#include "../modules/Rectangle.h"
 #include "VerletStick.h"
-#include <functional>
+#include "../utils/Rectangle.h"
+#include "../consts.h"
+#include "../utils/Vector.h"
 
 class AtomWorld {
 private:

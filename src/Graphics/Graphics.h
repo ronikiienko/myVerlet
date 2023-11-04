@@ -1,37 +1,9 @@
-//#pragma once
-//
-//#include "../AtomWorld/AtomWorld.h"
-//#include "SFML/Graphics/RenderWindow.hpp"
-//
-//class Graphics {
-//private:
-//    AtomWorld &atomWorld;
-//    sf::RenderWindow &window;
-//public:
-//    explicit Graphics(AtomWorld &atomWorld, sf::RenderWindow &window) : atomWorld(atomWorld), window(window) {};
-//
-//    void update() {
-//        window.clear(sf::Color::Black);
-//        sf::CircleShape circle{1.0f};
-//        circle.setPointCount(6);
-//        circle.setOrigin(1.0f, 1.0f);
-//        const std::vector<VerletObject> &objects = atomWorld.getObjects();
-//        for (const VerletObject &object: objects) {
-//            circle.setPosition(object.posCurr.x, object.posCurr.y);
-//            circle.setScale(objectsRadius, object.radius);
-//            circle.setFillColor(object.color);
-//            window.draw(circle);
-//        }
-//        window.display();
-//    }
-//};
-
 #pragma once
 
-#include "../World/AtomWorld.h"
+#include "../AtomWorld/AtomWorld.h"
 #include "SFML/Graphics/RenderWindow.hpp"
 #include "SFML/Graphics/VertexArray.hpp"
-#include "../modules/ThreadPool.h"
+#include "../utils/ThreadPool.h"
 
 class Graphics {
 private:

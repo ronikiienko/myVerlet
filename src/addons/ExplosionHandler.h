@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../World/AtomWorld.h"
+#include "../AtomWorld/AtomWorld.h"
 
 class ExplosionHandler {
 private:

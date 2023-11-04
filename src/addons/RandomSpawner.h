@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../World/AtomWorld.h"
-#include "../modules/Rand.h"
+#include "../AtomWorld/AtomWorld.h"
+#include "../utils/Rand.h"
 #include "../consts.h"
 
 class RandomSpawner {

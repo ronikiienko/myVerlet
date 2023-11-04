@@ -1,9 +1,9 @@
 #pragma once
 
-#include "../World/AtomWorld.h"
+#include "../AtomWorld/AtomWorld.h"
 #include "SFML/Graphics/RenderWindow.hpp"
-#include "../modules/Grid.h"
-#include "../modules/ThreadPool.h"
+#include "./Grid.h"
+#include "../utils/ThreadPool.h"
 #include "../PerformanceMonitor/PerformanceMonitor.h"
 
 class Physics {

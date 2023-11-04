@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../modules/Angle.h"
-#include "../modules/Vector.h"
-#include "../World/AtomWorld.h"
+#include "../utils/Angle.h"
+#include "../utils/Vector.h"
+#include "../AtomWorld/AtomWorld.h"
 #include "../consts.h"
 
 class Shooter {

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../modules/Vector.h"
-#include "../World/AtomWorld.h"
+#include "../utils/Vector.h"
+#include "../AtomWorld/AtomWorld.h"
 #include "../consts.h"
 
 class Chain {

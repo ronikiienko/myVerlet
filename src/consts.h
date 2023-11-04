@@ -1,8 +1,8 @@
 #pragma once
 
 #include <thread>
-#include "modules/Vector.h"
-#include "modules/Rectangle.h"
+#include "utils/Vector.h"
+#include "utils/Rectangle.h"
 
 const int maxObjectNum = 200000;
 const int maxSticksNum = 100000;
