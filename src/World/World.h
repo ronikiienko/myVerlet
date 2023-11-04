@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include "../World/ComplexObject.h"
+#include "ComplexObject.h"
 
 class World {
 private:
