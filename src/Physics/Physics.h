@@ -19,8 +19,10 @@ private:
         threadPool.dispatch(objectsCount, [this, &bounds, dt](int start, int end) {
             atomWorld.forEachObject([&bounds, dt](VerletObject& object, int i) {
                 // TODO when all grid filled with objects, you can see that some start falling faster and some slower (on lower gravity levels like 10) - this is because of floats precision
-                if (!object.isPinned) object.accelerate(gravity);
-                object.update(dt);
+                if (!object.isPinned) {
+                    object.accelerate(gravity);
+                    object.update(dt);
+                }
 
                 // problem was that for example: atomWorld is 100x100. Then both objects are outside of field on same direction, like obj1(101.256, 102.399) and obj2(105.936, 110.87). both will be pushed to (100,100) resulting in zero distance.
                 // offset is trying to fix this problem
