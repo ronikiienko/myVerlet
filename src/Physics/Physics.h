@@ -13,11 +13,13 @@ private:
     ThreadPool &threadPool;
     PerformanceMonitor &performanceMonitor;
 
-    void applyConstraints() {
+    void applyGravityAndConstraints() {
         const Rectangle bounds = atomWorld.getBoundsF();
         const int objectsCount = atomWorld.getObjectsCount();
         threadPool.dispatch(objectsCount, [this, &bounds](int start, int end) {
             atomWorld.forEachObject([&bounds](VerletObject& object, int i) {
+                // TODO when all grid filled with objects, you can see that some start falling faster and some slower (on lower gravity levels like 10) - this is because of floats precision
+                if (!object.isPinned) object.accelerate(gravity);
                 // problem was that for example: atomWorld is 100x100. Then both objects are outside of field on same direction, like obj1(101.256, 102.399) and obj2(105.936, 110.87). both will be pushed to (100,100) resulting in zero distance.
                 // offset is trying to fix this problem
                 const float offset = static_cast<float>(i) * 1e-6f;
@@ -41,6 +43,43 @@ private:
             }, start, end);
         });
     }
+
+//    void applyGravity() {
+//        threadPool.dispatch(atomWorld.getObjectsCount(), [this](int start, int end) {
+//            atomWorld.forEachObject([](VerletObject& object, int i) {
+//                if (!object.isPinned) object.accelerate(gravity);
+//            }, start, end);
+//        });
+//    }
+//
+//    void applyConstraints() {
+//        const Rectangle bounds = atomWorld.getBoundsF();
+//        const int objectsCount = atomWorld.getObjectsCount();
+//        threadPool.dispatch(objectsCount, [this, &bounds](int start, int end) {
+//            atomWorld.forEachObject([&bounds](VerletObject& object, int i) {
+//                // problem was that for example: atomWorld is 100x100. Then both objects are outside of field on same direction, like obj1(101.256, 102.399) and obj2(105.936, 110.87). both will be pushed to (100,100) resulting in zero distance.
+//                // offset is trying to fix this problem
+//                const float offset = static_cast<float>(i) * 1e-6f;
+//
+//                const Vector2 velocity = (object.posCurr - object.posOld) * wallsDamping;
+//                if (object.posCurr.x < bounds.getX1() + objectsRadius) {
+//                    object.posCurr.x = bounds.getX1() + objectsRadius + offset;
+//                    object.posOld.x = object.posCurr.x + velocity.x;
+//                } else if (object.posCurr.x > bounds.getX2() - objectsRadius) {
+//                    object.posCurr.x = bounds.getX2() - objectsRadius - offset;
+//                    object.posOld.x = object.posCurr.x + velocity.x;
+//                }
+//
+//                if (object.posCurr.y < bounds.getY1() + objectsRadius) {
+//                    object.posCurr.y = bounds.getY1() + objectsRadius + offset;
+//                    object.posOld.y = object.posCurr.y + velocity.y;
+//                } else if (object.posCurr.y > bounds.getY2() - objectsRadius) {
+//                    object.posCurr.y = bounds.getY2() - objectsRadius - offset;
+//                    object.posOld.y = object.posCurr.y + velocity.y;
+//                }
+//            }, start, end);
+//        });
+//    }
 
     static void solveContact(VerletObject &obj1, VerletObject &obj2) {
         const Vector2 vectorBetween = obj1.posCurr - obj2.posCurr;
@@ -144,14 +183,7 @@ private:
         threadPool.waitForCompletion();
     }
 
-    // TODO when all grid filled with objects, you can see that some start falling faster and some slower (on lower gravity levels like 10)
-    void applyGravity() {
-        threadPool.dispatch(atomWorld.getObjectsCount(), [this](int start, int end) {
-            atomWorld.forEachObject([](VerletObject& object, int i) {
-                if (!object.isPinned) object.accelerate(gravity);
-            }, start, end);
-        });
-    }
+
 
     void updatePositions(float dt) {
         threadPool.dispatch(atomWorld.getObjectsCount(), [this, dt](int start, int end) {
@@ -201,12 +233,12 @@ public:
         const float subStepDt = physicsInterval / physicsSubSteps;
 
         for (int i = 0; i < physicsSubSteps; i++) {
-            applyGravity();
+            applyGravityAndConstraints();
+
             performanceMonitor.start("sticks");
             constraintSticks();
             performanceMonitor.end("sticks");
 
-            applyConstraints();
 
             performanceMonitor.start("grid");
             rebuildGrid();
