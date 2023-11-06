@@ -96,13 +96,12 @@ private:
     static void solveContact(VerletObject &obj1, VerletObject &obj2) {
         const Vector2 vectorBetween = obj1.posCurr - obj2.posCurr;
         const float dist2 = vectorBetween.magnitude2();
-        const float min_dist = objectsRadius + objectsRadius;
         // Check overlapping
-        if (dist2 < min_dist * min_dist) {
+        if (dist2 < twoObjectRadiusSquared) {
             const float dist = std::sqrt(dist2);
             if (dist == 0) return;
             const Vector2 normal = vectorBetween / dist;
-            const float delta = 0.5f * collisionRestitution * (dist - min_dist);
+            const float delta = 0.5f * collisionRestitution * (dist - twoObjectRadiusSquared);
             // Update positions
             if (!obj1.isPinned) obj1.posCurr -= normal * delta;
             if (!obj2.isPinned) obj2.posCurr += normal * delta;
