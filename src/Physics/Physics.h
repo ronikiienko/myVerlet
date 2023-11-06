@@ -239,9 +239,9 @@ public:
         for (int i = 0; i < physicsSubSteps; i++) {
 
             performanceMonitor.start("sticks");
+            updatePositionsConstraint(subStepDt);
             constraintSticks();
             performanceMonitor.end("sticks");
-
 
             performanceMonitor.start("grid");
             rebuildGrid();
@@ -251,8 +251,6 @@ public:
             solveCollisions();
             performanceMonitor.end("collisions");
 
-            updatePositionsConstraint(subStepDt);
-//            updatePositions(subStepDt);
         }
     }
 };
