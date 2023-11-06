@@ -71,7 +71,7 @@ public:
         updateObjectsArray();
         updateSticksArray();
 
-        window.draw(objectVertexArray);
+        window.draw(objectVertexArray, &objectTexture);
         window.draw(sticksVertexArray);
     }
 };
