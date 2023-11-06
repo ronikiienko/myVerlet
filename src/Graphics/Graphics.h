@@ -28,10 +28,8 @@ public:
         textureSize = 1024.0f;
     };
 
-    void update() {
+    void updateObjectsArray() {
         objectVertexArray.resize(atomWorld.getObjectsCount() * 4);
-        sticksVertexArray.resize(atomWorld.getSticksCount() * 2);
-
         threadPool.dispatch(atomWorld.getObjectsCount(), [this](int start, int end) {
             atomWorld.forEachObject([this](VerletObject& object, int i){
                 const int ind = i * 4;
@@ -52,7 +50,10 @@ public:
                 objectVertexArray[ind + 3].color = object.color;
             }, start, end);
         });
+    }
 
+    void updateSticksArray() {
+        sticksVertexArray.resize(atomWorld.getSticksCount() * 2);
         threadPool.dispatch(atomWorld.getSticksCount(), [this](int start, int end) {
             atomWorld.forEachStick([this](VerletStick& stick, int i){
                 const int ind = i * 2;
@@ -64,8 +65,13 @@ public:
                 objectVertexArray[ind + 1].color = stick.obj2.color;
             }, start, end);
         });
+    }
 
-        window.draw(objectVertexArray, &objectTexture);
+    void update() {
+        updateObjectsArray();
+        updateSticksArray();
+
+        window.draw(objectVertexArray);
         window.draw(sticksVertexArray);
     }
 };
