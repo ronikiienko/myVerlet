@@ -13,13 +13,15 @@ private:
     ThreadPool &threadPool;
     PerformanceMonitor &performanceMonitor;
 
-    void applyGravityAndConstraints() {
+    void updatePositionsConstraint(float dt) {
         const Rectangle bounds = atomWorld.getBoundsF();
         const int objectsCount = atomWorld.getObjectsCount();
-        threadPool.dispatch(objectsCount, [this, &bounds](int start, int end) {
-            atomWorld.forEachObject([&bounds](VerletObject& object, int i) {
+        threadPool.dispatch(objectsCount, [this, &bounds, dt](int start, int end) {
+            atomWorld.forEachObject([&bounds, dt](VerletObject& object, int i) {
                 // TODO when all grid filled with objects, you can see that some start falling faster and some slower (on lower gravity levels like 10) - this is because of floats precision
                 if (!object.isPinned) object.accelerate(gravity);
+                object.update(dt);
+
                 // problem was that for example: atomWorld is 100x100. Then both objects are outside of field on same direction, like obj1(101.256, 102.399) and obj2(105.936, 110.87). both will be pushed to (100,100) resulting in zero distance.
                 // offset is trying to fix this problem
                 const float offset = static_cast<float>(i) * 1e-6f;
@@ -40,6 +42,7 @@ private:
                     object.posCurr.y = bounds.getY2() - objectsRadius - offset;
                     object.posOld.y = object.posCurr.y + velocity.y;
                 }
+
             }, start, end);
         });
     }
@@ -77,6 +80,13 @@ private:
 //                    object.posCurr.y = bounds.getY2() - objectsRadius - offset;
 //                    object.posOld.y = object.posCurr.y + velocity.y;
 //                }
+//            }, start, end);
+//        });
+//    }
+//    void updatePositions(float dt) {
+//        threadPool.dispatch(atomWorld.getObjectsCount(), [this, dt](int start, int end) {
+//            atomWorld.forEachObject([dt](VerletObject& object, int i) {
+//                if (!object.isPinned) object.update(dt);
 //            }, start, end);
 //        });
 //    }
@@ -185,13 +195,7 @@ private:
 
 
 
-    void updatePositions(float dt) {
-        threadPool.dispatch(atomWorld.getObjectsCount(), [this, dt](int start, int end) {
-            atomWorld.forEachObject([dt](VerletObject& object, int i) {
-                if (!object.isPinned) object.update(dt);
-            }, start, end);
-        });
-    }
+
 
 //    void rebuildGrid() {
 //        grid.clear();
@@ -233,7 +237,6 @@ public:
         const float subStepDt = physicsInterval / physicsSubSteps;
 
         for (int i = 0; i < physicsSubSteps; i++) {
-            applyGravityAndConstraints();
 
             performanceMonitor.start("sticks");
             constraintSticks();
@@ -248,7 +251,8 @@ public:
             solveCollisions();
             performanceMonitor.end("collisions");
 
-            updatePositions(subStepDt);
+            updatePositionsConstraint(subStepDt);
+//            updatePositions(subStepDt);
         }
     }
 };
