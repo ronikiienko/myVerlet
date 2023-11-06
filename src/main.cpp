@@ -15,6 +15,8 @@
 #include "addons/RandomSpawner.h"
 #include "addons/Chain.h"
 #include "addons/Benchmark.h"
+#include "World/World.h"
+#include "addons/Square.h"
 
 bool isSpacePressed = false;
 
@@ -35,6 +37,8 @@ int main() {
     RNGf gen = RNGf(seed);
     RandomSpawner randomSpawner{atomWorld, gen};
     Benchmark benchmark{60 * 30};
+    World world{atomWorld};
+    Square square{atomWorld, Vector2::fromCartesian(200,200), 5};
     randomSpawner.spawn(150000);
 
 

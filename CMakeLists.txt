@@ -24,6 +24,7 @@ set(SOURCES src/main.cpp
         src/addons/Benchmark.h
         src/World/ComplexObject.h
         src/World/World.h
+        src/World/Rocket.h
 )
 
 project(${PROJECT_NAME})

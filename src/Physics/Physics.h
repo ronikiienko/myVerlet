@@ -42,7 +42,7 @@ private:
         });
     }
 
-    void solveContact(VerletObject &obj1, VerletObject &obj2) {
+    static void solveContact(VerletObject &obj1, VerletObject &obj2) {
         const Vector2 vectorBetween = obj1.posCurr - obj2.posCurr;
         const float dist2 = vectorBetween.magnitude2();
         const float min_dist = objectsRadius + objectsRadius;

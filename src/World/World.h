@@ -5,13 +5,20 @@
 
 class World {
 private:
-    std::vector<ComplexObject> complexObjects;
+    AtomWorld& atomWorld;
+    std::vector<std::unique_ptr<ComplexObject>> complexObjects;
 
 public:
-    int addComplexObject(ComplexObject &&complexObject) {
-        complexObjects.push_back(std::move(complexObject));
+    explicit World(AtomWorld& atomWorld) : atomWorld(atomWorld) {};
+
+    template<typename T>
+    int addComplexObject(T &&complexObject) {
+        auto complexObjectPtr = std::make_unique<T>(complexObject);
+        complexObjects.push_back(std::move(complexObjectPtr));
+
         return getComplexObjectsCount() - 1;
     }
+
 
     [[nodiscard]] int getComplexObjectsCount() {
         return static_cast<int>(complexObjects.size());
