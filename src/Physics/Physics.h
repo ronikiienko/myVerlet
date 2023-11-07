@@ -97,11 +97,11 @@ private:
         const Vector2 vectorBetween = obj1.posCurr - obj2.posCurr;
         const float dist2 = vectorBetween.magnitude2();
         // Check overlapping
-        if (dist2 < twoObjectRadiusSquared) {
+        if (dist2 < twoObjectsRadiusSquared) {
             const float dist = std::sqrt(dist2);
             if (dist == 0) return;
             const Vector2 normal = vectorBetween / dist;
-            const float delta = 0.5f * collisionRestitution * (dist - twoObjectRadiusSquared);
+            const float delta = 0.5f * collisionRestitution * (dist - twoObjectsRadius);
             // Update positions
             if (!obj1.isPinned) obj1.posCurr -= normal * delta;
             if (!obj2.isPinned) obj2.posCurr += normal * delta;

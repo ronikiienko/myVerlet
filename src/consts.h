@@ -13,8 +13,8 @@ constexpr RectangleI worldBounds = RectangleI::fromSize(0,0,2400,1800);
 constexpr RectangleI windowBounds = RectangleI::fromSize(0,0,2400,1800);
 
 constexpr int objectsRadius = 2;
-constexpr int objectsRadiusSquared = objectsRadius * objectsRadius;
-constexpr int twoObjectRadiusSquared = objectsRadiusSquared * 2;
+constexpr int twoObjectsRadius = objectsRadius + objectsRadius;
+constexpr int twoObjectsRadiusSquared = twoObjectsRadius * twoObjectsRadius;
 
 // collision grid when finding collisions is split on many threads (by columns). To avoid race conditions i use two pass method. This means that grid in fact will be split on numberOfThreads * 2 tasks. So, if we have 10threads
 // and grid of, say, size 39 will mean that each thread gets 1 task, and 19 remain for "cleanup" function, which is inefficient, because cleanup function (it solves remaining colums) runs on one core
