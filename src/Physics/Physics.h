@@ -28,21 +28,21 @@ private:
                 // offset is trying to fix this problem
                 const float offset = static_cast<float>(i) * 1e-6f;
 
-                const Vector2 velocity = (object.posCurr - object.posOld) * wallsDamping;
+                const Vector2 newVelocity = object.getVelocity() * wallsDamping;
                 if (object.posCurr.x < bounds.getX1() + objectsRadius) {
                     object.posCurr.x = bounds.getX1() + objectsRadius + offset;
-                    object.posOld.x = object.posCurr.x + velocity.x;
+                    object.posOld.x = object.posCurr.x + newVelocity.x;
                 } else if (object.posCurr.x > bounds.getX2() - objectsRadius) {
                     object.posCurr.x = bounds.getX2() - objectsRadius - offset;
-                    object.posOld.x = object.posCurr.x + velocity.x;
+                    object.posOld.x = object.posCurr.x + newVelocity.x;
                 }
 
                 if (object.posCurr.y < bounds.getY1() + objectsRadius) {
                     object.posCurr.y = bounds.getY1() + objectsRadius + offset;
-                    object.posOld.y = object.posCurr.y + velocity.y;
+                    object.posOld.y = object.posCurr.y + newVelocity.y;
                 } else if (object.posCurr.y > bounds.getY2() - objectsRadius) {
                     object.posCurr.y = bounds.getY2() - objectsRadius - offset;
-                    object.posOld.y = object.posCurr.y + velocity.y;
+                    object.posOld.y = object.posCurr.y + newVelocity.y;
                 }
 
             }, start, end);
