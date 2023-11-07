@@ -17,7 +17,11 @@ private:
         const Rectangle bounds = atomWorld.getBoundsF();
         const int objectsCount = atomWorld.getObjectsCount();
         threadPool.dispatch(objectsCount, [this, &bounds, dt](int start, int end) {
-            atomWorld.forEachObject([&bounds, dt](VerletObject& object, int i) {
+            const float minX = bounds.getX1() + objectsRadius;
+            const float maxX = bounds.getX2() - objectsRadius;
+            const float minY = bounds.getY1() + objectsRadius;
+            const float maxY = bounds.getY2() - objectsRadius;
+            atomWorld.forEachObject([&bounds, dt, minX, maxX, minY, maxY](VerletObject& object, int i) {
                 // TODO when all grid filled with objects, you can see that some start falling faster and some slower (on lower gravity levels like 10) - this is because of floats precision
                 if (!object.isPinned) {
                     object.accelerate(gravity);
@@ -29,18 +33,18 @@ private:
                 const float offset = static_cast<float>(i) * 1e-6f;
 
                 const Vector2 newVelocity = object.getVelocity() * wallsDamping;
-                if (object.posCurr.x < bounds.getX1() + objectsRadius) {
+                if (object.posCurr.x < minX) {
                     object.posCurr.x = bounds.getX1() + objectsRadius + offset;
                     object.posOld.x = object.posCurr.x + newVelocity.x;
-                } else if (object.posCurr.x > bounds.getX2() - objectsRadius) {
+                } else if (object.posCurr.x > maxX) {
                     object.posCurr.x = bounds.getX2() - objectsRadius - offset;
                     object.posOld.x = object.posCurr.x + newVelocity.x;
                 }
 
-                if (object.posCurr.y < bounds.getY1() + objectsRadius) {
+                if (object.posCurr.y < minY) {
                     object.posCurr.y = bounds.getY1() + objectsRadius + offset;
                     object.posOld.y = object.posCurr.y + newVelocity.y;
-                } else if (object.posCurr.y > bounds.getY2() - objectsRadius) {
+                } else if (object.posCurr.y > maxY) {
                     object.posCurr.y = bounds.getY2() - objectsRadius - offset;
                     object.posOld.y = object.posCurr.y + newVelocity.y;
                 }
