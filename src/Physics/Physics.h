@@ -243,8 +243,11 @@ public:
 
         for (int i = 0; i < physicsSubSteps; i++) {
 
-            performanceMonitor.start("sticks");
+            performanceMonitor.start("gravityConstraintsUpdate");
             updatePositionsConstraint(subStepDt);
+            performanceMonitor.end("gravityConstraintsUpdate");
+
+            performanceMonitor.start("sticks");
             constraintSticks();
             performanceMonitor.end("sticks");
 
