@@ -10,7 +10,7 @@ public:
 
     explicit ComplexObject(AtomWorld& atomWorld) : atomWorld(atomWorld) {};
 
-    void update() {};
+    virtual void update() {};
 };
 
 

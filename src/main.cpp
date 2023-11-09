@@ -18,6 +18,7 @@
 #include "World/World.h"
 #include "addons/Square.h"
 #include "World/Rocket.h"
+#include "World/Dumb.h"
 
 bool isSpacePressed = false;
 
@@ -40,6 +41,7 @@ int main() {
     Benchmark benchmark{60 * 30};
     World world{atomWorld};
     world.addComplexObject(Rocket(atomWorld));
+    world.addComplexObject(Dumb(atomWorld, Vector2::fromCartesian(400,400)));
 //    randomSpawner.spawn(150000);
 
 
@@ -121,6 +123,8 @@ int main() {
         performanceMonitor.start("physics");
         physics.update();
         performanceMonitor.end("physics");
+
+        world.update();
 
         performanceMonitor.start("graphics");
         window.clear(sf::Color::Black);

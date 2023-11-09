@@ -25,6 +25,7 @@ set(SOURCES src/main.cpp
         src/World/ComplexObject.h
         src/World/World.h
         src/World/Rocket.h
+        src/World/Dumb.h
 )
 
 project(${PROJECT_NAME})

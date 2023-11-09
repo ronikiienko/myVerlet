@@ -24,4 +24,10 @@ public:
     [[nodiscard]] int getComplexObjectsCount() {
         return static_cast<int>(complexObjects.size());
     }
+
+    void update() {
+        for (auto& complexObject : complexObjects) {
+            complexObject->update();
+        }
+    }
 };
