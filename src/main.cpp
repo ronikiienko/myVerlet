@@ -17,6 +17,7 @@
 #include "addons/Benchmark.h"
 #include "World/World.h"
 #include "addons/Square.h"
+#include "World/Rocket.h"
 
 bool isSpacePressed = false;
 
@@ -38,8 +39,8 @@ int main() {
     RandomSpawner randomSpawner{atomWorld, gen};
     Benchmark benchmark{60 * 30};
     World world{atomWorld};
-    Square square{atomWorld, Vector2::fromCartesian(200,200), 30};
-    randomSpawner.spawn(150000);
+    world.addComplexObject(Rocket(atomWorld));
+//    randomSpawner.spawn(150000);
 
 
     VerletObject *objectHold = nullptr;

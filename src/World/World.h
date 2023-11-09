@@ -13,12 +13,13 @@ public:
 
     template<typename T>
     int addComplexObject(T &&complexObject) {
-        auto complexObjectPtr = std::make_unique<T>(complexObject);
-        complexObjects.push_back(std::move(complexObjectPtr));
-
+        complexObjects.push_back(std::make_unique<T>(std::forward<T>(complexObject)));
         return getComplexObjectsCount() - 1;
     }
 
+    std::unique_ptr<ComplexObject>& getObject(int index) {
+        return complexObjects[index];
+    }
 
     [[nodiscard]] int getComplexObjectsCount() {
         return static_cast<int>(complexObjects.size());
