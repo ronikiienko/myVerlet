@@ -9,7 +9,7 @@ public:
     }
 
     void update() override {
-        VerletObject& object = atomWorld.getObject(objects[0]);
-        object.addVelocity(Vector2::fromCartesian(0.01,0.01));
+//        VerletObject& object = atomWorld.getObject(objects[0]);
+//        object.addVelocity(Vector2::fromCartesian(0.001,0.001));
     }
 };

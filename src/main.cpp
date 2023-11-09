@@ -41,7 +41,20 @@ int main() {
     Benchmark benchmark{60 * 30};
     World world{atomWorld};
     world.addComplexObject(Rocket(atomWorld));
-    world.addComplexObject(Dumb(atomWorld, Vector2::fromCartesian(400,400)));
+    for (int i = 0; i < 150000; i++) {
+        world.addComplexObject(Dumb(
+                atomWorld,
+                Vector2::fromCartesian(
+                        gen.getInRange(
+                                atomWorld.getBoundsF().getX1(),
+                                atomWorld.getBoundsF().getX2()
+                        ),
+                        gen.getInRange(
+                                atomWorld.getBoundsF().getY1() + 400,
+                                atomWorld.getBoundsF().getY2()
+                        )))
+        );
+    }
 //    randomSpawner.spawn(150000);
 
 
