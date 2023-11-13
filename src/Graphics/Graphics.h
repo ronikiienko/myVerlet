@@ -4,6 +4,7 @@
 #include "SFML/Graphics/RenderWindow.hpp"
 #include "SFML/Graphics/VertexArray.hpp"
 #include "../utils/ThreadPool.h"
+#include "../PerformanceMonitor/PerformanceMonitor.h"
 
 class Graphics {
 private:
@@ -13,10 +14,11 @@ private:
     sf::VertexArray sticksVertexArray;
     ThreadPool &threadPool;
     sf::Texture objectTexture;
+    PerformanceMonitor& performanceMonitor;
     float textureSize;
 public:
-    explicit Graphics(AtomWorld &atomWorld, sf::RenderWindow &window, ThreadPool &threadPool)
-            : atomWorld(atomWorld), window(window), threadPool(threadPool) {
+    explicit Graphics(AtomWorld &atomWorld, sf::RenderWindow &window, ThreadPool &threadPool, PerformanceMonitor& performanceMonitor)
+            : atomWorld(atomWorld), window(window), threadPool(threadPool), performanceMonitor(performanceMonitor) {
         objectVertexArray.setPrimitiveType(sf::Quads);  // Initialize with Quads
         sticksVertexArray.setPrimitiveType(sf::Lines);
         // TODO somehow organise resources, because now path depends on where executable is. Same for fonts in performance monitor

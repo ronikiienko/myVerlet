@@ -32,7 +32,7 @@ int main() {
     ThreadPool threadPool{numThreads};
     AtomWorld atomWorld{worldBounds};
     PerformanceMonitor performanceMonitor = PerformanceMonitor{window, atomWorld};
-    Graphics graphics{atomWorld, window, threadPool};
+    Graphics graphics{atomWorld, window, threadPool, performanceMonitor};
     Physics physics{atomWorld, threadPool, performanceMonitor};
     ExplosionHandler explosionHandler{atomWorld};
     Shooter shooter{Vector2::fromCartesian(200, 200), Angle::fromDegrees(45), 4, 1, 4, atomWorld, 6};
