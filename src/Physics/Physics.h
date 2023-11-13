@@ -216,11 +216,11 @@ private:
             grid.clear(start, end);
         });
         performanceMonitor.end("grid clear");
-//        performanceMonitor.start("grid build");
+        performanceMonitor.start("grid build");
         atomWorld.forEachObject([this](VerletObject& object, int i) {
             grid.insert(i, object.posCurr.x, object.posCurr.y);
         });
-//        performanceMonitor.end("grid build");
+        performanceMonitor.end("grid build");
 
     }
 

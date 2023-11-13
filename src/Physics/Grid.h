@@ -74,6 +74,8 @@ struct IdGrid {
     int realHeight;
     float widthRatio;
     float heightRatio;
+    float inverseWidthRatio;
+    float inverseHeightRatio;
     std::vector<Cell> data;
     int length;
 
@@ -89,6 +91,8 @@ struct IdGrid {
 
         widthRatio = static_cast<float>(realWidth) / static_cast<float>(width);
         heightRatio = static_cast<float>(realHeight) / static_cast<float>(height);
+        inverseWidthRatio = 1 / widthRatio;
+        inverseHeightRatio = 1 / heightRatio;
 
         length = width * height;
         data.resize(length);
@@ -96,8 +100,8 @@ struct IdGrid {
 
     void insert(int id, float realX, float realY) {
         // Convert real-atomWorld coordinates to grid coordinates
-        const int gridX = static_cast<int>((realX - realX1f) / widthRatio);
-        const int gridY = static_cast<int>((realY - realY1f) / heightRatio);
+        const int gridX = static_cast<int>((realX - realX1f) * inverseWidthRatio);
+        const int gridY = static_cast<int>((realY - realY1f) * inverseHeightRatio);
 
         // TODO remove checks - they are for debuggin
         if (gridX < 0 || gridX >= width || gridY < 0 || gridY >= height) {
