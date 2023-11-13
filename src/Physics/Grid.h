@@ -64,12 +64,6 @@ struct Cell {
 struct IdGrid {
     int width;
     int height;
-    int realX1;
-    int realY1;
-    float realX1f;
-    float realY1f;
-    int realX2;
-    int realY2;
     int realWidth;
     int realHeight;
     float widthRatio;
@@ -80,12 +74,6 @@ struct IdGrid {
     int length;
 
     IdGrid(int width, int height, RectangleI realBounds) : width(width), height(height) {
-        realX1 = realBounds.getX1();
-        realY1 = realBounds.getY1();
-        realX1f = static_cast<float>(realX1);
-        realY1f = static_cast<float>(realY1);
-        realX2 = realBounds.getX2();
-        realY2 = realBounds.getY2();
         realWidth = realBounds.getWidth();
         realHeight = realBounds.getHeight();
 
@@ -100,8 +88,8 @@ struct IdGrid {
 
     void insert(int id, float realX, float realY) {
         // Convert real-atomWorld coordinates to grid coordinates
-        const int gridX = static_cast<int>((realX - realX1f) * inverseWidthRatio);
-        const int gridY = static_cast<int>((realY - realY1f) * inverseHeightRatio);
+        const int gridX = static_cast<int>(realX * inverseWidthRatio);
+        const int gridY = static_cast<int>(realY * inverseHeightRatio);
 
         // TODO remove checks - they are for debuggin
         if (gridX < 0 || gridX >= width || gridY < 0 || gridY >= height) {
