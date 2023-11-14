@@ -30,10 +30,6 @@ set(SOURCES src/main.cpp
 
 project(${PROJECT_NAME})
 
-#include(FetchContent)
-#set(BUILD_SHARED_LIBS OFF)
-#fetchcontent_declare(SFML GIT_REPOSITORY https://github.com/SFML/SFML.git GIT_TAG 2.5.1)
-#fetchcontent_makeavailable(SFML)
 set(SFML_DIR "C:/Users/ronik/Downloads/SFML-2.6.1-windows-gcc-13.1.0-mingw-64-bit/SFML-2.6.1/lib/cmake/SFML")
 find_package(SFML 2.6.1 COMPONENTS system window graphics REQUIRED)
 #first to generate profile second to run
