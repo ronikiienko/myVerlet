@@ -39,3 +39,4 @@ set(CMAKE_CXX_STANDARD 23)
 
 add_executable(${PROJECT_NAME} ${SOURCES})
 target_link_libraries(${PROJECT_NAME} sfml-system sfml-window sfml-graphics)
+target_link_options(${PROJECT_NAME} PRIVATE -static-libgcc -static-libstdc++)
