@@ -22,7 +22,7 @@ public:
         objectVertexArray.setPrimitiveType(sf::Quads);  // Initialize with Quads
         sticksVertexArray.setPrimitiveType(sf::Lines);
         // TODO somehow organise resources, because now path depends on where executable is. Same for fonts in performance monitor
-        if (!objectTexture.loadFromFile("../res/circle.png")) {
+        if (!objectTexture.loadFromFile("./res/circle.png")) {
             throw std::runtime_error("Could not load circle texture file");
         }
         objectTexture.generateMipmap();

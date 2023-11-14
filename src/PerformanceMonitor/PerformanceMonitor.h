@@ -18,7 +18,7 @@ private:
     sf::Text text;
 public:
     explicit PerformanceMonitor(sf::RenderWindow& window, AtomWorld& world): window(window), world(world) {
-        if(!font.loadFromFile("../res/Roboto-Medium.ttf")) {
+        if(!font.loadFromFile("./res/Roboto-Medium.ttf")) {
             throw std::runtime_error("Font could not load. Perhaps it doesn't exist?");
         }
         text.setFont(font);
