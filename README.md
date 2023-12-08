@@ -21,5 +21,5 @@ Try:
 
 
 
-Compiled for windows only. M - add random. Spacebar - shoot. right click - explosion. WASD - shooter more, Arrows - shooter rotate.
+Compiled for windows only. M - add random. Spacebar - shoot. right click - explosion. WASD - shooter more, Arrows - shooter rotate, Backspase - remove all.
 Not fully showcasing possibilities, and window size is small meaning you can fit only around 50k without cluttering. 8 substeps.
