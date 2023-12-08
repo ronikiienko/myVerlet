@@ -17,7 +17,9 @@ Not using GPU for physics calculations.
 ![image](https://github.com/ronikiienko/myVerlet/assets/106737540/d5d2cdc9-ee5b-4dea-a775-57e176f7549e)
 
 Try:
-[myVerlet.zip](https://github.com/ronikiienko/myVerlet/files/13621572/myVerlet.zip)
+[myVerlet (3).zip](https://github.com/ronikiienko/myVerlet/files/13621621/myVerlet.3.zip)
 
 
-Compiled for windows. M - add random. Spacebar - shoot. right click - explosion. WASD - shooter more, Arrows - shooter rotate
+
+Compiled for windows only. M - add random. Spacebar - shoot. right click - explosion. WASD - shooter more, Arrows - shooter rotate.
+Not fully showcasing possibilities, and window size is small meaning you can fit only around 50k without cluttering. 8 substeps.
