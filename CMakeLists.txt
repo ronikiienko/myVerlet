@@ -22,10 +22,7 @@ set(SOURCES src/main.cpp
         src/addons/Chain.h
         src/addons/Square.h
         src/addons/Benchmark.h
-        src/World/ComplexObject.h
-        src/World/World.h
-        src/World/Rocket.h
-        src/World/Dumb.h
+        src/Camera/Camera.h
 )
 
 project(${PROJECT_NAME})
