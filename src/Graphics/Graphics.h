@@ -5,6 +5,7 @@
 #include "SFML/Graphics/VertexArray.hpp"
 #include "../utils/ThreadPool.h"
 #include "../PerformanceMonitor/PerformanceMonitor.h"
+#include "../Camera/Camera.h"
 
 class Graphics {
 private:
@@ -14,11 +15,14 @@ private:
     sf::VertexArray sticksVertexArray;
     ThreadPool &threadPool;
     sf::Texture objectTexture;
-    PerformanceMonitor& performanceMonitor;
+    PerformanceMonitor &performanceMonitor;
+    Camera &camera;
     float textureSize;
 public:
-    explicit Graphics(AtomWorld &atomWorld, sf::RenderWindow &window, ThreadPool &threadPool, PerformanceMonitor& performanceMonitor)
-            : atomWorld(atomWorld), window(window), threadPool(threadPool), performanceMonitor(performanceMonitor) {
+    explicit Graphics(AtomWorld &atomWorld, sf::RenderWindow &window, ThreadPool &threadPool,
+                      PerformanceMonitor &performanceMonitor, Camera &camera)
+            : atomWorld(atomWorld), window(window), threadPool(threadPool), performanceMonitor(performanceMonitor),
+              camera(camera) {
         objectVertexArray.setPrimitiveType(sf::Quads);  // Initialize with Quads
         sticksVertexArray.setPrimitiveType(sf::Lines);
         // TODO somehow organise resources, because now path depends on where executable is. Same for fonts in performance monitor
@@ -33,13 +37,16 @@ public:
     void updateObjectsArray() {
         objectVertexArray.resize(atomWorld.getObjectsCount() * 4);
         threadPool.dispatch(atomWorld.getObjectsCount(), [this](int start, int end) {
-            atomWorld.forEachObject([this](VerletObject& object, int i){
+            atomWorld.forEachObject([this](VerletObject &object, int i) {
                 const int ind = i * 4;
 
                 objectVertexArray[ind].position = {object.posCurr.x - objectsRadius, object.posCurr.y - objectsRadius};
-                objectVertexArray[ind + 1].position = {object.posCurr.x + objectsRadius, object.posCurr.y - objectsRadius};
-                objectVertexArray[ind + 2].position = {object.posCurr.x + objectsRadius, object.posCurr.y + objectsRadius};
-                objectVertexArray[ind + 3].position = {object.posCurr.x - objectsRadius, object.posCurr.y + objectsRadius};
+                objectVertexArray[ind + 1].position = {object.posCurr.x + objectsRadius,
+                                                       object.posCurr.y - objectsRadius};
+                objectVertexArray[ind + 2].position = {object.posCurr.x + objectsRadius,
+                                                       object.posCurr.y + objectsRadius};
+                objectVertexArray[ind + 3].position = {object.posCurr.x - objectsRadius,
+                                                       object.posCurr.y + objectsRadius};
 
                 objectVertexArray[ind].texCoords = {0.0f, 0.0f};
                 objectVertexArray[ind + 1].texCoords = {textureSize, 0.0f};
@@ -57,7 +64,7 @@ public:
     void updateSticksArray() {
         sticksVertexArray.resize(atomWorld.getSticksCount() * 2);
         threadPool.dispatch(atomWorld.getSticksCount(), [this](int start, int end) {
-            atomWorld.forEachStick([this](VerletStick& stick, int i){
+            atomWorld.forEachStick([this](VerletStick &stick, int i) {
                 const int ind = i * 2;
 
                 sticksVertexArray[ind].position = {stick.obj1.posCurr.x, stick.obj1.posCurr.y};

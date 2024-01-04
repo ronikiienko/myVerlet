@@ -16,6 +16,7 @@
 #include "addons/Chain.h"
 #include "addons/Benchmark.h"
 #include "addons/Square.h"
+#include "Camera/Camera.h"
 
 
 int main() {
@@ -25,11 +26,11 @@ int main() {
                             sf::Style::Default, settings);
     window.setFramerateLimit(60);
 
-    Camera camera{window, worldBounds};
     ThreadPool threadPool{numThreads};
     AtomWorld atomWorld{worldBounds};
+    Camera camera{atomWorld.getBoundsF().getWidth(), atomWorld.getBoundsF().getHeight(), Vector2::fromCartesian(0, 0)};
     PerformanceMonitor performanceMonitor = PerformanceMonitor{window, atomWorld};
-    Graphics graphics{atomWorld, window, threadPool, performanceMonitor};
+    Graphics graphics{atomWorld, window, threadPool, performanceMonitor, camera};
     Physics physics{atomWorld, threadPool, performanceMonitor};
     ExplosionHandler explosionHandler{atomWorld};
     Shooter shooter{Vector2::fromCartesian(200, 200), Angle::fromDegrees(45), 4, 1, 4, atomWorld, 1};
