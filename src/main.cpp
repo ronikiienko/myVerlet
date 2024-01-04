@@ -25,6 +25,7 @@ int main() {
                             sf::Style::Default, settings);
     window.setFramerateLimit(60);
 
+    Camera camera{window, worldBounds};
     ThreadPool threadPool{numThreads};
     AtomWorld atomWorld{worldBounds};
     PerformanceMonitor performanceMonitor = PerformanceMonitor{window, atomWorld};

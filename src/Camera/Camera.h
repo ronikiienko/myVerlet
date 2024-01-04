@@ -40,5 +40,6 @@ public:
         return position;
     }
 
-    explicit Camera(float viewWidth, float viewHeight) : viewWidth(viewWidth), viewHeight(viewHeight) {};
+    explicit Camera(float viewWidth, float viewHeight, Vector2 position) : viewWidth(viewWidth), viewHeight(viewHeight),
+                                                                           position(position) {};
 };
