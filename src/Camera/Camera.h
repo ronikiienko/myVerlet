@@ -65,5 +65,7 @@ public:
     }
 
     explicit Camera(float viewWidth, float viewHeight, Vector2 position) : viewWidth(viewWidth), viewHeight(viewHeight),
-                                                                           position(position) {};
+                                                                           position(position) {
+        updateLeftTopCorner();
+    };
 };
