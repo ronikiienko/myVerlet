@@ -23,6 +23,7 @@ set(SOURCES src/main.cpp
         src/addons/Square.h
         src/addons/Benchmark.h
         src/Camera/Camera.h
+        src/Game/Game.h
 )
 
 project(${PROJECT_NAME})
