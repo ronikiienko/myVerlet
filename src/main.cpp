@@ -15,10 +15,7 @@
 #include "addons/RandomSpawner.h"
 #include "addons/Chain.h"
 #include "addons/Benchmark.h"
-#include "World/World.h"
 #include "addons/Square.h"
-#include "World/Rocket.h"
-#include "World/Dumb.h"
 
 bool isSpacePressed = false;
 
@@ -121,8 +118,6 @@ int main() {
         performanceMonitor.start("physics");
         physics.update();
         performanceMonitor.end("physics");
-
-        world.update();
 
         performanceMonitor.start("graphics");
         window.clear(sf::Color::Black);
