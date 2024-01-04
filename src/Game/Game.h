@@ -92,7 +92,7 @@ public:
                     }
                 }
 
-                if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space) {
+                if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
                     if (isRunning) {
                         stop();
                     } else {
