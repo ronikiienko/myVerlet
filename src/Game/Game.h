@@ -30,7 +30,7 @@ public:
     RNGf gen{consts::seed};
     RandomSpawner randomSpawner{atomWorld, gen};
     Benchmark benchmark{60 * 30};
-    Camera camera{atomWorld.getBoundsF().getWidth(), atomWorld.getBoundsF().getHeight(), Vector2::fromCartesian(0, 0)};
+    Camera camera{static_cast<float>(window.getSize().x), static_cast<float>(window.getSize().y), Vector2::fromCartesian(0, 0)};
     PerformanceMonitor performanceMonitor{window, atomWorld};
     bool isRunning = true;
 
@@ -39,7 +39,6 @@ public:
         randomSpawner.spawn(150);
         startLoop();
     };
-
     void startLoop() {
         while (window.isOpen()) {
 
@@ -85,6 +84,9 @@ public:
                 }
 
                 if (event.type == sf::Event::MouseWheelScrolled) {
+                    // need to pass mouse position
+                    Vector2 screenMousePos = Vector2::fromCartesian(static_cast<float>(sf::Mouse::getPosition(window).x),
+                                                                    static_cast<float>(sf::Mouse::getPosition(window).y));
                     if (event.mouseWheelScroll.delta > 0) {
                         camera.zoom(1.5);
                     } else {

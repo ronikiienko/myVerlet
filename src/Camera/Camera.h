@@ -4,10 +4,10 @@
 
 class Camera {
 public:
-    Vector2 position = Vector2::fromCartesian(0,0);
-    Vector2 leftTopCorner = Vector2::fromCartesian(0,0);
-    float viewWidth = 100;
-    float viewHeight = 100;
+    Vector2 position = Vector2::fromCartesian(0,0); // position itself (storing left top corner would make rotation very hard)
+    Vector2 leftTopCorner = Vector2::fromCartesian(0,0); // position of the left top corner of the camera (just for to not calculate it every time)
+    float baseViewWidth = 100;
+    float baseViewHeight = 100;
     float zoomFactor = 1;
 
     void updateLeftTopCorner() {
@@ -31,17 +31,25 @@ public:
         updateLeftTopCorner();
     }
 
+    [[nodiscard]] float getViewWidth() const {
+        return baseViewWidth / zoomFactor;
+    }
+
+    [[nodiscard]] float getViewHeight() const {
+        return baseViewHeight / zoomFactor;
+    }
+
     [[nodiscard]] float getX1() const {
-        return position.x - (viewWidth / zoomFactor) / 2;
+        return position.x - (baseViewWidth / zoomFactor) / 2;
     }
     [[nodiscard]] float getX2() const {
-        return position.x + (viewWidth / zoomFactor) / 2;
+        return position.x + (baseViewWidth / zoomFactor) / 2;
     }
     [[nodiscard]] float getY1() const {
-        return position.y - (viewHeight / zoomFactor) / 2;
+        return position.y - (baseViewHeight / zoomFactor) / 2;
     }
     [[nodiscard]] float getY2() const {
-        return position.y + (viewHeight / zoomFactor) / 2;
+        return position.y + (baseViewHeight / zoomFactor) / 2;
     }
 
     [[nodiscard]] Vector2 getPosition() const {
@@ -64,7 +72,15 @@ public:
         return screenSize / zoomFactor;
     }
 
-    explicit Camera(float viewWidth, float viewHeight, Vector2 position) : viewWidth(viewWidth), viewHeight(viewHeight),
+    [[nodiscard]] Vector2 worldVectorToScreenVector(Vector2 worldVector) const {
+        return worldVector * zoomFactor;
+    }
+
+    [[nodiscard]] Vector2 screenVectorToWorldVector(Vector2 screenVector) const {
+        return screenVector / zoomFactor;
+    }
+
+    explicit Camera(float viewWidth, float viewHeight, Vector2 position) : baseViewWidth(viewWidth), baseViewHeight(viewHeight),
                                                                            position(position) {
         updateLeftTopCorner();
     };
