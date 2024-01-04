@@ -56,4 +56,8 @@ public:
             rowOffset += Vector2::fromPolar(interval, direction);
         }
     }
+
+    void pointTo(Vector2 point) {
+        direction = Angle::fromRadians(std::atan2(point.y - position.y, point.x - position.x));
+    }
 };
