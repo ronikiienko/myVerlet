@@ -37,22 +37,19 @@ public:
     void updateObjectsArray() {
         objectVertexArray.resize(atomWorld.getObjectsCount() * 4);
         threadPool.dispatch(atomWorld.getObjectsCount(), [this](int start, int end) {
-            float objectSize = consts::objectsRadius * camera.zoomFactor;
-            float x1 = camera.getX1();
-            float y1 = camera.getY1();
-            atomWorld.forEachObject([this, objectSize, x1, y1](VerletObject &object, int i) {
-                float screenX = (object.posCurr.x - x1) * camera.zoomFactor;
-                float screenY = (object.posCurr.y - y1) * camera.zoomFactor;
+            float objectSize = camera.worldSizeToScreenSize(consts::objectsRadius);
+            atomWorld.forEachObject([this, objectSize](VerletObject &object, int i) {
+                Vector2 screenPos = camera.worldPosToScreenPos(object.posCurr);
 
                 const int ind = i * 4;
 
-                objectVertexArray[ind].position = {screenX - objectSize, screenY - objectSize};
-                objectVertexArray[ind + 1].position = {screenX + objectSize,
-                                                       screenY - objectSize};
-                objectVertexArray[ind + 2].position = {screenX + objectSize,
-                                                       screenY + objectSize};
-                objectVertexArray[ind + 3].position = {screenX - objectSize,
-                                                       screenY + objectSize};
+                objectVertexArray[ind].position = {screenPos.x - objectSize, screenPos.y - objectSize};
+                objectVertexArray[ind + 1].position = {screenPos.x + objectSize,
+                                                       screenPos.y - objectSize};
+                objectVertexArray[ind + 2].position = {screenPos.x + objectSize,
+                                                       screenPos.y + objectSize};
+                objectVertexArray[ind + 3].position = {screenPos.x - objectSize,
+                                                       screenPos.y + objectSize};
 
                 objectVertexArray[ind].texCoords = {0.0f, 0.0f};
                 objectVertexArray[ind + 1].texCoords = {textureSize, 0.0f};

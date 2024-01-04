@@ -38,7 +38,7 @@ int main() {
     RandomSpawner randomSpawner{atomWorld, gen};
     Benchmark benchmark{60 * 30};
 
-    randomSpawner.spawn(15);
+    randomSpawner.spawn(150);
 
 
     while (window.isOpen()) {
@@ -49,16 +49,16 @@ int main() {
                 window.close();
             }
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::W) {
-                shooter.move(Vector2::fromCartesian(0, -40));
+                camera.move(Vector2::fromCartesian(0, -40));
             }
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::S) {
-                shooter.move(Vector2::fromCartesian(0, 40));
+                camera.move(Vector2::fromCartesian(0, 40));
             }
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::A) {
-                shooter.move(Vector2::fromCartesian(-40, 0));
+                camera.move(Vector2::fromCartesian(-40, 0));
             }
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::D) {
-                shooter.move(Vector2::fromCartesian(40, 0));
+                camera.move(Vector2::fromCartesian(40, 0));
             }
 
             if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
@@ -82,9 +82,9 @@ int main() {
 
             if (event.type == sf::Event::MouseWheelScrolled) {
                 if (event.mouseWheelScroll.delta > 0) {
-                    camera.zoom(2);
+                    camera.zoom(1.5);
                 } else {
-                    camera.zoom(0.5);
+                    camera.zoom(0.75);
                 }
             }
         }
