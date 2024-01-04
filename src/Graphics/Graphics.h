@@ -40,13 +40,13 @@ public:
             atomWorld.forEachObject([this](VerletObject &object, int i) {
                 const int ind = i * 4;
 
-                objectVertexArray[ind].position = {object.posCurr.x - objectsRadius, object.posCurr.y - objectsRadius};
-                objectVertexArray[ind + 1].position = {object.posCurr.x + objectsRadius,
-                                                       object.posCurr.y - objectsRadius};
-                objectVertexArray[ind + 2].position = {object.posCurr.x + objectsRadius,
-                                                       object.posCurr.y + objectsRadius};
-                objectVertexArray[ind + 3].position = {object.posCurr.x - objectsRadius,
-                                                       object.posCurr.y + objectsRadius};
+                objectVertexArray[ind].position = {object.posCurr.x - consts::objectsRadius, object.posCurr.y - consts::objectsRadius};
+                objectVertexArray[ind + 1].position = {object.posCurr.x + consts::objectsRadius,
+                                                       object.posCurr.y - consts::objectsRadius};
+                objectVertexArray[ind + 2].position = {object.posCurr.x + consts::objectsRadius,
+                                                       object.posCurr.y + consts::objectsRadius};
+                objectVertexArray[ind + 3].position = {object.posCurr.x - consts::objectsRadius,
+                                                       object.posCurr.y + consts::objectsRadius};
 
                 objectVertexArray[ind].texCoords = {0.0f, 0.0f};
                 objectVertexArray[ind + 1].texCoords = {textureSize, 0.0f};

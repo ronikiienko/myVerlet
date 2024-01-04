@@ -22,19 +22,19 @@
 int main() {
     sf::ContextSettings settings;
     settings.antialiasingLevel = 1;
-    sf::RenderWindow window(sf::VideoMode(windowBounds.getWidth(), windowBounds.getHeight()), "Verlet",
+    sf::RenderWindow window(sf::VideoMode(consts::windowBounds.getWidth(), consts::windowBounds.getHeight()), "Verlet",
                             sf::Style::Default, settings);
     window.setFramerateLimit(60);
 
-    ThreadPool threadPool{numThreads};
-    AtomWorld atomWorld{worldBounds};
+    ThreadPool threadPool{consts::numThreads};
+    AtomWorld atomWorld{consts::worldBounds};
     Camera camera{atomWorld.getBoundsF().getWidth(), atomWorld.getBoundsF().getHeight(), Vector2::fromCartesian(0, 0)};
     PerformanceMonitor performanceMonitor = PerformanceMonitor{window, atomWorld};
     Graphics graphics{atomWorld, window, threadPool, performanceMonitor, camera};
     Physics physics{atomWorld, threadPool, performanceMonitor};
     ExplosionHandler explosionHandler{atomWorld};
     Shooter shooter{Vector2::fromCartesian(200, 200), Angle::fromDegrees(45), 4, 1, 4, atomWorld, 1};
-    RNGf gen = RNGf(seed);
+    RNGf gen = RNGf(consts::seed);
     RandomSpawner randomSpawner{atomWorld, gen};
     Benchmark benchmark{60 * 30};
 

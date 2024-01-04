@@ -17,14 +17,14 @@ private:
         const Rectangle bounds = atomWorld.getBoundsF();
         const int objectsCount = atomWorld.getObjectsCount();
         threadPool.dispatch(objectsCount, [this, &bounds, dt](int start, int end) {
-            const float minX = bounds.getX1() + objectsRadius;
-            const float maxX = bounds.getX2() - objectsRadius;
-            const float minY = bounds.getY1() + objectsRadius;
-            const float maxY = bounds.getY2() - objectsRadius;
+            const float minX = bounds.getX1() + consts::objectsRadius;
+            const float maxX = bounds.getX2() - consts::objectsRadius;
+            const float minY = bounds.getY1() + consts::objectsRadius;
+            const float maxY = bounds.getY2() - consts::objectsRadius;
             atomWorld.forEachObject([&bounds, dt, minX, maxX, minY, maxY](VerletObject& object, int i) {
                 // TODO when all grid filled with objects, you can see that some start falling faster and some slower (on lower gravity levels like 10) - this is because of floats precision
                 if (!object.isPinned) {
-                    object.accelerate(gravity);
+                    object.accelerate(consts::gravity);
                     object.update(dt);
                 }
 
@@ -32,20 +32,20 @@ private:
                 // offset is trying to fix this problem
                 const float offset = static_cast<float>(i) * 1e-6f;
 
-                const Vector2 newVelocity = object.getVelocity() * wallsDamping;
+                const Vector2 newVelocity = object.getVelocity() * consts::wallsDamping;
                 if (object.posCurr.x < minX) {
-                    object.posCurr.x = bounds.getX1() + objectsRadius + offset;
+                    object.posCurr.x = bounds.getX1() + consts::objectsRadius + offset;
                     object.posOld.x = object.posCurr.x + newVelocity.x;
                 } else if (object.posCurr.x > maxX) {
-                    object.posCurr.x = bounds.getX2() - objectsRadius - offset;
+                    object.posCurr.x = bounds.getX2() - consts::objectsRadius - offset;
                     object.posOld.x = object.posCurr.x + newVelocity.x;
                 }
 
                 if (object.posCurr.y < minY) {
-                    object.posCurr.y = bounds.getY1() + objectsRadius + offset;
+                    object.posCurr.y = bounds.getY1() + consts::objectsRadius + offset;
                     object.posOld.y = object.posCurr.y + newVelocity.y;
                 } else if (object.posCurr.y > maxY) {
-                    object.posCurr.y = bounds.getY2() - objectsRadius - offset;
+                    object.posCurr.y = bounds.getY2() - consts::objectsRadius - offset;
                     object.posOld.y = object.posCurr.y + newVelocity.y;
                 }
 
@@ -101,11 +101,11 @@ private:
         const Vector2 vectorBetween = obj1.posCurr - obj2.posCurr;
         const float dist2 = vectorBetween.magnitude2();
         // Check overlapping
-        if (dist2 < twoObjectsRadiusSquared) {
+        if (dist2 < consts::twoObjectsRadiusSquared) {
             const float dist = std::sqrt(dist2);
             if (dist == 0) return;
             const Vector2 normal = vectorBetween / dist;
-            const float delta = 0.5f * collisionRestitution * (dist - twoObjectsRadius);
+            const float delta = 0.5f * consts::collisionRestitution * (dist - consts::twoObjectsRadius);
             // Update positions
             if (!obj1.isPinned) obj1.posCurr -= normal * delta;
             if (!obj2.isPinned) obj2.posCurr += normal * delta;
@@ -237,12 +237,12 @@ private:
 
 public:
     explicit Physics(AtomWorld &atomWorld, ThreadPool &threadPool, PerformanceMonitor& performanceMonitor)
-            : atomWorld(atomWorld), grid(collisionGridWidth, collisionGridHeight, atomWorld.getBoundsI()), threadPool(threadPool), performanceMonitor(performanceMonitor) {}
+            : atomWorld(atomWorld), grid(consts::collisionGridWidth, consts::collisionGridHeight, atomWorld.getBoundsI()), threadPool(threadPool), performanceMonitor(performanceMonitor) {}
 
     void update() {
-        const float subStepDt = physicsInterval / physicsSubSteps;
+        const float subStepDt = consts::physicsInterval / consts::physicsSubSteps;
 
-        for (int i = 0; i < physicsSubSteps; i++) {
+        for (int i = 0; i < consts::physicsSubSteps; i++) {
 
             performanceMonitor.start("gravityConstraintsUpdate");
             updatePositionsConstraint(subStepDt);

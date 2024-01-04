@@ -18,8 +18,8 @@ public:
                                            gen.getInRange(0, atomWorld.getBoundsF().getHeight()))
             );
             VerletObject &object = atomWorld.getObject(objInt);
-            object.color = sf::Color(static_cast<int>(object.posCurr.x / worldBounds.getWidth() * 255),
-                                     static_cast<int>(object.posCurr.y / worldBounds.getHeight() * 255), 255);
+            object.color = sf::Color(static_cast<int>(object.posCurr.x / consts::worldBounds.getWidth() * 255),
+                                     static_cast<int>(object.posCurr.y / consts::worldBounds.getHeight() * 255), 255);
         }
     }
 };

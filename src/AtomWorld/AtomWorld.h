@@ -15,8 +15,8 @@ private:
     RectangleI boundsI;
 public:
     explicit AtomWorld(RectangleI bounds) : boundsF(RectangleF::fromOther(bounds)), boundsI(bounds) {
-        objects.reserve(maxObjectNum);
-        sticks.reserve(maxSticksNum);
+        objects.reserve(consts::maxObjectNum);
+        sticks.reserve(consts::maxSticksNum);
     }
 
     int addObject(Vector2 position) {

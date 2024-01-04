@@ -2,6 +2,7 @@
 
 #include "../utils/Vector.h"
 #include "SFML/Graphics/Color.hpp"
+#include "../consts.h"
 
 
 class VerletObject {
@@ -37,9 +38,9 @@ public:
 
     void update(float dt) {
         Vector2 velocity = posCurr - posOld;
-        velocity *= linearDamping;
+        velocity *= consts::linearDamping;
         // TODO review maby limiting not needed
-        velocity.limitMagnitude(maxVelocity);
+        velocity.limitMagnitude(consts::maxVelocity);
 
         posOld = posCurr;
         posCurr += velocity + (acceleration * (dt * dt));
