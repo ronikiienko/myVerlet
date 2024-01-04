@@ -32,13 +32,15 @@ public:
     Benchmark benchmark{60 * 30};
     Camera camera{atomWorld.getBoundsF().getWidth(), atomWorld.getBoundsF().getHeight(), Vector2::fromCartesian(0, 0)};
     PerformanceMonitor performanceMonitor{window, atomWorld};
+    bool isRunning = true;
 
     Game() {
         window.setFramerateLimit(60);
         randomSpawner.spawn(150);
+        startLoop();
     };
 
-    void run() {
+    void startLoop() {
         while (window.isOpen()) {
 
             sf::Event event{};
@@ -89,13 +91,23 @@ public:
                         camera.zoom(0.75);
                     }
                 }
+
+                if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space) {
+                    if (isRunning) {
+                        stop();
+                    } else {
+                        run();
+                    }
+                }
             }
 
             performanceMonitor.start("total");
 
-            performanceMonitor.start("physics");
-            physics.update();
-            performanceMonitor.end("physics");
+            if (isRunning) {
+                performanceMonitor.start("physics");
+                physics.update();
+                performanceMonitor.end("physics");
+            }
 
             performanceMonitor.start("graphics");
             window.clear(sf::Color::Black);
@@ -108,5 +120,13 @@ public:
 
             benchmark.sample();
         }
+    }
+
+    void run() {
+        isRunning = true;
+    }
+
+    void stop() {
+        isRunning = false;
     }
 };
