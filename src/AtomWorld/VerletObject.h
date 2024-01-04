@@ -47,4 +47,6 @@ public:
 
         acceleration = Vector2::fromCartesian();
     }
+
+    void onCollision() {}
 };

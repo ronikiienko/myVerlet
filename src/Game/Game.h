@@ -36,7 +36,7 @@ public:
 
     Game() {
         window.setFramerateLimit(60);
-        randomSpawner.spawn(150);
+        randomSpawner.spawn(150000);
         startLoop();
     };
     void startLoop() {
