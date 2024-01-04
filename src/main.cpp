@@ -79,6 +79,14 @@ int main() {
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::M) {
                 randomSpawner.spawn(5000);
             }
+
+            if (event.type == sf::Event::MouseWheelScrolled) {
+                if (event.mouseWheelScroll.delta > 0) {
+                    camera.zoom(2);
+                } else {
+                    camera.zoom(0.5);
+                }
+            }
         }
 
         performanceMonitor.start("total");
