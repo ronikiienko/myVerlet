@@ -62,14 +62,17 @@ int main() {
             }
 
             if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
-                shooter.pointTo(Vector2::fromCartesian(static_cast<float>(event.mouseButton.x),
-                                                       static_cast<float>(event.mouseButton.y)));
+                shooter.pointTo(
+                        camera.screenPosToWorldPos(Vector2::fromCartesian(static_cast<float>(event.mouseButton.x),
+                                                                          static_cast<float>(event.mouseButton.y))));
                 shooter.shoot();
             }
 
             if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Right) {
-                explosionHandler.launch(Vector2::fromCartesian(static_cast<float>(event.mouseButton.x),
-                                                               static_cast<float>(event.mouseButton.y)), 4, 150);
+                explosionHandler.launch(
+                        camera.screenPosToWorldPos(Vector2::fromCartesian(static_cast<float>(event.mouseButton.x),
+                                                                          static_cast<float>(event.mouseButton.y))), 4,
+                        150);
             }
 
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::BackSpace) {

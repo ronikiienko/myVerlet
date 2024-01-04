@@ -26,7 +26,7 @@ public:
 
     void zoom(float value) {
         zoomFactor *= value;
-        zoomFactor = std::max(1.0f, zoomFactor);
+        zoomFactor = std::max(0.5f, zoomFactor);
         zoomFactor = std::min(64.0f, zoomFactor);
         updateLeftTopCorner();
     }
@@ -53,7 +53,7 @@ public:
     }
 
     [[nodiscard]] Vector2 screenPosToWorldPos(Vector2 screenPosition) const {
-        return screenPosition / zoomFactor + getPosition();
+        return screenPosition / zoomFactor + leftTopCorner;
     }
 
     [[nodiscard]] float worldSizeToScreenSize(float worldSize) const {
