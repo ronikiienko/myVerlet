@@ -11,7 +11,8 @@ public:
     sf::Color color = sf::Color::White;
     bool isPinned = false;
 
-    explicit VerletObject(Vector2 position) : posCurr(position), posOld(position) {};
+    explicit VerletObject(Vector2 position) : posCurr(position), posOld(position) {
+    };
 
     void setVelocity(Vector2 v) {
         posOld = posCurr - v;
@@ -46,5 +47,18 @@ public:
         posCurr += velocity + (acceleration * (dt * dt));
 
         acceleration = Vector2::fromCartesian();
+    }
+
+    void log() const {
+        std::cout << "Pos curr: ";
+        posCurr.log();
+        std::cout << "Pos old: ";
+        posOld.log();
+        std::cout << "Velocity: ";
+        getVelocity().log();
+        std::cout << "Acceleration: ";
+        acceleration.log();
+        std::cout << "Is pinned: " << isPinned << std::endl;
+        std::cout << "Color: " << color.toInteger() << std::endl;
     }
 };
