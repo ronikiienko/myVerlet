@@ -19,8 +19,6 @@ set(SOURCES src/main.cpp
         src/addons/ExplosionHandler.h
         src/addons/Shooter.h
         src/addons/RandomSpawner.h
-        src/addons/Chain.h
-        src/addons/Square.h
         src/addons/Benchmark.h
         src/Camera/Camera.h
         src/Game/Game.h

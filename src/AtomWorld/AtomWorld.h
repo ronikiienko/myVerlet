@@ -9,7 +9,7 @@
 
 class AtomWorld {
 private:
-    std::vector<VerletObject> objects;
+    std::vector<std::unique_ptr<VerletObject>> objects;
     std::vector<VerletStick> sticks;
     RectangleF boundsF;
     RectangleI boundsI;
@@ -19,8 +19,10 @@ public:
         sticks.reserve(consts::maxSticksNum);
     }
 
-    int addObject(Vector2 position) {
-        objects.emplace_back(position);
+    template<typename T>
+    int addObject(T&& object) {
+        std::unique_ptr<T> ptr = std::make_unique<T>(std::forward<T>(object));
+        objects.push_back(std::move(ptr));
         return getObjectsCount() - 1;
     }
 
@@ -31,12 +33,12 @@ public:
         }
 
         for (int i = start; i < end; i++) {
-            callback(objects[i], i);
+            callback(*objects[i], i);
         }
     }
 
     VerletObject& getObject(int ind) {
-        return objects[ind];
+        return *objects[ind];
     }
 
     VerletStick &addStick(VerletObject& obj1, VerletObject& obj2) {

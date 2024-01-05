@@ -39,7 +39,7 @@ public:
 
     Game() {
         window.setFramerateLimit(60);
-        randomSpawner.spawn(150000);
+        randomSpawner.spawn(50);
 
         inputHandler.addEventListener(sf::Event::MouseWheelScrolled, [&](sf::Event &event) {
             if (event.mouseWheelScroll.delta > 0) {

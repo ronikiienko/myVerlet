@@ -4,6 +4,7 @@
 #include "../utils/Vector.h"
 #include "../AtomWorld/AtomWorld.h"
 #include "../consts.h"
+#include "../AtomWorld/VerletObject2.h"
 
 class Shooter {
 private:
@@ -13,11 +14,13 @@ private:
     int width;
     int rowsNum;
     float interval;
-    AtomWorld& atomWorld;
+    AtomWorld &atomWorld;
 public:
 
 
-    Shooter(Vector2 position, Angle direction, float speed, int width, float interval, AtomWorld& atomWorld, int rowsNum) : position(position), direction(direction), speed(speed), width(width), interval(interval), atomWorld(atomWorld), rowsNum(rowsNum) {}
+    Shooter(Vector2 position, Angle direction, float speed, int width, float interval, AtomWorld &atomWorld,
+            int rowsNum) : position(position), direction(direction), speed(speed), width(width), interval(interval),
+                           atomWorld(atomWorld), rowsNum(rowsNum) {}
 
     void rotate(Angle angle) {
         direction += angle;
@@ -41,7 +44,7 @@ public:
 
 
     void shoot() {
-        Vector2 rowOffset = Vector2::fromCartesian(0,0);
+        Vector2 rowOffset = Vector2::fromCartesian(0, 0);
         for (int row = 0; row < rowsNum; row++) {
             const Angle rowDirection = direction + Angle::fromDegrees(90);
             const Vector2 move = Vector2::fromPolar(interval, rowDirection);
@@ -49,7 +52,7 @@ public:
             const int leftOffset = width / 2;
             Vector2 currentPosition = position - (move * static_cast<float>(leftOffset)) + rowOffset;
             for (int i = 0; i < width; i++) {
-                int objInd = atomWorld.addObject(currentPosition);
+                int objInd = atomWorld.addObject(VerletObject2(currentPosition));
                 atomWorld.getObject(objInd).setVelocity(initialVelocity);
                 currentPosition += move;
             }
