@@ -40,24 +40,6 @@ public:
     Game() {
         window.setFramerateLimit(60);
         randomSpawner.spawn(150000);
-        inputHandler.addEventListener(sf::Event::MouseButtonPressed, [&](sf::Event &event) {
-            if (event.mouseButton.button == sf::Mouse::Right) {
-                explosionHandler.launch(
-                        camera.screenPosToWorldPos(Vector2::fromCartesian(static_cast<float>(event.mouseButton.x),
-                                                                          static_cast<float>(event.mouseButton.y))),
-                        4,
-                        150);
-            }
-        });
-        inputHandler.addEventListener(sf::Event::KeyPressed, [&](sf::Event &event) {
-            if (event.key.code == sf::Keyboard::Escape) {
-                if (isRunning) {
-                    stop();
-                } else {
-                    run();
-                }
-            }
-        });
 
         inputHandler.addEventListener(sf::Event::MouseWheelScrolled, [&](sf::Event &event) {
             if (event.mouseWheelScroll.delta > 0) {
@@ -68,38 +50,32 @@ public:
         });
 
         inputHandler.addEventListener(sf::Event::KeyPressed, [&](sf::Event &event) {
-            if (event.key.code == sf::Keyboard::M) {
-                randomSpawner.spawn(5000);
-            }
-        });
-
-        inputHandler.addEventListener(sf::Event::KeyPressed, [&](sf::Event &event) {
             if (event.key.code == sf::Keyboard::BackSpace) {
                 atomWorld.clear();
             }
-        });
 
-        inputHandler.addEventListener(sf::Event::KeyPressed, [&](sf::Event &event) {
+            if (event.key.code == sf::Keyboard::M) {
+                randomSpawner.spawn(5000);
+            }
+
             if (event.key.code == sf::Keyboard::W) {
                 camera.move(Vector2::fromCartesian(0, -40));
             }
-        });
-
-        inputHandler.addEventListener(sf::Event::KeyPressed, [&](sf::Event &event) {
             if (event.key.code == sf::Keyboard::S) {
                 camera.move(Vector2::fromCartesian(0, 40));
             }
-        });
-
-        inputHandler.addEventListener(sf::Event::KeyPressed, [&](sf::Event &event) {
             if (event.key.code == sf::Keyboard::A) {
                 camera.move(Vector2::fromCartesian(-40, 0));
             }
-        });
-
-        inputHandler.addEventListener(sf::Event::KeyPressed, [&](sf::Event &event) {
             if (event.key.code == sf::Keyboard::D) {
                 camera.move(Vector2::fromCartesian(40, 0));
+            }
+            if (event.key.code == sf::Keyboard::Escape) {
+                if (isRunning) {
+                    stop();
+                } else {
+                    run();
+                }
             }
         });
 
@@ -109,6 +85,13 @@ public:
                         camera.screenPosToWorldPos(Vector2::fromCartesian(static_cast<float>(event.mouseButton.x),
                                                                           static_cast<float>(event.mouseButton.y))));
                 shooter.shoot();
+            }
+            if (event.mouseButton.button == sf::Mouse::Right) {
+                explosionHandler.launch(
+                        camera.screenPosToWorldPos(Vector2::fromCartesian(static_cast<float>(event.mouseButton.x),
+                                                                          static_cast<float>(event.mouseButton.y))),
+                        4,
+                        150);
             }
         });
         startLoop();
