@@ -28,7 +28,7 @@ public:
     Graphics graphics{atomWorld, window, threadPool, performanceMonitor, camera};
     Physics physics{atomWorld, threadPool, performanceMonitor};
     ExplosionHandler explosionHandler{atomWorld};
-    Shooter shooter{Vector2::fromCartesian(200, 200), Angle::fromDegrees(45), 4, 1, 4, atomWorld, 1};
+    Shooter shooter{Vector2::fromCartesian(200, 200), 4, 1, 4, atomWorld, 1, explosionHandler};
     RNGf gen{consts::seed};
     RandomSpawner randomSpawner{atomWorld, gen};
     Benchmark benchmark{60 * 30};
@@ -40,7 +40,7 @@ public:
 
     Game() {
         window.setFramerateLimit(60);
-        randomSpawner.spawn(50);
+        randomSpawner.spawn(10000);
         int id = atomWorld.addObject(Player{Vector2::fromCartesian(100,100), inputHandler, camera, shooter});
         inputHandler.addEventListener(sf::Event::MouseWheelScrolled, [&](sf::Event &event) {
             if (event.mouseWheelScroll.delta > 0) {

@@ -4,23 +4,25 @@
 #include "../utils/Vector.h"
 #include "../AtomWorld/AtomWorld.h"
 #include "../consts.h"
+#include "../AtomWorld/Bullet.h"
 
 
 class Shooter {
 private:
     Vector2 position;
-    Angle direction;
+    Angle direction = Angle::fromDegrees(0);
     float speed;
     int width;
     int rowsNum;
     float interval;
     AtomWorld &atomWorld;
+    ExplosionHandler& explosionHandler;
 public:
 
 
-    Shooter(Vector2 position, Angle direction, float speed, int width, float interval, AtomWorld &atomWorld,
-            int rowsNum) : position(position), direction(direction), speed(speed), width(width), interval(interval),
-                           atomWorld(atomWorld), rowsNum(rowsNum) {}
+    Shooter(Vector2 position, float speed, int width, float interval, AtomWorld &atomWorld,
+            int rowsNum, ExplosionHandler& explosionHandler) : position(position), speed(speed), width(width), interval(interval),
+                           atomWorld(atomWorld), rowsNum(rowsNum), explosionHandler(explosionHandler) {}
 
     void rotate(Angle angle) {
         direction += angle;
@@ -53,7 +55,7 @@ public:
             const int leftOffset = width / 2;
             Vector2 currentPosition = position - (move * static_cast<float>(leftOffset)) + rowOffset;
             for (int i = 0; i < width; i++) {
-                int objInd = atomWorld.addObject(VerletObject(currentPosition));
+                int objInd = atomWorld.addObject(Bullet(currentPosition + Vector2::fromCartesian(5, 5), explosionHandler));
                 atomWorld.getObject(objInd).setVelocity(initialVelocity);
                 currentPosition += move;
             }

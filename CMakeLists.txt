@@ -24,6 +24,7 @@ set(SOURCES src/main.cpp
         src/Game/Game.h
         src/InputHandler/InputHandler.h
         src/AtomWorld/Player.h
+        src/AtomWorld/Bullet.h
 )
 
 project(${PROJECT_NAME})
