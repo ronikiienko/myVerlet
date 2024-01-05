@@ -17,7 +17,7 @@ public:
 //        std::cout << "onCollision" << std::endl;
         if (!isExploded) {
             isExploded = true;
-            explosionHandler.launch(posCurr + Vector2::fromCartesian(5,5), 5, 40);
+            explosionHandler.launch(posCurr + Vector2::fromCartesian(5,5), 1, 20);
         }
     }
 };

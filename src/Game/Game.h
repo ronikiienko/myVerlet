@@ -28,7 +28,7 @@ public:
     Graphics graphics{atomWorld, window, threadPool, performanceMonitor, camera};
     Physics physics{atomWorld, threadPool, performanceMonitor};
     ExplosionHandler explosionHandler{atomWorld};
-    Shooter shooter{Vector2::fromCartesian(200, 200), 4, 1, 4, atomWorld, 1, explosionHandler};
+    Shooter shooter{Vector2::fromCartesian(200, 200), 2, 1, 4, atomWorld, 1, explosionHandler};
     RNGf gen{consts::seed};
     RandomSpawner randomSpawner{atomWorld, gen};
     Benchmark benchmark{60 * 30};
