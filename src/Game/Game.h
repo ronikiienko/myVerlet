@@ -114,10 +114,14 @@ public:
             performanceMonitor.end("graphics");
             window.display();
 
+            performanceMonitor.start("input");
+            inputHandler.update();
+            performanceMonitor.end("input");
+
+
             performanceMonitor.end("total");
 
             benchmark.sample();
-            inputHandler.update();
         }
     }
 
