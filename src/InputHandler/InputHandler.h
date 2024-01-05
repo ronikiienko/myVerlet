@@ -29,8 +29,4 @@ public:
         eventHandlers[type].push_back(std::forward<T>(callback));
         return static_cast<int>(eventHandlers[type].size()) - 1;
     }
-
-    void removeEventListener(sf::Event::EventType type, int handle) {
-        eventHandlers[type].erase(eventHandlers[type].begin() + handle);
-    }
 };
