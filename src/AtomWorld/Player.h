@@ -8,7 +8,11 @@ public:
     InputHandler &inputHandler;
     Camera &camera;
     Shooter &shooter;
-
+    float movementSpeed = 1000;
+    bool movingUp = false;
+    bool movingDown = false;
+    bool movingLeft = false;
+    bool movingRight = false;
     Player(Vector2 position, InputHandler &inputHandler, Camera &camera, Shooter &shooter) : VerletObject(position),
                                                                                              inputHandler(inputHandler),
                                                                                              camera(camera),
@@ -21,16 +25,30 @@ public:
         std::cout << "onInit" << std::endl;
         inputHandler.addEventListener(sf::Event::KeyPressed, [this](sf::Event &event) {
             if (event.key.code == sf::Keyboard::W) {
-                addVelocity(Vector2::fromCartesian(0, -0.5));
+                movingUp = true;
             }
             if (event.key.code == sf::Keyboard::S) {
-                addVelocity(Vector2::fromCartesian(0, 0.5));
+                movingDown = true;
             }
             if (event.key.code == sf::Keyboard::A) {
-                addVelocity(Vector2::fromCartesian(-0.5, 0));
+                movingLeft = true;
             }
             if (event.key.code == sf::Keyboard::D) {
-                addVelocity(Vector2::fromCartesian(0.5, 0));
+                movingRight = true;
+            }
+        });
+        inputHandler.addEventListener(sf::Event::KeyReleased, [this](sf::Event &event) {
+            if (event.key.code == sf::Keyboard::W) {
+                movingUp = false;
+            }
+            if (event.key.code == sf::Keyboard::S) {
+                movingDown = false;
+            }
+            if (event.key.code == sf::Keyboard::A) {
+                movingLeft = false;
+            }
+            if (event.key.code == sf::Keyboard::D) {
+                movingRight = false;
             }
         });
         inputHandler.addEventListener(sf::Event::MouseButtonPressed, [this](sf::Event &event) {
@@ -44,5 +62,21 @@ public:
 
     void onTick() override {
         camera.setPosition(posCurr);
+        if (movingUp) {
+//            setVelocity(Vector2::fromCartesian(0, -movementSpeed));
+            accelerate(Vector2::fromCartesian(0, -movementSpeed));
+        }
+        if (movingDown) {
+//            setVelocity(Vector2::fromCartesian(0, movementSpeed));
+            accelerate(Vector2::fromCartesian(0, movementSpeed));
+        }
+        if (movingLeft) {
+//            setVelocity(Vector2::fromCartesian(-movementSpeed, 0));
+            accelerate(Vector2::fromCartesian(-movementSpeed, 0));
+        }
+        if (movingRight) {
+//            setVelocity(Vector2::fromCartesian(movementSpeed, 0));
+            accelerate(Vector2::fromCartesian(movementSpeed, 0));
+        }
     }
 };
