@@ -3,7 +3,6 @@
 #include "../AtomWorld/AtomWorld.h"
 #include "../utils/Rand.h"
 #include "../consts.h"
-#include "../AtomWorld/VerletObject2.h"
 
 class RandomSpawner {
 private:
@@ -16,7 +15,7 @@ public:
         for (int i = 0; i < number; i++) {
             int objInt = atomWorld.addObject(
 
-                    VerletObject2
+                    VerletObject
                             (
                                     Vector2::fromCartesian
                                             (

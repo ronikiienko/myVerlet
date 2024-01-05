@@ -4,7 +4,6 @@
 #include "../utils/Vector.h"
 #include "../AtomWorld/AtomWorld.h"
 #include "../consts.h"
-#include "../AtomWorld/VerletObject2.h"
 
 class Shooter {
 private:
@@ -52,7 +51,7 @@ public:
             const int leftOffset = width / 2;
             Vector2 currentPosition = position - (move * static_cast<float>(leftOffset)) + rowOffset;
             for (int i = 0; i < width; i++) {
-                int objInd = atomWorld.addObject(VerletObject2(currentPosition));
+                int objInd = atomWorld.addObject(VerletObject(currentPosition));
                 atomWorld.getObject(objInd).setVelocity(initialVelocity);
                 currentPosition += move;
             }
