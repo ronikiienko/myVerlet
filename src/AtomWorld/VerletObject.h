@@ -47,8 +47,4 @@ public:
 
         acceleration = Vector2::fromCartesian();
     }
-
-    virtual void onCollision() {
-        std::cout << "base collision\n" << std::endl;
-    }
 };

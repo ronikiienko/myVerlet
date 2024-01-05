@@ -102,8 +102,6 @@ private:
         const float dist2 = vectorBetween.magnitude2();
         // Check overlapping
         if (dist2 < consts::twoObjectsRadiusSquared) {
-            obj1.onCollision();
-            obj2.onCollision();
             const float dist = std::sqrt(dist2);
             if (dist == 0) return;
             const Vector2 normal = vectorBetween / dist;
