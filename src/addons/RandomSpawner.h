@@ -21,11 +21,11 @@ public:
                                             (
                                                     gen.getInRange
                                                             (
-                                                                    1000,
+                                                                    0,
                                                                     atomWorld.getBoundsF().getWidth()
                                                             ),
                                                     gen.getInRange
-                                                            (1000, atomWorld.getBoundsF().getHeight()
+                                                            (0, atomWorld.getBoundsF().getHeight()
                                                             )
                                             )
                             )

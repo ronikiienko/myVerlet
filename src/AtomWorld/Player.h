@@ -8,7 +8,7 @@ public:
     InputHandler &inputHandler;
     Camera &camera;
     Shooter &shooter;
-    float movementSpeed = 1000;
+    float movementSpeed = 2000;
     bool movingUp = false;
     bool movingDown = false;
     bool movingLeft = false;
