@@ -26,7 +26,7 @@ public:
 
     template<typename T>
     int addEventListener(sf::Event::EventType type, T && callback) {
-        eventHandlers[type].push_back(callback);
+        eventHandlers[type].push_back(std::forward<T>(callback));
         return static_cast<int>(eventHandlers[type].size()) - 1;
     }
 
