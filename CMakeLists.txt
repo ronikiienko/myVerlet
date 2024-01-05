@@ -24,6 +24,7 @@ set(SOURCES src/main.cpp
         src/addons/Benchmark.h
         src/Camera/Camera.h
         src/Game/Game.h
+        src/InputHandler/InputHandler.h
 )
 
 project(${PROJECT_NAME})

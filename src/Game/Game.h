@@ -15,6 +15,7 @@
 #include "../addons/RandomSpawner.h"
 #include "../addons/Benchmark.h"
 #include "../Camera/Camera.h"
+#include "../InputHandler/InputHandler.h"
 
 class Game {
 public:
@@ -30,79 +31,91 @@ public:
     RNGf gen{consts::seed};
     RandomSpawner randomSpawner{atomWorld, gen};
     Benchmark benchmark{60 * 30};
-    Camera camera{static_cast<float>(window.getSize().x), static_cast<float>(window.getSize().y), Vector2::fromCartesian(0, 0)};
+    Camera camera{static_cast<float>(window.getSize().x), static_cast<float>(window.getSize().y),
+                  Vector2::fromCartesian(0, 0)};
     PerformanceMonitor performanceMonitor{window, atomWorld};
+    InputHandler inputHandler{window};
     bool isRunning = true;
 
     Game() {
         window.setFramerateLimit(60);
         randomSpawner.spawn(150000);
-        startLoop();
-    };
-    void startLoop() {
-        while (window.isOpen()) {
-
-            sf::Event event{};
-            while (window.pollEvent(event)) {
-                if (event.type == sf::Event::Closed) {
-                    window.close();
-                }
-                if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::W) {
-                    camera.move(Vector2::fromCartesian(0, -40));
-                }
-                if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::S) {
-                    camera.move(Vector2::fromCartesian(0, 40));
-                }
-                if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::A) {
-                    camera.move(Vector2::fromCartesian(-40, 0));
-                }
-                if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::D) {
-                    camera.move(Vector2::fromCartesian(40, 0));
-                }
-
-                if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
-                    shooter.pointTo(
-                            camera.screenPosToWorldPos(Vector2::fromCartesian(static_cast<float>(event.mouseButton.x),
-                                                                              static_cast<float>(event.mouseButton.y))));
-                    shooter.shoot();
-                }
-
-                if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Right) {
-                    explosionHandler.launch(
-                            camera.screenPosToWorldPos(Vector2::fromCartesian(static_cast<float>(event.mouseButton.x),
-                                                                              static_cast<float>(event.mouseButton.y))),
-                            4,
-                            150);
-                }
-
-                if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::BackSpace) {
-                    atomWorld.clear();
-                }
-
-                if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::M) {
-                    randomSpawner.spawn(5000);
-                }
-
-                if (event.type == sf::Event::MouseWheelScrolled) {
-                    // need to pass mouse position
-                    Vector2 screenMousePos = Vector2::fromCartesian(static_cast<float>(sf::Mouse::getPosition(window).x),
-                                                                    static_cast<float>(sf::Mouse::getPosition(window).y));
-                    if (event.mouseWheelScroll.delta > 0) {
-                        camera.zoom(1.5);
-                    } else {
-                        camera.zoom(0.75);
-                    }
-                }
-
-                if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
-                    if (isRunning) {
-                        stop();
-                    } else {
-                        run();
-                    }
+        inputHandler.addEventListener(sf::Event::MouseButtonPressed, [&](sf::Event &event) {
+            if (event.mouseButton.button == sf::Mouse::Right) {
+                explosionHandler.launch(
+                        camera.screenPosToWorldPos(Vector2::fromCartesian(static_cast<float>(event.mouseButton.x),
+                                                                          static_cast<float>(event.mouseButton.y))),
+                        4,
+                        150);
+            }
+        });
+        inputHandler.addEventListener(sf::Event::KeyPressed, [&](sf::Event &event) {
+            if (event.key.code == sf::Keyboard::Escape) {
+                if (isRunning) {
+                    stop();
+                } else {
+                    run();
                 }
             }
+        });
 
+        inputHandler.addEventListener(sf::Event::MouseWheelScrolled, [&](sf::Event &event) {
+            if (event.mouseWheelScroll.delta > 0) {
+                camera.zoom(1.5);
+            } else {
+                camera.zoom(0.75);
+            }
+        });
+
+        inputHandler.addEventListener(sf::Event::KeyPressed, [&](sf::Event &event) {
+            if (event.key.code == sf::Keyboard::M) {
+                randomSpawner.spawn(5000);
+            }
+        });
+
+        inputHandler.addEventListener(sf::Event::KeyPressed, [&](sf::Event &event) {
+            if (event.key.code == sf::Keyboard::BackSpace) {
+                atomWorld.clear();
+            }
+        });
+
+        inputHandler.addEventListener(sf::Event::KeyPressed, [&](sf::Event &event) {
+            if (event.key.code == sf::Keyboard::W) {
+                camera.move(Vector2::fromCartesian(0, -40));
+            }
+        });
+
+        inputHandler.addEventListener(sf::Event::KeyPressed, [&](sf::Event &event) {
+            if (event.key.code == sf::Keyboard::S) {
+                camera.move(Vector2::fromCartesian(0, 40));
+            }
+        });
+
+        inputHandler.addEventListener(sf::Event::KeyPressed, [&](sf::Event &event) {
+            if (event.key.code == sf::Keyboard::A) {
+                camera.move(Vector2::fromCartesian(-40, 0));
+            }
+        });
+
+        inputHandler.addEventListener(sf::Event::KeyPressed, [&](sf::Event &event) {
+            if (event.key.code == sf::Keyboard::D) {
+                camera.move(Vector2::fromCartesian(40, 0));
+            }
+        });
+
+        inputHandler.addEventListener(sf::Event::MouseButtonPressed, [&](sf::Event &event) {
+            if (event.mouseButton.button == sf::Mouse::Left) {
+                shooter.pointTo(
+                        camera.screenPosToWorldPos(Vector2::fromCartesian(static_cast<float>(event.mouseButton.x),
+                                                                          static_cast<float>(event.mouseButton.y))));
+                shooter.shoot();
+            }
+        });
+        startLoop();
+    };
+
+    void startLoop() {
+        while (window.isOpen()) {
             performanceMonitor.start("total");
 
             if (isRunning) {
@@ -121,6 +134,7 @@ public:
             performanceMonitor.end("total");
 
             benchmark.sample();
+            inputHandler.update();
         }
     }
 
