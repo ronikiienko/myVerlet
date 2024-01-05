@@ -23,6 +23,7 @@ set(SOURCES src/main.cpp
         src/Camera/Camera.h
         src/Game/Game.h
         src/InputHandler/InputHandler.h
+        src/AtomWorld/Player.h
 )
 
 project(${PROJECT_NAME})

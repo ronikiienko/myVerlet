@@ -16,6 +16,7 @@
 #include "../addons/Benchmark.h"
 #include "../Camera/Camera.h"
 #include "../InputHandler/InputHandler.h"
+#include "../AtomWorld/Player.h"
 
 class Game {
 public:
@@ -40,7 +41,7 @@ public:
     Game() {
         window.setFramerateLimit(60);
         randomSpawner.spawn(50);
-
+        int id = atomWorld.addObject(Player{Vector2::fromCartesian(100,100), inputHandler, camera, shooter});
         inputHandler.addEventListener(sf::Event::MouseWheelScrolled, [&](sf::Event &event) {
             if (event.mouseWheelScroll.delta > 0) {
                 camera.zoom(1.5);
@@ -57,19 +58,6 @@ public:
             if (event.key.code == sf::Keyboard::M) {
                 randomSpawner.spawn(5000);
             }
-
-            if (event.key.code == sf::Keyboard::W) {
-                camera.move(Vector2::fromCartesian(0, -40));
-            }
-            if (event.key.code == sf::Keyboard::S) {
-                camera.move(Vector2::fromCartesian(0, 40));
-            }
-            if (event.key.code == sf::Keyboard::A) {
-                camera.move(Vector2::fromCartesian(-40, 0));
-            }
-            if (event.key.code == sf::Keyboard::D) {
-                camera.move(Vector2::fromCartesian(40, 0));
-            }
             if (event.key.code == sf::Keyboard::Escape) {
                 if (isRunning) {
                     stop();
@@ -80,12 +68,12 @@ public:
         });
 
         inputHandler.addEventListener(sf::Event::MouseButtonPressed, [&](sf::Event &event) {
-            if (event.mouseButton.button == sf::Mouse::Left) {
-                shooter.pointTo(
-                        camera.screenPosToWorldPos(Vector2::fromCartesian(static_cast<float>(event.mouseButton.x),
-                                                                          static_cast<float>(event.mouseButton.y))));
-                shooter.shoot();
-            }
+//            if (event.mouseButton.button == sf::Mouse::Left) {
+//                shooter.pointTo(
+//                        camera.screenPosToWorldPos(Vector2::fromCartesian(static_cast<float>(event.mouseButton.x),
+//                                                                          static_cast<float>(event.mouseButton.y))));
+//                shooter.shoot();
+//            }
             if (event.mouseButton.button == sf::Mouse::Right) {
                 explosionHandler.launch(
                         camera.screenPosToWorldPos(Vector2::fromCartesian(static_cast<float>(event.mouseButton.x),
@@ -118,6 +106,9 @@ public:
             inputHandler.update();
             performanceMonitor.end("input");
 
+            performanceMonitor.start("onTick");
+            atomWorld.runTick();
+            performanceMonitor.end("onTick");
 
             performanceMonitor.end("total");
 

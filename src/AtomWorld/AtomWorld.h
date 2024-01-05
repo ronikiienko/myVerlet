@@ -23,6 +23,8 @@ public:
     int addObject(T&& object) {
         std::unique_ptr<T> ptr = std::make_unique<T>(std::forward<T>(object));
         objects.push_back(std::move(ptr));
+        int index = static_cast<int>(objects.size()) - 1;
+        objects[index]->onInit();
         return getObjectsCount() - 1;
     }
 
@@ -88,5 +90,11 @@ public:
 
     void removeObjects() {
         objects.clear();
+    }
+
+    void runTick() {
+        forEachObject([](VerletObject &object, int ind) {
+            object.onTick();
+        });
     }
 };

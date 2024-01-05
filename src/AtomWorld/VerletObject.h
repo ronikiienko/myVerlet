@@ -61,4 +61,8 @@ public:
         std::cout << "Is pinned: " << isPinned << std::endl;
         std::cout << "Color: " << color.toInteger() << std::endl;
     }
+
+    virtual void onTick() {};
+    virtual void onInit() {};
+    virtual void onCollision() {};
 };

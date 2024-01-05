@@ -5,6 +5,7 @@
 #include "../AtomWorld/AtomWorld.h"
 #include "../consts.h"
 
+
 class Shooter {
 private:
     Vector2 position;
@@ -42,7 +43,8 @@ public:
     }
 
 
-    void shoot() {
+    void shoot(Vector2 target) {
+        pointTo(target);
         Vector2 rowOffset = Vector2::fromCartesian(0, 0);
         for (int row = 0; row < rowsNum; row++) {
             const Angle rowDirection = direction + Angle::fromDegrees(90);
