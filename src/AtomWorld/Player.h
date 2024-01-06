@@ -61,7 +61,7 @@ public:
     }
 
     void onTick() override {
-        camera.setPosition(posCurr);
+        camera.setPosition((posCurr * 0.2 + camera.position * 1.8) / 2);
         if (movingUp) {
 //            setVelocity(Vector2::fromCartesian(0, -movementSpeed));
             accelerate(Vector2::fromCartesian(0, -movementSpeed));
