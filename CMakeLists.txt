@@ -21,11 +21,13 @@ set(SOURCES src/main.cpp
         src/addons/RandomSpawner.h
         src/addons/Benchmark.h
         src/Engine/Camera.h
-        src/Engine/Game.h
         src/Engine/InputHandler.h
         src/Objects/Player.h
         src/Objects/Bullet.h
-        src/Engine/Level.h
+        src/Engine/BaseLevel.h
+        src/Engine/BaseGame.h
+        src/Game.h
+        src/Level.h
 )
 
 project(${PROJECT_NAME})
