@@ -1,11 +1,11 @@
 #pragma once
 
-#include "../AtomWorld/AtomWorld.h"
+#include "AtomWorld.h"
 #include "SFML/Graphics/RenderWindow.hpp"
 #include "SFML/Graphics/VertexArray.hpp"
 #include "../utils/ThreadPool.h"
-#include "../PerformanceMonitor/PerformanceMonitor.h"
-#include "../Camera/Camera.h"
+#include "PerformanceMonitor.h"
+#include "Camera.h"
 
 class Graphics {
 private:

@@ -1,8 +1,8 @@
 #pragma once
 
 #include <thread>
-#include "utils/Vector.h"
-#include "utils/Rectangle.h"
+#include "../utils/Vector.h"
+#include "../utils/Rectangle.h"
 
 namespace consts {
     const int maxObjectNum = 200000;

@@ -2,9 +2,9 @@
 
 #include "../utils/Angle.h"
 #include "../utils/Vector.h"
-#include "../AtomWorld/AtomWorld.h"
-#include "../consts.h"
-#include "../AtomWorld/Bullet.h"
+#include "../Engine/AtomWorld.h"
+#include "../Engine/EngineConsts.h"
+#include "../Objects/Bullet.h"
 
 
 class Shooter {

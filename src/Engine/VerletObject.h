@@ -2,7 +2,7 @@
 
 #include "../utils/Vector.h"
 #include "SFML/Graphics/Color.hpp"
-#include "../consts.h"
+#include "EngineConsts.h"
 
 
 class VerletObject {

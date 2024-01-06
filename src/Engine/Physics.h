@@ -1,10 +1,10 @@
 #pragma once
 
-#include "../AtomWorld/AtomWorld.h"
+#include "AtomWorld.h"
 #include "SFML/Graphics/RenderWindow.hpp"
-#include "./Grid.h"
+#include "utils/Grid.h"
 #include "../utils/ThreadPool.h"
-#include "../PerformanceMonitor/PerformanceMonitor.h"
+#include "PerformanceMonitor.h"
 
 class Physics {
 private:

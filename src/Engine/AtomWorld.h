@@ -4,7 +4,7 @@
 #include "VerletObject.h"
 #include "VerletStick.h"
 #include "../utils/Rectangle.h"
-#include "../consts.h"
+#include "EngineConsts.h"
 #include "../utils/Vector.h"
 
 class AtomWorld {

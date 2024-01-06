@@ -1,7 +1,7 @@
 #pragma once
 
-#include "VerletObject.h"
-#include "../InputHandler/InputHandler.h"
+#include "../Engine/VerletObject.h"
+#include "../Engine/InputHandler.h"
 
 class Player : public VerletObject {
 public:

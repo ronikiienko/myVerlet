@@ -2,29 +2,29 @@ cmake_minimum_required(VERSION 3.22)
 
 set(PROJECT_NAME myVerlet)
 set(SOURCES src/main.cpp
-        src/utils/Vector.h
-        src/Graphics/Graphics.h
-        src/AtomWorld/AtomWorld.h
-        src/AtomWorld/VerletObject.h
-        src/consts.h
-        src/Physics/Physics.h
-        src/utils/Rand.h
-        src/utils/Rectangle.h
-        src/utils/Angle.h
-        src/utils/ThreadsTest.h
-        src/Physics/Grid.h
-        src/AtomWorld/VerletStick.h
-        src/utils/ThreadPool.h
-        src/PerformanceMonitor/PerformanceMonitor.h
+        src/Engine/utils/Vector.h
+        src/Engine/Graphics.h
+        src/Engine/AtomWorld.h
+        src/Engine/VerletObject.h
+        src/Engine/EngineConsts.h
+        src/Engine/Physics.h
+        src/Engine/utils/Rand.h
+        src/Engine/utils/Rectangle.h
+        src/Engine/utils/Angle.h
+        src/Engine/utils/ThreadsTest.h
+        src/Engine/utils/Grid.h
+        src/Engine/VerletStick.h
+        src/Engine/utils/ThreadPool.h
+        src/Engine/PerformanceMonitor.h
         src/addons/ExplosionHandler.h
         src/addons/Shooter.h
         src/addons/RandomSpawner.h
         src/addons/Benchmark.h
-        src/Camera/Camera.h
-        src/Game/Game.h
-        src/InputHandler/InputHandler.h
-        src/AtomWorld/Player.h
-        src/AtomWorld/Bullet.h
+        src/Engine/Camera.h
+        src/Engine/Game.h
+        src/Engine/InputHandler.h
+        src/Objects/Player.h
+        src/Objects/Bullet.h
 )
 
 project(${PROJECT_NAME})
