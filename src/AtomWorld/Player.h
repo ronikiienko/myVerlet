@@ -13,6 +13,7 @@ public:
     bool movingDown = false;
     bool movingLeft = false;
     bool movingRight = false;
+    bool isBraking = false;
     Player(Vector2 position, InputHandler &inputHandler, Camera &camera, Shooter &shooter) : VerletObject(position),
                                                                                              inputHandler(inputHandler),
                                                                                              camera(camera),
@@ -36,6 +37,9 @@ public:
             if (event.key.code == sf::Keyboard::D) {
                 movingRight = true;
             }
+            if (event.key.code == sf::Keyboard::Space) {
+                isBraking = true;
+            }
         });
         inputHandler.addEventListener(sf::Event::KeyReleased, [this](sf::Event &event) {
             if (event.key.code == sf::Keyboard::W) {
@@ -49,6 +53,9 @@ public:
             }
             if (event.key.code == sf::Keyboard::D) {
                 movingRight = false;
+            }
+            if (event.key.code == sf::Keyboard::Space) {
+                isBraking = false;
             }
         });
         inputHandler.addEventListener(sf::Event::MouseButtonPressed, [this](sf::Event &event) {
@@ -77,6 +84,9 @@ public:
         if (movingRight) {
 //            setVelocity(Vector2::fromCartesian(movementSpeed, 0));
             accelerate(Vector2::fromCartesian(movementSpeed, 0));
+        }
+        if (isBraking) {
+            setVelocity(getVelocity() * 0.95);
         }
     }
 };
