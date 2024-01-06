@@ -14,6 +14,10 @@ public:
     bool movingLeft = false;
     bool movingRight = false;
     bool isBraking = false;
+
+    int keyPressedListenerId = -1;
+    int keyReleasedListenerId = -1;
+    int mouseButtonPressedListenerId = -1;
     Player(Vector2 position, InputHandler &inputHandler, Camera &camera, Shooter &shooter) : VerletObject(position),
                                                                                              inputHandler(inputHandler),
                                                                                              camera(camera),
@@ -22,9 +26,15 @@ public:
         // `this` before std::make_unique will fire, which will invalidate `this`, because ownership is transferred to unique_ptr
     }
 
+    ~Player() override {
+        inputHandler.removeEventListener(sf::Event::KeyPressed, keyPressedListenerId);
+        inputHandler.removeEventListener(sf::Event::KeyReleased, keyReleasedListenerId);
+        inputHandler.removeEventListener(sf::Event::MouseButtonPressed, mouseButtonPressedListenerId);
+    }
+
     void onInit() override {
         std::cout << "onInit" << std::endl;
-        inputHandler.addEventListener(sf::Event::KeyPressed, [this](sf::Event &event) {
+        keyPressedListenerId = inputHandler.addEventListener(sf::Event::KeyPressed, [this](sf::Event &event) {
             if (event.key.code == sf::Keyboard::W) {
                 movingUp = true;
             }
@@ -41,7 +51,7 @@ public:
                 isBraking = true;
             }
         });
-        inputHandler.addEventListener(sf::Event::KeyReleased, [this](sf::Event &event) {
+        keyReleasedListenerId = inputHandler.addEventListener(sf::Event::KeyReleased, [this](sf::Event &event) {
             if (event.key.code == sf::Keyboard::W) {
                 movingUp = false;
             }
@@ -58,7 +68,7 @@ public:
                 isBraking = false;
             }
         });
-        inputHandler.addEventListener(sf::Event::MouseButtonPressed, [this](sf::Event &event) {
+        mouseButtonPressedListenerId = inputHandler.addEventListener(sf::Event::MouseButtonPressed, [this](sf::Event &event) {
             if (event.mouseButton.button == sf::Mouse::Left) {
                 shooter.setPosition(posCurr);
                 shooter.shoot(camera.screenPosToWorldPos(Vector2::fromCartesian(static_cast<float>(event.mouseButton.x),

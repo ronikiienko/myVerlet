@@ -65,4 +65,6 @@ public:
     virtual void onTick() {};
     virtual void onInit() {};
     virtual void onCollision() {};
+
+    virtual ~VerletObject() = default;
 };
