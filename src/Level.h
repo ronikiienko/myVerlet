@@ -17,7 +17,6 @@ public:
     }
 
     void onInit() override {
-        std::cout << "DerivedLevel::onInit() called\n";
         int id = atomWorld.addObject(Player{Vector2::fromCartesian(100, 100), inputHandler, camera, shooter});
         inputHandler.addEventListener(sf::Event::MouseWheelScrolled, [&](sf::Event &event) {
             if (event.mouseWheelScroll.delta > 0) {
