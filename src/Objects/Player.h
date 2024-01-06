@@ -1,9 +1,9 @@
 #pragma once
 
-#include "../Engine/VerletObject.h"
+#include "../Engine/BaseObject.h"
 #include "../Engine/InputHandler.h"
 
-class Player : public VerletObject {
+class Player : public BaseObject {
 public:
     InputHandler &inputHandler;
     Camera &camera;
@@ -18,7 +18,7 @@ public:
     int keyPressedListenerId = -1;
     int keyReleasedListenerId = -1;
     int mouseButtonPressedListenerId = -1;
-    Player(Vector2 position, InputHandler &inputHandler, Camera &camera, Shooter &shooter) : VerletObject(position),
+    Player(Vector2 position, InputHandler &inputHandler, Camera &camera, Shooter &shooter) : BaseObject(position),
                                                                                              inputHandler(inputHandler),
                                                                                              camera(camera),
                                                                                              shooter(shooter) {

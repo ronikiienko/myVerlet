@@ -38,7 +38,7 @@ public:
         objectVertexArray.resize(atomWorld.getObjectsCount() * 4);
         threadPool.dispatch(atomWorld.getObjectsCount(), [this](int start, int end) {
             float objectSize = camera.worldSizeToScreenSize(consts::objectsRadius);
-            atomWorld.forEachObject([this, objectSize](VerletObject &object, int i) {
+            atomWorld.forEachObject([this, objectSize](BaseObject &object, int i) {
                 Vector2 screenPos = camera.worldPosToScreenPos(object.posCurr);
 
                 const int ind = i * 4;
@@ -67,7 +67,7 @@ public:
     void updateSticksArray() {
         sticksVertexArray.resize(atomWorld.getSticksCount() * 2);
         threadPool.dispatch(atomWorld.getSticksCount(), [this](int start, int end) {
-            atomWorld.forEachStick([this](VerletStick &stick, int i) {
+            atomWorld.forEachStick([this](BaseStick &stick, int i) {
                 const int ind = i * 2;
 
                 sticksVertexArray[ind].position = {stick.obj1.posCurr.x, stick.obj1.posCurr.y};

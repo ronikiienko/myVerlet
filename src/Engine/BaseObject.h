@@ -5,13 +5,13 @@
 #include "EngineConsts.h"
 
 
-class VerletObject {
+class BaseObject {
 public:
     Vector2 posCurr, posOld, acceleration = Vector2::fromCartesian();
     sf::Color color = sf::Color::White;
     bool isPinned = false;
 
-    explicit VerletObject(Vector2 position) : posCurr(position), posOld(position) {
+    explicit BaseObject(Vector2 position) : posCurr(position), posOld(position) {
     };
 
     void setVelocity(Vector2 v) {
@@ -66,5 +66,5 @@ public:
     virtual void onInit() {};
     virtual void onCollision() {};
 
-    virtual ~VerletObject() = default;
+    virtual ~BaseObject() = default;
 };

@@ -15,7 +15,7 @@ public:
         for (int i = 0; i < number; i++) {
             int objInt = atomWorld.addObject(
 
-                    VerletObject
+                    BaseObject
                             (
                                     Vector2::fromCartesian
                                             (
@@ -31,7 +31,7 @@ public:
                             )
             );
 
-            VerletObject &object = atomWorld.getObject(objInt);
+            BaseObject &object = atomWorld.getObject(objInt);
             object.color = sf::Color(static_cast<int>(object.posCurr.x / consts::worldBounds.getWidth() * 255),
                                      static_cast<int>(object.posCurr.y / consts::worldBounds.getHeight() * 255), 255);
         }

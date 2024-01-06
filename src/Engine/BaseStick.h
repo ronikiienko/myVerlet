@@ -1,14 +1,14 @@
 #pragma once
 
-#include "VerletObject.h"
+#include "BaseObject.h"
 
-class VerletStick {
+class BaseStick {
 public:
-    VerletObject &obj1;
-    VerletObject &obj2;
+    BaseObject &obj1;
+    BaseObject &obj2;
     float length;
 
-    VerletStick(VerletObject &obj1, VerletObject &obj2) : obj1(obj1), obj2(obj2) {
+    BaseStick(BaseObject &obj1, BaseObject &obj2) : obj1(obj1), obj2(obj2) {
         length = (obj1.posCurr - obj2.posCurr).magnitude();
     }
 

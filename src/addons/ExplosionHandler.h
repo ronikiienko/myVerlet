@@ -9,7 +9,7 @@ public:
     explicit ExplosionHandler(AtomWorld& atomWorld) : atomWorld(atomWorld) {}
 
     void launch(Vector2 position, float strength, float radius) {
-        atomWorld.forEachObject([&position, &strength, &radius](VerletObject& object, int i){
+        atomWorld.forEachObject([&position, &strength, &radius](BaseObject& object, int i){
             Vector2 direction = object.posCurr - position;
             float distance = direction.magnitude();
             if (distance <= radius) {

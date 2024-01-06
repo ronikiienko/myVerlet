@@ -5,7 +5,7 @@ set(SOURCES src/main.cpp
         src/Engine/utils/Vector.h
         src/Engine/Graphics.h
         src/Engine/AtomWorld.h
-        src/Engine/VerletObject.h
+        src/Engine/BaseObject.h
         src/Engine/EngineConsts.h
         src/Engine/Physics.h
         src/Engine/utils/Rand.h
@@ -13,7 +13,7 @@ set(SOURCES src/main.cpp
         src/Engine/utils/Angle.h
         src/Engine/utils/ThreadsTest.h
         src/Engine/utils/Grid.h
-        src/Engine/VerletStick.h
+        src/Engine/BaseStick.h
         src/Engine/utils/ThreadPool.h
         src/Engine/PerformanceMonitor.h
         src/addons/ExplosionHandler.h

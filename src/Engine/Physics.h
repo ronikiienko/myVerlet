@@ -20,7 +20,7 @@ private:
             const float maxX = bounds.getX2() - consts::objectsRadius;
             const float minY = bounds.getY1() + consts::objectsRadius;
             const float maxY = bounds.getY2() - consts::objectsRadius;
-            atomWorld.forEachObject([&bounds, dt, minX, maxX, minY, maxY](VerletObject& object, int i) {
+            atomWorld.forEachObject([&bounds, dt, minX, maxX, minY, maxY](BaseObject& object, int i) {
                 // TODO when all grid filled with objects, you can see that some start falling faster and some slower (on lower gravity levels like 10) - this is because of floats precision
                 if (!object.isPinned) {
                     object.accelerate(consts::gravity);
@@ -54,7 +54,7 @@ private:
 
 //    void applyGravity() {
 //        threadPool.dispatch(atomWorld.getObjectsCount(), [this](int start, int end) {
-//            atomWorld.forEachObject([](VerletObject& object, int i) {
+//            atomWorld.forEachObject([](BaseObject& object, int i) {
 //                if (!object.isPinned) object.accelerate(gravity);
 //            }, start, end);
 //        });
@@ -64,7 +64,7 @@ private:
 //        const Rectangle bounds = atomWorld.getBoundsF();
 //        const int objectsCount = atomWorld.getObjectsCount();
 //        threadPool.dispatch(objectsCount, [this, &bounds](int start, int end) {
-//            atomWorld.forEachObject([&bounds](VerletObject& object, int i) {
+//            atomWorld.forEachObject([&bounds](BaseObject& object, int i) {
 //                // problem was that for example: atomWorld is 100x100. Then both objects are outside of field on same direction, like obj1(101.256, 102.399) and obj2(105.936, 110.87). both will be pushed to (100,100) resulting in zero distance.
 //                // offset is trying to fix this problem
 //                const float offset = static_cast<float>(i) * 1e-6f;
@@ -90,13 +90,13 @@ private:
 //    }
 //    void updatePositions(float dt) {
 //        threadPool.dispatch(atomWorld.getObjectsCount(), [this, dt](int start, int end) {
-//            atomWorld.forEachObject([dt](VerletObject& object, int i) {
+//            atomWorld.forEachObject([dt](BaseObject& object, int i) {
 //                if (!object.isPinned) object.update(dt);
 //            }, start, end);
 //        });
 //    }
 
-    static void solveContact(VerletObject &obj1, VerletObject &obj2) {
+    static void solveContact(BaseObject &obj1, BaseObject &obj2) {
         const Vector2 vectorBetween = obj1.posCurr - obj2.posCurr;
         const float dist2 = vectorBetween.magnitude2();
         // Check overlapping
@@ -112,7 +112,7 @@ private:
             if (!obj2.isPinned) obj2.posCurr += normal * delta;
         }
     }
-//    void solveContact(VerletObject &obj1, VerletObject &obj2) {
+//    void solveContact(BaseObject &obj1, BaseObject &obj2) {
 //        Vector2 move = obj1.posCurr - obj2.posCurr;
 //        const float dist2 = move.magnitude2();
 //        const float min_dist = obj1.radius + obj2.radius;
@@ -206,7 +206,7 @@ private:
 //    void rebuildGrid() {
 //        grid.clear();
 //        threadPool.dispatch(atomWorld.getObjectsCount(), [this](int start, int end){
-//            atomWorld.forEachObject([this](VerletObject& object, int i) {
+//            atomWorld.forEachObject([this](BaseObject& object, int i) {
 //                grid.insert(i, object.posCurr.x, object.posCurr.y);
 //            }, start, end);
 //        });
@@ -218,7 +218,7 @@ private:
         });
         performanceMonitor.end("grid clear");
         performanceMonitor.start("grid build");
-        atomWorld.forEachObject([this](VerletObject& object, int i) {
+        atomWorld.forEachObject([this](BaseObject& object, int i) {
             grid.insert(i, object.posCurr.x, object.posCurr.y);
         });
         performanceMonitor.end("grid build");
@@ -226,11 +226,11 @@ private:
     }
 
     void constraintSticks() {
-//        atomWorld.forEachStick([](VerletStick& stick, int i) {
+//        atomWorld.forEachStick([](BaseStick& stick, int i) {
 //            stick.constraint();
 //        });
         threadPool.dispatch(atomWorld.getSticksCount(), [this](int start, int end) {
-            atomWorld.forEachStick([](VerletStick& stick, int i) {
+            atomWorld.forEachStick([](BaseStick& stick, int i) {
                 stick.constraint();
             }, start, end);
         });

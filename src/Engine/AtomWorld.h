@@ -1,14 +1,14 @@
 #pragma once
 
 #include <vector>
-#include "VerletObject.h"
-#include "VerletStick.h"
+#include "BaseObject.h"
+#include "BaseStick.h"
 #include "EngineConsts.h"
 
 class AtomWorld {
 private:
-    std::vector<std::unique_ptr<VerletObject>> objects;
-    std::vector<VerletStick> sticks;
+    std::vector<std::unique_ptr<BaseObject>> objects;
+    std::vector<BaseStick> sticks;
     RectangleF boundsF;
     RectangleI boundsI;
 public:
@@ -37,11 +37,11 @@ public:
         }
     }
 
-    VerletObject& getObject(int ind) {
+    BaseObject& getObject(int ind) {
         return *objects[ind];
     }
 
-    VerletStick &addStick(VerletObject& obj1, VerletObject& obj2) {
+    BaseStick &addStick(BaseObject& obj1, BaseObject& obj2) {
         return sticks.emplace_back(obj1, obj2);
     }
     int addStick(int ind1, int ind2) {
@@ -60,7 +60,7 @@ public:
         }
     }
 
-    VerletStick &getStick(int id) {
+    BaseStick &getStick(int id) {
         return sticks[id];
     }
 
@@ -91,7 +91,7 @@ public:
     }
 
     void runTick() {
-        forEachObject([](VerletObject &object, int ind) {
+        forEachObject([](BaseObject &object, int ind) {
             object.onTick();
         });
     }

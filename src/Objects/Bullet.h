@@ -1,15 +1,15 @@
 #pragma once
 
 
-#include "../Engine/VerletObject.h"
+#include "../Engine/BaseObject.h"
 #include "../addons/ExplosionHandler.h"
 
-class Bullet : public VerletObject {
+class Bullet : public BaseObject {
 public:
     bool isExploded = false;
     ExplosionHandler &explosionHandler;
 
-    explicit Bullet(Vector2 position, ExplosionHandler &explosionHandler) : VerletObject(position), explosionHandler(explosionHandler) {
+    explicit Bullet(Vector2 position, ExplosionHandler &explosionHandler) : BaseObject(position), explosionHandler(explosionHandler) {
 
     }
 
