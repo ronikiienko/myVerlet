@@ -65,7 +65,7 @@ public:
     template<typename T>
     void setLevel() {
         atomWorld.clear();
-        std::unique_ptr<T> ptr = std::make_unique<T>(atomWorld, camera, inputHandler);
+        std::unique_ptr<T> ptr = std::make_unique<T>(LevelContext(atomWorld, camera, inputHandler));
         level = std::move(ptr);
         level->onInit();
     }

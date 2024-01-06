@@ -5,15 +5,22 @@
 #include "Camera.h"
 #include "InputHandler.h"
 
+struct LevelContext {
+    AtomWorld& atomWorld;
+    Camera& camera;
+    InputHandler& inputHandler;
+
+    LevelContext(AtomWorld& atomWorld, Camera& camera, InputHandler& inputHandler) : atomWorld(atomWorld), camera(camera), inputHandler(inputHandler) {}
+};
+
 class BaseLevel {
 public:
     AtomWorld& atomWorld;
     Camera& camera;
     InputHandler& inputHandler;
-    BaseLevel(AtomWorld& atomWorld, Camera& camera, InputHandler& inputHandler) : atomWorld(atomWorld), camera(camera), inputHandler(inputHandler) {
+    explicit BaseLevel(LevelContext levelContext) : atomWorld(levelContext.atomWorld), camera(levelContext.camera), inputHandler(levelContext.inputHandler) {
     }
 
-    virtual void onInit() {
-        std::cout << "BaseLevel::onInit() called\n";
-    }
+
+    virtual void onInit() {}
 };

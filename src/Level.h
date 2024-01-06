@@ -13,8 +13,7 @@ class Level : public BaseLevel {
     RNGf gen{consts::seed};
     RandomSpawner randomSpawner{atomWorld, gen};
 public:
-    Level(AtomWorld &atomWorld, Camera &camera, InputHandler &inputHandler) : BaseLevel(atomWorld, camera,
-                                                                                        inputHandler) {
+    explicit Level(LevelContext levelContext) : BaseLevel(levelContext) {
     }
 
     void onInit() override {
