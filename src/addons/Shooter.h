@@ -1,7 +1,5 @@
 #pragma once
 
-#include "../utils/Angle.h"
-#include "../utils/Vector.h"
 #include "../Engine/AtomWorld.h"
 #include "../Engine/EngineConsts.h"
 #include "../Objects/Bullet.h"

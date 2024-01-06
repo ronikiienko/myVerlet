@@ -3,9 +3,7 @@
 #include <vector>
 #include "VerletObject.h"
 #include "VerletStick.h"
-#include "../utils/Rectangle.h"
 #include "EngineConsts.h"
-#include "../utils/Vector.h"
 
 class AtomWorld {
 private:

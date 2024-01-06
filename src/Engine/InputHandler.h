@@ -7,7 +7,8 @@
 class InputHandler {
 private:
     sf::RenderWindow &window;
-    std::unordered_map<sf::Event::EventType, std::vector<std::function<void(sf::Event &)>>> eventHandlers;
+    std::unordered_map<sf::Event::EventType, std::unordered_map<int, std::function<void(sf::Event &)>>> eventHandlers;
+    int keyCounter = 0;
 public:
     explicit InputHandler(sf::RenderWindow &window) : window(window) {}
     void update() {
@@ -17,8 +18,8 @@ public:
                 window.close();
             } else {
                 auto &eventTypeCallbacks = eventHandlers[event.type];
-                for (auto &callback: eventTypeCallbacks) {
-                    callback(event);
+                for (auto &pair: eventTypeCallbacks) {
+                    pair.second(event);
                 }
             }
         }
@@ -26,7 +27,13 @@ public:
 
     template<typename T>
     int addEventListener(sf::Event::EventType type, T && callback) {
-        eventHandlers[type].push_back(std::forward<T>(callback));
-        return static_cast<int>(eventHandlers[type].size()) - 1;
+        eventHandlers[type][keyCounter] = std::forward<T>(callback);
+        keyCounter++;
+        return keyCounter - 1;
+    }
+
+
+    void removeEventListener(sf::Event::EventType type, int key) {
+        eventHandlers[type].erase(key);
     }
 };

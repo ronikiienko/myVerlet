@@ -25,6 +25,7 @@ set(SOURCES src/main.cpp
         src/Engine/InputHandler.h
         src/Objects/Player.h
         src/Objects/Bullet.h
+        src/Engine/Level.h
 )
 
 project(${PROJECT_NAME})

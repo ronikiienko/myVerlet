@@ -1,8 +1,8 @@
 #pragma once
 
 #include "../Engine/AtomWorld.h"
-#include "../utils/Rand.h"
 #include "../Engine/EngineConsts.h"
+#include "../Engine/utils/Rand.h"
 
 class RandomSpawner {
 private:

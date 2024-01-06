@@ -3,7 +3,6 @@
 #include "AtomWorld.h"
 #include "SFML/Graphics/RenderWindow.hpp"
 #include "utils/Grid.h"
-#include "../utils/ThreadPool.h"
 #include "PerformanceMonitor.h"
 
 class Physics {

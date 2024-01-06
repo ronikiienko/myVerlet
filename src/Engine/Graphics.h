@@ -3,9 +3,9 @@
 #include "AtomWorld.h"
 #include "SFML/Graphics/RenderWindow.hpp"
 #include "SFML/Graphics/VertexArray.hpp"
-#include "../utils/ThreadPool.h"
 #include "PerformanceMonitor.h"
 #include "Camera.h"
+#include "utils/ThreadPool.h"
 
 class Graphics {
 private:

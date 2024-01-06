@@ -1,6 +1,5 @@
 #pragma once
 
-#include "../utils/Vector.h"
 
 class Camera {
 public:

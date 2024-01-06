@@ -1,14 +1,10 @@
 #pragma once
 
 #include "SFML/Graphics.hpp"
-#include "../utils/Vector.h"
 #include "EngineConsts.h"
 #include "AtomWorld.h"
 #include "Graphics.h"
 #include "Physics.h"
-#include "../utils/Rand.h"
-#include "../utils/ThreadsTest.h"
-#include "../utils/ThreadPool.h"
 #include "PerformanceMonitor.h"
 #include "../addons/ExplosionHandler.h"
 #include "../addons/Shooter.h"
