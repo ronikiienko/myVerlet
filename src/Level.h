@@ -3,10 +3,12 @@
 #include "Engine/BaseLevel.h"
 #include "Engine/utils/Rand.h"
 #include "addons/RandomSpawner.h"
+#include "Objects/Player.h"
+#include "addons/Shooter.h"
 
 class Level : public BaseLevel {
-//    ExplosionHandler explosionHandler{atomWorld};
-//    Shooter shooter{Vector2::fromCartesian(200, 200), 2, 1, 4, atomWorld, 1, explosionHandler};
+    ExplosionHandler explosionHandler{atomWorld};
+    Shooter shooter{Vector2::fromCartesian(200, 200), 2, 1, 4, atomWorld, 1, explosionHandler};
     RNGf gen{consts::seed};
     RandomSpawner randomSpawner{atomWorld, gen};
 public:
@@ -14,9 +16,8 @@ public:
     }
 
     void onInit() override {
-        atomWorld.addObject(BaseObject(), Vector2::fromCartesian(100, 100));
-        randomSpawner.spawn(150000);
-//        int id = atomWorld.addObject(Player{Vector2::fromCartesian(100, 100), inputHandler, camera, shooter});
+        randomSpawner.spawn(150);
+        int id = atomWorld.addObject(Player{inputHandler, camera, shooter}, Vector2::fromCartesian(100, 100));
 //        inputHandler.addEventListener(sf::Event::MouseWheelScrolled, [&](sf::Event &event) {
 //            if (event.mouseWheelScroll.delta > 0) {
 //                camera.zoom(1.5);

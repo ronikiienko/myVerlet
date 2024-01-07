@@ -24,6 +24,9 @@ set(SOURCES src/main.cpp
         src/Game.h
         src/Level.h
         src/addons/ExplosionHandler.h
+        src/Objects/Player.h
+        src/addons/Shooter.h
+        src/Objects/Bullet.h
 )
 
 project(${PROJECT_NAME})
