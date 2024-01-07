@@ -8,7 +8,7 @@
 class Physics {
 private:
     AtomWorld &atomWorld;
-    IdGrid grid;
+    IdGrid& grid;
     ThreadPool &threadPool;
     PerformanceMonitor &performanceMonitor;
     int currentSubStep = 0;
@@ -227,7 +227,7 @@ private:
 public:
     explicit Physics(AtomWorld &atomWorld, ThreadPool &threadPool, PerformanceMonitor &performanceMonitor)
             : atomWorld(atomWorld),
-              grid(consts::collisionGridWidth, consts::collisionGridHeight, atomWorld.getBoundsI()),
+              grid(atomWorld.grid),
               threadPool(threadPool), performanceMonitor(performanceMonitor) {}
 
     void update() {
@@ -251,3 +251,5 @@ public:
         }
     }
 };
+
+// grid(),

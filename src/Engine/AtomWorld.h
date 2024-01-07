@@ -4,6 +4,7 @@
 #include <bits/shared_ptr.h>
 #include "BaseObject.h"
 #include "EngineConsts.h"
+#include "utils/Grid.h"
 
 class AtomWorld {
 private:
@@ -12,6 +13,8 @@ private:
     RectangleF boundsF;
     RectangleI boundsI;
 public:
+    IdGrid grid{consts::collisionGridWidth, consts::collisionGridHeight, getBoundsI()};
+
     explicit AtomWorld(RectangleI bounds) : boundsF(RectangleF::fromOther(bounds)), boundsI(bounds) {
         objects.reserve(consts::maxObjectNum);
     }
