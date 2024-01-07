@@ -10,6 +10,7 @@ public:
     InputHandler &inputHandler;
     Camera &camera;
     Shooter &shooter;
+    AtomWorld &atomWorld;
     float movementSpeed = 2000;
     bool movingUp = false;
     bool movingDown = false;
@@ -22,10 +23,11 @@ public:
     int mouseButtonPressedListenerId = -1;
     int mouseWheelScrolledListenerId = -1;
 
-    Player(InputHandler &inputHandler, Camera &camera, Shooter &shooter) :
+    Player(InputHandler &inputHandler, Camera &camera, Shooter &shooter, AtomWorld &atomWorld) :
             inputHandler(inputHandler),
             camera(camera),
-            shooter(shooter) {
+            shooter(shooter),
+            atomWorld(atomWorld) {
         // i can't setup events from constructor, because lambda will capture
         // `this` before std::make_unique will fire, which will invalidate `this`, because ownership is transferred to unique_ptr
     }
@@ -94,6 +96,9 @@ public:
     }
 
     void onTick() override {
+        if (!basicDetails) {
+            throw std::runtime_error("basicDetails is nullptr");
+        }
         camera.setPosition((basicDetails->posCurr * 0.2 + camera.position * 1.8) / 2);
         if (movingUp) {
 //            setVelocity(Vector2::fromCartesian(0, -movementSpeed));
@@ -114,5 +119,9 @@ public:
         if (isBraking) {
             basicDetails->setVelocity(basicDetails->getVelocity() * 0.95);
         }
+    }
+
+    void onCollision(BaseObject *ptr) override {
+        atomWorld.removeObject(ptr);
     }
 };

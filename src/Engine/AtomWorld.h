@@ -30,6 +30,38 @@ public:
         return {objects[index]};
     }
 
+    void removeObject(std::weak_ptr<BaseObject>& ptr) {
+        auto it = std::find(objects.begin(), objects.end(), ptr.lock());
+        if (it != objects.end()) {
+            int index = static_cast<int>(it - objects.begin());
+            objects.erase(it);
+            basicDetails.erase(basicDetails.begin() + index);
+
+            for (int i = index; i < objects.size(); i++) {
+                objects[i]->basicDetails = &basicDetails[i];
+            }
+        }
+    }
+
+    void removeObject(BaseObject* ptr) {
+        auto it = objects.end();
+        for (auto i = objects.begin(); i != objects.end(); i++) {
+            if (i->get() == ptr) {
+                it = i;
+                break;
+            }
+        }
+        if (it != objects.end()) {
+            int index = static_cast<int>(it - objects.begin());
+            objects.erase(it);
+            basicDetails.erase(basicDetails.begin() + index);
+
+            for (int i = index; i < objects.size(); i++) {
+                objects[i]->basicDetails = &basicDetails[i];
+            }
+        }
+    }
+
     template<typename Func>
     void forEachObject(Func &&callback, int start = 0, int end = -1) {
         if (end == -1) {

@@ -13,7 +13,7 @@ public:
 
     }
 
-    void onCollision() override {
+    void onCollision(BaseObject* ptr) override {
 //        std::cout << "onCollision" << std::endl;
         if (!isExploded) {
             isExploded = true;
