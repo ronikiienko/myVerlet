@@ -20,6 +20,7 @@ public:
     int keyPressedListenerId = -1;
     int keyReleasedListenerId = -1;
     int mouseButtonPressedListenerId = -1;
+    int mouseWheelScrolledListenerId = -1;
 
     Player(InputHandler &inputHandler, Camera &camera, Shooter &shooter) :
             inputHandler(inputHandler),
@@ -33,6 +34,7 @@ public:
         inputHandler.removeEventListener(sf::Event::KeyPressed, keyPressedListenerId);
         inputHandler.removeEventListener(sf::Event::KeyReleased, keyReleasedListenerId);
         inputHandler.removeEventListener(sf::Event::MouseButtonPressed, mouseButtonPressedListenerId);
+        inputHandler.removeEventListener(sf::Event::MouseWheelScrolled, mouseWheelScrolledListenerId);
     }
 
     void onInit() override {
@@ -82,6 +84,13 @@ public:
                                                                                              static_cast<float>(event.mouseButton.y))));
                                                                          }
                                                                      });
+        inputHandler.addEventListener(sf::Event::MouseWheelScrolled, [&](sf::Event &event) {
+            if (event.mouseWheelScroll.delta > 0) {
+                camera.zoom(1.5);
+            } else {
+                camera.zoom(0.75);
+            }
+        });
     }
 
     void onTick() override {
