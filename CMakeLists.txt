@@ -15,14 +15,10 @@ set(SOURCES src/main.cpp
         src/Engine/utils/Grid.h
         src/Engine/utils/ThreadPool.h
         src/Engine/PerformanceMonitor.h
-        src/addons/ExplosionHandler.h
-        src/addons/Shooter.h
         src/addons/RandomSpawner.h
         src/Engine/Benchmark.h
         src/Engine/Camera.h
         src/Engine/InputHandler.h
-        src/Objects/Player.h
-        src/Objects/Bullet.h
         src/Engine/BaseLevel.h
         src/Engine/BaseGame.h
         src/Game.h
