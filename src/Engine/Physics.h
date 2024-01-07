@@ -225,17 +225,6 @@ private:
 
     }
 
-    void constraintSticks() {
-//        atomWorld.forEachStick([](BaseStick& stick, int i) {
-//            stick.constraint();
-//        });
-        threadPool.dispatch(atomWorld.getSticksCount(), [this](int start, int end) {
-            atomWorld.forEachStick([](BaseStick& stick, int i) {
-                stick.constraint();
-            }, start, end);
-        });
-    }
-
 public:
     explicit Physics(AtomWorld &atomWorld, ThreadPool &threadPool, PerformanceMonitor& performanceMonitor)
             : atomWorld(atomWorld), grid(consts::collisionGridWidth, consts::collisionGridHeight, atomWorld.getBoundsI()), threadPool(threadPool), performanceMonitor(performanceMonitor) {}
@@ -248,10 +237,6 @@ public:
             performanceMonitor.start("gravityConstraintsUpdate");
             updatePositionsConstraint(subStepDt);
             performanceMonitor.end("gravityConstraintsUpdate");
-
-            performanceMonitor.start("sticks");
-            constraintSticks();
-            performanceMonitor.end("sticks");
 
             performanceMonitor.start("grid");
             rebuildGrid();
