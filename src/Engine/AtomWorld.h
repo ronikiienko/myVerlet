@@ -7,7 +7,7 @@
 
 class AtomWorld {
 private:
-    std::vector<std::unique_ptr<BaseObject>> objects;
+    std::vector<std::shared_ptr<BaseObject>> objects;
     std::vector<BasicDetails> basicDetails;
     RectangleF boundsF;
     RectangleI boundsI;
@@ -21,7 +21,7 @@ public:
         basicDetails.emplace_back(position);
         object.basicDetails = &basicDetails.back();
 
-        std::unique_ptr<T> ptr = std::make_unique<T>(std::forward<T>(object));
+        std::shared_ptr<T> ptr = std::make_shared<T>(std::forward<T>(object));
         objects.push_back(std::move(ptr));
 
         int index = static_cast<int>(objects.size()) - 1;
