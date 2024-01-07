@@ -3,7 +3,6 @@
 #include <vector>
 #include <bits/shared_ptr.h>
 #include "BaseObject.h"
-#include "BaseStick.h"
 #include "EngineConsts.h"
 
 class AtomWorld {
