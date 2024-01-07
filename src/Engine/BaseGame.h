@@ -6,7 +6,6 @@
 #include "AtomWorld.h"
 #include "Graphics.h"
 #include "Physics.h"
-#include "Benchmark.h"
 #include "InputHandler.h"
 #include "BaseLevel.h"
 
@@ -18,7 +17,6 @@ class BaseGame {
     AtomWorld atomWorld{consts::worldBounds};
     Graphics graphics{atomWorld, window, threadPool, performanceMonitor, camera};
     Physics physics{atomWorld, threadPool, performanceMonitor};
-    Benchmark benchmark{60 * 30};
     PerformanceMonitor performanceMonitor{window, atomWorld};
     InputHandler inputHandler{window};
     Camera camera{static_cast<float>(window.getSize().x), static_cast<float>(window.getSize().y),
