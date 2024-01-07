@@ -51,8 +51,6 @@ class BaseGame {
             performanceMonitor.end("removingMarked");
 
             performanceMonitor.end("total");
-
-            benchmark.sample();
         }
     }
 
