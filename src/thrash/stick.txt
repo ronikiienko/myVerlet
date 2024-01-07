@@ -1,0 +1,53 @@
+//void constraintSticks() {
+////        atomWorld.forEachStick([](BaseStick& stick, int i) {
+////            stick.constraint();
+////        });
+//    threadPool.dispatch(atomWorld.getSticksCount(), [this](int start, int end) {
+//        atomWorld.forEachStick([](BaseStick& stick, int i) {
+//            stick.constraint();
+//        }, start, end);
+//    });
+//}
+
+//#pragma once
+//
+//#include "BaseObject.h"
+//
+//class BaseStick {
+//public:
+//    BaseObject &obj1;
+//    BaseObject &obj2;
+//    float length;
+//
+//    BaseStick(BaseObject &obj1, BaseObject &obj2) : obj1(obj1), obj2(obj2) {
+//        length = (obj1.posCurr - obj2.posCurr).magnitude();
+//    }
+//
+//    void constraint() const {
+//        const Vector2 vectorBetween = obj1.posCurr - obj2.posCurr;
+//        const float distanceBetween = vectorBetween.magnitude();
+//
+//        const float diff = distanceBetween - length;
+//        const float moveRatio = (diff / distanceBetween) / 2;
+//
+//        const Vector2 offset = vectorBetween * moveRatio;
+//
+//        if (!obj1.isPinned) obj1.posCurr -= offset;
+//        if (!obj2.isPinned) obj2.posCurr += offset;
+//    }
+//};
+
+//void updateSticksArray() {
+//    sticksVertexArray.resize(atomWorld.getSticksCount() * 2);
+//    threadPool.dispatch(atomWorld.getSticksCount(), [this](int start, int end) {
+//        atomWorld.forEachStick([this](BaseStick &stick, int i) {
+//            const int ind = i * 2;
+//
+//            sticksVertexArray[ind].position = {stick.obj1.posCurr.x, stick.obj1.posCurr.y};
+//            sticksVertexArray[ind + 1].position = {stick.obj2.posCurr.x, stick.obj2.posCurr.y};
+//
+//            objectVertexArray[ind].color = stick.obj1.color;
+//            objectVertexArray[ind + 1].color = stick.obj2.color;
+//        }, start, end);
+//    });
+//}

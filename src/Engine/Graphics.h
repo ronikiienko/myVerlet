@@ -12,7 +12,6 @@ private:
     AtomWorld &atomWorld;
     sf::RenderWindow &window;
     sf::VertexArray objectVertexArray;
-    sf::VertexArray sticksVertexArray;
     ThreadPool &threadPool;
     sf::Texture objectTexture;
     PerformanceMonitor &performanceMonitor;
@@ -24,7 +23,6 @@ public:
             : atomWorld(atomWorld), window(window), threadPool(threadPool), performanceMonitor(performanceMonitor),
               camera(camera) {
         objectVertexArray.setPrimitiveType(sf::Quads);  // Initialize with Quads
-        sticksVertexArray.setPrimitiveType(sf::Lines);
         // TODO somehow organise resources, because now path depends on where executable is. Same for fonts in performance monitor
         if (!objectTexture.loadFromFile("./res/circle.png")) {
             throw std::runtime_error("Could not load circle texture file");
@@ -64,26 +62,9 @@ public:
         });
     }
 
-    void updateSticksArray() {
-        sticksVertexArray.resize(atomWorld.getSticksCount() * 2);
-        threadPool.dispatch(atomWorld.getSticksCount(), [this](int start, int end) {
-            atomWorld.forEachStick([this](BaseStick &stick, int i) {
-                const int ind = i * 2;
-
-                sticksVertexArray[ind].position = {stick.obj1.posCurr.x, stick.obj1.posCurr.y};
-                sticksVertexArray[ind + 1].position = {stick.obj2.posCurr.x, stick.obj2.posCurr.y};
-
-                objectVertexArray[ind].color = stick.obj1.color;
-                objectVertexArray[ind + 1].color = stick.obj2.color;
-            }, start, end);
-        });
-    }
-
     void update() {
         updateObjectsArray();
-        updateSticksArray();
 
         window.draw(objectVertexArray, &objectTexture);
-        window.draw(sticksVertexArray);
     }
 };
