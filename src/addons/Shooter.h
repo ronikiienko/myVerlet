@@ -53,8 +53,8 @@ public:
             const int leftOffset = width / 2;
             Vector2 currentPosition = position - (move * static_cast<float>(leftOffset)) + rowOffset;
             for (int i = 0; i < width; i++) {
-                int objInd = atomWorld.addObject(Bullet(explosionHandler), currentPosition + Vector2::fromCartesian(5, 5));
-                atomWorld.getObject(objInd).basicDetails->setVelocity(initialVelocity);
+                auto ptr = atomWorld.addObject(Bullet(explosionHandler), currentPosition + Vector2::fromCartesian(5, 5));
+                ptr.lock()->basicDetails->setVelocity(initialVelocity);
                 currentPosition += move;
             }
             rowOffset += Vector2::fromPolar(interval, direction);

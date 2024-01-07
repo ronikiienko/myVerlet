@@ -16,8 +16,8 @@ public:
     }
 
     void onInit() override {
-        randomSpawner.spawn(150);
-        int id = atomWorld.addObject(Player{inputHandler, camera, shooter}, Vector2::fromCartesian(100, 100));
+        randomSpawner.spawn(100000);
+        atomWorld.addObject(Player{inputHandler, camera, shooter}, Vector2::fromCartesian(100, 100));
         inputHandler.addEventListener(sf::Event::KeyPressed, [&](sf::Event &event) {
             if (event.key.code == sf::Keyboard::BackSpace) {
                 atomWorld.clear();

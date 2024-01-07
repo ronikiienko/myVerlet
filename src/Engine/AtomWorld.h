@@ -17,17 +17,17 @@ public:
     }
 
     template<typename T>
-    int addObject(T&& object, Vector2 position) {
+    std::weak_ptr<BaseObject> addObject(T&& object, Vector2 position) {
         basicDetails.emplace_back(position);
         object.basicDetails = &basicDetails.back();
 
-        std::shared_ptr<T> ptr = std::make_shared<T>(std::forward<T>(object));
+        std::shared_ptr<BaseObject> ptr = std::make_shared<BaseObject>(std::forward<BaseObject>(object));
         objects.push_back(std::move(ptr));
 
         int index = static_cast<int>(objects.size()) - 1;
         basicDetails[index].parent = objects[index].get();
         objects[index]->onInit();
-        return index;
+        return std::weak_ptr<BaseObject>(objects[index]);
     }
 
     template <typename Func>
