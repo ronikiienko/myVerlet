@@ -4,15 +4,14 @@
 #include "SFML/Graphics/Color.hpp"
 #include "EngineConsts.h"
 
+class BaseObject;
 
-class BaseObject {
+class BasicDetails {
 public:
+    BaseObject* parent = nullptr;
     Vector2 posCurr, posOld, acceleration = Vector2::fromCartesian();
     sf::Color color = sf::Color::White;
     bool isPinned = false;
-
-    explicit BaseObject(Vector2 position) : posCurr(position), posOld(position) {
-    };
 
     void setVelocity(Vector2 v) {
         posOld = posCurr - v;
@@ -49,6 +48,9 @@ public:
         acceleration = Vector2::fromCartesian();
     }
 
+    explicit BasicDetails(Vector2 position) : posCurr(position), posOld(position) {
+    };
+
     void log() const {
         std::cout << "Pos curr: ";
         posCurr.log();
@@ -61,6 +63,12 @@ public:
         std::cout << "Is pinned: " << isPinned << std::endl;
         std::cout << "Color: " << color.toInteger() << std::endl;
     }
+};
+
+
+class BaseObject {
+public:
+    BasicDetails* basicDetails = nullptr;
 
     virtual void onTick() {};
     virtual void onInit() {};

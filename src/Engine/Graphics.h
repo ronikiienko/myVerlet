@@ -36,7 +36,7 @@ public:
         objectVertexArray.resize(atomWorld.getObjectsCount() * 4);
         threadPool.dispatch(atomWorld.getObjectsCount(), [this](int start, int end) {
             float objectSize = camera.worldSizeToScreenSize(consts::objectsRadius);
-            atomWorld.forEachObject([this, objectSize](BaseObject &object, int i) {
+            atomWorld.forEachBasicDetails([this, objectSize](BasicDetails &object, int i) {
                 Vector2 screenPos = camera.worldPosToScreenPos(object.posCurr);
 
                 const int ind = i * 4;

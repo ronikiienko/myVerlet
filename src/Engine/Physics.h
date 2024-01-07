@@ -20,7 +20,7 @@ private:
             const float maxX = bounds.getX2() - consts::objectsRadius;
             const float minY = bounds.getY1() + consts::objectsRadius;
             const float maxY = bounds.getY2() - consts::objectsRadius;
-            atomWorld.forEachObject([&bounds, dt, minX, maxX, minY, maxY](BaseObject& object, int i) {
+            atomWorld.forEachBasicDetails([&bounds, dt, minX, maxX, minY, maxY](BasicDetails& object, int i) {
                 // TODO when all grid filled with objects, you can see that some start falling faster and some slower (on lower gravity levels like 10) - this is because of floats precision
                 if (!object.isPinned) {
                     object.accelerate(consts::gravity);
@@ -96,13 +96,13 @@ private:
 //        });
 //    }
 
-    static void solveContact(BaseObject &obj1, BaseObject &obj2) {
+    static void solveContact(BasicDetails &obj1, BasicDetails &obj2) {
         const Vector2 vectorBetween = obj1.posCurr - obj2.posCurr;
         const float dist2 = vectorBetween.magnitude2();
         // Check overlapping
         if (dist2 < consts::twoObjectsRadiusSquared) {
-            obj1.onCollision();
-            obj2.onCollision();
+            obj1.parent->onCollision();
+            obj2.parent->onCollision();
             const float dist = std::sqrt(dist2);
             if (dist == 0) return;
             const Vector2 normal = vectorBetween / dist;
@@ -140,7 +140,7 @@ private:
             for (int j = 0; j < cell2.activeCount; j++) {
                 const int id2 = cell2.ids[j];
                 if (id1 == id2) continue;
-                solveContact(atomWorld.getObject(id1), atomWorld.getObject(id2));
+                solveContact(atomWorld.getBasicDetails(id1), atomWorld.getBasicDetails(id2));
             }
         }
     }
@@ -218,7 +218,7 @@ private:
         });
         performanceMonitor.end("grid clear");
         performanceMonitor.start("grid build");
-        atomWorld.forEachObject([this](BaseObject& object, int i) {
+        atomWorld.forEachBasicDetails([this](BasicDetails& object, int i) {
             grid.insert(i, object.posCurr.x, object.posCurr.y);
         });
         performanceMonitor.end("grid build");

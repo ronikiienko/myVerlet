@@ -8,6 +8,7 @@
 class AtomWorld {
 private:
     std::vector<std::unique_ptr<BaseObject>> objects;
+    std::vector<BasicDetails> basicDetails;
     RectangleF boundsF;
     RectangleI boundsI;
 public:
@@ -16,12 +17,17 @@ public:
     }
 
     template<typename T>
-    int addObject(T&& object) {
+    int addObject(T&& object, Vector2 position) {
+        basicDetails.emplace_back(position);
+        object.basicDetails = &basicDetails.back();
+
         std::unique_ptr<T> ptr = std::make_unique<T>(std::forward<T>(object));
         objects.push_back(std::move(ptr));
+
         int index = static_cast<int>(objects.size()) - 1;
+        basicDetails[index].parent = objects[index].get();
         objects[index]->onInit();
-        return getObjectsCount() - 1;
+        return index;
     }
 
     template <typename Func>
@@ -35,8 +41,25 @@ public:
         }
     }
 
+    template <typename Func>
+    void forEachBasicDetails(Func &&callback, int start = 0, int end = -1) {
+        if (end == -1) {
+            end = static_cast<int>(basicDetails.size());
+        }
+
+        for (int i = start; i < end; i++) {
+            callback(basicDetails[i], i);
+        }
+    }
+
+
+
     BaseObject& getObject(int ind) {
         return *objects[ind];
+    }
+
+    BasicDetails& getBasicDetails(int ind) {
+        return basicDetails[ind];
     }
 
     void clear() {

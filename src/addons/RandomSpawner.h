@@ -15,25 +15,23 @@ public:
         for (int i = 0; i < number; i++) {
             int objInt = atomWorld.addObject(
 
-                    BaseObject
+                    BaseObject(),
+                    Vector2::fromCartesian
                             (
-                                    Vector2::fromCartesian
+                                    gen.getInRange
                                             (
-                                                    gen.getInRange
-                                                            (
-                                                                    0,
-                                                                    atomWorld.getBoundsF().getWidth()
-                                                            ),
-                                                    gen.getInRange
-                                                            (0, atomWorld.getBoundsF().getHeight()
-                                                            )
+                                                    0,
+                                                    atomWorld.getBoundsF().getWidth()
+                                            ),
+                                    gen.getInRange
+                                            (0, atomWorld.getBoundsF().getHeight()
                                             )
                             )
             );
 
             BaseObject &object = atomWorld.getObject(objInt);
-            object.color = sf::Color(static_cast<int>(object.posCurr.x / consts::worldBounds.getWidth() * 255),
-                                     static_cast<int>(object.posCurr.y / consts::worldBounds.getHeight() * 255), 255);
+            object.basicDetails->color = sf::Color(static_cast<int>(object.basicDetails->posCurr.x / consts::worldBounds.getWidth() * 255),
+                                     static_cast<int>(object.basicDetails->posCurr.y / consts::worldBounds.getHeight() * 255), 255);
         }
     }
 };
