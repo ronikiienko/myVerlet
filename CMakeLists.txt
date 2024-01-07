@@ -23,6 +23,7 @@ set(SOURCES src/main.cpp
         src/Engine/BaseGame.h
         src/Game.h
         src/Level.h
+        src/addons/ExplosionHandler.h
 )
 
 project(${PROJECT_NAME})
