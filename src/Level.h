@@ -17,7 +17,7 @@ public:
     }
 
     void onInit() override {
-        randomSpawner.spawn(100000);
+        randomSpawner.spawn(80000);
         int id = atomWorld.addObject(Player{Vector2::fromCartesian(100, 100), inputHandler, camera, shooter});
         inputHandler.addEventListener(sf::Event::MouseWheelScrolled, [&](sf::Event &event) {
             if (event.mouseWheelScroll.delta > 0) {

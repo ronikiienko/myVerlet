@@ -1,13 +1,14 @@
 #pragma once
 
 #include <vector>
+#include <bits/shared_ptr.h>
 #include "BaseObject.h"
 #include "BaseStick.h"
 #include "EngineConsts.h"
 
 class AtomWorld {
 private:
-    std::vector<std::unique_ptr<BaseObject>> objects;
+    std::vector<std::shared_ptr<BaseObject>> objects;
     std::vector<BaseStick> sticks;
     RectangleF boundsF;
     RectangleI boundsI;
@@ -19,7 +20,7 @@ public:
 
     template<typename T>
     int addObject(T&& object) {
-        std::unique_ptr<T> ptr = std::make_unique<T>(std::forward<T>(object));
+        std::shared_ptr<T> ptr = std::make_shared<T>(std::forward<T>(object));
         objects.push_back(std::move(ptr));
         int index = static_cast<int>(objects.size()) - 1;
         objects[index]->onInit();
