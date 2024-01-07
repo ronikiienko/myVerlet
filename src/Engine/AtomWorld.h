@@ -17,20 +17,20 @@ public:
     }
 
     template<typename T>
-    std::weak_ptr<BaseObject> addObject(T&& object, Vector2 position) {
+    std::weak_ptr<BaseObject> addObject(T &&object, Vector2 position) {
         basicDetails.emplace_back(position);
         object.basicDetails = &basicDetails.back();
 
-        std::shared_ptr<BaseObject> ptr = std::make_shared<BaseObject>(std::forward<BaseObject>(object));
+        std::shared_ptr<T> ptr = std::make_shared<T>(std::forward<T>(object));
         objects.push_back(std::move(ptr));
 
         int index = static_cast<int>(objects.size()) - 1;
         basicDetails[index].parent = objects[index].get();
         objects[index]->onInit();
-        return std::weak_ptr<BaseObject>(objects[index]);
+        return {objects[index]};
     }
 
-    template <typename Func>
+    template<typename Func>
     void forEachObject(Func &&callback, int start = 0, int end = -1) {
         if (end == -1) {
             end = static_cast<int>(objects.size());
@@ -41,7 +41,7 @@ public:
         }
     }
 
-    template <typename Func>
+    template<typename Func>
     void forEachBasicDetails(Func &&callback, int start = 0, int end = -1) {
         if (end == -1) {
             end = static_cast<int>(basicDetails.size());
@@ -53,12 +53,11 @@ public:
     }
 
 
-
-    BaseObject& getObject(int ind) {
+    BaseObject &getObject(int ind) {
         return *objects[ind];
     }
 
-    BasicDetails& getBasicDetails(int ind) {
+    BasicDetails &getBasicDetails(int ind) {
         return basicDetails[ind];
     }
 
