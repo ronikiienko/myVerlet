@@ -6,7 +6,7 @@
 #include "AtomWorld.h"
 #include "Graphics.h"
 #include "Physics.h"
-#include "../addons/Benchmark.h"
+#include "Benchmark.h"
 #include "InputHandler.h"
 #include "BaseLevel.h"
 
