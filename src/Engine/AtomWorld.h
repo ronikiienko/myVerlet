@@ -9,13 +9,11 @@
 class AtomWorld {
 private:
     std::vector<std::unique_ptr<BaseObject>> objects;
-    std::vector<BaseStick> sticks;
     RectangleF boundsF;
     RectangleI boundsI;
 public:
     explicit AtomWorld(RectangleI bounds) : boundsF(RectangleF::fromOther(bounds)), boundsI(bounds) {
         objects.reserve(consts::maxObjectNum);
-        sticks.reserve(consts::maxSticksNum);
     }
 
     template<typename T>
@@ -42,41 +40,12 @@ public:
         return *objects[ind];
     }
 
-    BaseStick &addStick(BaseObject& obj1, BaseObject& obj2) {
-        return sticks.emplace_back(obj1, obj2);
-    }
-    int addStick(int ind1, int ind2) {
-        sticks.emplace_back(getObject(ind1), getObject(ind2));
-        return getSticksCount() - 1;
-    }
-
-    template <typename Func>
-    void forEachStick(Func &&callback, int start = 0, int end = -1) {
-        if (end == -1) {
-            end = static_cast<int>(sticks.size());
-        }
-
-        for (int i = start; i < end; i++) {
-            callback(sticks[i], i);
-        }
-    }
-
-    BaseStick &getStick(int id) {
-        return sticks[id];
-    }
-
     void clear() {
         objects.clear();
-        sticks.clear();
     }
 
     [[nodiscard]] int getObjectsCount() {
         return static_cast<int>(objects.size());
-    }
-
-
-    [[nodiscard]] int getSticksCount() {
-        return static_cast<int>(sticks.size());
     }
 
     [[nodiscard]] RectangleF &getBoundsF() {
