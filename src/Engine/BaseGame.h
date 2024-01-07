@@ -48,6 +48,10 @@ class BaseGame {
             atomWorld.runTick();
             performanceMonitor.end("onTick");
 
+            performanceMonitor.start("removingMarked");
+            atomWorld.removeMarkedObjects();
+            performanceMonitor.end("removingMarked");
+
             performanceMonitor.end("total");
 
             benchmark.sample();

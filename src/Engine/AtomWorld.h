@@ -6,10 +6,12 @@
 #include "EngineConsts.h"
 #include "utils/Grid.h"
 
+
 class AtomWorld {
 private:
     std::vector<std::shared_ptr<BaseObject>> objects;
     std::vector<BasicDetails> basicDetails;
+    std::vector<int> objectsToRemove;
     RectangleF boundsF;
     RectangleI boundsI;
 public:
@@ -17,6 +19,8 @@ public:
 
     explicit AtomWorld(RectangleI bounds) : boundsF(RectangleF::fromOther(bounds)), boundsI(bounds) {
         objects.reserve(consts::maxObjectNum);
+        basicDetails.reserve(consts::maxObjectNum);
+        objectsToRemove.reserve(consts::maxObjectNum);
     }
 
     template<typename T>
@@ -33,41 +37,8 @@ public:
         return {objects[index]};
     }
 
-    void removeObject(std::weak_ptr<BaseObject>& ptr) {
-        auto it = std::find(objects.begin(), objects.end(), ptr.lock());
-        if (it != objects.end()) {
-            int index = static_cast<int>(it - objects.begin());
-            objects.erase(it);
-            basicDetails.erase(basicDetails.begin() + index);
 
-            for (int i = index; i < objects.size(); i++) {
-                objects[i]->basicDetails = &basicDetails[i];
-            }
-        }
-    }
 
-    // theres a bug: if you remove an object during physics calculations, it will cause some grid objects to become invalid (because everything is shifted), and grid uses id's
-    // this can happen primarily if we for example remove an object in collision callback
-    // to fix this we can use a stack of objects to remove, and remove them after physics calculations (and input handling)
-
-    void removeObject(BaseObject* ptr) {
-        auto it = objects.end();
-        for (auto i = objects.begin(); i != objects.end(); i++) {
-            if (i->get() == ptr) {
-                it = i;
-                break;
-            }
-        }
-        if (it != objects.end()) {
-            int index = static_cast<int>(it - objects.begin());
-            objects.erase(it);
-            basicDetails.erase(basicDetails.begin() + index);
-
-            for (int i = index; i < objects.size(); i++) {
-                objects[i]->basicDetails = &basicDetails[i];
-            }
-        }
-    }
 
     template<typename Func>
     void forEachObject(Func &&callback, int start = 0, int end = -1) {
@@ -125,4 +96,77 @@ public:
             object.onTick();
         });
     }
+
+    void forEachInRadius(Vector2 pos, float radius, std::function<void(BaseObject*, int)> callback) {
+        forEachBasicDetails([&](BasicDetails &details, int ind) {
+            if ((details.posCurr - pos).magnitude2() < radius * radius) {
+                callback(details.parent, ind);
+            }
+        });
+    }
+
+
+    void removeMarkedObjects() {
+        // need to sort objectsToRemove in descending order
+
+        if (objectsToRemove.empty()) {
+            return;
+        }
+        std::sort(objectsToRemove.begin(), objectsToRemove.end(), std::greater<>());
+
+        for (int i : objectsToRemove) {
+            objects.erase(objects.begin() + i);
+            basicDetails.erase(basicDetails.begin() + i);
+        }
+
+        for (int i = 0; i < objects.size(); i++) {
+            objects[i]->basicDetails = &basicDetails[i];
+        }
+        objectsToRemove.clear();
+    }
+
+    void markObjectForRemoval(int index) {
+        if (std::find(objectsToRemove.begin(), objectsToRemove.end(), index) == objectsToRemove.end()) {
+            objectsToRemove.push_back(index);
+        }
+    }
+
+
+    void removeObject(int index) {
+        markObjectForRemoval(index);
+    }
+
+//    void removeObject(std::weak_ptr<BaseObject> &ptr) {
+//        auto it = std::find(objects.begin(), objects.end(), ptr.lock());
+//        if (it != objects.end()) {
+//            int index = static_cast<int>(it - objects.begin());
+//            markObjectForRemoval(index);
+//        }
+//    }
+//
+//    // theres a bug: if you remove an object during physics calculations, it will cause some grid objects to become invalid (because everything is shifted), and grid uses id's
+//    // this can happen primarily if we for example remove an object in collision callback
+//    // to fix this we can use a stack of objects to remove, and remove them after physics calculations (and input handling)
+//    void removeObject(BaseObject *ptr) {
+//        auto it = objects.end();
+//        for (auto i = objects.begin(); i != objects.end(); i++) {
+//            if (i->get() == ptr) {
+//                it = i;
+//                break;
+//            }
+//        }
+//        if (it != objects.end()) {
+//            int index = static_cast<int>(it - objects.begin());
+//            markObjectForRemoval(index);
+//        }
+//    }
+
 };
+
+
+//objects.erase(objects.begin() + index);
+//basicDetails.erase(basicDetails.begin() + index);
+//
+//for (int i = index; i < objects.size(); i++) {
+//objects[i]->basicDetails = &basicDetails[i];
+//}

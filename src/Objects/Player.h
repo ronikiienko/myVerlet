@@ -122,6 +122,10 @@ public:
     }
 
     void onCollision(BaseObject *ptr) override {
-        atomWorld.removeObject(ptr);
+        atomWorld.forEachInRadius(basicDetails->posCurr, 50, [&](BaseObject *ptr, int ind) {
+            if (ptr != this) {
+                atomWorld.removeObject(ind);
+            }
+        });
     }
 };
