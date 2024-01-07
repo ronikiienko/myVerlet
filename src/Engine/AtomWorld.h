@@ -162,11 +162,3 @@ public:
 //    }
 
 };
-
-
-//objects.erase(objects.begin() + index);
-//basicDetails.erase(basicDetails.begin() + index);
-//
-//for (int i = index; i < objects.size(); i++) {
-//objects[i]->basicDetails = &basicDetails[i];
-//}
