@@ -6,19 +6,70 @@
 #include "InputHandler.h"
 
 struct LevelContext {
-    Scene& scene;
-    InputHandler& inputHandler;
+    sf::RenderWindow &window;
+    ThreadPool &threadPool;
 
-    LevelContext(Scene& scene, InputHandler& inputHandler) : scene(scene), inputHandler(inputHandler) {}
+    LevelContext(sf::RenderWindow &window, ThreadPool &threadPool) : window(window), threadPool(threadPool) {}
 };
 
 class BaseLevel {
+protected:
+    Scene scene;
+    Graphics graphics;
+    Physics physics;
+    PerformanceMonitor performanceMonitor;
+    InputHandler inputHandler;
+    sf::RenderWindow &window;
+    ThreadPool &threadPool;
 public:
-    Scene& scene;
-    InputHandler& inputHandler;
-    explicit BaseLevel(LevelContext levelContext) : scene(levelContext.scene), inputHandler(levelContext.inputHandler) {
+
+    explicit BaseLevel(LevelContext levelContext) : window(levelContext.window), threadPool(levelContext.threadPool),
+                                                    scene(consts::worldSize,
+                                                          Camera{static_cast<float>(levelContext.window.getSize().x),
+                                                                 static_cast<float>(levelContext.window.getSize().y),
+                                                                 Vector2F::cart(1200, 900)}),
+                                                    graphics(scene, levelContext.window, levelContext.threadPool,
+                                                             performanceMonitor),
+                                                    physics(scene, levelContext.threadPool, performanceMonitor),
+                                                    performanceMonitor(levelContext.window, scene),
+                                                    inputHandler(levelContext.window) {
+
+
+    }
+    void launch() {
+        onInit();
+        while (window.isOpen()) {
+            performanceMonitor.start("total");
+
+            performanceMonitor.start("physics");
+            physics.update();
+            performanceMonitor.end("physics");
+
+            performanceMonitor.start("graphics");
+            window.clear(sf::Color::Black);
+            graphics.update();
+            performanceMonitor.draw();
+            window.display();
+            performanceMonitor.end("graphics");
+
+            performanceMonitor.start("input");
+            inputHandler.update();
+            performanceMonitor.end("input");
+
+            performanceMonitor.start("onTick");
+            scene.runTick();
+            onTick();
+            performanceMonitor.end("onTick");
+
+            performanceMonitor.start("removingMarked");
+            scene.removeMarkedObjects();
+            performanceMonitor.end("removingMarked");
+
+            performanceMonitor.end("total");
+        }
     }
 
-
     virtual void onInit() {}
+
+    virtual void onTick() {}
 };

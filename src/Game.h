@@ -7,6 +7,5 @@ class Game : public BaseGame {
 public:
     Game() : BaseGame() {
         setLevel<Level>();
-        initialize();
     }
 };

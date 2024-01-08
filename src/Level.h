@@ -36,5 +36,7 @@ public:
                         150);
             }
         });
+        std::cout << "Objects num: " << scene.getObjectsCount() << std::endl;
     }
+
 };
