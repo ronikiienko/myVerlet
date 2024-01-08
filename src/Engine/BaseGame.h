@@ -35,8 +35,8 @@ class BaseGame {
             window.clear(sf::Color::Black);
             graphics.update();
             performanceMonitor.draw();
-            performanceMonitor.end("graphics");
             window.display();
+            performanceMonitor.end("graphics");
 
             performanceMonitor.start("input");
             inputHandler.update();
