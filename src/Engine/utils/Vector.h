@@ -113,6 +113,11 @@ public:
     void addY(T yAdd) {
         y += yAdd;
     }
+
+    template<typename U>
+    constexpr static Vector2 fromOther(Vector2<U> other) {
+        return Vector2{static_cast<T>(other.x), static_cast<T>(other.y)};
+    }
 };
 
 using Vector2F = Vector2<float>;

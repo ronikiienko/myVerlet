@@ -13,13 +13,13 @@ private:
     std::vector<std::shared_ptr<BaseObject>> objects;
     std::vector<BasicDetails> basicDetails;
     std::vector<int> objectsToRemove;
-    RectangleF boundsF;
-    RectangleI boundsI;
+    Vector2F sizeF;
+    Vector2I sizeI;
     Camera camera;
 public:
-    IdGrid grid{consts::collisionGridWidth, consts::collisionGridHeight, getBoundsI()};
+    IdGrid grid{consts::collisionGridWidth, consts::collisionGridHeight, getSizeI()};
 
-    explicit Scene(RectangleI bounds, Camera camera) : boundsF(RectangleF::fromOther(bounds)), boundsI(bounds), camera(camera)  {
+    explicit Scene(Vector2I size, Camera camera) : sizeF(Vector2F::fromOther(size)), sizeI(size), camera(camera)  {
         objects.reserve(consts::maxObjectNum);
         basicDetails.reserve(consts::maxObjectNum);
         objectsToRemove.reserve(consts::maxObjectNum);
@@ -83,12 +83,12 @@ public:
         return static_cast<int>(objects.size());
     }
 
-    [[nodiscard]] RectangleF &getBoundsF() {
-        return boundsF;
+    [[nodiscard]] Vector2F &getSizeF() {
+        return sizeF;
     }
 
-    [[nodiscard]] RectangleI &getBoundsI() {
-        return boundsI;
+    [[nodiscard]] Vector2I &getSizeI() {
+        return sizeI;
     }
 
     void removeObjects() {
@@ -101,6 +101,7 @@ public:
         });
     }
 
+//    ASDF
     void forEachInRadius(Vector2F pos, float radius, std::function<void(BaseObject*, int)> callback) {
 //        forEachBasicDetails([&](BasicDetails &details, int ind) {
 //            if ((details.posCurr - pos).magnitude2() < radius * radius) {

@@ -14,14 +14,14 @@ private:
     int currentSubStep = 0;
 
     void updatePositionsConstraint(float dt) {
-        const Rectangle bounds = scene.getBoundsF();
+        const Vector2F size = scene.getSizeF();
         const int objectsCount = scene.getObjectsCount();
-        threadPool.dispatch(objectsCount, [this, &bounds, dt](int start, int end) {
-            const float minX = bounds.getX1() + consts::objectsRadius;
-            const float maxX = bounds.getX2() - consts::objectsRadius;
-            const float minY = bounds.getY1() + consts::objectsRadius;
-            const float maxY = bounds.getY2() - consts::objectsRadius;
-            scene.forEachBasicDetails([&bounds, dt, minX, maxX, minY, maxY](BasicDetails &object, int i) {
+        threadPool.dispatch(objectsCount, [this, &size, dt](int start, int end) {
+            const float minX = 0 + consts::objectsRadius;
+            const float maxX = size.x - consts::objectsRadius;
+            const float minY = 0 + consts::objectsRadius;
+            const float maxY = size.y - consts::objectsRadius;
+            scene.forEachBasicDetails([&size, dt, minX, maxX, minY, maxY](BasicDetails &object, int i) {
                 // TODO when all grid filled with objects, you can see that some start falling faster and some slower (on lower gravity levels like 10) - this is because of floats precision
                 if (!object.isPinned) {
                     object.accelerate(consts::gravity);
@@ -34,18 +34,18 @@ private:
 
                 const Vector2F newVelocity = object.getVelocity() * consts::wallsDamping;
                 if (object.posCurr.x < minX) {
-                    object.posCurr.x = bounds.getX1() + consts::objectsRadius + offset;
+                    object.posCurr.x = 0 + consts::objectsRadius + offset;
                     object.posOld.x = object.posCurr.x + newVelocity.x;
                 } else if (object.posCurr.x > maxX) {
-                    object.posCurr.x = bounds.getX2() - consts::objectsRadius - offset;
+                    object.posCurr.x = size.x - consts::objectsRadius - offset;
                     object.posOld.x = object.posCurr.x + newVelocity.x;
                 }
 
                 if (object.posCurr.y < minY) {
-                    object.posCurr.y = bounds.getY1() + consts::objectsRadius + offset;
+                    object.posCurr.y = 0 + consts::objectsRadius + offset;
                     object.posOld.y = object.posCurr.y + newVelocity.y;
                 } else if (object.posCurr.y > maxY) {
-                    object.posCurr.y = bounds.getY2() - consts::objectsRadius - offset;
+                    object.posCurr.y = size.y - consts::objectsRadius - offset;
                     object.posOld.y = object.posCurr.y + newVelocity.y;
                 }
 
@@ -62,7 +62,7 @@ private:
 //    }
 //
 //    void applyConstraints() {
-//        const Rectangle bounds = scene.getBoundsF();
+//        const Rectangle bounds = scene.getSizeF();
 //        const int objectsCount = scene.getObjectsCount();
 //        threadPool.dispatch(objectsCount, [this, &bounds](int start, int end) {
 //            scene.forEachObject([&bounds](BaseObject& object, int i) {

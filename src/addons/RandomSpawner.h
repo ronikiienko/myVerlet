@@ -21,17 +21,17 @@ public:
                                     gen.getInRange
                                             (
                                                     0,
-                                                    scene.getBoundsF().getWidth()
+                                                    scene.getSizeF().x
                                             ),
                                     gen.getInRange
-                                            (0, scene.getBoundsF().getHeight()
+                                            (0, scene.getSizeF().y
                                             )
                             )
             );
 
             BaseObject &object = *ptr.lock();
-            object.basicDetails->color = sf::Color(static_cast<int>(object.basicDetails->posCurr.x / consts::worldBounds.getWidth() * 255),
-                                     static_cast<int>(object.basicDetails->posCurr.y / consts::worldBounds.getHeight() * 255), 255);
+            object.basicDetails->color = sf::Color(static_cast<int>(object.basicDetails->posCurr.x / consts::worldSize.x * 255),
+                                                   static_cast<int>(object.basicDetails->posCurr.y / consts::worldSize.y * 255), 255);
         }
     }
 };

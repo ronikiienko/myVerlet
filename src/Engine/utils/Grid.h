@@ -73,9 +73,9 @@ struct IdGrid {
     std::vector<Cell> data;
     int length;
 
-    IdGrid(int width, int height, RectangleI realBounds) : width(width), height(height) {
-        realWidth = realBounds.getWidth();
-        realHeight = realBounds.getHeight();
+    IdGrid(int width, int height, Vector2I realSize) : width(width), height(height) {
+        realWidth = realSize.x;
+        realHeight = realSize.y;
 
         widthRatio = static_cast<float>(realWidth) / static_cast<float>(width);
         heightRatio = static_cast<float>(realHeight) / static_cast<float>(height);

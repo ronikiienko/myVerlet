@@ -14,7 +14,7 @@ class BaseGame {
                                                              consts::windowBounds.getHeight()), "Verlet",
                                                sf::Style::Default, sf::ContextSettings(0, 0, 1));
     ThreadPool threadPool{consts::numThreads};
-    Scene scene{consts::worldBounds, Camera{static_cast<float>(window.getSize().x), static_cast<float>(window.getSize().y),
+    Scene scene{consts::worldSize, Camera{static_cast<float>(window.getSize().x), static_cast<float>(window.getSize().y),
                                       Vector2F::cart(1200, 900)}};
     Graphics graphics{scene, window, threadPool, performanceMonitor};
     Physics physics{scene, threadPool, performanceMonitor};
