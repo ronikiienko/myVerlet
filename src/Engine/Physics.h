@@ -210,19 +210,7 @@ private:
 //            }, start, end);
 //        });
 //    }
-    void rebuildGrid() {
-        performanceMonitor.start("grid clear");
-        threadPool.dispatch(grid.length, [this](int start, int end) {
-            grid.clear(start, end);
-        });
-        performanceMonitor.end("grid clear");
-        performanceMonitor.start("grid build");
-        scene.forEachBasicDetails([this](BasicDetails &object, int i) {
-            grid.insert(i, object.posCurr.x, object.posCurr.y);
-        });
-        performanceMonitor.end("grid build");
 
-    }
 
 public:
     explicit Physics(Scene &scene, ThreadPool &threadPool, PerformanceMonitor &performanceMonitor)
@@ -241,7 +229,7 @@ public:
             performanceMonitor.end("gravityConstraintsUpdate");
 
             performanceMonitor.start("grid");
-            rebuildGrid();
+            scene.rebuildGrid();
             performanceMonitor.end("grid");
 
             performanceMonitor.start("collisions");

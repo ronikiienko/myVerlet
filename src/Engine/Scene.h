@@ -6,6 +6,7 @@
 #include "EngineConsts.h"
 #include "utils/Grid.h"
 #include "Camera.h"
+#include "PerformanceMonitor.h"
 
 
 class Scene {
@@ -16,10 +17,12 @@ private:
     Vector2F sizeF;
     Vector2I sizeI;
     Camera camera;
+    ThreadPool& threadPool;
+    PerformanceMonitor& performanceMonitor;
 public:
     IdGrid grid{consts::collisionGridWidth, consts::collisionGridHeight, getSizeI()};
 
-    explicit Scene(Vector2I size, Camera camera) : sizeF(Vector2F::fromOther(size)), sizeI(size), camera(camera)  {
+    explicit Scene(Vector2I size, Camera camera, ThreadPool& threadPool, PerformanceMonitor& performanceMonitor) : sizeF(Vector2F::fromOther(size)), sizeI(size), camera(camera), threadPool(threadPool), performanceMonitor(performanceMonitor)  {
         objects.reserve(consts::maxObjectNum);
         basicDetails.reserve(consts::maxObjectNum);
         objectsToRemove.reserve(consts::maxObjectNum);
@@ -170,5 +173,16 @@ public:
             markObjectForRemoval(index);
         }
     }
-
+    void rebuildGrid() {
+        performanceMonitor.start("grid clear");
+        threadPool.dispatch(grid.length, [this](int start, int end) {
+            grid.clear(start, end);
+        });
+        performanceMonitor.end("grid clear");
+        performanceMonitor.start("grid build");
+        forEachBasicDetails([this](BasicDetails &object, int i) {
+            grid.insert(i, object.posCurr.x, object.posCurr.y);
+        });
+        performanceMonitor.end("grid build");
+    }
 };

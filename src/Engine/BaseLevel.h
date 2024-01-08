@@ -24,18 +24,23 @@ protected:
 public:
 
     explicit BaseLevel(LevelContext levelContext) : window(levelContext.window), threadPool(levelContext.threadPool),
-                                                    scene(consts::worldSize,
-                                                          Camera{static_cast<float>(levelContext.window.getSize().x),
-                                                                 static_cast<float>(levelContext.window.getSize().y),
-                                                                 Vector2F::cart(1200, 900)}),
+                                                    scene(
+                                                            consts::worldSize,
+                                                            Camera{static_cast<float>(levelContext.window.getSize().x),
+                                                                   static_cast<float>(levelContext.window.getSize().y),
+                                                                   Vector2F::cart(1200, 900),
+                                                            },
+                                                            levelContext.threadPool,
+                                                            performanceMonitor),
                                                     graphics(scene, levelContext.window, levelContext.threadPool,
                                                              performanceMonitor),
                                                     physics(scene, levelContext.threadPool, performanceMonitor),
-                                                    performanceMonitor(levelContext.window, scene),
+                                                    performanceMonitor(levelContext.window),
                                                     inputHandler(levelContext.window) {
 
 
     }
+
     void launch() {
         onInit();
         while (window.isOpen()) {
@@ -71,5 +76,7 @@ public:
 
     virtual void onInit() {}
 
-    virtual void onTick() {}
+    virtual void onTick() {
+        performanceMonitor.setObjectsCount(scene.getObjectsCount());
+    }
 };

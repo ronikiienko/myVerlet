@@ -7,17 +7,18 @@
 #include "SFML/Graphics/RenderWindow.hpp"
 #include "SFML/Graphics/Font.hpp"
 #include "SFML/Graphics/Text.hpp"
+#include "Scene.h"
 
 class PerformanceMonitor {
 private:
-    Scene& world;
     sf::RenderWindow& window;
     std::unordered_map<std::string, sf::Clock> clocks;
     std::unordered_map<std::string, long long> times;
     sf::Font font;
     sf::Text text;
+    int objectsCount = 0;
 public:
-    explicit PerformanceMonitor(sf::RenderWindow& window, Scene& world): window(window), world(world) {
+    explicit PerformanceMonitor(sf::RenderWindow& window): window(window) {
         if(!font.loadFromFile("./res/Roboto-Medium.ttf")) {
             throw std::runtime_error("Font could not load. Perhaps it doesn't exist?");
         }
@@ -52,7 +53,7 @@ public:
 
     void draw() {
         std::string textString;
-        textString += "Objects count:  " + std::to_string(world.getObjectsCount()) + "\n";
+        textString += "Objects count:  " + std::to_string(objectsCount) + "\n";
         for (auto& it : times) {
             double milliseconds = static_cast<double>(it.second) / 1000;
             short fps = 1000 / milliseconds;
@@ -60,6 +61,10 @@ public:
         }
         text.setString(textString);
         window.draw(text);
+    }
+
+    void setObjectsCount(int count) {
+        objectsCount = count;
     }
 };
 
