@@ -101,7 +101,7 @@ public:
         });
     }
 
-//    ASDF
+    // TODO not copy callback
     void forEachInRadius(Vector2F pos, float radius, std::function<void(BaseObject*, int)> callback) {
 //        forEachBasicDetails([&](BasicDetails &details, int ind) {
 //            if ((details.posCurr - pos).magnitude2() < radius * radius) {
