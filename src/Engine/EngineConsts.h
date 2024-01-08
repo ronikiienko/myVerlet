@@ -9,7 +9,7 @@ namespace consts {
     const int maxObjectNum = 200000;
     constexpr Vector2F gravity = Vector2F::cart(0, 0);
     constexpr Vector2I worldSize = Vector2I::cart(2400, 1800);
-    constexpr RectangleI windowBounds = RectangleI::fromSize(0, 0, 2400, 1800);
+    constexpr Vector2I windowSize = Vector2I::cart(2400, 1800);
     constexpr int objectsRadius = 2;
     constexpr int twoObjectsRadius = objectsRadius + objectsRadius;
     constexpr int twoObjectsRadiusSquared = twoObjectsRadius * twoObjectsRadius;

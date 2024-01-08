@@ -10,8 +10,8 @@
 #include "BaseLevel.h"
 
 class BaseGame {
-    sf::RenderWindow window = sf::RenderWindow(sf::VideoMode(consts::windowBounds.getWidth(),
-                                                             consts::windowBounds.getHeight()), "Verlet",
+    sf::RenderWindow window = sf::RenderWindow(sf::VideoMode(consts::windowSize.x,
+                                                             consts::windowSize.y), "Verlet",
                                                sf::Style::Default, sf::ContextSettings(0, 0, 1));
     ThreadPool threadPool{consts::numThreads};
     Scene scene{consts::worldSize, Camera{static_cast<float>(window.getSize().x), static_cast<float>(window.getSize().y),
