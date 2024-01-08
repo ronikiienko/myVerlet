@@ -136,29 +136,29 @@ public:
         markObjectForRemoval(index);
     }
 
-//    void removeObject(std::weak_ptr<BaseObject> &ptr) {
-//        auto it = std::find(objects.begin(), objects.end(), ptr.lock());
-//        if (it != objects.end()) {
-//            int index = static_cast<int>(it - objects.begin());
-//            markObjectForRemoval(index);
-//        }
-//    }
-//
-//    // theres a bug: if you remove an object during physics calculations, it will cause some grid objects to become invalid (because everything is shifted), and grid uses id's
-//    // this can happen primarily if we for example remove an object in collision callback
-//    // to fix this we can use a stack of objects to remove, and remove them after physics calculations (and input handling)
-//    void removeObject(BaseObject *ptr) {
-//        auto it = objects.end();
-//        for (auto i = objects.begin(); i != objects.end(); i++) {
-//            if (i->get() == ptr) {
-//                it = i;
-//                break;
-//            }
-//        }
-//        if (it != objects.end()) {
-//            int index = static_cast<int>(it - objects.begin());
-//            markObjectForRemoval(index);
-//        }
-//    }
+    void removeObject(std::weak_ptr<BaseObject> &ptr) {
+        auto it = std::find(objects.begin(), objects.end(), ptr.lock());
+        if (it != objects.end()) {
+            int index = static_cast<int>(it - objects.begin());
+            markObjectForRemoval(index);
+        }
+    }
+
+    // theres was bug: if you remove an object during physics calculations, it will cause some grid objects to become invalid (because everything is shifted), and grid uses id's
+    // this can happen primarily if we for example remove an object in collision callback
+    // to fix this we  use a stack of objects to remove, and remove them after physics calculations (and input handling)
+    void removeObject(BaseObject *ptr) {
+        auto it = objects.end();
+        for (auto i = objects.begin(); i != objects.end(); i++) {
+            if (i->get() == ptr) {
+                it = i;
+                break;
+            }
+        }
+        if (it != objects.end()) {
+            int index = static_cast<int>(it - objects.begin());
+            markObjectForRemoval(index);
+        }
+    }
 
 };
