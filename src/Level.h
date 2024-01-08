@@ -7,20 +7,20 @@
 #include "addons/Shooter.h"
 
 class Level : public BaseLevel {
-    ExplosionHandler explosionHandler{atomWorld};
-    Shooter shooter{Vector2F::cart(200, 200), 2, 1, 4, atomWorld, 1, explosionHandler};
+    ExplosionHandler explosionHandler{scene};
+    Shooter shooter{Vector2F::cart(200, 200), 2, 1, 4, scene, 1, explosionHandler};
     RNGf gen{consts::seed};
-    RandomSpawner randomSpawner{atomWorld, gen};
+    RandomSpawner randomSpawner{scene, gen};
 public:
     explicit Level(LevelContext levelContext) : BaseLevel(levelContext) {
     }
 
     void onInit() override {
         randomSpawner.spawn(150000);
-        atomWorld.addObject(Player{inputHandler, camera, shooter, atomWorld}, Vector2F::cart(100, 100));
+        scene.addObject(Player{inputHandler, camera, shooter, scene}, Vector2F::cart(100, 100));
         inputHandler.addEventListener(sf::Event::KeyPressed, [&](sf::Event &event) {
             if (event.key.code == sf::Keyboard::BackSpace) {
-                atomWorld.clear();
+                scene.clear();
             }
 
             if (event.key.code == sf::Keyboard::M) {

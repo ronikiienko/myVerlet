@@ -3,7 +3,7 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "EngineConsts.h"
 #include "utils/ThreadPool.h"
-#include "AtomWorld.h"
+#include "Scene.h"
 #include "Graphics.h"
 #include "Physics.h"
 #include "InputHandler.h"
@@ -14,10 +14,10 @@ class BaseGame {
                                                              consts::windowBounds.getHeight()), "Verlet",
                                                sf::Style::Default, sf::ContextSettings(0, 0, 1));
     ThreadPool threadPool{consts::numThreads};
-    AtomWorld atomWorld{consts::worldBounds};
-    Graphics graphics{atomWorld, window, threadPool, performanceMonitor, camera};
-    Physics physics{atomWorld, threadPool, performanceMonitor};
-    PerformanceMonitor performanceMonitor{window, atomWorld};
+    Scene scene{consts::worldBounds};
+    Graphics graphics{scene, window, threadPool, performanceMonitor, camera};
+    Physics physics{scene, threadPool, performanceMonitor};
+    PerformanceMonitor performanceMonitor{window, scene};
     InputHandler inputHandler{window};
     Camera camera{static_cast<float>(window.getSize().x), static_cast<float>(window.getSize().y),
                   Vector2F::cart(1200, 900)};
@@ -43,11 +43,11 @@ class BaseGame {
             performanceMonitor.end("input");
 
             performanceMonitor.start("onTick");
-            atomWorld.runTick();
+            scene.runTick();
             performanceMonitor.end("onTick");
 
             performanceMonitor.start("removingMarked");
-            atomWorld.removeMarkedObjects();
+            scene.removeMarkedObjects();
             performanceMonitor.end("removingMarked");
 
             performanceMonitor.end("total");
@@ -64,8 +64,8 @@ public:
 
     template<typename T>
     void setLevel() {
-        atomWorld.clear();
-        std::unique_ptr<T> ptr = std::make_unique<T>(LevelContext(atomWorld, camera, inputHandler));
+        scene.clear();
+        std::unique_ptr<T> ptr = std::make_unique<T>(LevelContext(scene, camera, inputHandler));
         level = std::move(ptr);
         level->onInit();
     }

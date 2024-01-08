@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Engine/AtomWorld.h"
+#include "../Engine/Scene.h"
 #include "../Engine/EngineConsts.h"
 #include "../Objects/Bullet.h"
 
@@ -13,14 +13,14 @@ private:
     int width;
     int rowsNum;
     float interval;
-    AtomWorld &atomWorld;
+    Scene &scene;
     ExplosionHandler& explosionHandler;
 public:
 
 
-    Shooter(Vector2F position, float speed, int width, float interval, AtomWorld &atomWorld,
+    Shooter(Vector2F position, float speed, int width, float interval, Scene &scene,
             int rowsNum, ExplosionHandler& explosionHandler) : position(position), speed(speed), width(width), interval(interval),
-                                                               atomWorld(atomWorld), rowsNum(rowsNum), explosionHandler(explosionHandler) {}
+                                                               scene(scene), rowsNum(rowsNum), explosionHandler(explosionHandler) {}
 
     void rotate(Angle angle) {
         direction += angle;
@@ -53,7 +53,7 @@ public:
             const int leftOffset = width / 2;
             Vector2F currentPosition = position - (move * static_cast<float>(leftOffset)) + rowOffset;
             for (int i = 0; i < width; i++) {
-                auto ptr = atomWorld.addObject(Bullet(explosionHandler), currentPosition + Vector2F::cart(5, 5));
+                auto ptr = scene.addObject(Bullet(explosionHandler), currentPosition + Vector2F::cart(5, 5));
                 ptr.lock()->basicDetails->setVelocity(initialVelocity);
                 currentPosition += move;
             }

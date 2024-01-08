@@ -1,6 +1,6 @@
 #pragma once
 
-#include "AtomWorld.h"
+#include "Scene.h"
 #include "SFML/Graphics/RenderWindow.hpp"
 #include "SFML/Graphics/VertexArray.hpp"
 #include "PerformanceMonitor.h"
@@ -9,7 +9,7 @@
 
 class Graphics {
 private:
-    AtomWorld &atomWorld;
+    Scene &scene;
     sf::RenderWindow &window;
     sf::VertexArray objectVertexArray;
     ThreadPool &threadPool;
@@ -18,9 +18,9 @@ private:
     Camera &camera;
     float textureSize;
 public:
-    explicit Graphics(AtomWorld &atomWorld, sf::RenderWindow &window, ThreadPool &threadPool,
+    explicit Graphics(Scene &scene, sf::RenderWindow &window, ThreadPool &threadPool,
                       PerformanceMonitor &performanceMonitor, Camera &camera)
-            : atomWorld(atomWorld), window(window), threadPool(threadPool), performanceMonitor(performanceMonitor),
+            : scene(scene), window(window), threadPool(threadPool), performanceMonitor(performanceMonitor),
               camera(camera) {
         objectVertexArray.setPrimitiveType(sf::Quads);  // Initialize with Quads
         // TODO somehow organise resources, because now path depends on where executable is. Same for fonts in performance monitor
@@ -33,10 +33,10 @@ public:
     };
 
     void updateObjectsArray() {
-        objectVertexArray.resize(atomWorld.getObjectsCount() * 4);
-        threadPool.dispatch(atomWorld.getObjectsCount(), [this](int start, int end) {
+        objectVertexArray.resize(scene.getObjectsCount() * 4);
+        threadPool.dispatch(scene.getObjectsCount(), [this](int start, int end) {
             float objectSize = camera.worldSizeToScreenSize(consts::objectsRadius);
-            atomWorld.forEachBasicDetails([this, objectSize](BasicDetails &object, int i) {
+            scene.forEachBasicDetails([this, objectSize](BasicDetails &object, int i) {
                 Vector2F screenPos = camera.worldPosToScreenPos(object.posCurr);
 
                 const int ind = i * 4;

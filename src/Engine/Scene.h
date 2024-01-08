@@ -7,7 +7,7 @@
 #include "utils/Grid.h"
 
 
-class AtomWorld {
+class Scene {
 private:
     std::vector<std::shared_ptr<BaseObject>> objects;
     std::vector<BasicDetails> basicDetails;
@@ -17,7 +17,7 @@ private:
 public:
     IdGrid grid{consts::collisionGridWidth, consts::collisionGridHeight, getBoundsI()};
 
-    explicit AtomWorld(RectangleI bounds) : boundsF(RectangleF::fromOther(bounds)), boundsI(bounds) {
+    explicit Scene(RectangleI bounds) : boundsF(RectangleF::fromOther(bounds)), boundsI(bounds) {
         objects.reserve(consts::maxObjectNum);
         basicDetails.reserve(consts::maxObjectNum);
         objectsToRemove.reserve(consts::maxObjectNum);

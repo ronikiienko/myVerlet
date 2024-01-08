@@ -10,7 +10,7 @@ public:
     InputHandler &inputHandler;
     Camera &camera;
     Shooter &shooter;
-    AtomWorld &atomWorld;
+    Scene &scene;
     float movementSpeed = 2000;
     bool movingUp = false;
     bool movingDown = false;
@@ -23,11 +23,11 @@ public:
     int mouseButtonPressedListenerId = -1;
     int mouseWheelScrolledListenerId = -1;
 
-    Player(InputHandler &inputHandler, Camera &camera, Shooter &shooter, AtomWorld &atomWorld) :
+    Player(InputHandler &inputHandler, Camera &camera, Shooter &shooter, Scene &scene) :
             inputHandler(inputHandler),
             camera(camera),
             shooter(shooter),
-            atomWorld(atomWorld) {
+            scene(scene) {
         // i can't setup events from constructor, because lambda will capture
         // `this` before std::make_unique will fire, which will invalidate `this`, because ownership is transferred to unique_ptr
     }
@@ -122,9 +122,9 @@ public:
     }
 
     void onCollision(BaseObject *ptr) override {
-        atomWorld.forEachInRadius(basicDetails->posCurr, 50, [&](BaseObject *ptr, int ind) {
+        scene.forEachInRadius(basicDetails->posCurr, 50, [&](BaseObject *ptr, int ind) {
             if (ptr != this) {
-                atomWorld.removeObject(ind);
+                scene.removeObject(ind);
             }
         });
     }

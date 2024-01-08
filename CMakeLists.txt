@@ -4,7 +4,7 @@ set(PROJECT_NAME myVerlet)
 set(SOURCES src/main.cpp
         src/Engine/utils/Vector.h
         src/Engine/Graphics.h
-        src/Engine/AtomWorld.h
+        src/Engine/Scene.h
         src/Engine/BaseObject.h
         src/Engine/EngineConsts.h
         src/Engine/Physics.h

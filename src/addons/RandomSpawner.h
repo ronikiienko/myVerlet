@@ -1,19 +1,19 @@
 #pragma once
 
-#include "../Engine/AtomWorld.h"
+#include "../Engine/Scene.h"
 #include "../Engine/EngineConsts.h"
 #include "../Engine/utils/Rand.h"
 
 class RandomSpawner {
 private:
-    AtomWorld &atomWorld;
+    Scene &scene;
     RNGf &gen;
 public:
-    RandomSpawner(AtomWorld &atomWorld, RNGf &gen) : atomWorld(atomWorld), gen(gen) {}
+    RandomSpawner(Scene &scene, RNGf &gen) : scene(scene), gen(gen) {}
 
     void spawn(int number) {
         for (int i = 0; i < number; i++) {
-            auto ptr = atomWorld.addObject(
+            auto ptr = scene.addObject(
 
                     BaseObject(),
                     Vector2F::cart
@@ -21,10 +21,10 @@ public:
                                     gen.getInRange
                                             (
                                                     0,
-                                                    atomWorld.getBoundsF().getWidth()
+                                                    scene.getBoundsF().getWidth()
                                             ),
                                     gen.getInRange
-                                            (0, atomWorld.getBoundsF().getHeight()
+                                            (0, scene.getBoundsF().getHeight()
                                             )
                             )
             );

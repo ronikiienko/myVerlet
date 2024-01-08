@@ -1,15 +1,15 @@
 #pragma once
 
-#include "../Engine/AtomWorld.h"
+#include "../Engine/Scene.h"
 
 class ExplosionHandler {
 private:
-    AtomWorld& atomWorld;
+    Scene& scene;
 public:
-    explicit ExplosionHandler(AtomWorld& atomWorld) : atomWorld(atomWorld) {}
+    explicit ExplosionHandler(Scene& scene) : scene(scene) {}
 
     void launch(Vector2F position, float strength, float radius) {
-        atomWorld.forEachBasicDetails([&position, &strength, &radius](BasicDetails& object, int i){
+        scene.forEachBasicDetails([&position, &strength, &radius](BasicDetails& object, int i){
             Vector2F direction = object.posCurr - position;
             float distance = direction.magnitude();
             if (distance <= radius) {
