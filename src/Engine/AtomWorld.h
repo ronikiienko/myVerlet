@@ -103,7 +103,7 @@ public:
 //                callback(details.parent, ind);
 //            }
 //        });
-        grid.forEachInRadius(pos, radius, [&](int id) {
+        grid.forEachInRect(RectangleF::fromCoords(pos.x - radius, pos.y - radius, pos.x + radius, pos.y + radius), [&](int id) {
             if ((basicDetails[id].posCurr - pos).magnitude2() < radius * radius) {
                 callback(basicDetails[id].parent, id);
             }

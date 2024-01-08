@@ -122,18 +122,13 @@ struct IdGrid {
         return data[index];
     }
 
-    // not actually in radius.. it's grid so it will be just a "broad phase" (not detailed, just rough)
+    // it's not precise iterator. it just uses grid cells to iterate. So it's not precise, but it's fast. To actually iterate precise, needs more checks (it's just a broad phase)
     template<typename Func>
-    void forEachInRadius(Vector2 position, float radius, Func&& callback) {
-        const int gridX = static_cast<int>(position.x * inverseWidthRatio);
-        const int gridY = static_cast<int>(position.y * inverseHeightRatio);
-
-        const int radiusInCells = static_cast<int>(radius * inverseWidthRatio);
-
-        const int startGridX = std::max(0, gridX - radiusInCells);
-        const int endGridX = std::min(width - 1, gridX + radiusInCells);
-        const int startGridY = std::max(0, gridY - radiusInCells);
-        const int endGridY = std::min(height - 1, gridY + radiusInCells);
+    void forEachInRect(RectangleF rect, Func &&callback) {
+        const int startGridX = std::max(0, static_cast<int>(rect.getX1() * inverseWidthRatio));
+        const int endGridX = std::min(width - 1, static_cast<int>(rect.getX2() * inverseWidthRatio));
+        const int startGridY = std::max(0, static_cast<int>(rect.getY1() * inverseHeightRatio));
+        const int endGridY = std::min(height - 1, static_cast<int>(rect.getY2() * inverseHeightRatio));
 
         for (int i = startGridX; i <= endGridX; i++) {
             for (int j = startGridY; j <= endGridY; j++) {
