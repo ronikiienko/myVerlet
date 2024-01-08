@@ -3,22 +3,22 @@
 
 class Camera {
 public:
-    Vector2 position = Vector2::cart(0, 0); // position itself (storing left top corner would make rotation very hard)
-    Vector2 leftTopCorner = Vector2::cart(0, 0); // position of the left top corner of the camera (just for to not calculate it every time)
+    Vector2F position = Vector2F::cart(0, 0); // position itself (storing left top corner would make rotation very hard)
+    Vector2F leftTopCorner = Vector2F::cart(0, 0); // position of the left top corner of the camera (just for to not calculate it every time)
     float baseViewWidth = 100;
     float baseViewHeight = 100;
     float zoomFactor = 1;
 
     void updateLeftTopCorner() {
-        leftTopCorner = Vector2::cart(getX1(), getY1());
+        leftTopCorner = Vector2F::cart(getX1(), getY1());
     }
 
-    void move(Vector2 delta) {
+    void move(Vector2F delta) {
         position += delta;
         updateLeftTopCorner();
     }
 
-    void setPosition(Vector2 vector) {
+    void setPosition(Vector2F vector) {
         position = vector;
         updateLeftTopCorner();
     }
@@ -51,15 +51,15 @@ public:
         return position.y + (baseViewHeight / zoomFactor) / 2;
     }
 
-    [[nodiscard]] Vector2 getPosition() const {
+    [[nodiscard]] Vector2F getPosition() const {
         return position;
     }
 
-    [[nodiscard]] Vector2 worldPosToScreenPos(Vector2 worldPosition) const {
+    [[nodiscard]] Vector2F worldPosToScreenPos(Vector2F worldPosition) const {
         return (worldPosition - leftTopCorner) * zoomFactor;
     }
 
-    [[nodiscard]] Vector2 screenPosToWorldPos(Vector2 screenPosition) const {
+    [[nodiscard]] Vector2F screenPosToWorldPos(Vector2F screenPosition) const {
         return screenPosition / zoomFactor + leftTopCorner;
     }
 
@@ -71,15 +71,15 @@ public:
         return screenSize / zoomFactor;
     }
 
-    [[nodiscard]] Vector2 worldVectorToScreenVector(Vector2 worldVector) const {
+    [[nodiscard]] Vector2F worldVectorToScreenVector(Vector2F worldVector) const {
         return worldVector * zoomFactor;
     }
 
-    [[nodiscard]] Vector2 screenVectorToWorldVector(Vector2 screenVector) const {
+    [[nodiscard]] Vector2F screenVectorToWorldVector(Vector2F screenVector) const {
         return screenVector / zoomFactor;
     }
 
-    explicit Camera(float viewWidth, float viewHeight, Vector2 position) : baseViewWidth(viewWidth), baseViewHeight(viewHeight),
+    explicit Camera(float viewWidth, float viewHeight, Vector2F position) : baseViewWidth(viewWidth), baseViewHeight(viewHeight),
                                                                            position(position) {
         updateLeftTopCorner();
     };

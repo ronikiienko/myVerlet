@@ -32,7 +32,7 @@ private:
                 // offset is trying to fix this problem
                 const float offset = static_cast<float>(i) * 1e-6f;
 
-                const Vector2 newVelocity = object.getVelocity() * consts::wallsDamping;
+                const Vector2F newVelocity = object.getVelocity() * consts::wallsDamping;
                 if (object.posCurr.x < minX) {
                     object.posCurr.x = bounds.getX1() + consts::objectsRadius + offset;
                     object.posOld.x = object.posCurr.x + newVelocity.x;
@@ -70,7 +70,7 @@ private:
 //                // offset is trying to fix this problem
 //                const float offset = static_cast<float>(i) * 1e-6f;
 //
-//                const Vector2 velocity = (object.posCurr - object.posOld) * wallsDamping;
+//                const Vector2F velocity = (object.posCurr - object.posOld) * wallsDamping;
 //                if (object.posCurr.x < bounds.getX1() + objectsRadius) {
 //                    object.posCurr.x = bounds.getX1() + objectsRadius + offset;
 //                    object.posOld.x = object.posCurr.x + velocity.x;
@@ -98,7 +98,7 @@ private:
 //    }
 
     void solveContact(BasicDetails &obj1, BasicDetails &obj2) {
-        const Vector2 vectorBetween = obj1.posCurr - obj2.posCurr;
+        const Vector2F vectorBetween = obj1.posCurr - obj2.posCurr;
         const float dist2 = vectorBetween.magnitude2();
         // Check overlapping
         if (dist2 < consts::twoObjectsRadiusSquared) {
@@ -107,7 +107,7 @@ private:
 
             const float dist = std::sqrt(dist2);
             if (dist == 0) return;
-            const Vector2 normal = vectorBetween / dist;
+            const Vector2F normal = vectorBetween / dist;
             const float delta = 0.5f * consts::collisionRestitution * (dist - consts::twoObjectsRadius);
             // Update positions
             if (!obj1.isPinned) obj1.posCurr -= normal * delta;
@@ -115,7 +115,7 @@ private:
         }
     }
 //    void solveContact(BaseObject &obj1, BaseObject &obj2) {
-//        Vector2 move = obj1.posCurr - obj2.posCurr;
+//        Vector2F move = obj1.posCurr - obj2.posCurr;
 //        const float dist2 = move.magnitude2();
 //        const float min_dist = obj1.radius + obj2.radius;
 //        // Check overlapping

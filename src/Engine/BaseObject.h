@@ -9,23 +9,23 @@ class BaseObject;
 class BasicDetails {
 public:
     BaseObject* parent = nullptr;
-    Vector2 posCurr, posOld, acceleration = Vector2::cart();
+    Vector2F posCurr, posOld, acceleration = Vector2F::cart();
     sf::Color color = sf::Color::White;
     bool isPinned = false;
 
-    void setVelocity(Vector2 v) {
+    void setVelocity(Vector2F v) {
         posOld = posCurr - v;
     }
 
-    [[nodiscard]] Vector2 getVelocity()const {
+    [[nodiscard]] Vector2F getVelocity()const {
         return posCurr - posOld;
     }
 
-    void addVelocity(Vector2 v) {
+    void addVelocity(Vector2F v) {
         setVelocity(getVelocity() + v);
     }
 
-    void accelerate(Vector2 a) {
+    void accelerate(Vector2F a) {
         acceleration += a;
     }
 
@@ -37,7 +37,7 @@ public:
     }
 
     void update(float dt) {
-        Vector2 velocity = posCurr - posOld;
+        Vector2F velocity = posCurr - posOld;
         velocity *= consts::linearDamping;
         // TODO review maby limiting not needed
         velocity.limitMagnitude(consts::maxVelocity);
@@ -45,10 +45,10 @@ public:
         posOld = posCurr;
         posCurr += velocity + (acceleration * (dt * dt));
 
-        acceleration = Vector2::cart();
+        acceleration = Vector2F::cart();
     }
 
-    explicit BasicDetails(Vector2 position) : posCurr(position), posOld(position) {
+    explicit BasicDetails(Vector2F position) : posCurr(position), posOld(position) {
     };
 
     void log() const {

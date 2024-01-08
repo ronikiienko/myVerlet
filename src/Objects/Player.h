@@ -81,7 +81,7 @@ public:
                                                                              sf::Mouse::Left) {
                                                                              shooter.setPosition(basicDetails->posCurr);
                                                                              shooter.shoot(camera.screenPosToWorldPos(
-                                                                                     Vector2::cart(
+                                                                                     Vector2F::cart(
                                                                                              static_cast<float>(event.mouseButton.x),
                                                                                              static_cast<float>(event.mouseButton.y))));
                                                                          }
@@ -101,20 +101,20 @@ public:
         }
         camera.setPosition((basicDetails->posCurr * 0.2 + camera.position * 1.8) / 2);
         if (movingUp) {
-//            setVelocity(Vector2::cart(0, -movementSpeed));
-            basicDetails->accelerate(Vector2::cart(0, -movementSpeed));
+//            setVelocity(Vector2F::cart(0, -movementSpeed));
+            basicDetails->accelerate(Vector2F::cart(0, -movementSpeed));
         }
         if (movingDown) {
-//            setVelocity(Vector2::cart(0, movementSpeed));
-            basicDetails->accelerate(Vector2::cart(0, movementSpeed));
+//            setVelocity(Vector2F::cart(0, movementSpeed));
+            basicDetails->accelerate(Vector2F::cart(0, movementSpeed));
         }
         if (movingLeft) {
-//            setVelocity(Vector2::cart(-movementSpeed, 0));
-            basicDetails->accelerate(Vector2::cart(-movementSpeed, 0));
+//            setVelocity(Vector2F::cart(-movementSpeed, 0));
+            basicDetails->accelerate(Vector2F::cart(-movementSpeed, 0));
         }
         if (movingRight) {
-//            setVelocity(Vector2::cart(movementSpeed, 0));
-            basicDetails->accelerate(Vector2::cart(movementSpeed, 0));
+//            setVelocity(Vector2F::cart(movementSpeed, 0));
+            basicDetails->accelerate(Vector2F::cart(movementSpeed, 0));
         }
         if (isBraking) {
             basicDetails->setVelocity(basicDetails->getVelocity() * 0.95);

@@ -37,7 +37,7 @@ public:
         threadPool.dispatch(atomWorld.getObjectsCount(), [this](int start, int end) {
             float objectSize = camera.worldSizeToScreenSize(consts::objectsRadius);
             atomWorld.forEachBasicDetails([this, objectSize](BasicDetails &object, int i) {
-                Vector2 screenPos = camera.worldPosToScreenPos(object.posCurr);
+                Vector2F screenPos = camera.worldPosToScreenPos(object.posCurr);
 
                 const int ind = i * 4;
 

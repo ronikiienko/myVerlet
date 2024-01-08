@@ -7,7 +7,7 @@
 
 class Shooter {
 private:
-    Vector2 position;
+    Vector2F position;
     Angle direction = Angle::fromDegrees(0);
     float speed;
     int width;
@@ -18,7 +18,7 @@ private:
 public:
 
 
-    Shooter(Vector2 position, float speed, int width, float interval, AtomWorld &atomWorld,
+    Shooter(Vector2F position, float speed, int width, float interval, AtomWorld &atomWorld,
             int rowsNum, ExplosionHandler& explosionHandler) : position(position), speed(speed), width(width), interval(interval),
                                                                atomWorld(atomWorld), rowsNum(rowsNum), explosionHandler(explosionHandler) {}
 
@@ -30,11 +30,11 @@ public:
         direction = angle;
     }
 
-    void move(Vector2 vector) {
+    void move(Vector2F vector) {
         position += vector;
     }
 
-    void setPosition(Vector2 vector) {
+    void setPosition(Vector2F vector) {
         position = vector;
     }
 
@@ -43,25 +43,25 @@ public:
     }
 
 
-    void shoot(Vector2 target) {
+    void shoot(Vector2F target) {
         pointTo(target);
-        Vector2 rowOffset = Vector2::cart(0, 0);
+        Vector2F rowOffset = Vector2F::cart(0, 0);
         for (int row = 0; row < rowsNum; row++) {
             const Angle rowDirection = direction + Angle::fromDegrees(90);
-            const Vector2 move = Vector2::polar(interval, rowDirection);
-            const Vector2 initialVelocity = Vector2::polar(speed, direction);
+            const Vector2F move = Vector2F::polar(interval, rowDirection);
+            const Vector2F initialVelocity = Vector2F::polar(speed, direction);
             const int leftOffset = width / 2;
-            Vector2 currentPosition = position - (move * static_cast<float>(leftOffset)) + rowOffset;
+            Vector2F currentPosition = position - (move * static_cast<float>(leftOffset)) + rowOffset;
             for (int i = 0; i < width; i++) {
-                auto ptr = atomWorld.addObject(Bullet(explosionHandler), currentPosition + Vector2::cart(5, 5));
+                auto ptr = atomWorld.addObject(Bullet(explosionHandler), currentPosition + Vector2F::cart(5, 5));
                 ptr.lock()->basicDetails->setVelocity(initialVelocity);
                 currentPosition += move;
             }
-            rowOffset += Vector2::polar(interval, direction);
+            rowOffset += Vector2F::polar(interval, direction);
         }
     }
 
-    void pointTo(Vector2 point) {
+    void pointTo(Vector2F point) {
         direction = Angle::fromRadians(std::atan2(point.y - position.y, point.x - position.x));
     }
 };

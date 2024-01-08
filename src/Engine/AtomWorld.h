@@ -24,7 +24,7 @@ public:
     }
 
     template<typename T>
-    std::weak_ptr<BaseObject> addObject(T &&object, Vector2 position) {
+    std::weak_ptr<BaseObject> addObject(T &&object, Vector2F position) {
         basicDetails.emplace_back(position);
         object.basicDetails = &basicDetails.back();
 
@@ -97,7 +97,7 @@ public:
         });
     }
 
-    void forEachInRadius(Vector2 pos, float radius, std::function<void(BaseObject*, int)> callback) {
+    void forEachInRadius(Vector2F pos, float radius, std::function<void(BaseObject*, int)> callback) {
 //        forEachBasicDetails([&](BasicDetails &details, int ind) {
 //            if ((details.posCurr - pos).magnitude2() < radius * radius) {
 //                callback(details.parent, ind);
