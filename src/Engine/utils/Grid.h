@@ -121,4 +121,28 @@ struct IdGrid {
         int index = gridY * width + gridX;
         return data[index];
     }
+
+    // not actually in radius.. it's grid so it will be just a "broad phase" (not detailed, just rough)
+    template<typename Func>
+    void forEachInRadius(Vector2 position, float radius, Func&& callback) {
+        const int gridX = static_cast<int>(position.x * inverseWidthRatio);
+        const int gridY = static_cast<int>(position.y * inverseHeightRatio);
+
+        const int radiusInCells = static_cast<int>(radius * inverseWidthRatio);
+
+        const int startGridX = std::max(0, gridX - radiusInCells);
+        const int endGridX = std::min(width - 1, gridX + radiusInCells);
+        const int startGridY = std::max(0, gridY - radiusInCells);
+        const int endGridY = std::min(height - 1, gridY + radiusInCells);
+
+        for (int i = startGridX; i <= endGridX; i++) {
+            for (int j = startGridY; j <= endGridY; j++) {
+                const Cell &cell = get(i,j);
+
+                for (int k = 0; k < cell.activeCount; k++) {
+                    callback(cell.ids[k]);
+                }
+            }
+        }
+    }
 };

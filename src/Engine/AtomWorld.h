@@ -98,9 +98,14 @@ public:
     }
 
     void forEachInRadius(Vector2 pos, float radius, std::function<void(BaseObject*, int)> callback) {
-        forEachBasicDetails([&](BasicDetails &details, int ind) {
-            if ((details.posCurr - pos).magnitude2() < radius * radius) {
-                callback(details.parent, ind);
+//        forEachBasicDetails([&](BasicDetails &details, int ind) {
+//            if ((details.posCurr - pos).magnitude2() < radius * radius) {
+//                callback(details.parent, ind);
+//            }
+//        });
+        grid.forEachInRadius(pos, radius, [&](int id) {
+            if ((basicDetails[id].posCurr - pos).magnitude2() < radius * radius) {
+                callback(basicDetails[id].parent, id);
             }
         });
     }
