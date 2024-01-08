@@ -11,11 +11,11 @@ private:
 public:
     float x, y;
 
-    constexpr static Vector2 fromCartesian(float x = 0, float y = 0) {
+    constexpr static Vector2 cart(float x = 0, float y = 0) {
         return Vector2{x, y};
     }
 
-    constexpr static Vector2 fromPolar(float magnitude, const Angle &angle) {
+    constexpr static Vector2 polar(float magnitude, const Angle &angle) {
         float angleRadians = angle.getRadians();
 
         float x = magnitude * std::cos(angleRadians);

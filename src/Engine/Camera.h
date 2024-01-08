@@ -3,14 +3,14 @@
 
 class Camera {
 public:
-    Vector2 position = Vector2::fromCartesian(0,0); // position itself (storing left top corner would make rotation very hard)
-    Vector2 leftTopCorner = Vector2::fromCartesian(0,0); // position of the left top corner of the camera (just for to not calculate it every time)
+    Vector2 position = Vector2::cart(0, 0); // position itself (storing left top corner would make rotation very hard)
+    Vector2 leftTopCorner = Vector2::cart(0, 0); // position of the left top corner of the camera (just for to not calculate it every time)
     float baseViewWidth = 100;
     float baseViewHeight = 100;
     float zoomFactor = 1;
 
     void updateLeftTopCorner() {
-        leftTopCorner = Vector2::fromCartesian(getX1(), getY1());
+        leftTopCorner = Vector2::cart(getX1(), getY1());
     }
 
     void move(Vector2 delta) {

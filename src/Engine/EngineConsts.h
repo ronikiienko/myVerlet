@@ -7,7 +7,7 @@
 
 namespace consts {
     const int maxObjectNum = 200000;
-    constexpr Vector2 gravity = Vector2::fromCartesian(0, 0);
+    constexpr Vector2 gravity = Vector2::cart(0, 0);
     constexpr RectangleI worldBounds = RectangleI::fromSize(0, 0, 2400, 1800);
     constexpr RectangleI windowBounds = RectangleI::fromSize(0, 0, 2400, 1800);
     constexpr int objectsRadius = 2;

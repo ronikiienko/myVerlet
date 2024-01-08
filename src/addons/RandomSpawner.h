@@ -16,7 +16,7 @@ public:
             auto ptr = atomWorld.addObject(
 
                     BaseObject(),
-                    Vector2::fromCartesian
+                    Vector2::cart
                             (
                                     gen.getInRange
                                             (

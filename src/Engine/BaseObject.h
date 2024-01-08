@@ -9,7 +9,7 @@ class BaseObject;
 class BasicDetails {
 public:
     BaseObject* parent = nullptr;
-    Vector2 posCurr, posOld, acceleration = Vector2::fromCartesian();
+    Vector2 posCurr, posOld, acceleration = Vector2::cart();
     sf::Color color = sf::Color::White;
     bool isPinned = false;
 
@@ -45,7 +45,7 @@ public:
         posOld = posCurr;
         posCurr += velocity + (acceleration * (dt * dt));
 
-        acceleration = Vector2::fromCartesian();
+        acceleration = Vector2::cart();
     }
 
     explicit BasicDetails(Vector2 position) : posCurr(position), posOld(position) {

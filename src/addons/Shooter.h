@@ -45,19 +45,19 @@ public:
 
     void shoot(Vector2 target) {
         pointTo(target);
-        Vector2 rowOffset = Vector2::fromCartesian(0, 0);
+        Vector2 rowOffset = Vector2::cart(0, 0);
         for (int row = 0; row < rowsNum; row++) {
             const Angle rowDirection = direction + Angle::fromDegrees(90);
-            const Vector2 move = Vector2::fromPolar(interval, rowDirection);
-            const Vector2 initialVelocity = Vector2::fromPolar(speed, direction);
+            const Vector2 move = Vector2::polar(interval, rowDirection);
+            const Vector2 initialVelocity = Vector2::polar(speed, direction);
             const int leftOffset = width / 2;
             Vector2 currentPosition = position - (move * static_cast<float>(leftOffset)) + rowOffset;
             for (int i = 0; i < width; i++) {
-                auto ptr = atomWorld.addObject(Bullet(explosionHandler), currentPosition + Vector2::fromCartesian(5, 5));
+                auto ptr = atomWorld.addObject(Bullet(explosionHandler), currentPosition + Vector2::cart(5, 5));
                 ptr.lock()->basicDetails->setVelocity(initialVelocity);
                 currentPosition += move;
             }
-            rowOffset += Vector2::fromPolar(interval, direction);
+            rowOffset += Vector2::polar(interval, direction);
         }
     }
 

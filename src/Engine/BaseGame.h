@@ -20,7 +20,7 @@ class BaseGame {
     PerformanceMonitor performanceMonitor{window, atomWorld};
     InputHandler inputHandler{window};
     Camera camera{static_cast<float>(window.getSize().x), static_cast<float>(window.getSize().y),
-                  Vector2::fromCartesian(1200, 900)};
+                  Vector2::cart(1200, 900)};
     std::unique_ptr<BaseLevel> level;
 
     void startLoop() {
