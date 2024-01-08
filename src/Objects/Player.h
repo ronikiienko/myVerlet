@@ -39,7 +39,7 @@ public:
 
     void onInit() override {
         std::cout << "onInit" << std::endl;
-        keyPressedListenerId = inputHandler.addEventListener(sf::Event::KeyPressed, [this](sf::Event &event) {
+        keyPressedListenerId = inputHandler.addEventListener(sf::Event::KeyPressed, [this](const sf::Event &event) {
             if (event.key.code == sf::Keyboard::W) {
                 movingUp = true;
             }
@@ -56,7 +56,7 @@ public:
                 isBraking = true;
             }
         });
-        keyReleasedListenerId = inputHandler.addEventListener(sf::Event::KeyReleased, [this](sf::Event &event) {
+        keyReleasedListenerId = inputHandler.addEventListener(sf::Event::KeyReleased, [this](const sf::Event &event) {
             if (event.key.code == sf::Keyboard::W) {
                 movingUp = false;
             }
@@ -74,7 +74,7 @@ public:
             }
         });
         mouseButtonPressedListenerId = inputHandler.addEventListener(sf::Event::MouseButtonPressed,
-                                                                     [this](sf::Event &event) {
+                                                                     [this](const sf::Event &event) {
                                                                          if (event.mouseButton.button ==
                                                                              sf::Mouse::Left) {
                                                                              shooter.setPosition(basicDetails->posCurr);
@@ -84,7 +84,7 @@ public:
                                                                                              static_cast<float>(event.mouseButton.y))));
                                                                          }
                                                                      });
-        inputHandler.addEventListener(sf::Event::MouseWheelScrolled, [&](sf::Event &event) {
+        inputHandler.addEventListener(sf::Event::MouseWheelScrolled, [&](const sf::Event &event) {
             if (event.mouseWheelScroll.delta > 0) {
                 scene.getCamera().zoom(1.5);
             } else {

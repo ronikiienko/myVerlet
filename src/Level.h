@@ -18,7 +18,7 @@ public:
     void onInit() override {
         randomSpawner.spawn(150000);
         scene.addObject(Player{inputHandler, shooter, scene}, Vector2F::cart(100, 100));
-        inputHandler.addEventListener(sf::Event::KeyPressed, [&](sf::Event &event) {
+        inputHandler.addEventListener(sf::Event::KeyPressed, [&](const sf::Event &event) {
             if (event.key.code == sf::Keyboard::BackSpace) {
                 scene.clear();
             }
@@ -27,7 +27,7 @@ public:
                 randomSpawner.spawn(5000);
             }
         });
-        inputHandler.addEventListener(sf::Event::MouseButtonPressed, [&](sf::Event &event) {
+        inputHandler.addEventListener(sf::Event::MouseButtonPressed, [&](const sf::Event &event) {
             if (event.mouseButton.button == sf::Mouse::Right) {
                 explosionHandler.launch(
                         scene.getCamera().screenPosToWorldPos(Vector2F::cart(static_cast<float>(event.mouseButton.x),
