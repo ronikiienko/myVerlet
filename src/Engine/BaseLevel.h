@@ -70,13 +70,12 @@ public:
             scene.removeMarkedObjects();
             performanceMonitor.end("removingMarked");
 
+            performanceMonitor.setObjectsCount(scene.getObjectsCount());
             performanceMonitor.end("total");
         }
     }
 
     virtual void onInit() {}
 
-    virtual void onTick() {
-        performanceMonitor.setObjectsCount(scene.getObjectsCount());
-    }
+    virtual void onTick() {}
 };
