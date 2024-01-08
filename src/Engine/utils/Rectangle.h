@@ -12,6 +12,10 @@ public:
         return {x1, y1, x2, y2};
     }
 
+    constexpr static Rectangle fromCoords(Vector2<T> p1, Vector2<T> p2) {
+        return {p1.x, p1.y, p2.x, p2.y};
+    }
+
     constexpr static Rectangle fromSize(T x1, T y1, T width, T height) {
         return {x1, y1, x1 + width, y1 + height};
     }
@@ -43,6 +47,14 @@ public:
 
     [[nodiscard]] constexpr T getHeight() const {
         return y2 - y1;
+    }
+
+    [[nodiscard]] constexpr Vector2<T> getP1() {
+        return {x1, y1};
+    }
+
+    [[nodiscard]] constexpr Vector2<T> getP2() {
+        return {x2, y2};
     }
 };
 
