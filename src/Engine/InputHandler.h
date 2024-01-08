@@ -19,15 +19,16 @@ public:
             } else {
                 auto &eventTypeCallbacks = eventHandlers[event.type];
                 for (auto &pair: eventTypeCallbacks) {
+                    std::cout << "Joystick: " << event.joystickButton.joystickId << std::endl;
                     pair.second(event);
                 }
             }
         }
     }
 
-    template<typename T>
-    int addEventListener(sf::Event::EventType type, T && callback) {
-        eventHandlers[type][keyCounter] = std::forward<T>(callback);
+
+    int addEventListener(sf::Event::EventType type, const std::function<void(const sf::Event &)>& callback) {
+        eventHandlers[type][keyCounter] = callback;
         keyCounter++;
         return keyCounter - 1;
     }
