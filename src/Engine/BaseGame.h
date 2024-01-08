@@ -14,13 +14,12 @@ class BaseGame {
                                                              consts::windowBounds.getHeight()), "Verlet",
                                                sf::Style::Default, sf::ContextSettings(0, 0, 1));
     ThreadPool threadPool{consts::numThreads};
-    Scene scene{consts::worldBounds};
-    Graphics graphics{scene, window, threadPool, performanceMonitor, camera};
+    Scene scene{consts::worldBounds, Camera{static_cast<float>(window.getSize().x), static_cast<float>(window.getSize().y),
+                                      Vector2F::cart(1200, 900)}};
+    Graphics graphics{scene, window, threadPool, performanceMonitor};
     Physics physics{scene, threadPool, performanceMonitor};
     PerformanceMonitor performanceMonitor{window, scene};
     InputHandler inputHandler{window};
-    Camera camera{static_cast<float>(window.getSize().x), static_cast<float>(window.getSize().y),
-                  Vector2F::cart(1200, 900)};
     std::unique_ptr<BaseLevel> level;
 
     void startLoop() {
@@ -65,7 +64,7 @@ public:
     template<typename T>
     void setLevel() {
         scene.clear();
-        std::unique_ptr<T> ptr = std::make_unique<T>(LevelContext(scene, camera, inputHandler));
+        std::unique_ptr<T> ptr = std::make_unique<T>(LevelContext(scene, inputHandler));
         level = std::move(ptr);
         level->onInit();
     }

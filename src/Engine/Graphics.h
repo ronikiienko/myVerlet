@@ -15,13 +15,11 @@ private:
     ThreadPool &threadPool;
     sf::Texture objectTexture;
     PerformanceMonitor &performanceMonitor;
-    Camera &camera;
     float textureSize;
 public:
     explicit Graphics(Scene &scene, sf::RenderWindow &window, ThreadPool &threadPool,
-                      PerformanceMonitor &performanceMonitor, Camera &camera)
-            : scene(scene), window(window), threadPool(threadPool), performanceMonitor(performanceMonitor),
-              camera(camera) {
+                      PerformanceMonitor &performanceMonitor)
+            : scene(scene), window(window), threadPool(threadPool), performanceMonitor(performanceMonitor) {
         objectVertexArray.setPrimitiveType(sf::Quads);  // Initialize with Quads
         // TODO somehow organise resources, because now path depends on where executable is. Same for fonts in performance monitor
         if (!objectTexture.loadFromFile("./res/circle.png")) {
@@ -35,9 +33,9 @@ public:
     void updateObjectsArray() {
         objectVertexArray.resize(scene.getObjectsCount() * 4);
         threadPool.dispatch(scene.getObjectsCount(), [this](int start, int end) {
-            float objectSize = camera.worldSizeToScreenSize(consts::objectsRadius);
+            float objectSize = scene.getCamera().worldSizeToScreenSize(consts::objectsRadius);
             scene.forEachBasicDetails([this, objectSize](BasicDetails &object, int i) {
-                Vector2F screenPos = camera.worldPosToScreenPos(object.posCurr);
+                Vector2F screenPos = scene.getCamera().worldPosToScreenPos(object.posCurr);
 
                 const int ind = i * 4;
 

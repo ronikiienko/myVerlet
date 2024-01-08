@@ -5,6 +5,7 @@
 #include "BaseObject.h"
 #include "EngineConsts.h"
 #include "utils/Grid.h"
+#include "Camera.h"
 
 
 class Scene {
@@ -14,10 +15,11 @@ private:
     std::vector<int> objectsToRemove;
     RectangleF boundsF;
     RectangleI boundsI;
+    Camera camera;
 public:
     IdGrid grid{consts::collisionGridWidth, consts::collisionGridHeight, getBoundsI()};
 
-    explicit Scene(RectangleI bounds) : boundsF(RectangleF::fromOther(bounds)), boundsI(bounds) {
+    explicit Scene(RectangleI bounds, Camera camera) : boundsF(RectangleF::fromOther(bounds)), boundsI(bounds), camera(camera)  {
         objects.reserve(consts::maxObjectNum);
         basicDetails.reserve(consts::maxObjectNum);
         objectsToRemove.reserve(consts::maxObjectNum);
@@ -37,7 +39,9 @@ public:
         return {objects[index]};
     }
 
-
+    Camera& getCamera() {
+        return camera;
+    }
 
 
     template<typename Func>
