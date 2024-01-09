@@ -11,9 +11,10 @@ struct LevelContext {
     sf::RenderWindow &window;
     ThreadPool &threadPool;
     EventBus &eventBus;
-    SoundManager& soundManager;
+    SoundManager &soundManager;
 
-    LevelContext(sf::RenderWindow &window, ThreadPool &threadPool, EventBus& eventBus, SoundManager& soundManager) : window(window), threadPool(threadPool), eventBus(eventBus), soundManager(soundManager) {}
+    LevelContext(sf::RenderWindow &window, ThreadPool &threadPool, EventBus &eventBus, SoundManager &soundManager)
+            : window(window), threadPool(threadPool), eventBus(eventBus), soundManager(soundManager) {}
 };
 
 class BaseLevel {
@@ -26,9 +27,12 @@ protected:
     sf::RenderWindow &window;
     ThreadPool &threadPool;
     EventBus &eventBus;
+    SoundManager &soundManager;
 public:
 
-    explicit BaseLevel(LevelContext levelContext) : window(levelContext.window), threadPool(levelContext.threadPool), eventBus(levelContext.eventBus),
+    explicit BaseLevel(LevelContext levelContext) : window(levelContext.window), threadPool(levelContext.threadPool),
+                                                    eventBus(levelContext.eventBus),
+                                                    soundManager(levelContext.soundManager),
                                                     scene(
                                                             consts::worldSize,
                                                             Camera{static_cast<float>(levelContext.window.getSize().x),
