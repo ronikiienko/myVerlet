@@ -26,7 +26,7 @@ class TimerManager {
 
     int keyCounter = 0;
 public:
-    void update() {
+    void tick() {
         for (auto &pair : tickTimers) {
             pair.second.tick();
             if (pair.second.isDone()) {

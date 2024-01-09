@@ -43,7 +43,7 @@ public:
         while (window.isOpen()) {
             level->update();
             onTick();
-            timerManager.update();
+            timerManager.tick();
         }
     }
 
