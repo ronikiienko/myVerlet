@@ -11,7 +11,8 @@ private:
     IdGrid& grid;
     ThreadPool &threadPool;
     PerformanceMonitor &performanceMonitor;
-    int currentSubStep = 0;
+
+    int subSteps = consts::physicsSubSteps;
 
     void updatePositionsConstraint(float dt) {
         const Vector2F size = scene.getSizeF();
@@ -219,11 +220,11 @@ public:
               threadPool(threadPool), performanceMonitor(performanceMonitor) {}
 
     void update() {
-        const float subStepDt = consts::physicsInterval / consts::physicsSubSteps;
+        int localSubSteps = subSteps;
 
-        for (int i = 0; i < consts::physicsSubSteps; i++) {
-            currentSubStep = i;
+        const float subStepDt = consts::physicsInterval / static_cast<float>(localSubSteps);
 
+        for (int i = 0; i < localSubSteps; i++) {
             performanceMonitor.start("gravityConstraintsUpdate");
             updatePositionsConstraint(subStepDt);
             performanceMonitor.end("gravityConstraintsUpdate");
@@ -236,6 +237,15 @@ public:
             solveCollisions();
             performanceMonitor.end("collisions");
 
+        }
+    }
+
+    // warning: if setting substeps from onCollision (for example), then subSteps number can change while update is running. For that i use localSubSteps variable
+    void setSubSteps(int subStepsNumber) {
+        if (subStepsNumber > 0 && subStepsNumber < 16) {
+            subSteps = subStepsNumber;
+        } else {
+            throw std::runtime_error("Substeps number should be between 1 and 16");
         }
     }
 };
