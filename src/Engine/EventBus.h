@@ -34,4 +34,8 @@ public:
             pair.second(event);
         }
     }
+
+    int getNumberOfEventTypes() {
+        return static_cast<int>(callbacks.count(typeid(BaseEvent)));
+    }
 };
