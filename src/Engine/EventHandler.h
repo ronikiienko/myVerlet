@@ -7,7 +7,6 @@
 struct BaseEvent {
     BaseEvent() = default;
     virtual ~BaseEvent() = default;
-    virtual void print() const = 0;
 };
 
 class EventManager {
