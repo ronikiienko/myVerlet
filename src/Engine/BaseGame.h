@@ -10,6 +10,7 @@
 #include "BaseLevel.h"
 #include "EventBus.h"
 #include "SoundManager.h"
+#include "TimerManager.h"
 
 class BaseGame {
 protected:
@@ -21,6 +22,7 @@ protected:
     std::unique_ptr<BaseLevel> level;
     EventBus eventBus;
     SoundManager soundManager;
+    TimerManager timerManager;
 public:
     BaseGame() {
         window.setFramerateLimit(60);
@@ -28,7 +30,7 @@ public:
 
     template<typename T>
     void setLevel() {
-        std::unique_ptr<T> ptr = std::make_unique<T>(LevelContext(window, threadPool, eventBus, soundManager));
+        std::unique_ptr<T> ptr = std::make_unique<T>(LevelContext(window, threadPool, eventBus, soundManager, timerManager));
         level = std::move(ptr);
         level->onInit();
     }
@@ -41,6 +43,7 @@ public:
         while (window.isOpen()) {
             level->update();
             onTick();
+            timerManager.update();
         }
     }
 

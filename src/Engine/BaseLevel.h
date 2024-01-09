@@ -6,15 +6,17 @@
 #include "InputHandler.h"
 #include "EventBus.h"
 #include "SoundManager.h"
+#include "TimerManager.h"
 
 struct LevelContext {
     sf::RenderWindow &window;
     ThreadPool &threadPool;
     EventBus &eventBus;
     SoundManager &soundManager;
+    TimerManager &timerManager;
 
-    LevelContext(sf::RenderWindow &window, ThreadPool &threadPool, EventBus &eventBus, SoundManager &soundManager)
-            : window(window), threadPool(threadPool), eventBus(eventBus), soundManager(soundManager) {}
+    LevelContext(sf::RenderWindow &window, ThreadPool &threadPool, EventBus &eventBus, SoundManager &soundManager, TimerManager &timerManager)
+            : window(window), threadPool(threadPool), eventBus(eventBus), soundManager(soundManager), timerManager(timerManager) {}
 };
 
 class BaseLevel {
@@ -28,11 +30,13 @@ protected:
     ThreadPool &threadPool;
     EventBus &eventBus;
     SoundManager &soundManager;
+    TimerManager &timerManager;
 public:
 
     explicit BaseLevel(LevelContext levelContext) : window(levelContext.window), threadPool(levelContext.threadPool),
                                                     eventBus(levelContext.eventBus),
                                                     soundManager(levelContext.soundManager),
+                                                    timerManager(levelContext.timerManager),
                                                     scene(
                                                             consts::worldSize,
                                                             Camera{static_cast<float>(levelContext.window.getSize().x),
