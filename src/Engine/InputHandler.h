@@ -29,8 +29,7 @@ public:
 
     int addEventListener(sf::Event::EventType type, const std::function<void(const sf::Event &)>& callback) {
         eventHandlers[type][keyCounter] = callback;
-        keyCounter++;
-        return keyCounter - 1;
+        return keyCounter++;
     }
 
 
