@@ -19,7 +19,6 @@ public:
             } else {
                 auto &eventTypeCallbacks = eventHandlers[event.type];
                 for (auto &pair: eventTypeCallbacks) {
-                    std::cout << "Joystick: " << event.joystickButton.joystickId << std::endl;
                     pair.second(event);
                 }
             }
