@@ -5,7 +5,10 @@
 
 class Game : public BaseGame {
 public:
-    Game() : BaseGame() {
+    Game() : BaseGame() {}
+
+    void onInit() override {
+        std::cout << "Game init" << std::endl;
         setLevel<Level>();
     }
 };

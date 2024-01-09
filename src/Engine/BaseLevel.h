@@ -44,38 +44,35 @@ public:
 
     }
 
-    void launch() {
-        onInit();
-        while (window.isOpen()) {
-            performanceMonitor.start("total");
+    void update() {
+        performanceMonitor.start("total");
 
-            performanceMonitor.start("physics");
-            physics.update();
-            performanceMonitor.end("physics");
+        performanceMonitor.start("physics");
+        physics.update();
+        performanceMonitor.end("physics");
 
-            performanceMonitor.start("graphics");
-            window.clear(sf::Color::Black);
-            graphics.update();
-            performanceMonitor.draw();
-            window.display();
-            performanceMonitor.end("graphics");
+        performanceMonitor.start("graphics");
+        window.clear(sf::Color::Black);
+        graphics.update();
+        performanceMonitor.draw();
+        window.display();
+        performanceMonitor.end("graphics");
 
-            performanceMonitor.start("input");
-            inputHandler.update();
-            performanceMonitor.end("input");
+        performanceMonitor.start("input");
+        inputHandler.update();
+        performanceMonitor.end("input");
 
-            performanceMonitor.start("onTick");
-            scene.runTick();
-            onTick();
-            performanceMonitor.end("onTick");
+        performanceMonitor.start("onTick");
+        scene.runTick();
+        onTick();
+        performanceMonitor.end("onTick");
 
-            performanceMonitor.start("removingMarked");
-            scene.removeMarkedObjects();
-            performanceMonitor.end("removingMarked");
+        performanceMonitor.start("removingMarked");
+        scene.removeMarkedObjects();
+        performanceMonitor.end("removingMarked");
 
-            performanceMonitor.setObjectsCount(scene.getObjectsCount());
-            performanceMonitor.end("total");
-        }
+        performanceMonitor.setObjectsCount(scene.getObjectsCount());
+        performanceMonitor.end("total");
     }
 
     virtual void onInit() {}

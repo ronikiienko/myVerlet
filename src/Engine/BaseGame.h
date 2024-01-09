@@ -28,6 +28,20 @@ public:
     void setLevel() {
         std::unique_ptr<T> ptr = std::make_unique<T>(LevelContext(window, threadPool, eventBus));
         level = std::move(ptr);
-        level->launch();
+        level->onInit();
     }
+
+    void init() {
+        onInit();
+        if (!level) {
+            throw std::runtime_error("Level should be set in onInit() method");
+        }
+        while (window.isOpen()) {
+            level->update();
+            onTick();
+        }
+    }
+
+    virtual void onInit() {}
+    virtual void onTick() {}
 };
