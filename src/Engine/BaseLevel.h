@@ -4,12 +4,14 @@
 #include "Scene.h"
 #include "Camera.h"
 #include "InputHandler.h"
+#include "EventBus.h"
 
 struct LevelContext {
     sf::RenderWindow &window;
     ThreadPool &threadPool;
+    EventBus &eventBus;
 
-    LevelContext(sf::RenderWindow &window, ThreadPool &threadPool) : window(window), threadPool(threadPool) {}
+    LevelContext(sf::RenderWindow &window, ThreadPool &threadPool, EventBus& eventBus) : window(window), threadPool(threadPool), eventBus(eventBus) {}
 };
 
 class BaseLevel {
@@ -21,9 +23,10 @@ protected:
     InputHandler inputHandler;
     sf::RenderWindow &window;
     ThreadPool &threadPool;
+    EventBus &eventBus;
 public:
 
-    explicit BaseLevel(LevelContext levelContext) : window(levelContext.window), threadPool(levelContext.threadPool),
+    explicit BaseLevel(LevelContext levelContext) : window(levelContext.window), threadPool(levelContext.threadPool), eventBus(levelContext.eventBus),
                                                     scene(
                                                             consts::worldSize,
                                                             Camera{static_cast<float>(levelContext.window.getSize().x),

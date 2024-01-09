@@ -8,6 +8,7 @@
 #include "Physics.h"
 #include "InputHandler.h"
 #include "BaseLevel.h"
+#include "EventBus.h"
 
 class BaseGame {
     sf::RenderWindow window = sf::RenderWindow(sf::VideoMode(consts::windowSize.x,
@@ -16,8 +17,7 @@ class BaseGame {
     ThreadPool threadPool{consts::numThreads};
 
     std::unique_ptr<BaseLevel> level;
-
-
+    EventBus eventBus;
 public:
     BaseGame() {
         window.setFramerateLimit(60);
@@ -25,7 +25,7 @@ public:
 
     template<typename T>
     void setLevel() {
-        std::unique_ptr<T> ptr = std::make_unique<T>(LevelContext(window, threadPool));
+        std::unique_ptr<T> ptr = std::make_unique<T>(LevelContext(window, threadPool, eventBus));
         level = std::move(ptr);
         level->launch();
     }

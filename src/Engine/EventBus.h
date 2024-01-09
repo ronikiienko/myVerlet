@@ -9,7 +9,7 @@ struct BaseEvent {
     virtual ~BaseEvent() = default;
 };
 
-class EventManager {
+class EventBus {
     std::unordered_map<std::type_index, std::unordered_map<int, std::function<void(const BaseEvent &)>>> callbacks;
     int keyCounter = 0;
 public:
