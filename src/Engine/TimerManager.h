@@ -23,6 +23,7 @@ class TimerManager {
     };
 
     std::unordered_map<int, TickTimer> tickTimers;
+    std::unordered_map<int, TickTimer> tickIntervals;
 
     int keyCounter = 0;
 public:
@@ -32,6 +33,13 @@ public:
             if (pair.second.isDone()) {
                 pair.second.callback();
                 tickTimers.erase(pair.first);
+            }
+        }
+        for (auto &pair : tickIntervals) {
+            pair.second.tick();
+            if (pair.second.isDone()) {
+                pair.second.callback();
+                pair.second.ticksLeft = pair.second.ticks;
             }
         }
     }
@@ -46,4 +54,12 @@ public:
     }
 
     // TODO add interval timer
+
+    int addTickInterval(int ticks, const std::function<void()>& callback) {
+        tickIntervals.emplace(keyCounter, TickTimer{ticks, callback});
+    }
+
+    void removeTickInterval(int key) {
+        tickIntervals.erase(key);
+    }
 };
