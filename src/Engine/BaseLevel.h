@@ -5,13 +5,15 @@
 #include "Camera.h"
 #include "InputHandler.h"
 #include "EventBus.h"
+#include "SoundManager.h"
 
 struct LevelContext {
     sf::RenderWindow &window;
     ThreadPool &threadPool;
     EventBus &eventBus;
+    SoundManager& soundManager;
 
-    LevelContext(sf::RenderWindow &window, ThreadPool &threadPool, EventBus& eventBus) : window(window), threadPool(threadPool), eventBus(eventBus) {}
+    LevelContext(sf::RenderWindow &window, ThreadPool &threadPool, EventBus& eventBus, SoundManager& soundManager) : window(window), threadPool(threadPool), eventBus(eventBus), soundManager(soundManager) {}
 };
 
 class BaseLevel {

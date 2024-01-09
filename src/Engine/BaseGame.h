@@ -9,6 +9,7 @@
 #include "InputHandler.h"
 #include "BaseLevel.h"
 #include "EventBus.h"
+#include "SoundManager.h"
 
 class BaseGame {
 protected:
@@ -19,6 +20,7 @@ protected:
 
     std::unique_ptr<BaseLevel> level;
     EventBus eventBus;
+    SoundManager soundManager;
 public:
     BaseGame() {
         window.setFramerateLimit(60);

@@ -27,17 +27,18 @@ set(SOURCES src/main.cpp
         src/addons/Shooter.h
         src/Objects/Bullet.h
         src/Engine/EventBus.h
+        src/Engine/SoundManager.h
 )
 
 project(${PROJECT_NAME})
 
 set(SFML_DIR "C:/Users/ronik/Downloads/SFML-2.6.1-windows-gcc-13.1.0-mingw-64-bit/SFML-2.6.1/lib/cmake/SFML")
-find_package(SFML 2.6.1 COMPONENTS system window graphics REQUIRED)
+find_package(SFML 2.6.1 COMPONENTS system window graphics audio REQUIRED)
 #first to generate profile second to startLoop
 #set(CMAKE_CXX_FLAGS_RELEASE  "-Ofast -frename-registers -funroll-loops -fprofile-generate -fprofile-correction")
 #set(CMAKE_CXX_FLAGS_RELEASE  "-Ofast -frename-registers -funroll-loops -fprofile-use -fprofile-correction")
 set(CMAKE_CXX_STANDARD 23)
 
 add_executable(${PROJECT_NAME} ${SOURCES})
-target_link_libraries(${PROJECT_NAME} sfml-system sfml-window sfml-graphics)
+target_link_libraries(${PROJECT_NAME} sfml-system sfml-window sfml-graphics sfml-audio)
 target_link_options(${PROJECT_NAME} PRIVATE -static-libgcc -static-libstdc++)
