@@ -57,6 +57,7 @@ public:
 
     int addTickInterval(int ticks, const std::function<void()>& callback) {
         tickIntervals.emplace(keyCounter, TickTimer{ticks, callback});
+        return keyCounter++;
     }
 
     void removeTickInterval(int key) {
