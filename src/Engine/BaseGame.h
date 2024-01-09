@@ -11,6 +11,7 @@
 #include "EventBus.h"
 
 class BaseGame {
+protected:
     sf::RenderWindow window = sf::RenderWindow(sf::VideoMode(consts::windowSize.x,
                                                              consts::windowSize.y), "Verlet",
                                                sf::Style::Default, sf::ContextSettings(0, 0, 1));
