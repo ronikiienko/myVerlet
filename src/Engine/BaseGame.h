@@ -20,6 +20,7 @@ protected:
     ThreadPool threadPool{consts::numThreads};
 
     std::unique_ptr<BaseLevel> level;
+    // TODO maby move to level because levels may leave their thrash behind (callbacks)
     EventBus eventBus;
     SoundManager soundManager;
     TimerManager timerManager;
