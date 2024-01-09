@@ -44,4 +44,6 @@ public:
     void removeTickTimer(int key) {
         tickTimers.erase(key);
     }
+
+    // TODO add interval timer
 };
