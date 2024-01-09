@@ -6,7 +6,7 @@ class SoundManager {
 
 public:
     void play(const std::string& path) {
-        if (!music.openFromFile("sound.wav")) {
+        if (!music.openFromFile(path)) {
             throw std::runtime_error("Sound file could not be loaded" + path);
         }
         music.play();
