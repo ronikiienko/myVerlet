@@ -28,7 +28,7 @@ public:
 
     template<typename T>
     void setLevel() {
-        std::unique_ptr<T> ptr = std::make_unique<T>(LevelContext(window, threadPool, eventBus));
+        std::unique_ptr<T> ptr = std::make_unique<T>(LevelContext(window, threadPool, eventBus, soundManager));
         level = std::move(ptr);
         level->onInit();
     }
