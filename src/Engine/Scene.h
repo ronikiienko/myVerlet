@@ -17,13 +17,25 @@ private:
     Vector2F sizeF;
     Vector2I sizeI;
     Camera camera;
-    ThreadPool& threadPool;
-    PerformanceMonitor& performanceMonitor;
-    int maxObjectsNum = engineDefaults::maxObjectsNum;
+    ThreadPool &threadPool;
+    PerformanceMonitor &performanceMonitor;
+    int maxObjectsNum;
+    // collision grid when finding collisions is split on many threads (by columns). To avoid race conditions i use two pass method. This means that grid in fact will be split on numberOfThreads * 2 tasks. So, if we have 10threads
+    // and grid of, say, size 39 will mean that each thread gets 1 task, and 19 remain for "cleanup" function, which is inefficient, because cleanup function (it solves remaining colums) runs on one core
+    // Conclusion: best if grid is divided by threads * 2 without remainder
+    int collisionGridWidth = sizeI.x / (engineDefaults::objectsRadius * 2);
+    int collisionGridHeight = sizeI.y / (engineDefaults::objectsRadius * 2);
 public:
-    IdGrid grid{engineDefaults::collisionGridWidth, engineDefaults::collisionGridHeight, getSizeI()};
+    IdGrid grid{collisionGridWidth, collisionGridHeight, getSizeI()};
 
-    explicit Scene(Vector2I size, Camera camera, ThreadPool& threadPool, PerformanceMonitor& performanceMonitor, int maxObjectsNum) : sizeF(Vector2F::fromOther(size)), sizeI(size), camera(camera), threadPool(threadPool), performanceMonitor(performanceMonitor), maxObjectsNum(maxObjectsNum) {
+    explicit Scene(Camera camera, ThreadPool &threadPool, PerformanceMonitor &performanceMonitor,
+                   int maxObjectsNum, Vector2I size) :
+            sizeF(Vector2F::fromOther(size)),
+            sizeI(size),
+            camera(camera),
+            threadPool(threadPool),
+            performanceMonitor(performanceMonitor),
+            maxObjectsNum(maxObjectsNum) {
         objects.reserve(maxObjectsNum);
         basicDetails.reserve(maxObjectsNum);
         objectsToRemove.reserve(maxObjectsNum);
@@ -47,7 +59,7 @@ public:
         return {objects[index]};
     }
 
-    Camera& getCamera() {
+    Camera &getCamera() {
         return camera;
     }
 
@@ -110,17 +122,18 @@ public:
     }
 
     // TODO not copy callback
-    void forEachInRadius(Vector2F pos, float radius, std::function<void(BaseObject*, int)> callback) {
+    void forEachInRadius(Vector2F pos, float radius, std::function<void(BaseObject *, int)> callback) {
 //        forEachBasicDetails([&](BasicDetails &details, int ind) {
 //            if ((details.posCurr - pos).magnitude2() < radius * radius) {
 //                callback(details.parent, ind);
 //            }
 //        });
-        grid.forEachInRect(RectangleF::fromCoords(pos.x - radius, pos.y - radius, pos.x + radius, pos.y + radius), [&](int id) {
-            if ((basicDetails[id].posCurr - pos).magnitude2() < radius * radius) {
-                callback(basicDetails[id].parent, id);
-            }
-        });
+        grid.forEachInRect(RectangleF::fromCoords(pos.x - radius, pos.y - radius, pos.x + radius, pos.y + radius),
+                           [&](int id) {
+                               if ((basicDetails[id].posCurr - pos).magnitude2() < radius * radius) {
+                                   callback(basicDetails[id].parent, id);
+                               }
+                           });
     }
 
 
@@ -132,7 +145,7 @@ public:
         }
         std::sort(objectsToRemove.begin(), objectsToRemove.end(), std::greater<>());
 
-        for (int i : objectsToRemove) {
+        for (int i: objectsToRemove) {
             objects.erase(objects.begin() + i);
             basicDetails.erase(basicDetails.begin() + i);
         }
@@ -178,6 +191,7 @@ public:
             markObjectForRemoval(index);
         }
     }
+
     void rebuildGrid() {
         performanceMonitor.start("grid clear");
         threadPool.dispatch(grid.length, [this](int start, int end) {

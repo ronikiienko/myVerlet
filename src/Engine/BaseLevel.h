@@ -35,28 +35,33 @@ protected:
     TimerManager &timerManager;
 public:
 
-    explicit BaseLevel(LevelContext levelContext, int maxObjectsNum) : window(levelContext.window),
-                                                                       threadPool(levelContext.threadPool),
-                                                                       eventBus(levelContext.eventBus),
-                                                                       soundManager(levelContext.soundManager),
-                                                                       timerManager(levelContext.timerManager),
-                                                                       scene(
-                                                                               engineDefaults::worldSize,
-                                                                               Camera{static_cast<float>(levelContext.window.getSize().x),
-                                                                                      static_cast<float>(levelContext.window.getSize().y),
-                                                                                      Vector2F::cart(1200, 900),
-                                                                               },
-                                                                               levelContext.threadPool,
-                                                                               performanceMonitor,
-                                                                               maxObjectsNum
-                                                                       ),
-                                                                       graphics(scene, levelContext.window,
-                                                                                levelContext.threadPool,
-                                                                                performanceMonitor),
-                                                                       physics(scene, levelContext.threadPool,
-                                                                               performanceMonitor),
-                                                                       performanceMonitor(levelContext.window),
-                                                                       inputHandler(levelContext.window) {
+    explicit BaseLevel(
+            LevelContext levelContext,
+            int maxObjectsNum = engineDefaults::maxObjectsNum,
+            Vector2I worldSize = engineDefaults::worldSize
+    ) :
+            window(levelContext.window),
+            threadPool(levelContext.threadPool),
+            eventBus(levelContext.eventBus),
+            soundManager(levelContext.soundManager),
+            timerManager(levelContext.timerManager),
+            scene(
+                    Camera{static_cast<float>(levelContext.window.getSize().x),
+                           static_cast<float>(levelContext.window.getSize().y),
+                           Vector2F::cart(1200, 900),
+                    },
+                    levelContext.threadPool,
+                    performanceMonitor,
+                    maxObjectsNum,
+                    worldSize
+            ),
+            graphics(scene, levelContext.window,
+                     levelContext.threadPool,
+                     performanceMonitor),
+            physics(scene, levelContext.threadPool,
+                    performanceMonitor),
+            performanceMonitor(levelContext.window),
+            inputHandler(levelContext.window) {
 
 
     }
