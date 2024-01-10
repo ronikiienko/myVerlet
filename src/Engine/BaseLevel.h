@@ -14,11 +14,12 @@ struct LevelContext {
     EventBus &eventBus;
     SoundManager &soundManager;
     TimerManager &timerManager;
+    InputHandler &inputHandler;
 
     LevelContext(sf::RenderWindow &window, ThreadPool &threadPool, EventBus &eventBus, SoundManager &soundManager,
-                 TimerManager &timerManager)
+                 TimerManager &timerManager, InputHandler &inputHandler)
             : window(window), threadPool(threadPool), eventBus(eventBus), soundManager(soundManager),
-              timerManager(timerManager) {}
+              timerManager(timerManager), inputHandler(inputHandler) {}
 };
 
 class BaseLevel {
@@ -27,10 +28,10 @@ protected:
     Graphics graphics;
     Physics physics;
     PerformanceMonitor performanceMonitor;
-    InputHandler inputHandler;
     sf::RenderWindow &window;
     ThreadPool &threadPool;
     EventBus &eventBus;
+    InputHandler &inputHandler;
     SoundManager &soundManager;
     TimerManager &timerManager;
 public:
@@ -45,6 +46,7 @@ public:
             eventBus(levelContext.eventBus),
             soundManager(levelContext.soundManager),
             timerManager(levelContext.timerManager),
+            inputHandler(levelContext.inputHandler),
             scene(
                     Camera{static_cast<float>(levelContext.window.getSize().x),
                            static_cast<float>(levelContext.window.getSize().y),
@@ -60,8 +62,7 @@ public:
                      performanceMonitor),
             physics(scene, levelContext.threadPool,
                     performanceMonitor),
-            performanceMonitor(levelContext.window),
-            inputHandler(levelContext.window) {
+            performanceMonitor(levelContext.window) {
 
 
     }

@@ -22,6 +22,7 @@ protected:
     std::unique_ptr<BaseLevel> level;
     // TODO maby move to level because levels may leave their thrash behind (callbacks)
     EventBus eventBus;
+    InputHandler inputHandler{window};
     SoundManager soundManager;
     TimerManager timerManager;
 public:
@@ -31,7 +32,7 @@ public:
 
     template<typename T>
     void setLevel() {
-        std::unique_ptr<T> ptr = std::make_unique<T>(LevelContext(window, threadPool, eventBus, soundManager, timerManager));
+        std::unique_ptr<T> ptr = std::make_unique<T>(LevelContext(window, threadPool, eventBus, soundManager, timerManager, inputHandler));
         level = std::move(ptr);
         level->onInit();
     }
