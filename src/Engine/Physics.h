@@ -4,6 +4,7 @@
 #include "SFML/Graphics/RenderWindow.hpp"
 #include "utils/Grid.h"
 #include "PerformanceMonitor.h"
+#include "EngineConsts.h"
 
 class Physics {
 private:
@@ -39,7 +40,7 @@ private:
                     velocity.limitMagnitude(maxVelocity);
 
                     object.posOld = object.posCurr;
-                    object.posCurr += velocity + (object.acceleration * (dt * dt));
+                    object.posCurr += velocity + (object.acceleration * dt);
 
                     object.acceleration = Vector2F::cart();
                 }

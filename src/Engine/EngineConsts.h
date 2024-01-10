@@ -11,8 +11,6 @@ namespace engineDefaults {
     constexpr int twoObjectsRadius = objectsRadius + objectsRadius;
     constexpr int twoObjectsRadiusSquared = twoObjectsRadius * twoObjectsRadius;
 
-    const float physicsInterval = 0.016f;
-
     constexpr Vector2I worldSize = Vector2I::cart(2400, 1800);
     const int maxObjectsNum = 200000;
     constexpr Vector2F gravity = Vector2F::cart(0, 0);
@@ -22,5 +20,7 @@ namespace engineDefaults {
     const float maxVelocity = 4;
     const float linearDamping = 0.9992f;
     const short numThreads = 4;
+    // actually, only thing it does is affecting how much given acceleration affects velocity
+    const float physicsInterval = 0.001f;
 }
 
