@@ -252,7 +252,7 @@ public:
         }
     }
 
-    int getSubSteps() {
+    [[nodiscard]] int getSubSteps() const {
         return subSteps;
     }
 
@@ -260,7 +260,7 @@ public:
         collisionsEnabled = enabled;
     }
 
-    bool getCollisionsEnabled() {
+    [[nodiscard]] bool getCollisionsEnabled() const {
         return collisionsEnabled;
     }
 };
