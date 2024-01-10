@@ -13,6 +13,7 @@ private:
     PerformanceMonitor &performanceMonitor;
 
     int subSteps = consts::physicsSubSteps;
+    bool collisionsEnabled = true;
 
     void updatePositionsConstraint(float dt) {
         const Vector2F size = scene.getSizeF();
@@ -221,6 +222,7 @@ public:
 
     void update() {
         int localSubSteps = subSteps;
+        bool localCollisionsEnabled = collisionsEnabled;
 
         const float subStepDt = consts::physicsInterval / static_cast<float>(localSubSteps);
 
@@ -233,10 +235,11 @@ public:
             scene.rebuildGrid();
             performanceMonitor.end("grid");
 
-            performanceMonitor.start("collisions");
-            solveCollisions();
-            performanceMonitor.end("collisions");
-
+            if (localCollisionsEnabled) {
+                performanceMonitor.start("collisions");
+                solveCollisions();
+                performanceMonitor.end("collisions");
+            }
         }
     }
 
@@ -247,6 +250,10 @@ public:
         } else {
             throw std::runtime_error("Substeps number should be between 1 and 16");
         }
+    }
+
+    void setCollisionsEnabled(bool enabled) {
+        collisionsEnabled = enabled;
     }
 };
 
