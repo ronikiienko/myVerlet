@@ -16,6 +16,7 @@ private:
     bool collisionsEnabled = true;
     float maxVelocity = consts::maxVelocity;
     Vector2F gravity = consts::gravity;
+    float collisionRestitution = consts::collisionRestitution;
 
     void updatePositionsConstraint(float dt) {
         const Vector2F size = scene.getSizeF();
@@ -121,7 +122,7 @@ private:
             const float dist = std::sqrt(dist2);
             if (dist == 0) return;
             const Vector2F normal = vectorBetween / dist;
-            const float delta = 0.5f * consts::collisionRestitution * (dist - consts::twoObjectsRadius);
+            const float delta = 0.5f * collisionRestitution * (dist - consts::twoObjectsRadius);
             // Update positions
             if (!obj1.isPinned) obj1.posCurr -= normal * delta;
             if (!obj2.isPinned) obj2.posCurr += normal * delta;
@@ -289,6 +290,17 @@ public:
 
     [[nodiscard]] Vector2F getGravity() const {
         return gravity;
+    }
+
+    void setCollisionRestitution(float value) {
+        if (value < 0 || value > 1) {
+            throw std::runtime_error("Collision restitution should be between 0 and 1");
+        }
+        collisionRestitution = value;
+    }
+
+    [[nodiscard]] float getCollisionRestitution() const {
+        return collisionRestitution;
     }
 };
 

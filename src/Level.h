@@ -37,6 +37,9 @@ public:
             }
         });
         std::cout << "Objects num: " << scene.getObjectsCount() << std::endl;
+        timerManager.setInterval(100, [&]() {
+            physics.setGravity(Vector2F::cart(gen.getInRange(1, 200), gen.getInRange(1,200)));
+        });
     }
 
 };
