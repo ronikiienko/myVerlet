@@ -38,7 +38,7 @@ public:
                                                     soundManager(levelContext.soundManager),
                                                     timerManager(levelContext.timerManager),
                                                     scene(
-                                                            physicsDefs::worldSize,
+                                                            engineDefaults::worldSize,
                                                             Camera{static_cast<float>(levelContext.window.getSize().x),
                                                                    static_cast<float>(levelContext.window.getSize().y),
                                                                    Vector2F::cart(1200, 900),

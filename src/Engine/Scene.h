@@ -20,12 +20,12 @@ private:
     ThreadPool& threadPool;
     PerformanceMonitor& performanceMonitor;
 public:
-    IdGrid grid{physicsDefs::collisionGridWidth, physicsDefs::collisionGridHeight, getSizeI()};
+    IdGrid grid{engineDefaults::collisionGridWidth, engineDefaults::collisionGridHeight, getSizeI()};
 
     explicit Scene(Vector2I size, Camera camera, ThreadPool& threadPool, PerformanceMonitor& performanceMonitor) : sizeF(Vector2F::fromOther(size)), sizeI(size), camera(camera), threadPool(threadPool), performanceMonitor(performanceMonitor)  {
-        objects.reserve(physicsDefs::maxObjectNum);
-        basicDetails.reserve(physicsDefs::maxObjectNum);
-        objectsToRemove.reserve(physicsDefs::maxObjectNum);
+        objects.reserve(engineDefaults::maxObjectNum);
+        basicDetails.reserve(engineDefaults::maxObjectNum);
+        objectsToRemove.reserve(engineDefaults::maxObjectNum);
     }
 
     template<typename T>
