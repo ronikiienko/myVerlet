@@ -17,7 +17,7 @@ protected:
     sf::RenderWindow window = sf::RenderWindow(sf::VideoMode(engineDefaults::windowSize.x,
                                                              engineDefaults::windowSize.y), "Verlet",
                                                sf::Style::Default, sf::ContextSettings(0, 0, 1));
-    ThreadPool threadPool{engineDefaults::numThreads};
+    ThreadPool threadPool;
 
     std::unique_ptr<BaseLevel> level;
     // TODO maby move to level because levels may leave their thrash behind (callbacks)
@@ -25,7 +25,7 @@ protected:
     SoundManager soundManager;
     TimerManager timerManager;
 public:
-    BaseGame() {
+    explicit BaseGame(int numThreads = engineDefaults::numThreads) : threadPool(numThreads) {
         window.setFramerateLimit(60);
     }
 
