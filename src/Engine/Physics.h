@@ -257,7 +257,8 @@ public:
         }
     }
 
-    // warning: if setting substeps from onCollision (for example), then subSteps number can change while update is running. For that i use localSubSteps variable
+    // warning: if setting substeps from onCollision (for example), then subSteps number can change while update is running.
+    // For that i use localSubSteps variable
     void setSubSteps(int value) {
         if (value > 0 && value < 16) {
             subSteps = value;
@@ -278,7 +279,8 @@ public:
         return collisionsEnabled;
     }
 
-    // limit velocity of each object on each update() call. This can prevent full chaos.
+    // limit velocity of each object on each update() call.
+    // This can prevent full chaos.
     void setMaxVelocity(float value) {
         maxVelocity = value;
     }
@@ -287,7 +289,8 @@ public:
         return maxVelocity;
     }
 
-    // set gravity. very high values can cause objects to pass through each other and other weird stuff
+    // set gravity.
+    // high values can cause objects to pass through each other and other weird stuff
     void setGravity(Vector2F value) {
         gravity = value;
     }
@@ -296,7 +299,8 @@ public:
         return gravity;
     }
 
-    // adjusts how much objects will be "splitted" when resolving collisions. 0 - not splitted no collision resolving happens. 1 - objects are fully splitted
+    // adjusts how much objects will be "splitted" when resolving collisions.
+    // 0 - not splitted no collision resolving happens. 1 - objects are fully splitted
     void setCollisionRestitution(float value) {
         if (value < 0 || value > 1) {
             throw std::runtime_error("Collision restitution should be between 0 and 1");
@@ -308,7 +312,8 @@ public:
         return collisionRestitution;
     }
 
-    // We multiply velocity of each object by this value on each substep. Can help a bit if simulation goes to chaos
+    // We multiply velocity of each object by this value on each substep.
+    // Can help a bit if simulation goes to chaos
     void setLinearDamping(float value) {
         if (value < 0 || value > 1) {
             throw std::runtime_error("Linear damping should be between 0 and 1");
