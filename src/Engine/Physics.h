@@ -88,16 +88,16 @@ private:
 //                const float offset = static_cast<float>(i) * 1e-6f;
 //
 //                const Vector2F velocity = (object.posCurr - object.posOld) * wallsDamping;
-//                if (object.posCurr.x < bounds.getX1() + objectsRadius) {
-//                    object.posCurr.x = bounds.getX1() + objectsRadius + offset;
+//                if (object.posCurr.x < bounds.getWorldX1() + objectsRadius) {
+//                    object.posCurr.x = bounds.getWorldX1() + objectsRadius + offset;
 //                    object.posOld.x = object.posCurr.x + velocity.x;
 //                } else if (object.posCurr.x > bounds.getX2() - objectsRadius) {
 //                    object.posCurr.x = bounds.getX2() - objectsRadius - offset;
 //                    object.posOld.x = object.posCurr.x + velocity.x;
 //                }
 //
-//                if (object.posCurr.y < bounds.getY1() + objectsRadius) {
-//                    object.posCurr.y = bounds.getY1() + objectsRadius + offset;
+//                if (object.posCurr.y < bounds.getWorldY1() + objectsRadius) {
+//                    object.posCurr.y = bounds.getWorldY1() + objectsRadius + offset;
 //                    object.posOld.y = object.posCurr.y + velocity.y;
 //                } else if (object.posCurr.y > bounds.getY2() - objectsRadius) {
 //                    object.posCurr.y = bounds.getY2() - objectsRadius - offset;

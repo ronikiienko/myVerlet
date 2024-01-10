@@ -48,9 +48,11 @@ public:
             timerManager(levelContext.timerManager),
             inputHandler(levelContext.inputHandler),
             scene(
-                    Camera{static_cast<float>(levelContext.window.getSize().x),
-                           static_cast<float>(levelContext.window.getSize().y),
-                           Vector2F::cart(1200, 900),
+                    Camera{
+                            engineDefaults::cameraLongestDimViewSize,
+                            engineDefaults::cameraDefaultPosition,
+                            levelContext.window,
+                            levelContext.inputHandler
                     },
                     levelContext.threadPool,
                     performanceMonitor,

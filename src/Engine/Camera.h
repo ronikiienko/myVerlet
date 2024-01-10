@@ -1,86 +1,107 @@
 #pragma once
 
 
-class Camera {
-public:
-    Vector2F position = Vector2F::cart(0, 0); // position itself (storing left top corner would make rotation very hard)
-    Vector2F leftTopCorner = Vector2F::cart(0, 0); // position of the left top corner of the camera (just for to not calculate it every time)
-    float baseViewWidth = 100;
-    float baseViewHeight = 100;
-    float zoomFactor = 1;
+#include "InputHandler.h"
 
-    void updateLeftTopCorner() {
-        leftTopCorner = Vector2F::cart(getX1(), getY1());
+class Camera {
+private:
+    [[nodiscard]] float getWorldX1() const {
+        return worldPosition.x - (baseWorldViewWidth / zoomFactor) / 2;
+    }
+
+    [[nodiscard]] float getWorldY1() const {
+        return worldPosition.y - (baseWorldViewHeight / zoomFactor) / 2;
+    }
+
+    float baseLongestDimViewSize = 100;
+    float windowToCameraZoom;
+public:
+    Vector2F worldPosition = Vector2F::cart(0, 0); // worldPosition itself (storing left top corner would make rotation very hard)
+    Vector2F worldLeftTopCorner = Vector2F::cart(0,
+                                                 0); // worldPosition of the left top corner of the camera (just for to not calculate it every time)
+    float baseWorldViewWidth;
+    float baseWorldViewHeight;
+    float zoomFactor = 1;
+    InputHandler &inputHandler;
+    sf::RenderWindow &window;
+
+    void updateWorldLeftTopCorner() {
+        worldLeftTopCorner = Vector2F::cart(getWorldX1(), getWorldY1());
     }
 
     void move(Vector2F delta) {
-        position += delta;
-        updateLeftTopCorner();
+        worldPosition += delta;
+        updateWorldLeftTopCorner();
     }
 
     void setPosition(Vector2F vector) {
-        position = vector;
-        updateLeftTopCorner();
+        worldPosition = vector;
+        updateWorldLeftTopCorner();
     }
 
     void zoom(float value) {
         zoomFactor *= value;
         zoomFactor = std::max(0.5f, zoomFactor);
         zoomFactor = std::min(64.0f, zoomFactor);
-        updateLeftTopCorner();
+        updateWorldLeftTopCorner();
     }
 
     [[nodiscard]] float getViewWidth() const {
-        return baseViewWidth / zoomFactor;
+        return baseWorldViewWidth / getFinalZoom();
     }
 
     [[nodiscard]] float getViewHeight() const {
-        return baseViewHeight / zoomFactor;
+        return baseWorldViewHeight / getFinalZoom();
     }
 
-    [[nodiscard]] float getX1() const {
-        return position.x - (baseViewWidth / zoomFactor) / 2;
-    }
-    [[nodiscard]] float getX2() const {
-        return position.x + (baseViewWidth / zoomFactor) / 2;
-    }
-    [[nodiscard]] float getY1() const {
-        return position.y - (baseViewHeight / zoomFactor) / 2;
-    }
-    [[nodiscard]] float getY2() const {
-        return position.y + (baseViewHeight / zoomFactor) / 2;
-    }
+
 
     [[nodiscard]] Vector2F getPosition() const {
-        return position;
+        return worldPosition;
     }
 
-    [[nodiscard]] Vector2F worldPosToScreenPos(Vector2F worldPosition) const {
-        return (worldPosition - leftTopCorner) * zoomFactor;
+    [[nodiscard]] Vector2F worldPosToScreenPos(Vector2F worldPos) const {
+        return (worldPos - worldLeftTopCorner) * getFinalZoom();
     }
 
     [[nodiscard]] Vector2F screenPosToWorldPos(Vector2F screenPosition) const {
-        return screenPosition / zoomFactor + leftTopCorner;
+        return screenPosition / getFinalZoom() + worldLeftTopCorner;
     }
 
     [[nodiscard]] float worldSizeToScreenSize(float worldSize) const {
-        return worldSize * zoomFactor;
+        return worldSize * getFinalZoom();
     }
 
     [[nodiscard]] float screenSizeToWorldSize(float screenSize) const {
-        return screenSize / zoomFactor;
+        return screenSize / getFinalZoom();
     }
 
     [[nodiscard]] Vector2F worldVectorToScreenVector(Vector2F worldVector) const {
-        return worldVector * zoomFactor;
+        return worldVector * getFinalZoom();
     }
 
     [[nodiscard]] Vector2F screenVectorToWorldVector(Vector2F screenVector) const {
-        return screenVector / zoomFactor;
+        return screenVector / getFinalZoom();
     }
 
-    explicit Camera(float viewWidth, float viewHeight, Vector2F position) : baseViewWidth(viewWidth), baseViewHeight(viewHeight),
-                                                                           position(position) {
-        updateLeftTopCorner();
+    [[nodiscard]] float getFinalZoom() const {
+        return zoomFactor * windowToCameraZoom;
+    }
+
+    explicit Camera(float longestDimViewSize, Vector2F position, sf::RenderWindow& window, InputHandler& inputHandler) : worldPosition(position), inputHandler(inputHandler), window(window) {
+        float aspectRatio = static_cast<float>(window.getSize().x) / static_cast<float>(window.getSize().y);
+
+        float biggestDimWindowSize = std::max(static_cast<float>(window.getSize().x) , static_cast<float>(window.getSize().y));
+        windowToCameraZoom = biggestDimWindowSize / longestDimViewSize;
+
+        if (aspectRatio > 1) {
+            baseWorldViewWidth = longestDimViewSize;
+            baseWorldViewHeight = longestDimViewSize / aspectRatio;
+        } else {
+            baseWorldViewWidth = longestDimViewSize * aspectRatio;
+            baseWorldViewHeight = longestDimViewSize;
+        }
+
+        updateWorldLeftTopCorner();
     };
 };
