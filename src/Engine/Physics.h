@@ -314,6 +314,7 @@ public:
 
     // We multiply velocity of each object by this value on each substep.
     // Can help a bit if simulation goes to chaos
+    // Value from 0 to 1
     void setLinearDamping(float value) {
         if (value < 0 || value > 1) {
             throw std::runtime_error("Linear damping should be between 0 and 1");
@@ -326,6 +327,7 @@ public:
     }
 
     // We multiply velocity of object by this value when it hits walls
+    // Value from 0 to 1
     void setWallsDamping(float value) {
         if (value < 0 || value > 1) {
             throw std::runtime_error("Walls damping should be between 0 and 1");
