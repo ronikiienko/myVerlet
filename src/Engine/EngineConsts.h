@@ -21,6 +21,7 @@ namespace engineDefaults {
     const float linearDamping = 0.9992f;
     const short numThreads = 4;
     // actually, only thing it does is affecting how much given acceleration affects velocity
+    // To make it affect more, increase this value
     const float physicsInterval = 0.001f;
 }
 
