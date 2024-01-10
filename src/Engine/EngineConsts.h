@@ -7,7 +7,6 @@
 
 namespace engineDefaults {
     const int maxObjectNum = 200000;
-    constexpr Vector2F gravity = Vector2F::cart(0, 0);
     constexpr Vector2I worldSize = Vector2I::cart(2400, 1800);
     constexpr Vector2I windowSize = Vector2I::cart(2400, 1800);
     constexpr int objectsRadius = 2;
@@ -19,15 +18,13 @@ namespace engineDefaults {
     constexpr int collisionGridWidth = worldSize.x / (objectsRadius * 2);
     constexpr int collisionGridHeight = worldSize.y / (objectsRadius * 2);
     const float physicsInterval = 0.016f;
-    const int physicsSubSteps = 8;
 
+    constexpr Vector2F gravity = Vector2F::cart(0, 0);
+    const int physicsSubSteps = 8;
     const float wallsDamping = 0.8f;
     const float collisionRestitution = 0.45f;
-
     const float maxVelocity = 4;
-
     const float linearDamping = 0.9992f;
-    // when same - whole simulation goes same way each time you launch it
     const short numThreads = 4;
 }
 
