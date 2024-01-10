@@ -32,7 +32,8 @@ public:
 
     template<typename T>
     void setLevel() {
-        std::unique_ptr<T> ptr = std::make_unique<T>(LevelContext(window, threadPool, eventBus, soundManager, timerManager, inputHandler));
+        std::unique_ptr<T> ptr = std::make_unique<T>(
+                LevelContext(window, threadPool, eventBus, soundManager, timerManager, inputHandler));
         level = std::move(ptr);
         level->onInit();
     }
@@ -42,6 +43,12 @@ public:
         if (!level) {
             throw std::runtime_error("Level should be set in onInit() method");
         }
+
+        inputHandler.addEventListener(sf::Event::Resized, [&](const sf::Event &event) {
+            sf::View view = sf::View(sf::FloatRect(0.f, 0.f, static_cast<float>(event.size.width),
+                                                   static_cast<float>(event.size.height)));
+            window.setView(view);
+        });
         while (window.isOpen()) {
             level->update();
             onTick();
@@ -49,6 +56,9 @@ public:
         }
     }
 
-    virtual void onInit() {}
+    virtual void onInit() {
+
+    }
+
     virtual void onTick() {}
 };
