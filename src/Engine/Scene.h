@@ -19,13 +19,14 @@ private:
     Camera camera;
     ThreadPool& threadPool;
     PerformanceMonitor& performanceMonitor;
+    int maxObjectsNum = engineDefaults::maxObjectsNum;
 public:
     IdGrid grid{engineDefaults::collisionGridWidth, engineDefaults::collisionGridHeight, getSizeI()};
 
-    explicit Scene(Vector2I size, Camera camera, ThreadPool& threadPool, PerformanceMonitor& performanceMonitor) : sizeF(Vector2F::fromOther(size)), sizeI(size), camera(camera), threadPool(threadPool), performanceMonitor(performanceMonitor)  {
-        objects.reserve(engineDefaults::maxObjectNum);
-        basicDetails.reserve(engineDefaults::maxObjectNum);
-        objectsToRemove.reserve(engineDefaults::maxObjectNum);
+    explicit Scene(Vector2I size, Camera camera, ThreadPool& threadPool, PerformanceMonitor& performanceMonitor, int maxObjectsNum) : sizeF(Vector2F::fromOther(size)), sizeI(size), camera(camera), threadPool(threadPool), performanceMonitor(performanceMonitor)  {
+        objects.reserve(maxObjectsNum);
+        basicDetails.reserve(maxObjectsNum);
+        objectsToRemove.reserve(maxObjectsNum);
     }
 
     template<typename T>

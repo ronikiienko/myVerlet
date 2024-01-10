@@ -15,8 +15,10 @@ struct LevelContext {
     SoundManager &soundManager;
     TimerManager &timerManager;
 
-    LevelContext(sf::RenderWindow &window, ThreadPool &threadPool, EventBus &eventBus, SoundManager &soundManager, TimerManager &timerManager)
-            : window(window), threadPool(threadPool), eventBus(eventBus), soundManager(soundManager), timerManager(timerManager) {}
+    LevelContext(sf::RenderWindow &window, ThreadPool &threadPool, EventBus &eventBus, SoundManager &soundManager,
+                 TimerManager &timerManager)
+            : window(window), threadPool(threadPool), eventBus(eventBus), soundManager(soundManager),
+              timerManager(timerManager) {}
 };
 
 class BaseLevel {
@@ -33,23 +35,28 @@ protected:
     TimerManager &timerManager;
 public:
 
-    explicit BaseLevel(LevelContext levelContext) : window(levelContext.window), threadPool(levelContext.threadPool),
-                                                    eventBus(levelContext.eventBus),
-                                                    soundManager(levelContext.soundManager),
-                                                    timerManager(levelContext.timerManager),
-                                                    scene(
-                                                            engineDefaults::worldSize,
-                                                            Camera{static_cast<float>(levelContext.window.getSize().x),
-                                                                   static_cast<float>(levelContext.window.getSize().y),
-                                                                   Vector2F::cart(1200, 900),
-                                                            },
-                                                            levelContext.threadPool,
-                                                            performanceMonitor),
-                                                    graphics(scene, levelContext.window, levelContext.threadPool,
-                                                             performanceMonitor),
-                                                    physics(scene, levelContext.threadPool, performanceMonitor),
-                                                    performanceMonitor(levelContext.window),
-                                                    inputHandler(levelContext.window) {
+    explicit BaseLevel(LevelContext levelContext, int maxObjectsNum) : window(levelContext.window),
+                                                                       threadPool(levelContext.threadPool),
+                                                                       eventBus(levelContext.eventBus),
+                                                                       soundManager(levelContext.soundManager),
+                                                                       timerManager(levelContext.timerManager),
+                                                                       scene(
+                                                                               engineDefaults::worldSize,
+                                                                               Camera{static_cast<float>(levelContext.window.getSize().x),
+                                                                                      static_cast<float>(levelContext.window.getSize().y),
+                                                                                      Vector2F::cart(1200, 900),
+                                                                               },
+                                                                               levelContext.threadPool,
+                                                                               performanceMonitor,
+                                                                               maxObjectsNum
+                                                                       ),
+                                                                       graphics(scene, levelContext.window,
+                                                                                levelContext.threadPool,
+                                                                                performanceMonitor),
+                                                                       physics(scene, levelContext.threadPool,
+                                                                               performanceMonitor),
+                                                                       performanceMonitor(levelContext.window),
+                                                                       inputHandler(levelContext.window) {
 
 
     }
