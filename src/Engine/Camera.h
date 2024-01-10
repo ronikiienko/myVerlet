@@ -13,7 +13,7 @@ private:
         return worldPosition.y - (baseWorldViewHeight / zoomFactor) / 2;
     }
 
-    float baseLongestDimViewSize = 100;
+    float biggestDimWorldViewSize = 100;
     float windowToCameraZoom;
 public:
     Vector2F worldPosition = Vector2F::cart(0, 0); // worldPosition itself (storing left top corner would make rotation very hard)
@@ -88,18 +88,18 @@ public:
         return zoomFactor * windowToCameraZoom;
     }
 
-    explicit Camera(float longestDimViewSize, Vector2F position, sf::RenderWindow& window, InputHandler& inputHandler) : worldPosition(position), inputHandler(inputHandler), window(window) {
+    explicit Camera(float biggestDimWorldViewSize, Vector2F position, sf::RenderWindow& window, InputHandler& inputHandler) : worldPosition(position), inputHandler(inputHandler), window(window), biggestDimWorldViewSize(biggestDimWorldViewSize) {
         float aspectRatio = static_cast<float>(window.getSize().x) / static_cast<float>(window.getSize().y);
 
         float biggestDimWindowSize = std::max(static_cast<float>(window.getSize().x) , static_cast<float>(window.getSize().y));
-        windowToCameraZoom = biggestDimWindowSize / longestDimViewSize;
+        windowToCameraZoom = biggestDimWindowSize / biggestDimWorldViewSize;
 
         if (aspectRatio > 1) {
-            baseWorldViewWidth = longestDimViewSize;
-            baseWorldViewHeight = longestDimViewSize / aspectRatio;
+            baseWorldViewWidth = biggestDimWorldViewSize;
+            baseWorldViewHeight = biggestDimWorldViewSize / aspectRatio;
         } else {
-            baseWorldViewWidth = longestDimViewSize * aspectRatio;
-            baseWorldViewHeight = longestDimViewSize;
+            baseWorldViewWidth = biggestDimWorldViewSize * aspectRatio;
+            baseWorldViewHeight = biggestDimWorldViewSize;
         }
 
         updateWorldLeftTopCorner();
