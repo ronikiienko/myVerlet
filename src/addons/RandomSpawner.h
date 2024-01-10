@@ -30,8 +30,9 @@ public:
             );
 
             BaseObject &object = *ptr.lock();
-            object.basicDetails->color = sf::Color(static_cast<int>(object.basicDetails->posCurr.x / consts::worldSize.x * 255),
-                                                   static_cast<int>(object.basicDetails->posCurr.y / consts::worldSize.y * 255), 255);
+            object.basicDetails->color = sf::Color(
+                    static_cast<int>(object.basicDetails->posCurr.x / scene.getSizeF().x * 255),
+                    static_cast<int>(object.basicDetails->posCurr.y / scene.getSizeF().y * 255), 255);
         }
     }
 };
