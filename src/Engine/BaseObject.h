@@ -36,17 +36,17 @@ public:
         isPinned = false;
     }
 
-    void update(float dt) {
-        Vector2F velocity = posCurr - posOld;
-        velocity *= consts::linearDamping;
-        // TODO review maby limiting not needed
-        velocity.limitMagnitude(consts::maxVelocity);
-
-        posOld = posCurr;
-        posCurr += velocity + (acceleration * (dt * dt));
-
-        acceleration = Vector2F::cart();
-    }
+//    void update(float dt) {
+//        Vector2F velocity = posCurr - posOld;
+//        velocity *= consts::linearDamping;
+//        // TODO review maby limiting not needed
+//        velocity.limitMagnitude(consts::maxVelocity);
+//
+//        posOld = posCurr;
+//        posCurr += velocity + (acceleration * (dt * dt));
+//
+//        acceleration = Vector2F::cart();
+//    }
 
     explicit BasicDetails(Vector2F position) : posCurr(position), posOld(position) {
     };

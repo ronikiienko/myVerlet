@@ -14,6 +14,7 @@ private:
 
     int subSteps = consts::physicsSubSteps;
     bool collisionsEnabled = true;
+    float maxVelocity = consts::maxVelocity;
 
     void updatePositionsConstraint(float dt) {
         const Vector2F size = scene.getSizeF();
@@ -23,11 +24,20 @@ private:
             const float maxX = size.x - consts::objectsRadius;
             const float minY = 0 + consts::objectsRadius;
             const float maxY = size.y - consts::objectsRadius;
-            scene.forEachBasicDetails([&size, dt, minX, maxX, minY, maxY](BasicDetails &object, int i) {
+            scene.forEachBasicDetails([&size, dt, minX, maxX, minY, maxY, this](BasicDetails &object, int i) {
                 // TODO when all grid filled with objects, you can see that some start falling faster and some slower (on lower gravity levels like 10) - this is because of floats precision
                 if (!object.isPinned) {
                     object.accelerate(consts::gravity);
-                    object.update(dt);
+//                    object.update(dt);
+                    Vector2F velocity = object.posCurr - object.posOld;
+                    velocity *= consts::linearDamping;
+                    // TODO review maby limiting not needed
+                    velocity.limitMagnitude(maxVelocity);
+
+                    object.posOld = object.posCurr;
+                    object.posCurr += velocity + (object.acceleration * (dt * dt));
+
+                    object.acceleration = Vector2F::cart();
                 }
 
                 // problem was that for example: scene is 100x100. Then both objects are outside of field on same direction, like obj1(101.256, 102.399) and obj2(105.936, 110.87). both will be pushed to (100,100) resulting in zero distance.
@@ -244,9 +254,9 @@ public:
     }
 
     // warning: if setting substeps from onCollision (for example), then subSteps number can change while update is running. For that i use localSubSteps variable
-    void setSubSteps(int subStepsNumber) {
-        if (subStepsNumber > 0 && subStepsNumber < 16) {
-            subSteps = subStepsNumber;
+    void setSubSteps(int value) {
+        if (value > 0 && value < 16) {
+            subSteps = value;
         } else {
             throw std::runtime_error("Substeps number should be between 1 and 16");
         }
@@ -262,6 +272,14 @@ public:
 
     [[nodiscard]] bool getCollisionsEnabled() const {
         return collisionsEnabled;
+    }
+
+    void setMaxVelocity(float value) {
+        maxVelocity = value;
+    }
+
+    [[nodiscard]] float getMaxVelocity() const {
+        return maxVelocity;
     }
 };
 
