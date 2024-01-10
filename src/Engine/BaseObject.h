@@ -38,9 +38,9 @@ public:
 
 //    void update(float dt) {
 //        Vector2F velocity = posCurr - posOld;
-//        velocity *= consts::linearDamping;
+//        velocity *= physicsDefs::linearDamping;
 //        // TODO review maby limiting not needed
-//        velocity.limitMagnitude(consts::maxVelocity);
+//        velocity.limitMagnitude(physicsDefs::maxVelocity);
 //
 //        posOld = posCurr;
 //        posCurr += velocity + (acceleration * (dt * dt));

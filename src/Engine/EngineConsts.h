@@ -5,7 +5,7 @@
 #include "utils/Rectangle.h"
 
 
-namespace consts {
+namespace physicsDefs {
     const int maxObjectNum = 200000;
     constexpr Vector2F gravity = Vector2F::cart(0, 0);
     constexpr Vector2I worldSize = Vector2I::cart(2400, 1800);
@@ -28,7 +28,6 @@ namespace consts {
 
     const float linearDamping = 0.9992f;
     // when same - whole simulation goes same way each time you launch it
-    const int seed = 40;
     const short numThreads = 4;
 }
 

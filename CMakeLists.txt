@@ -29,6 +29,7 @@ set(SOURCES src/main.cpp
         src/Engine/EventBus.h
         src/Engine/SoundManager.h
         src/Engine/TimerManager.h
+        src/consts.h
 )
 
 project(${PROJECT_NAME})

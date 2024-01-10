@@ -12,22 +12,22 @@ private:
     ThreadPool &threadPool;
     PerformanceMonitor &performanceMonitor;
 
-    int subSteps = consts::physicsSubSteps;
+    int subSteps = physicsDefs::physicsSubSteps;
     bool collisionsEnabled = true;
-    float maxVelocity = consts::maxVelocity;
-    Vector2F gravity = consts::gravity;
-    float collisionRestitution = consts::collisionRestitution;
-    float linearDamping = consts::linearDamping;
-    float wallsDamping = consts::wallsDamping;
+    float maxVelocity = physicsDefs::maxVelocity;
+    Vector2F gravity = physicsDefs::gravity;
+    float collisionRestitution = physicsDefs::collisionRestitution;
+    float linearDamping = physicsDefs::linearDamping;
+    float wallsDamping = physicsDefs::wallsDamping;
 
     void updatePositionsConstraint(float dt) {
         const Vector2F size = scene.getSizeF();
         const int objectsCount = scene.getObjectsCount();
         threadPool.dispatch(objectsCount, [this, &size, dt](int start, int end) {
-            const float minX = 0 + consts::objectsRadius;
-            const float maxX = size.x - consts::objectsRadius;
-            const float minY = 0 + consts::objectsRadius;
-            const float maxY = size.y - consts::objectsRadius;
+            const float minX = 0 + physicsDefs::objectsRadius;
+            const float maxX = size.x - physicsDefs::objectsRadius;
+            const float minY = 0 + physicsDefs::objectsRadius;
+            const float maxY = size.y - physicsDefs::objectsRadius;
             scene.forEachBasicDetails([&size, dt, minX, maxX, minY, maxY, this](BasicDetails &object, int i) {
                 // TODO when all grid filled with objects, you can see that some start falling faster and some slower (on lower gravity levels like 10) - this is because of floats precision
                 if (!object.isPinned) {
@@ -50,18 +50,18 @@ private:
 
                 const Vector2F newVelocity = object.getVelocity() * wallsDamping;
                 if (object.posCurr.x < minX) {
-                    object.posCurr.x = 0 + consts::objectsRadius + offset;
+                    object.posCurr.x = 0 + physicsDefs::objectsRadius + offset;
                     object.posOld.x = object.posCurr.x + newVelocity.x;
                 } else if (object.posCurr.x > maxX) {
-                    object.posCurr.x = size.x - consts::objectsRadius - offset;
+                    object.posCurr.x = size.x - physicsDefs::objectsRadius - offset;
                     object.posOld.x = object.posCurr.x + newVelocity.x;
                 }
 
                 if (object.posCurr.y < minY) {
-                    object.posCurr.y = 0 + consts::objectsRadius + offset;
+                    object.posCurr.y = 0 + physicsDefs::objectsRadius + offset;
                     object.posOld.y = object.posCurr.y + newVelocity.y;
                 } else if (object.posCurr.y > maxY) {
-                    object.posCurr.y = size.y - consts::objectsRadius - offset;
+                    object.posCurr.y = size.y - physicsDefs::objectsRadius - offset;
                     object.posOld.y = object.posCurr.y + newVelocity.y;
                 }
 
@@ -117,14 +117,14 @@ private:
         const Vector2F vectorBetween = obj1.posCurr - obj2.posCurr;
         const float dist2 = vectorBetween.magnitude2();
         // Check overlapping
-        if (dist2 < consts::twoObjectsRadiusSquared) {
+        if (dist2 < physicsDefs::twoObjectsRadiusSquared) {
             obj1.parent->onCollision(obj2.parent);
             obj2.parent->onCollision(obj1.parent);
 
             const float dist = std::sqrt(dist2);
             if (dist == 0) return;
             const Vector2F normal = vectorBetween / dist;
-            const float delta = 0.5f * collisionRestitution * (dist - consts::twoObjectsRadius);
+            const float delta = 0.5f * collisionRestitution * (dist - physicsDefs::twoObjectsRadius);
             // Update positions
             if (!obj1.isPinned) obj1.posCurr -= normal * delta;
             if (!obj2.isPinned) obj2.posCurr += normal * delta;
@@ -238,7 +238,7 @@ public:
         int localSubSteps = subSteps;
         bool localCollisionsEnabled = collisionsEnabled;
 
-        const float subStepDt = consts::physicsInterval / static_cast<float>(localSubSteps);
+        const float subStepDt = physicsDefs::physicsInterval / static_cast<float>(localSubSteps);
 
         for (int i = 0; i < localSubSteps; i++) {
             performanceMonitor.start("gravityConstraintsUpdate");

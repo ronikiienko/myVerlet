@@ -14,10 +14,10 @@
 
 class BaseGame {
 protected:
-    sf::RenderWindow window = sf::RenderWindow(sf::VideoMode(consts::windowSize.x,
-                                                             consts::windowSize.y), "Verlet",
+    sf::RenderWindow window = sf::RenderWindow(sf::VideoMode(physicsDefs::windowSize.x,
+                                                             physicsDefs::windowSize.y), "Verlet",
                                                sf::Style::Default, sf::ContextSettings(0, 0, 1));
-    ThreadPool threadPool{consts::numThreads};
+    ThreadPool threadPool{physicsDefs::numThreads};
 
     std::unique_ptr<BaseLevel> level;
     // TODO maby move to level because levels may leave their thrash behind (callbacks)

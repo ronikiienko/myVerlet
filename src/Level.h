@@ -5,6 +5,7 @@
 #include "addons/RandomSpawner.h"
 #include "Objects/Player.h"
 #include "addons/Shooter.h"
+#include "consts.h"
 
 class Level : public BaseLevel {
     ExplosionHandler explosionHandler{scene};
