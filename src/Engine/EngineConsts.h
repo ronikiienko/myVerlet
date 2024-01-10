@@ -20,14 +20,12 @@ namespace consts {
     constexpr int collisionGridHeight = worldSize.y / (objectsRadius * 2);
     const float physicsInterval = 0.016f;
     const int physicsSubSteps = 8;
-    // how much speed is damped when hitting wall
+
     const float wallsDamping = 0.8f;
-    // doesn't actually change speed when collision happens, but rather how much objects will be "splitted" when resolving collisions. 0 - not splitted no collision resolving happens. 1 - objects are fully splitted
     const float collisionRestitution = 0.45f;
-    // we limit velocity of each object on each update() call. This can prevent full chaos.
-    // changes chains behaviours
+
     const float maxVelocity = 4;
-    // we just multiply velocity of each object by this value on each substep. Can help a bit if simulation goes to chaos
+
     const float linearDamping = 0.9992f;
     // when same - whole simulation goes same way each time you launch it
     const int seed = 40;
