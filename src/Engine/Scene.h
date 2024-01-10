@@ -23,7 +23,7 @@ private:
 public:
     IdGrid grid{engineDefaults::collisionGridWidth, engineDefaults::collisionGridHeight, getSizeI()};
 
-    explicit Scene(Vector2I size, Camera camera, ThreadPool& threadPool, PerformanceMonitor& performanceMonitor, int maxObjectsNum) : sizeF(Vector2F::fromOther(size)), sizeI(size), camera(camera), threadPool(threadPool), performanceMonitor(performanceMonitor)  {
+    explicit Scene(Vector2I size, Camera camera, ThreadPool& threadPool, PerformanceMonitor& performanceMonitor, int maxObjectsNum) : sizeF(Vector2F::fromOther(size)), sizeI(size), camera(camera), threadPool(threadPool), performanceMonitor(performanceMonitor), maxObjectsNum(maxObjectsNum) {
         objects.reserve(maxObjectsNum);
         basicDetails.reserve(maxObjectsNum);
         objectsToRemove.reserve(maxObjectsNum);
