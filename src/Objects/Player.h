@@ -10,7 +10,7 @@ public:
     InputHandler &inputHandler;
     Shooter &shooter;
     Scene &scene;
-    float movementSpeed = 2000;
+    float acceleration = 100;
     bool movingUp = false;
     bool movingDown = false;
     bool movingLeft = false;
@@ -99,20 +99,20 @@ public:
         }
         scene.getCamera().setPosition((basicDetails->posCurr * 0.2 + scene.getCamera().position * 1.8) / 2);
         if (movingUp) {
-//            setVelocity(Vector2F::cart(0, -movementSpeed));
-            basicDetails->accelerate(Vector2F::cart(0, -movementSpeed));
+//            setVelocity(Vector2F::cart(0, -acceleration));
+            basicDetails->accelerate(Vector2F::cart(0, -acceleration));
         }
         if (movingDown) {
-//            setVelocity(Vector2F::cart(0, movementSpeed));
-            basicDetails->accelerate(Vector2F::cart(0, movementSpeed));
+//            setVelocity(Vector2F::cart(0, acceleration));
+            basicDetails->accelerate(Vector2F::cart(0, acceleration));
         }
         if (movingLeft) {
-//            setVelocity(Vector2F::cart(-movementSpeed, 0));
-            basicDetails->accelerate(Vector2F::cart(-movementSpeed, 0));
+//            setVelocity(Vector2F::cart(-acceleration, 0));
+            basicDetails->accelerate(Vector2F::cart(-acceleration, 0));
         }
         if (movingRight) {
-//            setVelocity(Vector2F::cart(movementSpeed, 0));
-            basicDetails->accelerate(Vector2F::cart(movementSpeed, 0));
+//            setVelocity(Vector2F::cart(acceleration, 0));
+            basicDetails->accelerate(Vector2F::cart(acceleration, 0));
         }
         if (isBraking) {
             basicDetails->setVelocity(basicDetails->getVelocity() * 0.95);
