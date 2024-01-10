@@ -15,6 +15,7 @@ private:
     int subSteps = consts::physicsSubSteps;
     bool collisionsEnabled = true;
     float maxVelocity = consts::maxVelocity;
+    Vector2F gravity = consts::gravity;
 
     void updatePositionsConstraint(float dt) {
         const Vector2F size = scene.getSizeF();
@@ -27,7 +28,7 @@ private:
             scene.forEachBasicDetails([&size, dt, minX, maxX, minY, maxY, this](BasicDetails &object, int i) {
                 // TODO when all grid filled with objects, you can see that some start falling faster and some slower (on lower gravity levels like 10) - this is because of floats precision
                 if (!object.isPinned) {
-                    object.accelerate(consts::gravity);
+                    object.accelerate(gravity);
 //                    object.update(dt);
                     Vector2F velocity = object.posCurr - object.posOld;
                     velocity *= consts::linearDamping;
@@ -280,6 +281,14 @@ public:
 
     [[nodiscard]] float getMaxVelocity() const {
         return maxVelocity;
+    }
+
+    void setGravity(Vector2F value) {
+        gravity = value;
+    }
+
+    [[nodiscard]] Vector2F getGravity() const {
+        return gravity;
     }
 };
 
