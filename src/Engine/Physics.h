@@ -252,8 +252,16 @@ public:
         }
     }
 
+    int getSubSteps() {
+        return subSteps;
+    }
+
     void setCollisionsEnabled(bool enabled) {
         collisionsEnabled = enabled;
+    }
+
+    bool getCollisionsEnabled() {
+        return collisionsEnabled;
     }
 };
 
