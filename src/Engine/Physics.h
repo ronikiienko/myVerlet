@@ -17,6 +17,7 @@ private:
     float maxVelocity = consts::maxVelocity;
     Vector2F gravity = consts::gravity;
     float collisionRestitution = consts::collisionRestitution;
+    float linearDamping = consts::linearDamping;
 
     void updatePositionsConstraint(float dt) {
         const Vector2F size = scene.getSizeF();
@@ -32,7 +33,7 @@ private:
                     object.accelerate(gravity);
 //                    object.update(dt);
                     Vector2F velocity = object.posCurr - object.posOld;
-                    velocity *= consts::linearDamping;
+                    velocity *= linearDamping;
                     // TODO review maby limiting not needed
                     velocity.limitMagnitude(maxVelocity);
 
@@ -301,6 +302,17 @@ public:
 
     [[nodiscard]] float getCollisionRestitution() const {
         return collisionRestitution;
+    }
+
+    void setLinearDamping(float value) {
+        if (value < 0 || value > 1) {
+            throw std::runtime_error("Linear damping should be between 0 and 1");
+        }
+        linearDamping = value;
+    }
+
+    [[nodiscard]] float getLinearDamping() const {
+        return linearDamping;
     }
 };
 
