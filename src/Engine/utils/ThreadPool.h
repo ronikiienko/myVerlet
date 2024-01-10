@@ -10,7 +10,7 @@
 struct TaskQueue {
     std::queue<std::function<void()>> tasks;
     std::mutex mutex;
-    std::atomic<short> tasksLeft = 0;
+    std::atomic<int> tasksLeft = 0;
 
 
     template<typename TCallback>
@@ -78,9 +78,9 @@ struct Worker {
 struct ThreadPool {
     TaskQueue queue;
     std::vector<Worker> workers;
-    short threadsNum;
+    int threadsNum;
 
-    explicit ThreadPool(short threadsNum) : threadsNum(threadsNum) {
+    explicit ThreadPool(int threadsNum) : threadsNum(threadsNum) {
         workers.reserve(threadsNum);
         for (int i = 0; i < threadsNum; i++) {
             workers.emplace_back(queue);
