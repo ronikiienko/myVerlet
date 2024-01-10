@@ -18,6 +18,7 @@ private:
     Vector2F gravity = consts::gravity;
     float collisionRestitution = consts::collisionRestitution;
     float linearDamping = consts::linearDamping;
+    float wallsDamping = consts::wallsDamping;
 
     void updatePositionsConstraint(float dt) {
         const Vector2F size = scene.getSizeF();
@@ -47,7 +48,7 @@ private:
                 // offset is trying to fix this problem
                 const float offset = static_cast<float>(i) * 1e-6f;
 
-                const Vector2F newVelocity = object.getVelocity() * consts::wallsDamping;
+                const Vector2F newVelocity = object.getVelocity() * wallsDamping;
                 if (object.posCurr.x < minX) {
                     object.posCurr.x = 0 + consts::objectsRadius + offset;
                     object.posOld.x = object.posCurr.x + newVelocity.x;
@@ -313,6 +314,17 @@ public:
 
     [[nodiscard]] float getLinearDamping() const {
         return linearDamping;
+    }
+
+    void setWallsDamping(float value) {
+        if (value < 0 || value > 1) {
+            throw std::runtime_error("Walls damping should be between 0 and 1");
+        }
+        wallsDamping = value;
+    }
+
+    [[nodiscard]] float getWallsDamping() const {
+        return wallsDamping;
     }
 };
 
