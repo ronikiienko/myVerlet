@@ -44,23 +44,23 @@ public:
         }
     }
 
-    int addTickTimer(int ticks, const std::function<void()>& callback) {
+    int setTimeout(int ticks, const std::function<void()>& callback) {
         tickTimers.emplace(keyCounter, TickTimer{ticks, callback});
         return keyCounter++;
     }
 
-    void removeTickTimer(int key) {
+    void removeTimeout(int key) {
         tickTimers.erase(key);
     }
 
     // TODO add interval timer
 
-    int addTickInterval(int ticks, const std::function<void()>& callback) {
+    int setInterval(int ticks, const std::function<void()>& callback) {
         tickIntervals.emplace(keyCounter, TickTimer{ticks, callback});
         return keyCounter++;
     }
 
-    void removeTickInterval(int key) {
+    void removeInterval(int key) {
         tickIntervals.erase(key);
     }
 };
