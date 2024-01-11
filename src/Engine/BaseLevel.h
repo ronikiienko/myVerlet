@@ -48,12 +48,10 @@ public:
             m_timerManager(levelContext.m_timerManager),
             m_inputHandler(levelContext.m_inputHandler),
             m_scene(
-                    Camera{
-                            engineDefaults::cameraLongestDimViewSize,
-                            engineDefaults::cameraDefaultPosition,
-                            levelContext.m_window,
-                            levelContext.m_inputHandler
-                    },
+                    600,
+                    Vector2F::cart(0, 0),
+                    levelContext.m_inputHandler,
+                    levelContext.m_window,
                     levelContext.m_threadPool,
                     m_performanceMonitor,
                     maxObjectsNum,
