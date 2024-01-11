@@ -97,7 +97,7 @@ public:
         if (!m_basicDetails) {
             throw std::runtime_error("m_basicDetails is nullptr");
         }
-//        m_scene.getCamera().setPosition((m_basicDetails->m_posCurr * 0.2 + m_scene.getCamera().m_worldPosition * 1.8) / 2);
+//        m_scene.getCamera().setPosition((m_basicDetails->m_posCurr * 0.2 + m_scene.getCamera().m_worldCenterPos * 1.8) / 2);
         m_scene.getCamera().setPosition(m_basicDetails->m_posCurr);
         if (m_movingUp) {
 //            setVelocity(Vector2F::cart(0, -m_acceleration));
