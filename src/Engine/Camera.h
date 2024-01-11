@@ -21,7 +21,7 @@ private:
         return m_zoomFactor * m_windowToCameraZoom;
     }
 
-    float m_biggestDimWorldViewSize = 100;
+    float m_maxWorldViewSize = 100;
 
     // m_worldPosition itself (storing left top corner would make rotation very hard)
     Vector2F m_worldPosition = Vector2F::cart(0, 0);
@@ -75,19 +75,23 @@ public:
     }
 
 
-
-    explicit Camera(float biggestDimWorldViewSize, Vector2F position, sf::RenderWindow& window, InputHandler& inputHandler) : m_worldPosition(position), m_inputHandler(inputHandler), m_window(window), m_biggestDimWorldViewSize(biggestDimWorldViewSize) {
+    explicit Camera(float maxWorldViewSize, Vector2F position, sf::RenderWindow &window, InputHandler &inputHandler) :
+            m_worldPosition(position),
+            m_inputHandler(inputHandler),
+            m_window(window),
+            m_maxWorldViewSize(maxWorldViewSize) {
         float aspectRatio = static_cast<float>(window.getSize().x) / static_cast<float>(window.getSize().y);
 
-        float biggestDimWindowSize = std::max(static_cast<float>(window.getSize().x) , static_cast<float>(window.getSize().y));
-        m_windowToCameraZoom = biggestDimWindowSize / biggestDimWorldViewSize;
+        float biggestDimWindowSize = std::max(static_cast<float>(window.getSize().x),
+                                              static_cast<float>(window.getSize().y));
+        m_windowToCameraZoom = biggestDimWindowSize / maxWorldViewSize;
 
         if (aspectRatio > 1) {
-            m_baseWorldViewWidth = biggestDimWorldViewSize;
-            m_baseWorldViewHeight = biggestDimWorldViewSize / aspectRatio;
+            m_baseWorldViewWidth = maxWorldViewSize;
+            m_baseWorldViewHeight = maxWorldViewSize / aspectRatio;
         } else {
-            m_baseWorldViewWidth = biggestDimWorldViewSize * aspectRatio;
-            m_baseWorldViewHeight = biggestDimWorldViewSize;
+            m_baseWorldViewWidth = maxWorldViewSize * aspectRatio;
+            m_baseWorldViewHeight = maxWorldViewSize;
         }
 
         updateWorldLeftTopCorner();
