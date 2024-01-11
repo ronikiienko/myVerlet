@@ -92,6 +92,7 @@ public:
             m_baseWorldViewHeight = m_maxWorldViewSize;
         }
 
+        // when camera is moved, this is invalidated
         m_inputHandler.addEventListener(sf::Event::Resized, [this](const sf::Event &event) {
             float aspectRatio = static_cast<float>(event.size.width) / static_cast<float>(event.size.height);
             float biggestDimWindowSize = std::max(static_cast<float>(event.size.width),
