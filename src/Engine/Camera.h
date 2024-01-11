@@ -23,9 +23,7 @@ private:
 
     float m_maxWorldViewSize;
 
-    // m_worldCenterPos itself (storing left top corner would make rotation very hard)
     Vector2F m_worldCenterPos = Vector2F::cart(0, 0);
-    // m_worldCenterPos of the left top corner of the m_camera (just for to not calculate it every time)
     Vector2F m_worldLeftTopPos = Vector2F::cart(0, 0);
 
     float m_baseWorldViewWidth;
@@ -87,12 +85,26 @@ public:
         m_windowToCameraZoom = biggestDimWindowSize / maxWorldViewSize;
 
         if (aspectRatio > 1) {
-            m_baseWorldViewWidth = maxWorldViewSize;
-            m_baseWorldViewHeight = maxWorldViewSize / aspectRatio;
+            m_baseWorldViewWidth = m_maxWorldViewSize;
+            m_baseWorldViewHeight = m_maxWorldViewSize / aspectRatio;
         } else {
-            m_baseWorldViewWidth = maxWorldViewSize * aspectRatio;
-            m_baseWorldViewHeight = maxWorldViewSize;
+            m_baseWorldViewWidth = m_maxWorldViewSize * aspectRatio;
+            m_baseWorldViewHeight = m_maxWorldViewSize;
         }
+
+        m_inputHandler.addEventListener(sf::Event::Resized, [this](const sf::Event &event) {
+            float aspectRatio = static_cast<float>(event.size.width) / static_cast<float>(event.size.height);
+            float biggestDimWindowSize = std::max(static_cast<float>(event.size.width),
+                                                  static_cast<float>(event.size.height));
+            m_windowToCameraZoom = biggestDimWindowSize / m_maxWorldViewSize;
+            if (aspectRatio > 1) {
+                m_baseWorldViewWidth = m_maxWorldViewSize;
+                m_baseWorldViewHeight = m_maxWorldViewSize / aspectRatio;
+            } else {
+                m_baseWorldViewWidth = m_maxWorldViewSize * aspectRatio;
+                m_baseWorldViewHeight = m_maxWorldViewSize;
+            }
+        });
 
         updateWorldLeftTopPos();
     };
