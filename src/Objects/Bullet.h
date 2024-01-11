@@ -6,18 +6,18 @@
 
 class Bullet : public BaseObject {
 public:
-    bool isExploded = false;
-    ExplosionHandler &explosionHandler;
+    bool m_isExploded = false;
+    ExplosionHandler &m_explosionHandler;
 
-    explicit Bullet(ExplosionHandler &explosionHandler) : explosionHandler(explosionHandler) {
+    explicit Bullet(ExplosionHandler &explosionHandler) : m_explosionHandler(explosionHandler) {
 
     }
 
     void onCollision(BaseObject* ptr) override {
 //        std::cout << "onCollision" << std::endl;
-        if (!isExploded) {
-            isExploded = true;
-            explosionHandler.launch(basicDetails->posCurr + Vector2F::cart(5, 5), 7, 100);
+        if (!m_isExploded) {
+            m_isExploded = true;
+            m_explosionHandler.launch(m_basicDetails->m_posCurr + Vector2F::cart(5, 5), 7, 100);
         }
     }
 };

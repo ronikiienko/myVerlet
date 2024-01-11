@@ -6,33 +6,33 @@
 
 class RandomSpawner {
 private:
-    Scene &scene;
-    RNGf &gen;
+    Scene &m_scene;
+    RNGf &m_gen;
 public:
-    RandomSpawner(Scene &scene, RNGf &gen) : scene(scene), gen(gen) {}
+    RandomSpawner(Scene &scene, RNGf &gen) : m_scene(scene), m_gen(gen) {}
 
     void spawn(int number) {
         for (int i = 0; i < number; i++) {
-            auto ptr = scene.addObject(
+            auto ptr = m_scene.addObject(
 
                     BaseObject(),
                     Vector2F::cart
                             (
-                                    gen.getInRange
+                                    m_gen.getInRange
                                             (
                                                     0,
-                                                    scene.getSizeF().x
+                                                    m_scene.getSizeF().m_x
                                             ),
-                                    gen.getInRange
-                                            (0, scene.getSizeF().y
+                                    m_gen.getInRange
+                                            (0, m_scene.getSizeF().m_y
                                             )
                             )
             );
 
             BaseObject &object = *ptr.lock();
-            object.basicDetails->color = sf::Color(
-                    static_cast<int>(object.basicDetails->posCurr.x / scene.getSizeF().x * 255),
-                    static_cast<int>(object.basicDetails->posCurr.y / scene.getSizeF().y * 255), 255);
+            object.m_basicDetails->m_color = sf::Color(
+                    static_cast<int>(object.m_basicDetails->m_posCurr.m_x / m_scene.getSizeF().m_x * 255),
+                    static_cast<int>(object.m_basicDetails->m_posCurr.m_y / m_scene.getSizeF().m_y * 255), 255);
         }
     }
 };

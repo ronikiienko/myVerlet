@@ -5,62 +5,62 @@
 
 class TimerManager {
     struct TickTimer {
-        int ticks;
-        int ticksLeft;
-        std::function<void()> callback;
+        int m_ticks;
+        int m_ticksLeft;
+        std::function<void()> m_callback;
 
-        TickTimer(int ticks, const std::function<void()>& callback) : ticks(ticks), ticksLeft(ticks), callback(callback) {
+        TickTimer(int ticks, const std::function<void()>& callback) : m_ticks(ticks), m_ticksLeft(ticks), m_callback(callback) {
 
         }
 
         void tick() {
-            ticksLeft--;
+            m_ticksLeft--;
         }
 
         [[nodiscard]] bool isDone() const {
-            return ticksLeft <= 0;
+            return m_ticksLeft <= 0;
         }
     };
 
-    std::unordered_map<int, TickTimer> tickTimers;
-    std::unordered_map<int, TickTimer> tickIntervals;
+    std::unordered_map<int, TickTimer> m_tickTimers;
+    std::unordered_map<int, TickTimer> m_tickIntervals;
 
-    int keyCounter = 0;
+    int m_keyCounter = 0;
 public:
     void tick() {
-        for (auto &pair : tickTimers) {
+        for (auto &pair : m_tickTimers) {
             pair.second.tick();
             if (pair.second.isDone()) {
-                pair.second.callback();
-                tickTimers.erase(pair.first);
+                pair.second.m_callback();
+                m_tickTimers.erase(pair.first);
             }
         }
-        for (auto &pair : tickIntervals) {
+        for (auto &pair : m_tickIntervals) {
             pair.second.tick();
             if (pair.second.isDone()) {
-                pair.second.callback();
-                pair.second.ticksLeft = pair.second.ticks;
+                pair.second.m_callback();
+                pair.second.m_ticksLeft = pair.second.m_ticks;
             }
         }
     }
 
     int setTimeout(int ticks, const std::function<void()>& callback) {
-        tickTimers.emplace(keyCounter, TickTimer{ticks, callback});
-        return keyCounter++;
+        m_tickTimers.emplace(m_keyCounter, TickTimer{ticks, callback});
+        return m_keyCounter++;
     }
 
     void removeTimeout(int key) {
-        tickTimers.erase(key);
+        m_tickTimers.erase(key);
     }
 
-    // TODO add interval timer
+    // TODO add m_interval timer
 
     int setInterval(int ticks, const std::function<void()>& callback) {
-        tickIntervals.emplace(keyCounter, TickTimer{ticks, callback});
-        return keyCounter++;
+        m_tickIntervals.emplace(m_keyCounter, TickTimer{ticks, callback});
+        return m_keyCounter++;
     }
 
     void removeInterval(int key) {
-        tickIntervals.erase(key);
+        m_tickIntervals.erase(key);
     }
 };

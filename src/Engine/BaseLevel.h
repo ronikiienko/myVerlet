@@ -9,31 +9,31 @@
 #include "TimerManager.h"
 
 struct LevelContext {
-    sf::RenderWindow &window;
-    ThreadPool &threadPool;
-    EventBus &eventBus;
-    SoundManager &soundManager;
-    TimerManager &timerManager;
-    InputHandler &inputHandler;
+    sf::RenderWindow &m_window;
+    ThreadPool &m_threadPool;
+    EventBus &m_eventBus;
+    SoundManager &m_soundManager;
+    TimerManager &m_timerManager;
+    InputHandler &m_inputHandler;
 
     LevelContext(sf::RenderWindow &window, ThreadPool &threadPool, EventBus &eventBus, SoundManager &soundManager,
                  TimerManager &timerManager, InputHandler &inputHandler)
-            : window(window), threadPool(threadPool), eventBus(eventBus), soundManager(soundManager),
-              timerManager(timerManager), inputHandler(inputHandler) {}
+            : m_window(window), m_threadPool(threadPool), m_eventBus(eventBus), m_soundManager(soundManager),
+              m_timerManager(timerManager), m_inputHandler(inputHandler) {}
 };
 
 class BaseLevel {
 protected:
-    Scene scene;
-    Graphics graphics;
-    Physics physics;
-    PerformanceMonitor performanceMonitor;
-    sf::RenderWindow &window;
-    ThreadPool &threadPool;
-    EventBus &eventBus;
-    InputHandler &inputHandler;
-    SoundManager &soundManager;
-    TimerManager &timerManager;
+    Scene m_scene;
+    Graphics m_graphics;
+    Physics m_physics;
+    PerformanceMonitor m_performanceMonitor;
+    sf::RenderWindow &m_window;
+    ThreadPool &m_threadPool;
+    EventBus &m_eventBus;
+    InputHandler &m_inputHandler;
+    SoundManager &m_soundManager;
+    TimerManager &m_timerManager;
 public:
 
     explicit BaseLevel(
@@ -41,63 +41,63 @@ public:
             int maxObjectsNum = engineDefaults::maxObjectsNum,
             Vector2I worldSize = engineDefaults::worldSize
     ) :
-            window(levelContext.window),
-            threadPool(levelContext.threadPool),
-            eventBus(levelContext.eventBus),
-            soundManager(levelContext.soundManager),
-            timerManager(levelContext.timerManager),
-            inputHandler(levelContext.inputHandler),
-            scene(
+            m_window(levelContext.m_window),
+            m_threadPool(levelContext.m_threadPool),
+            m_eventBus(levelContext.m_eventBus),
+            m_soundManager(levelContext.m_soundManager),
+            m_timerManager(levelContext.m_timerManager),
+            m_inputHandler(levelContext.m_inputHandler),
+            m_scene(
                     Camera{
                             engineDefaults::cameraLongestDimViewSize,
                             engineDefaults::cameraDefaultPosition,
-                            levelContext.window,
-                            levelContext.inputHandler
+                            levelContext.m_window,
+                            levelContext.m_inputHandler
                     },
-                    levelContext.threadPool,
-                    performanceMonitor,
+                    levelContext.m_threadPool,
+                    m_performanceMonitor,
                     maxObjectsNum,
                     worldSize
             ),
-            graphics(scene, levelContext.window,
-                     levelContext.threadPool,
-                     performanceMonitor),
-            physics(scene, levelContext.threadPool,
-                    performanceMonitor),
-            performanceMonitor(levelContext.window) {
+            m_graphics(m_scene, levelContext.m_window,
+                       levelContext.m_threadPool,
+                       m_performanceMonitor),
+            m_physics(m_scene, levelContext.m_threadPool,
+                      m_performanceMonitor),
+            m_performanceMonitor(levelContext.m_window) {
 
 
     }
 
     void update() {
-        performanceMonitor.start("total");
+        m_performanceMonitor.start("total");
 
-        performanceMonitor.start("physics");
-        physics.update();
-        performanceMonitor.end("physics");
+        m_performanceMonitor.start("m_physics");
+        m_physics.update();
+        m_performanceMonitor.end("m_physics");
 
-        performanceMonitor.start("graphics");
-        window.clear(sf::Color::Black);
-        graphics.update();
-        performanceMonitor.draw();
-        window.display();
-        performanceMonitor.end("graphics");
+        m_performanceMonitor.start("m_graphics");
+        m_window.clear(sf::Color::Black);
+        m_graphics.update();
+        m_performanceMonitor.draw();
+        m_window.display();
+        m_performanceMonitor.end("m_graphics");
 
-        performanceMonitor.start("input");
-        inputHandler.update();
-        performanceMonitor.end("input");
+        m_performanceMonitor.start("input");
+        m_inputHandler.update();
+        m_performanceMonitor.end("input");
 
-        performanceMonitor.start("onTick");
-        scene.runTick();
+        m_performanceMonitor.start("onTick");
+        m_scene.runTick();
         onTick();
-        performanceMonitor.end("onTick");
+        m_performanceMonitor.end("onTick");
 
-        performanceMonitor.start("removingMarked");
-        scene.removeMarkedObjects();
-        performanceMonitor.end("removingMarked");
+        m_performanceMonitor.start("removingMarked");
+        m_scene.removeMarkedObjects();
+        m_performanceMonitor.end("removingMarked");
 
-        performanceMonitor.setObjectsCount(scene.getObjectsCount());
-        performanceMonitor.end("total");
+        m_performanceMonitor.setObjectsCount(m_scene.getObjectsCount());
+        m_performanceMonitor.end("total");
     }
 
     virtual void onInit() {}

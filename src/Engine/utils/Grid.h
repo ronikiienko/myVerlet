@@ -21,9 +21,9 @@
 //    }
 //
 //    template<typename Func>
-//    void forEachId(Func &&callback) const {
+//    void forEachId(Func &&m_callback) const {
 //        for (int i = 0; i < activeCount; i++) {
-//            callback(ids[i], i);
+//            m_callback(ids[i], i);
 //        }
 //    }
 //
@@ -32,7 +32,7 @@
 //    }
 //};
 
-// this cell  uses fixed size array - more performant. but it relies on fact that only 4 objects can fit in one cell (all should have same radius). Commented one - vector, which allows different radiuses.
+// this cell  uses fixed size array - more performant. but it relies on fact that only 4 m_objects can fit in one cell (all should have same radius). Commented one - vector, which allows different radiuses.
 struct Cell {
     std::array<int, 4> ids = {0,0,0,0};  // Fixed-size array
     char activeCount = 0;  // Keeps track of how many ids are currently active.
@@ -41,7 +41,7 @@ struct Cell {
         if (activeCount < 4) {
             ids[activeCount] = id;
         } else {
-            // TODO throw if cell overflow happens. For now i spawn many objects randomly and one can be in other, so overflow will initially happen
+            // TODO throw if cell overflow happens. For now i spawn many m_objects randomly and one can be in other, so overflow will initially happen
             // TODO overflow can happen also if many object are dense and "smashed" together. It happens pretty rare so probably can ignore that
 //            throw std::runtime_error("cell overflow");
         }
@@ -50,9 +50,9 @@ struct Cell {
 
     // good thing but affects performance. Because should be called for each cell.
 //    template<typename Func>
-//    void forEachId(Func&& callback)const {
+//    void forEachId(Func&& m_callback)const {
 //        for (int i = 0; i < activeCount; i++) {
-//            callback(ids[i], i);
+//            m_callback(ids[i], i);
 //        }
 //    }
 
@@ -62,73 +62,73 @@ struct Cell {
 };
 
 struct IdGrid {
-    int width;
-    int height;
-    int realWidth;
-    int realHeight;
-    float widthRatio;
-    float heightRatio;
-    float inverseWidthRatio;
-    float inverseHeightRatio;
-    std::vector<Cell> data;
-    int length;
+    int m_width;
+    int m_height;
+    int m_realWidth;
+    int m_realHeight;
+    float m_widthRatio;
+    float m_heightRatio;
+    float m_inverseWidthRatio;
+    float m_inverseHeightRatio;
+    std::vector<Cell> m_data;
+    int m_length;
 
-    IdGrid(int width, int height, Vector2I realSize) : width(width), height(height) {
-        realWidth = realSize.x;
-        realHeight = realSize.y;
+    IdGrid(int width, int height, Vector2I realSize) : m_width(width), m_height(height) {
+        m_realWidth = realSize.m_x;
+        m_realHeight = realSize.m_y;
 
-        widthRatio = static_cast<float>(realWidth) / static_cast<float>(width);
-        heightRatio = static_cast<float>(realHeight) / static_cast<float>(height);
-        inverseWidthRatio = 1 / widthRatio;
-        inverseHeightRatio = 1 / heightRatio;
+        m_widthRatio = static_cast<float>(m_realWidth) / static_cast<float>(width);
+        m_heightRatio = static_cast<float>(m_realHeight) / static_cast<float>(height);
+        m_inverseWidthRatio = 1 / m_widthRatio;
+        m_inverseHeightRatio = 1 / m_heightRatio;
 
-        length = width * height;
-        data.resize(length);
+        m_length = width * height;
+        m_data.resize(m_length);
     }
 
     void insert(int id, float realX, float realY) {
-        // Convert real-scene coordinates to grid coordinates
-        const int gridX = static_cast<int>(realX * inverseWidthRatio);
-        const int gridY = static_cast<int>(realY * inverseHeightRatio);
+        // Convert real-m_scene coordinates to m_grid coordinates
+        const int gridX = static_cast<int>(realX * m_inverseWidthRatio);
+        const int gridY = static_cast<int>(realY * m_inverseHeightRatio);
 
         // TODO remove checks - they are for debuggin
-        if (gridX < 0 || gridX >= width || gridY < 0 || gridY >= height) {
-            throw std::runtime_error("Trying to set outside the grid. Grid x: " + std::to_string(gridX) + " Grid y: " + std::to_string(gridY) + " Id: " + std::to_string(id));
+        if (gridX < 0 || gridX >= m_width || gridY < 0 || gridY >= m_height) {
+            throw std::runtime_error("Trying to set outside the m_grid. Grid m_x: " + std::to_string(gridX) + " Grid m_y: " + std::to_string(gridY) + " Id: " + std::to_string(id));
         }
 
-        const int index = gridY * width + gridX;
+        const int index = gridY * m_width + gridX;
 
-        data[index].insert(id);
+        m_data[index].insert(id);
     }
 
     void clear() {
-        for (auto &cell: data) {
+        for (auto &cell: m_data) {
             cell.clear();
         }
     }
 
     void clear(int startCellIndex, int endCellIndex) {
         for (int i = startCellIndex; i < endCellIndex; i++) {
-            data[i].clear();
+            m_data[i].clear();
         }
     }
 
     [[nodiscard]] const Cell& get(int gridX, int gridY) const {
         // TODO remove safety checks
-        if (gridX < 0 || gridX >= width || gridY < 0 || gridY >= height) {
-            throw std::runtime_error("Trying to get outside the grid.");
+        if (gridX < 0 || gridX >= m_width || gridY < 0 || gridY >= m_height) {
+            throw std::runtime_error("Trying to get outside the m_grid.");
         }
-        int index = gridY * width + gridX;
-        return data[index];
+        int index = gridY * m_width + gridX;
+        return m_data[index];
     }
 
-    // it's not precise iterator. it just uses grid cells to iterate. So it's not precise, but it's fast. To actually iterate precise, needs more checks (it's just a broad phase)
+    // it's not precise iterator. it just uses m_grid cells to iterate. So it's not precise, but it's fast. To actually iterate precise, needs more checks (it's just a broad phase)
     template<typename Func>
     void forEachInRect(RectangleF rect, Func &&callback) {
-        const int startGridX = std::max(0, static_cast<int>(rect.getX1() * inverseWidthRatio));
-        const int endGridX = std::min(width - 1, static_cast<int>(rect.getX2() * inverseWidthRatio));
-        const int startGridY = std::max(0, static_cast<int>(rect.getY1() * inverseHeightRatio));
-        const int endGridY = std::min(height - 1, static_cast<int>(rect.getY2() * inverseHeightRatio));
+        const int startGridX = std::max(0, static_cast<int>(rect.getX1() * m_inverseWidthRatio));
+        const int endGridX = std::min(m_width - 1, static_cast<int>(rect.getX2() * m_inverseWidthRatio));
+        const int startGridY = std::max(0, static_cast<int>(rect.getY1() * m_inverseHeightRatio));
+        const int endGridY = std::min(m_height - 1, static_cast<int>(rect.getY2() * m_inverseHeightRatio));
 
         for (int i = startGridX; i <= endGridX; i++) {
             for (int j = startGridY; j <= endGridY; j++) {

@@ -11,108 +11,108 @@
 
 class Scene {
 private:
-    std::vector<std::shared_ptr<BaseObject>> objects;
-    std::vector<BasicDetails> basicDetails;
-    std::vector<int> objectsToRemove;
-    Vector2F sizeF;
-    Vector2I sizeI;
-    Camera camera;
-    ThreadPool &threadPool;
-    PerformanceMonitor &performanceMonitor;
-    int maxObjectsNum;
-    // collision grid when finding collisions is split on many threads (by columns). To avoid race conditions i use two pass method. This means that grid in fact will be split on numberOfThreads * 2 tasks. So, if we have 10threads
-    // and grid of, say, size 39 will mean that each thread gets 1 task, and 19 remain for "cleanup" function, which is inefficient, because cleanup function (it solves remaining colums) runs on one core
-    // Conclusion: best if grid is divided by threads * 2 without remainder
-    int collisionGridWidth = sizeI.x / (engineDefaults::objectsRadius * 2);
-    int collisionGridHeight = sizeI.y / (engineDefaults::objectsRadius * 2);
+    std::vector<std::shared_ptr<BaseObject>> m_objects;
+    std::vector<BasicDetails> m_basicDetails;
+    std::vector<int> m_objectsToRemove;
+    Vector2F m_sizeF;
+    Vector2I m_sizeI;
+    Camera m_camera;
+    ThreadPool &m_threadPool;
+    PerformanceMonitor &m_performanceMonitor;
+    int m_maxObjectsNum;
+    // collision m_grid when finding collisions is split on many threads (by columns). To avoid race conditions i use two pass method. This means that m_grid in fact will be split on numberOfThreads * 2 m_tasks. So, if we have 10threads
+    // and m_grid of, say, size 39 will mean that each m_thread gets 1 m_task, and 19 remain for "cleanup" function, which is inefficient, because cleanup function (it solves remaining colums) runs on one core
+    // Conclusion: best if m_grid is divided by threads * 2 without remainder
+    int m_collisionGridWidth = m_sizeI.m_x / (engineDefaults::objectsRadius * 2);
+    int m_collisionGridHeight = m_sizeI.m_y / (engineDefaults::objectsRadius * 2);
 public:
-    IdGrid grid{collisionGridWidth, collisionGridHeight, getSizeI()};
+    IdGrid grid{m_collisionGridWidth, m_collisionGridHeight, getSizeI()};
 
     explicit Scene(Camera camera, ThreadPool &threadPool, PerformanceMonitor &performanceMonitor,
                    int maxObjectsNum, Vector2I size) :
-            sizeF(Vector2F::fromOther(size)),
-            sizeI(size),
-            camera(camera),
-            threadPool(threadPool),
-            performanceMonitor(performanceMonitor),
-            maxObjectsNum(maxObjectsNum) {
-        objects.reserve(maxObjectsNum);
-        basicDetails.reserve(maxObjectsNum);
-        objectsToRemove.reserve(maxObjectsNum);
+            m_sizeF(Vector2F::fromOther(size)),
+            m_sizeI(size),
+            m_camera(camera),
+            m_threadPool(threadPool),
+            m_performanceMonitor(performanceMonitor),
+            m_maxObjectsNum(maxObjectsNum) {
+        m_objects.reserve(maxObjectsNum);
+        m_basicDetails.reserve(maxObjectsNum);
+        m_objectsToRemove.reserve(maxObjectsNum);
     }
 
     template<typename T>
     std::weak_ptr<BaseObject> addObject(T &&object, Vector2F position) {
-        if (objects.size() >= maxObjectsNum) {
+        if (m_objects.size() >= m_maxObjectsNum) {
             throw std::runtime_error("Exceeded Scene capacity");
         }
 
-        basicDetails.emplace_back(position);
-        object.basicDetails = &basicDetails.back();
+        m_basicDetails.emplace_back(position);
+        object.m_basicDetails = &m_basicDetails.back();
 
         std::shared_ptr<T> ptr = std::make_shared<T>(std::forward<T>(object));
-        objects.push_back(std::move(ptr));
+        m_objects.push_back(std::move(ptr));
 
-        int index = static_cast<int>(objects.size()) - 1;
-        basicDetails[index].parent = objects[index].get();
-        objects[index]->onInit();
-        return {objects[index]};
+        int index = static_cast<int>(m_objects.size()) - 1;
+        m_basicDetails[index].m_parent = m_objects[index].get();
+        m_objects[index]->onInit();
+        return {m_objects[index]};
     }
 
     Camera &getCamera() {
-        return camera;
+        return m_camera;
     }
 
 
     template<typename Func>
     void forEachObject(Func &&callback, int start = 0, int end = -1) {
         if (end == -1) {
-            end = static_cast<int>(objects.size());
+            end = static_cast<int>(m_objects.size());
         }
 
         for (int i = start; i < end; i++) {
-            callback(*objects[i], i);
+            callback(*m_objects[i], i);
         }
     }
 
     template<typename Func>
     void forEachBasicDetails(Func &&callback, int start = 0, int end = -1) {
         if (end == -1) {
-            end = static_cast<int>(basicDetails.size());
+            end = static_cast<int>(m_basicDetails.size());
         }
 
         for (int i = start; i < end; i++) {
-            callback(basicDetails[i], i);
+            callback(m_basicDetails[i], i);
         }
     }
 
 
     BaseObject &getObject(int ind) {
-        return *objects[ind];
+        return *m_objects[ind];
     }
 
     BasicDetails &getBasicDetails(int ind) {
-        return basicDetails[ind];
+        return m_basicDetails[ind];
     }
 
     void clear() {
-        objects.clear();
+        m_objects.clear();
     }
 
     [[nodiscard]] int getObjectsCount() {
-        return static_cast<int>(objects.size());
+        return static_cast<int>(m_objects.size());
     }
 
     [[nodiscard]] Vector2F &getSizeF() {
-        return sizeF;
+        return m_sizeF;
     }
 
     [[nodiscard]] Vector2I &getSizeI() {
-        return sizeI;
+        return m_sizeI;
     }
 
     void removeObjects() {
-        objects.clear();
+        m_objects.clear();
     }
 
     void runTick() {
@@ -121,44 +121,44 @@ public:
         });
     }
 
-    // TODO not copy callback
+    // TODO not copy m_callback
     void forEachInRadius(Vector2F pos, float radius, std::function<void(BaseObject *, int)> callback) {
 //        forEachBasicDetails([&](BasicDetails &details, int ind) {
-//            if ((details.posCurr - pos).magnitude2() < radius * radius) {
-//                callback(details.parent, ind);
+//            if ((details.m_posCurr - pos).magnitude2() < radius * radius) {
+//                m_callback(details.m_parent, ind);
 //            }
 //        });
-        grid.forEachInRect(RectangleF::fromCoords(pos.x - radius, pos.y - radius, pos.x + radius, pos.y + radius),
+        grid.forEachInRect(RectangleF::fromCoords(pos.m_x - radius, pos.m_y - radius, pos.m_x + radius, pos.m_y + radius),
                            [&](int id) {
-                               if ((basicDetails[id].posCurr - pos).magnitude2() < radius * radius) {
-                                   callback(basicDetails[id].parent, id);
+                               if ((m_basicDetails[id].m_posCurr - pos).magnitude2() < radius * radius) {
+                                   callback(m_basicDetails[id].m_parent, id);
                                }
                            });
     }
 
 
     void removeMarkedObjects() {
-        // need to sort objectsToRemove in descending order
+        // need to sort m_objectsToRemove in descending order
 
-        if (objectsToRemove.empty()) {
+        if (m_objectsToRemove.empty()) {
             return;
         }
-        std::sort(objectsToRemove.begin(), objectsToRemove.end(), std::greater<>());
+        std::sort(m_objectsToRemove.begin(), m_objectsToRemove.end(), std::greater<>());
 
-        for (int i: objectsToRemove) {
-            objects.erase(objects.begin() + i);
-            basicDetails.erase(basicDetails.begin() + i);
+        for (int i: m_objectsToRemove) {
+            m_objects.erase(m_objects.begin() + i);
+            m_basicDetails.erase(m_basicDetails.begin() + i);
         }
 
-        for (int i = 0; i < objects.size(); i++) {
-            objects[i]->basicDetails = &basicDetails[i];
+        for (int i = 0; i < m_objects.size(); i++) {
+            m_objects[i]->m_basicDetails = &m_basicDetails[i];
         }
-        objectsToRemove.clear();
+        m_objectsToRemove.clear();
     }
 
     void markObjectForRemoval(int index) {
-        if (std::find(objectsToRemove.begin(), objectsToRemove.end(), index) == objectsToRemove.end()) {
-            objectsToRemove.push_back(index);
+        if (std::find(m_objectsToRemove.begin(), m_objectsToRemove.end(), index) == m_objectsToRemove.end()) {
+            m_objectsToRemove.push_back(index);
         }
     }
 
@@ -168,40 +168,40 @@ public:
     }
 
     void removeObject(std::weak_ptr<BaseObject> &ptr) {
-        auto it = std::find(objects.begin(), objects.end(), ptr.lock());
-        if (it != objects.end()) {
-            int index = static_cast<int>(it - objects.begin());
+        auto it = std::find(m_objects.begin(), m_objects.end(), ptr.lock());
+        if (it != m_objects.end()) {
+            int index = static_cast<int>(it - m_objects.begin());
             markObjectForRemoval(index);
         }
     }
 
-    // theres was bug: if you remove an object during physics calculations, it will cause some grid objects to become invalid (because everything is shifted), and grid uses id's
-    // this can happen primarily if we for example remove an object in collision callback
-    // to fix this we  use a stack of objects to remove, and remove them after physics calculations (and input handling)
+    // theres was bug: if you remove an object during m_physics calculations, it will cause some m_grid m_objects to become invalid (because everything is shifted), and m_grid uses id's
+    // this can happen primarily if we for example remove an object in collision m_callback
+    // to fix this we  use a stack of m_objects to remove, and remove them after m_physics calculations (and input handling)
     void removeObject(BaseObject *ptr) {
-        auto it = objects.end();
-        for (auto i = objects.begin(); i != objects.end(); i++) {
+        auto it = m_objects.end();
+        for (auto i = m_objects.begin(); i != m_objects.end(); i++) {
             if (i->get() == ptr) {
                 it = i;
                 break;
             }
         }
-        if (it != objects.end()) {
-            int index = static_cast<int>(it - objects.begin());
+        if (it != m_objects.end()) {
+            int index = static_cast<int>(it - m_objects.begin());
             markObjectForRemoval(index);
         }
     }
 
     void rebuildGrid() {
-        performanceMonitor.start("grid clear");
-        threadPool.dispatch(grid.length, [this](int start, int end) {
+        m_performanceMonitor.start("m_grid clear");
+        m_threadPool.dispatch(grid.m_length, [this](int start, int end) {
             grid.clear(start, end);
         });
-        performanceMonitor.end("grid clear");
-        performanceMonitor.start("grid build");
+        m_performanceMonitor.end("m_grid clear");
+        m_performanceMonitor.start("m_grid build");
         forEachBasicDetails([this](BasicDetails &object, int i) {
-            grid.insert(i, object.posCurr.x, object.posCurr.y);
+            grid.insert(i, object.m_posCurr.m_x, object.m_posCurr.m_y);
         });
-        performanceMonitor.end("grid build");
+        m_performanceMonitor.end("m_grid build");
     }
 };

@@ -6,18 +6,18 @@
 
 class InputHandler {
 private:
-    sf::RenderWindow &window;
-    std::unordered_map<sf::Event::EventType, std::unordered_map<int, std::function<void(const sf::Event &)>>> eventHandlers;
-    int keyCounter = 0;
+    sf::RenderWindow &m_window;
+    std::unordered_map<sf::Event::EventType, std::unordered_map<int, std::function<void(const sf::Event &)>>> m_eventHandlers;
+    int m_keyCounter = 0;
 public:
-    explicit InputHandler(sf::RenderWindow &window) : window(window) {}
+    explicit InputHandler(sf::RenderWindow &window) : m_window(window) {}
     void update() {
         sf::Event event{};
-        while (window.pollEvent(event)) {
+        while (m_window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
-                window.close();
+                m_window.close();
             } else {
-                auto &eventTypeCallbacks = eventHandlers[event.type];
+                auto &eventTypeCallbacks = m_eventHandlers[event.type];
                 for (auto &pair: eventTypeCallbacks) {
                     pair.second(event);
                 }
@@ -27,12 +27,12 @@ public:
 
 
     int addEventListener(sf::Event::EventType type, const std::function<void(const sf::Event &)>& callback) {
-        eventHandlers[type][keyCounter] = callback;
-        return keyCounter++;
+        m_eventHandlers[type][m_keyCounter] = callback;
+        return m_keyCounter++;
     }
 
 
     void removeEventListener(sf::Event::EventType type, int key) {
-        eventHandlers[type].erase(key);
+        m_eventHandlers[type].erase(key);
     }
 };

@@ -7,61 +7,61 @@
 
 class Shooter {
 private:
-    Vector2F position;
-    Angle direction = Angle::fromDegrees(0);
-    float speed;
-    int width;
-    int rowsNum;
-    float interval;
-    Scene &scene;
-    ExplosionHandler& explosionHandler;
+    Vector2F m_position;
+    Angle m_direction = Angle::fromDegrees(0);
+    float m_speed;
+    int m_width;
+    int m_rowsNum;
+    float m_interval;
+    Scene &m_scene;
+    ExplosionHandler& m_explosionHandler;
 public:
 
 
     Shooter(Vector2F position, float speed, int width, float interval, Scene &scene,
-            int rowsNum, ExplosionHandler& explosionHandler) : position(position), speed(speed), width(width), interval(interval),
-                                                               scene(scene), rowsNum(rowsNum), explosionHandler(explosionHandler) {}
+            int rowsNum, ExplosionHandler& explosionHandler) : m_position(position), m_speed(speed), m_width(width), m_interval(interval),
+                                                               m_scene(scene), m_rowsNum(rowsNum), m_explosionHandler(explosionHandler) {}
 
     void rotate(Angle angle) {
-        direction += angle;
+        m_direction += angle;
     }
 
     void setDirection(Angle angle) {
-        direction = angle;
+        m_direction = angle;
     }
 
     void move(Vector2F vector) {
-        position += vector;
+        m_position += vector;
     }
 
     void setPosition(Vector2F vector) {
-        position = vector;
+        m_position = vector;
     }
 
     void setWidth(int value) {
-        width = value;
+        m_width = value;
     }
 
 
     void shoot(Vector2F target) {
         pointTo(target);
         Vector2F rowOffset = Vector2F::cart(0, 0);
-        for (int row = 0; row < rowsNum; row++) {
-            const Angle rowDirection = direction + Angle::fromDegrees(90);
-            const Vector2F move = Vector2F::polar(interval, rowDirection);
-            const Vector2F initialVelocity = Vector2F::polar(speed, direction);
-            const int leftOffset = width / 2;
-            Vector2F currentPosition = position - (move * static_cast<float>(leftOffset)) + rowOffset;
-            for (int i = 0; i < width; i++) {
-                auto ptr = scene.addObject(Bullet(explosionHandler), currentPosition + Vector2F::cart(5, 5));
-                ptr.lock()->basicDetails->setVelocity(initialVelocity);
+        for (int row = 0; row < m_rowsNum; row++) {
+            const Angle rowDirection = m_direction + Angle::fromDegrees(90);
+            const Vector2F move = Vector2F::polar(m_interval, rowDirection);
+            const Vector2F initialVelocity = Vector2F::polar(m_speed, m_direction);
+            const int leftOffset = m_width / 2;
+            Vector2F currentPosition = m_position - (move * static_cast<float>(leftOffset)) + rowOffset;
+            for (int i = 0; i < m_width; i++) {
+                auto ptr = m_scene.addObject(Bullet(m_explosionHandler), currentPosition + Vector2F::cart(5, 5));
+                ptr.lock()->m_basicDetails->setVelocity(initialVelocity);
                 currentPosition += move;
             }
-            rowOffset += Vector2F::polar(interval, direction);
+            rowOffset += Vector2F::polar(m_interval, m_direction);
         }
     }
 
     void pointTo(Vector2F point) {
-        direction = Angle::fromRadians(std::atan2(point.y - position.y, point.x - position.x));
+        m_direction = Angle::fromRadians(std::atan2(point.m_y - m_position.m_y, point.m_x - m_position.m_x));
     }
 };

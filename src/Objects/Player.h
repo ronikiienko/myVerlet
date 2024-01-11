@@ -7,123 +7,123 @@
 
 class Player : public BaseObject {
 public:
-    InputHandler &inputHandler;
-    Shooter &shooter;
-    Scene &scene;
-    float acceleration = 100;
-    bool movingUp = false;
-    bool movingDown = false;
-    bool movingLeft = false;
-    bool movingRight = false;
-    bool isBraking = false;
+    InputHandler &m_inputHandler;
+    Shooter &m_shooter;
+    Scene &m_scene;
+    float m_acceleration = 100;
+    bool m_movingUp = false;
+    bool m_movingDown = false;
+    bool m_movingLeft = false;
+    bool m_movingRight = false;
+    bool m_isBraking = false;
 
-    int keyPressedListenerId = -1;
-    int keyReleasedListenerId = -1;
-    int mouseButtonPressedListenerId = -1;
-    int mouseWheelScrolledListenerId = -1;
+    int m_keyPressedListenerId = -1;
+    int m_keyReleasedListenerId = -1;
+    int m_mouseButtonPressedListenerId = -1;
+    int m_mouseWheelScrolledListenerId = -1;
 
     Player(InputHandler &inputHandler, Shooter &shooter, Scene &scene) :
-            inputHandler(inputHandler),
-            shooter(shooter),
-            scene(scene) {
+            m_inputHandler(inputHandler),
+            m_shooter(shooter),
+            m_scene(scene) {
         // i can't setup events from constructor, because lambda will capture
         // `this` before std::make_unique will fire, which will invalidate `this`, because ownership is transferred to unique_ptr
     }
 
     ~Player() override {
-        inputHandler.removeEventListener(sf::Event::KeyPressed, keyPressedListenerId);
-        inputHandler.removeEventListener(sf::Event::KeyReleased, keyReleasedListenerId);
-        inputHandler.removeEventListener(sf::Event::MouseButtonPressed, mouseButtonPressedListenerId);
-        inputHandler.removeEventListener(sf::Event::MouseWheelScrolled, mouseWheelScrolledListenerId);
+        m_inputHandler.removeEventListener(sf::Event::KeyPressed, m_keyPressedListenerId);
+        m_inputHandler.removeEventListener(sf::Event::KeyReleased, m_keyReleasedListenerId);
+        m_inputHandler.removeEventListener(sf::Event::MouseButtonPressed, m_mouseButtonPressedListenerId);
+        m_inputHandler.removeEventListener(sf::Event::MouseWheelScrolled, m_mouseWheelScrolledListenerId);
     }
 
     void onInit() override {
         std::cout << "onInit" << std::endl;
-        keyPressedListenerId = inputHandler.addEventListener(sf::Event::KeyPressed, [this](const sf::Event &event) {
+        m_keyPressedListenerId = m_inputHandler.addEventListener(sf::Event::KeyPressed, [this](const sf::Event &event) {
             if (event.key.code == sf::Keyboard::W) {
-                movingUp = true;
+                m_movingUp = true;
             }
             if (event.key.code == sf::Keyboard::S) {
-                movingDown = true;
+                m_movingDown = true;
             }
             if (event.key.code == sf::Keyboard::A) {
-                movingLeft = true;
+                m_movingLeft = true;
             }
             if (event.key.code == sf::Keyboard::D) {
-                movingRight = true;
+                m_movingRight = true;
             }
             if (event.key.code == sf::Keyboard::Space) {
-                isBraking = true;
+                m_isBraking = true;
             }
         });
-        keyReleasedListenerId = inputHandler.addEventListener(sf::Event::KeyReleased, [this](const sf::Event &event) {
+        m_keyReleasedListenerId = m_inputHandler.addEventListener(sf::Event::KeyReleased, [this](const sf::Event &event) {
             if (event.key.code == sf::Keyboard::W) {
-                movingUp = false;
+                m_movingUp = false;
             }
             if (event.key.code == sf::Keyboard::S) {
-                movingDown = false;
+                m_movingDown = false;
             }
             if (event.key.code == sf::Keyboard::A) {
-                movingLeft = false;
+                m_movingLeft = false;
             }
             if (event.key.code == sf::Keyboard::D) {
-                movingRight = false;
+                m_movingRight = false;
             }
             if (event.key.code == sf::Keyboard::Space) {
-                isBraking = false;
+                m_isBraking = false;
             }
         });
-        mouseButtonPressedListenerId = inputHandler.addEventListener(sf::Event::MouseButtonPressed,
-                                                                     [this](const sf::Event &event) {
+        m_mouseButtonPressedListenerId = m_inputHandler.addEventListener(sf::Event::MouseButtonPressed,
+                                                                         [this](const sf::Event &event) {
                                                                          if (event.mouseButton.button ==
                                                                              sf::Mouse::Left) {
-                                                                             shooter.setPosition(basicDetails->posCurr);
-                                                                             shooter.shoot(scene.getCamera().screenPosToWorldPos(
+                                                                             m_shooter.setPosition(m_basicDetails->m_posCurr);
+                                                                             m_shooter.shoot(m_scene.getCamera().screenPosToWorldPos(
                                                                                      Vector2F::cart(
                                                                                              static_cast<float>(event.mouseButton.x),
                                                                                              static_cast<float>(event.mouseButton.y))));
                                                                          }
                                                                      });
-        inputHandler.addEventListener(sf::Event::MouseWheelScrolled, [&](const sf::Event &event) {
+        m_inputHandler.addEventListener(sf::Event::MouseWheelScrolled, [&](const sf::Event &event) {
             if (event.mouseWheelScroll.delta > 0) {
-                scene.getCamera().zoom(1.5);
+                m_scene.getCamera().zoom(1.5);
             } else {
-                scene.getCamera().zoom(0.75);
+                m_scene.getCamera().zoom(0.75);
             }
         });
     }
 
     void onTick() override {
-        if (!basicDetails) {
-            throw std::runtime_error("basicDetails is nullptr");
+        if (!m_basicDetails) {
+            throw std::runtime_error("m_basicDetails is nullptr");
         }
-//        scene.getCamera().setPosition((basicDetails->posCurr * 0.2 + scene.getCamera().worldPosition * 1.8) / 2);
-        scene.getCamera().setPosition(basicDetails->posCurr);
-        if (movingUp) {
-//            setVelocity(Vector2F::cart(0, -acceleration));
-            basicDetails->accelerate(Vector2F::cart(0, -acceleration));
+//        m_scene.getCamera().setPosition((m_basicDetails->m_posCurr * 0.2 + m_scene.getCamera().m_worldPosition * 1.8) / 2);
+        m_scene.getCamera().setPosition(m_basicDetails->m_posCurr);
+        if (m_movingUp) {
+//            setVelocity(Vector2F::cart(0, -m_acceleration));
+            m_basicDetails->accelerate(Vector2F::cart(0, -m_acceleration));
         }
-        if (movingDown) {
-//            setVelocity(Vector2F::cart(0, acceleration));
-            basicDetails->accelerate(Vector2F::cart(0, acceleration));
+        if (m_movingDown) {
+//            setVelocity(Vector2F::cart(0, m_acceleration));
+            m_basicDetails->accelerate(Vector2F::cart(0, m_acceleration));
         }
-        if (movingLeft) {
-//            setVelocity(Vector2F::cart(-acceleration, 0));
-            basicDetails->accelerate(Vector2F::cart(-acceleration, 0));
+        if (m_movingLeft) {
+//            setVelocity(Vector2F::cart(-m_acceleration, 0));
+            m_basicDetails->accelerate(Vector2F::cart(-m_acceleration, 0));
         }
-        if (movingRight) {
-//            setVelocity(Vector2F::cart(acceleration, 0));
-            basicDetails->accelerate(Vector2F::cart(acceleration, 0));
+        if (m_movingRight) {
+//            setVelocity(Vector2F::cart(m_acceleration, 0));
+            m_basicDetails->accelerate(Vector2F::cart(m_acceleration, 0));
         }
-        if (isBraking) {
-            basicDetails->setVelocity(basicDetails->getVelocity() * 0.95);
+        if (m_isBraking) {
+            m_basicDetails->setVelocity(m_basicDetails->getVelocity() * 0.95);
         }
     }
 
     void onCollision(BaseObject *ptr) override {
-        scene.forEachInRadius(basicDetails->posCurr, 50, [&](BaseObject *ptr, int ind) {
+        m_scene.forEachInRadius(m_basicDetails->m_posCurr, 50, [&](BaseObject *ptr, int ind) {
             if (ptr != this) {
-                scene.removeObject(ind);
+                m_scene.removeObject(ind);
             }
         });
     }

@@ -8,17 +8,17 @@ class BaseObject;
 
 class BasicDetails {
 public:
-    BaseObject* parent = nullptr;
-    Vector2F posCurr, posOld, acceleration = Vector2F::cart();
-    sf::Color color = sf::Color::White;
-    bool isPinned = false;
+    BaseObject* m_parent = nullptr;
+    Vector2F m_posCurr, m_posOld, m_acceleration = Vector2F::cart();
+    sf::Color m_color = sf::Color::White;
+    bool m_isPinned = false;
 
     void setVelocity(Vector2F v) {
-        posOld = posCurr - v;
+        m_posOld = m_posCurr - v;
     }
 
     [[nodiscard]] Vector2F getVelocity()const {
-        return posCurr - posOld;
+        return m_posCurr - m_posOld;
     }
 
     void addVelocity(Vector2F v) {
@@ -26,49 +26,49 @@ public:
     }
 
     void accelerate(Vector2F a) {
-        acceleration += a;
+        m_acceleration += a;
     }
 
     void pin() {
-        isPinned = true;
+        m_isPinned = true;
     }
     void unpin() {
-        isPinned = false;
+        m_isPinned = false;
     }
 
 //    void update(float dt) {
-//        Vector2F velocity = posCurr - posOld;
-//        velocity *= engineDefaults::linearDamping;
+//        Vector2F velocity = m_posCurr - m_posOld;
+//        velocity *= engineDefaults::m_linearDamping;
 //        // TODO review maby limiting not needed
-//        velocity.limitMagnitude(engineDefaults::maxVelocity);
+//        velocity.limitMagnitude(engineDefaults::m_maxVelocity);
 //
-//        posOld = posCurr;
-//        posCurr += velocity + (acceleration * (dt * dt));
+//        m_posOld = m_posCurr;
+//        m_posCurr += velocity + (m_acceleration * (dt * dt));
 //
-//        acceleration = Vector2F::cart();
+//        m_acceleration = Vector2F::cart();
 //    }
 
-    explicit BasicDetails(Vector2F position) : posCurr(position), posOld(position) {
+    explicit BasicDetails(Vector2F position) : m_posCurr(position), m_posOld(position) {
     };
 
     void log() const {
         std::cout << "Pos curr: ";
-        posCurr.log();
+        m_posCurr.log();
         std::cout << "Pos old: ";
-        posOld.log();
+        m_posOld.log();
         std::cout << "Velocity: ";
         getVelocity().log();
         std::cout << "Acceleration: ";
-        acceleration.log();
-        std::cout << "Is pinned: " << isPinned << std::endl;
-        std::cout << "Color: " << color.toInteger() << std::endl;
+        m_acceleration.log();
+        std::cout << "Is pinned: " << m_isPinned << std::endl;
+        std::cout << "Color: " << m_color.toInteger() << std::endl;
     }
 };
 
 
 class BaseObject {
 public:
-    BasicDetails* basicDetails = nullptr;
+    BasicDetails* m_basicDetails = nullptr;
 
     virtual void onTick() {};
     virtual void onInit() {};

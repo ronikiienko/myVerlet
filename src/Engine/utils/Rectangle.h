@@ -3,9 +3,9 @@
 template <typename T>
 class Rectangle {
 private:
-    T x1, x2, y1, y2;
+    T m_x1, m_x2, m_y1, m_y2;
 
-    constexpr Rectangle(T x1, T y1, T x2, T y2) : x1(x1), x2(x2), y1(y1), y2(y2) {};
+    constexpr Rectangle(T x1, T y1, T x2, T y2) : m_x1(x1), m_x2(x2), m_y1(y1), m_y2(y2) {};
 public:
 
     constexpr static Rectangle fromCoords(T x1, T y1, T x2, T y2) {
@@ -13,7 +13,7 @@ public:
     }
 
     constexpr static Rectangle fromCoords(Vector2<T> p1, Vector2<T> p2) {
-        return {p1.x, p1.y, p2.x, p2.y};
+        return {p1.m_x, p1.m_y, p2.m_x, p2.m_y};
     }
 
     constexpr static Rectangle fromSize(T x1, T y1, T width, T height) {
@@ -26,35 +26,35 @@ public:
     }
 
     [[nodiscard]] constexpr T getX1() const {
-        return x1;
+        return m_x1;
     }
 
     [[nodiscard]] constexpr T getX2() const {
-        return x2;
+        return m_x2;
     }
 
     [[nodiscard]] constexpr T getY1() const {
-        return y1;
+        return m_y1;
     }
 
     [[nodiscard]] constexpr T getY2() const {
-        return y2;
+        return m_y2;
     }
 
     [[nodiscard]] constexpr T getWidth() const {
-        return x2 - x1;
+        return m_x2 - m_x1;
     }
 
     [[nodiscard]] constexpr T getHeight() const {
-        return y2 - y1;
+        return m_y2 - m_y1;
     }
 
     [[nodiscard]] constexpr Vector2<T> getP1() {
-        return {x1, y1};
+        return {m_x1, m_y1};
     }
 
     [[nodiscard]] constexpr Vector2<T> getP2() {
-        return {x2, y2};
+        return {m_x2, m_y2};
     }
 };
 

@@ -4,24 +4,24 @@
 
 class NumberGenerator {
 protected:
-    std::random_device rd;
-    std::mt19937 gen;
+    std::random_device m_rd;
+    std::mt19937 m_gen;
 
-    NumberGenerator() : gen(rd()) {};
+    NumberGenerator() : m_gen(m_rd()) {};
 
-    explicit NumberGenerator(int seed) : gen(seed) {};
+    explicit NumberGenerator(int seed) : m_gen(seed) {};
 };
 
 template<typename T>
 class RealNumberGenerator : NumberGenerator {
 private:
-    std::uniform_real_distribution<T> distribution{0, 1};
+    std::uniform_real_distribution<T> m_distribution{0, 1};
 public:
     explicit RealNumberGenerator(int seed) : NumberGenerator(seed) {}
     RealNumberGenerator() : NumberGenerator() {}
 
     T get() {
-        return distribution(gen);
+        return m_distribution(m_gen);
     }
 
     T getInRange(T min, T max) {
@@ -37,7 +37,7 @@ public:
 
     T getInRange(T min, T max) {
         std::uniform_int_distribution<T> distribution(min, max);
-        return distribution(gen);
+        return distribution(m_gen);
     }
 };
 
