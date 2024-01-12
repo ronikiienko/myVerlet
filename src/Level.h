@@ -13,7 +13,7 @@ class Level : public BaseLevel {
     RNGf m_gen{consts::seed};
     RandomSpawner m_randomSpawner{m_scene, m_gen};
 public:
-    explicit Level(LevelContext levelContext) : BaseLevel(levelContext, 200000, Vector2I::cart(1000,1000), 600) {
+    explicit Level(LevelContext levelContext) : BaseLevel(levelContext, 200000, Vector2I::cart(2000,2000), 600) {
     }
 
     void onInit() override {
