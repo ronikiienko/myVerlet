@@ -35,4 +35,9 @@ public:
     void removeEventListener(sf::Event::EventType type, int key) {
         m_eventHandlers[type].erase(key);
     }
+
+    InputHandler(const InputHandler &) = delete;
+    InputHandler& operator=(const InputHandler &) = delete;
+    InputHandler(InputHandler &&) = delete;
+    InputHandler& operator=(InputHandler &&) = delete;
 };

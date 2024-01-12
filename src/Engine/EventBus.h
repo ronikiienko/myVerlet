@@ -13,6 +13,8 @@ class EventBus {
     std::unordered_map<std::type_index, std::unordered_map<int, std::function<void(const BaseEvent &)>>> m_callbacks;
     int m_keyCounter = 0;
 public:
+    EventBus() = default;
+
     template<typename EventType>
     int addEventListener(const std::function<void(const EventType &)> &callback) {
         // here passing m_callback as copy is necessary. otherwise if parameter is a reference and it is destroyed, lambda will have dangling reference
@@ -38,4 +40,9 @@ public:
     int getNumberOfEventTypes() {
         return static_cast<int>(m_callbacks.count(typeid(BaseEvent)));
     }
+
+    EventBus(const EventBus &) = delete;
+    EventBus& operator=(const EventBus &) = delete;
+    EventBus(EventBus &&) = delete;
+    EventBus& operator=(EventBus &&) = delete;
 };

@@ -66,5 +66,10 @@ public:
     void setObjectsCount(int count) {
         m_objectsCount = count;
     }
+
+    PerformanceMonitor(const PerformanceMonitor &) = delete;
+    PerformanceMonitor& operator=(const PerformanceMonitor &) = delete;
+    PerformanceMonitor(PerformanceMonitor &&) = delete;
+    PerformanceMonitor& operator=(PerformanceMonitor &&) = delete;
 };
 

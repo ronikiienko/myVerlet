@@ -65,4 +65,9 @@ public:
 
         m_window.draw(m_objectVertexArray, &m_objectTexture);
     }
+
+    Graphics(const Graphics &) = delete;
+    Graphics& operator=(const Graphics &) = delete;
+    Graphics(Graphics &&) = delete;
+    Graphics& operator=(Graphics &&) = delete;
 };
