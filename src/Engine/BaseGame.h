@@ -61,4 +61,9 @@ public:
     }
 
     virtual void onTick() {}
+
+    BaseGame(const BaseGame&) = delete;
+    BaseGame(BaseGame&&) = delete;
+    BaseGame& operator=(const BaseGame&) = delete;
+    BaseGame& operator=(BaseGame&&) = delete;
 };

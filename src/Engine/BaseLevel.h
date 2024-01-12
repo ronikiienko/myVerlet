@@ -101,4 +101,9 @@ public:
     virtual void onInit() {}
 
     virtual void onTick() {}
+
+    BaseLevel(const BaseLevel&) = delete;
+    BaseLevel(BaseLevel&&) = delete;
+    BaseLevel& operator=(const BaseLevel&) = delete;
+    BaseLevel& operator=(BaseLevel&&) = delete;
 };
