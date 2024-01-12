@@ -204,4 +204,9 @@ public:
         });
         m_performanceMonitor.end("m_grid build");
     }
+
+    Scene(const Scene&) = delete;
+    Scene(Scene&&) = delete;
+    Scene& operator=(const Scene&) = delete;
+    Scene& operator=(Scene&&) = delete;
 };
