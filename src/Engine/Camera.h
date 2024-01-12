@@ -47,7 +47,7 @@ public:
 
     void zoom(float zoomFactor) {
         m_zoomFactor *= zoomFactor;
-        m_zoomFactor = std::max(0.5f, m_zoomFactor);
+        m_zoomFactor = std::max(0.1f, m_zoomFactor);
         m_zoomFactor = std::min(64.0f, m_zoomFactor);
         updateWorldLeftTopPos();
     }

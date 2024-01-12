@@ -24,7 +24,7 @@ namespace engineDefaults {
     // To make it affect more, increase this value
     const float physicsInterval = 0.001f;
 
-    float cameraLongestDimViewSize = 400;
     Vector2F cameraDefaultPosition = Vector2F::cart(0, 0);
+    float cameraMaxWorldViewSize = 400;
 }
 

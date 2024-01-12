@@ -39,7 +39,8 @@ public:
     explicit BaseLevel(
             LevelContext levelContext,
             int maxObjectsNum = engineDefaults::maxObjectsNum,
-            Vector2I worldSize = engineDefaults::worldSize
+            Vector2I worldSize = engineDefaults::worldSize,
+            float cameraMaxWorldViewSize = engineDefaults::cameraMaxWorldViewSize
     ) :
             m_window(levelContext.m_window),
             m_threadPool(levelContext.m_threadPool),
@@ -48,7 +49,7 @@ public:
             m_timerManager(levelContext.m_timerManager),
             m_inputHandler(levelContext.m_inputHandler),
             m_scene(
-                    600,
+                    cameraMaxWorldViewSize,
                     Vector2F::cart(0, 0),
                     levelContext.m_inputHandler,
                     levelContext.m_window,
