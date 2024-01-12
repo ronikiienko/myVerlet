@@ -17,7 +17,7 @@ public:
     }
 
     void onInit() override {
-        m_randomSpawner.spawn(1500);
+        m_randomSpawner.spawn(150000);
         m_scene.addObject(Player{m_inputHandler, m_shooter, m_scene}, Vector2F::cart(100, 100));
         m_inputHandler.addEventListener(sf::Event::KeyPressed, [&](const sf::Event &event) {
             if (event.key.code == sf::Keyboard::BackSpace) {
