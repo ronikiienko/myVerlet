@@ -339,6 +339,11 @@ public:
     [[nodiscard]] float getWallsDamping() const {
         return m_wallsDamping;
     }
+
+    Physics(const Physics&) = delete;
+    Physics(Physics&&) = delete;
+    Physics& operator=(const Physics&) = delete;
+    Physics& operator=(Physics&&) = delete;
 };
 
 // m_grid(),
