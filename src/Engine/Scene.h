@@ -199,9 +199,14 @@ public:
         });
         m_performanceMonitor.end("m_grid clear");
         m_performanceMonitor.start("m_grid build");
-        forEachBasicDetails([this](BasicDetails &object, int i) {
-            grid.insert(i, object.m_posCurr.m_x, object.m_posCurr.m_y);
+        m_threadPool.dispatch(static_cast<int>(m_basicDetails.size()), [this](int start, int end) {
+            for (int i = start; i < end; i++) {
+                grid.insert(i, m_basicDetails[i].m_posCurr.m_x, m_basicDetails[i].m_posCurr.m_y);
+            }
         });
+//        forEachBasicDetails([this](BasicDetails &object, int i) {
+//            grid.insert(i, object.m_posCurr.m_x, object.m_posCurr.m_y);
+//        });
         m_performanceMonitor.end("m_grid build");
     }
 
