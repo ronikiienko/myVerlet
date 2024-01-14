@@ -121,10 +121,10 @@ public:
     }
 
     void onCollision(BaseObject *ptr) override {
-        m_scene.forEachInRadius(m_basicDetails->m_posCurr, 50, [&](BaseObject *ptr, int ind) {
-            if (ptr != this) {
-                m_scene.removeObject(ind);
-            }
-        });
+//        m_scene.forEachInRadius(m_basicDetails->m_posCurr, 50, [&](BaseObject *ptr, int ind) {
+//            if (ptr != this) {
+//                m_scene.removeObject(ind);
+//            }
+//        });
     }
 };
