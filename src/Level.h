@@ -19,24 +19,6 @@ public:
     void onInit() override {
         m_randomSpawner.spawn(150000);
         m_scene.addObject(Player{m_inputHandler, m_shooter, m_scene}, Vector2F::cart(100, 100));
-        m_inputHandler.addEventListener(sf::Event::KeyPressed, [&](const sf::Event &event) {
-            if (event.key.code == sf::Keyboard::BackSpace) {
-                m_scene.clear();
-            }
-
-            if (event.key.code == sf::Keyboard::M) {
-                m_randomSpawner.spawn(5000);
-            }
-        });
-        m_inputHandler.addEventListener(sf::Event::MouseButtonPressed, [&](const sf::Event &event) {
-            if (event.mouseButton.button == sf::Mouse::Right) {
-                m_explosionHandler.launch(
-                        m_scene.getCamera().screenPosToWorldPos(Vector2F::cart(static_cast<float>(event.mouseButton.x),
-                                                                               static_cast<float>(event.mouseButton.y))),
-                        4,
-                        150);
-            }
-        });
         std::cout << "Objects num: " << m_scene.getObjectsCount() << std::endl;
     }
 
