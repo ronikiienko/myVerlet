@@ -85,10 +85,10 @@ public:
         m_inputHandler.update();
         m_performanceMonitor.end("input");
 
-        m_performanceMonitor.start("onTick");
-        m_scene.runTick();
+        m_performanceMonitor.start("object ticks");
+        m_scene.runObjectTicks();
         onTick();
-        m_performanceMonitor.end("onTick");
+        m_performanceMonitor.end("object ticks");
 
         m_performanceMonitor.start("removingMarked");
         m_scene.removeMarkedObjects();

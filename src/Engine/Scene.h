@@ -115,7 +115,7 @@ public:
         m_objects.clear();
     }
 
-    void runTick() {
+    void runObjectTicks() {
         forEachObject([](BaseObject &object, int ind) {
             object.onTick();
         });
