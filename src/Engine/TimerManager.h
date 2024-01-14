@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <functional>
 
+// better not use it too much because it uses callbacks. so not use for each of for example 50 000 objects lol
 class TimerManager {
     struct TickTimer {
         int m_ticks;
