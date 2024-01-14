@@ -15,11 +15,12 @@ struct LevelContext {
     SoundManager &m_soundManager;
     TimerManager &m_timerManager;
     InputHandler &m_inputHandler;
+    PerformanceMonitor& m_performanceMonitor;
 
     LevelContext(sf::RenderWindow &window, ThreadPool &threadPool, EventBus &eventBus, SoundManager &soundManager,
-                 TimerManager &timerManager, InputHandler &inputHandler)
+                 TimerManager &timerManager, InputHandler &inputHandler, PerformanceMonitor& performanceMonitor)
             : m_window(window), m_threadPool(threadPool), m_eventBus(eventBus), m_soundManager(soundManager),
-              m_timerManager(timerManager), m_inputHandler(inputHandler) {}
+              m_timerManager(timerManager), m_inputHandler(inputHandler), m_performanceMonitor(performanceMonitor) {}
 };
 
 class BaseLevel {
@@ -27,7 +28,7 @@ protected:
     Scene m_scene;
     Graphics m_graphics;
     Physics m_physics;
-    PerformanceMonitor m_performanceMonitor;
+    PerformanceMonitor& m_performanceMonitor;
     sf::RenderWindow &m_window;
     ThreadPool &m_threadPool;
     EventBus &m_eventBus;
@@ -48,29 +49,27 @@ public:
             m_soundManager(levelContext.m_soundManager),
             m_timerManager(levelContext.m_timerManager),
             m_inputHandler(levelContext.m_inputHandler),
+            m_performanceMonitor(levelContext.m_performanceMonitor),
             m_scene(
                     cameraMaxWorldViewSize,
                     Vector2F::cart(0, 0),
                     levelContext.m_inputHandler,
                     levelContext.m_window,
                     levelContext.m_threadPool,
-                    m_performanceMonitor,
+                    levelContext.m_performanceMonitor,
                     maxObjectsNum,
                     worldSize
             ),
             m_graphics(m_scene, levelContext.m_window,
                        levelContext.m_threadPool,
-                       m_performanceMonitor),
+                       levelContext.m_performanceMonitor),
             m_physics(m_scene, levelContext.m_threadPool,
-                      m_performanceMonitor),
-            m_performanceMonitor(levelContext.m_window) {
+                      levelContext.m_performanceMonitor) {
 
 
     }
 
     void update() {
-        m_performanceMonitor.start("total");
-
         m_performanceMonitor.start("m_physics");
         m_physics.update();
         m_performanceMonitor.end("m_physics");
@@ -96,7 +95,6 @@ public:
         m_performanceMonitor.end("removingMarked");
 
         m_performanceMonitor.setObjectsCount(m_scene.getObjectsCount());
-        m_performanceMonitor.end("total");
     }
 
     virtual void onInit() {}

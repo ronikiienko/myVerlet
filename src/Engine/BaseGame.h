@@ -25,6 +25,7 @@ protected:
     InputHandler m_inputHandler{m_window};
     SoundManager m_soundManager;
     TimerManager m_timerManager;
+    PerformanceMonitor m_performanceMonitor{m_window};
 public:
     explicit BaseGame(int numThreads = engineDefaults::numThreads) : m_threadPool(numThreads) {
         m_window.setFramerateLimit(60);
@@ -33,7 +34,7 @@ public:
     template<typename T>
     void setLevel() {
         std::unique_ptr<T> ptr = std::make_unique<T>(
-                LevelContext(m_window, m_threadPool, m_eventBus, m_soundManager, m_timerManager, m_inputHandler));
+                LevelContext(m_window, m_threadPool, m_eventBus, m_soundManager, m_timerManager, m_inputHandler, m_performanceMonitor));
         m_level = std::move(ptr);
         m_level->onInit();
     }
@@ -50,9 +51,15 @@ public:
             m_window.setView(view);
         });
         while (m_window.isOpen()) {
+            m_performanceMonitor.start("total");
             m_level->update();
             onTick();
+
+            m_performanceMonitor.start("timer manager");
             m_timerManager.tick();
+            m_performanceMonitor.end("timer manager");
+
+            m_performanceMonitor.end("total");
         }
     }
 
