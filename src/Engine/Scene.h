@@ -7,6 +7,7 @@
 #include "utils/Grid.h"
 #include "Camera.h"
 #include "PerformanceMonitor.h"
+#include "./utils/ThreadPool.h"
 
 
 class Scene {

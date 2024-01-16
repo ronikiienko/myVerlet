@@ -6,6 +6,7 @@
 #include "PerformanceMonitor.h"
 #include "Camera.h"
 #include "utils/ThreadPool.h"
+#include "EngineConsts.h"
 
 class Graphics {
 private:

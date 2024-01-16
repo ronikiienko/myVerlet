@@ -11,6 +11,7 @@
 #include "EventBus.h"
 #include "SoundManager.h"
 #include "TimerManager.h"
+#include "EngineConsts.h"
 
 class BaseGame {
 protected:

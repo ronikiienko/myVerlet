@@ -2,11 +2,11 @@ cmake_minimum_required(VERSION 3.22)
 
 set(PROJECT_NAME myVerlet)
 set(SOURCES src/main.cpp
+        src/Engine/EngineConsts.cpp
         src/Engine/utils/Vector.h
         src/Engine/Graphics.h
         src/Engine/Scene.h
         src/Engine/BaseObject.h
-        src/Engine/EngineConsts.h
         src/Engine/Physics.h
         src/Engine/utils/Rand.h
         src/Engine/utils/Rectangle.h
