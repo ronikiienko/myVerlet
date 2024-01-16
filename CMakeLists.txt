@@ -34,12 +34,20 @@ set(SOURCES src/main.cpp
 
 project(${PROJECT_NAME})
 
+set(TGUI_BACKEND "SFML_GRAPHICS")
 set(SFML_DIR "C:/Libraries/SFML-2.6.1-windows-gcc-13.1.0-mingw-64-bit/SFML-2.6.1/lib/cmake/SFML")
 find_package(SFML 2.6.1 COMPONENTS system window graphics audio REQUIRED)
+
+set(TGUI_DIR "C:/Libraries/TGUI-1.1/lib/cmake/TGUI")
+find_package(TGUI REQUIRED)
+include_directories("C:/Libraries/TGUI-1.1/include/TGUI")
+
+
 #first to generate profile second to startLoop
 #set(CMAKE_CXX_FLAGS_RELEASE  "-Ofast -frename-registers -funroll-loops -fprofile-generate -fprofile-correction")
 #set(CMAKE_CXX_FLAGS_RELEASE  "-Ofast -frename-registers -funroll-loops -fprofile-use -fprofile-correction")
 set(CMAKE_CXX_STANDARD 23)
 
 add_executable(${PROJECT_NAME} ${SOURCES})
-target_link_libraries(${PROJECT_NAME} sfml-system sfml-window sfml-graphics sfml-audio)
+target_link_libraries(${PROJECT_NAME} PUBLIC sfml-system sfml-window sfml-graphics sfml-audio)
+target_link_libraries(${PROJECT_NAME} PRIVATE TGUI::TGUI)
