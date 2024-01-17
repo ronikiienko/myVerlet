@@ -37,8 +37,8 @@ public:
         m_inputHandler.removeEventListener(sf::Event::MouseWheelScrolled, m_mouseWheelScrolledListenerId);
     }
 
-    void onInit() override {
-        std::cout << "onInit" << std::endl;
+    void v_onInit() override {
+        std::cout << "v_onInit" << std::endl;
         m_keyPressedListenerId = m_inputHandler.addEventListener(sf::Event::KeyPressed, [this](const sf::Event &event) {
             if (event.key.code == sf::Keyboard::W) {
                 m_movingUp = true;
@@ -93,7 +93,7 @@ public:
         });
     }
 
-    void onTick() override {
+    void v_onTick() override {
         if (!m_basicDetails) {
             throw std::runtime_error("m_basicDetails is nullptr");
         }
@@ -120,7 +120,7 @@ public:
         }
     }
 
-    void onCollision(BaseObject *ptr) override {
+    void v_onCollision(BaseObject *ptr) override {
 //        m_scene.forEachInRadius(m_basicDetails->m_posCurr, 50, [&](BaseObject *ptr, int ind) {
 //            if (ptr != this) {
 //                m_scene.removeObject(ind);

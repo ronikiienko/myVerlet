@@ -16,7 +16,7 @@ public:
     explicit Level(LevelContext levelContext) : BaseLevel(levelContext, 200000, Vector2I::cart(2000,2000), 600) {
     }
 
-    void onInit() override {
+    void v_onInit() override {
         m_randomSpawner.spawn(150000);
         m_scene.addObject(Player{m_inputHandler, m_shooter, m_scene}, Vector2F::cart(100, 100));
         std::cout << "Objects num: " << m_scene.getObjectsCount() << std::endl;
@@ -28,5 +28,5 @@ public:
 //
 //        m_gui.add(label);
     }
-    void onTick() override {}
+    void v_onTick() override {}
 };

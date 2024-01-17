@@ -42,9 +42,9 @@ public:
     }
 
     void init() {
-        onInit();
+        v_onInit();
         if (!m_level) {
-            throw std::runtime_error("Level should be set in onInit() method");
+            throw std::runtime_error("Level should be set in v_onInit() method");
         }
 
         m_inputHandler.addEventListener(sf::Event::Resized, [&](const sf::Event &event) {
@@ -58,7 +58,7 @@ public:
             m_performanceMonitor.start("input");
             m_inputHandler.update();
             m_performanceMonitor.end("input");
-            onTick();
+            v_onTick();
 
             m_performanceMonitor.start("timer manager");
             m_timerManager.tick();
@@ -68,8 +68,8 @@ public:
         }
     }
 
-    virtual void onInit() = 0;
-    virtual void onTick() = 0;
+    virtual void v_onInit() = 0;
+    virtual void v_onTick() = 0;
 
     BaseGame(const BaseGame&) = delete;
     BaseGame(BaseGame&&) = delete;

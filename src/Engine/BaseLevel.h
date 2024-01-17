@@ -59,7 +59,7 @@ private:
     }
 
     void init() {
-        onInit();
+        v_onInit();
         tgui::Label::Ptr debugWidget = tgui::Label::create();
         debugWidget->setTextSize(12);
         debugWidget->setPosition(5.0f, 5.0f);
@@ -68,7 +68,7 @@ private:
     }
 
     void tick() {
-        onTick();
+        v_onTick();
         m_gui.get<tgui::Label>("debugWidget")->setText(m_performanceMonitor.getString());
     }
 protected:
@@ -128,8 +128,8 @@ protected:
         }
     }
 public:
-    virtual void onInit() = 0;
-    virtual void onTick() = 0;
+    virtual void v_onInit() = 0;
+    virtual void v_onTick() = 0;
 
     BaseLevel(const BaseLevel&) = delete;
     BaseLevel(BaseLevel&&) = delete;

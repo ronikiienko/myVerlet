@@ -6,7 +6,7 @@ class EmptyObject : public BaseObject {
 public:
     explicit EmptyObject() : BaseObject() {}
 
-    void onTick() override {};
-    void onInit() override {};
-    void onCollision(BaseObject* ptr) override {};
+    void v_onTick() override {};
+    void v_onInit() override {};
+    void v_onCollision(BaseObject* ptr) override {};
 };

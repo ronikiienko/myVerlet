@@ -13,14 +13,14 @@ public:
 
     }
 
-    void onCollision(BaseObject* ptr) override {
-//        std::cout << "onCollision" << std::endl;
+    void v_onCollision(BaseObject* ptr) override {
+//        std::cout << "v_onCollision" << std::endl;
         if (!m_isExploded) {
             m_isExploded = true;
             m_explosionHandler.launch(m_basicDetails->m_posCurr + Vector2F::cart(5, 5), 7, 100);
         }
     }
 
-    void onTick() override {};
-    void onInit() override {};
+    void v_onTick() override {};
+    void v_onInit() override {};
 };

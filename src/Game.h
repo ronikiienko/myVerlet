@@ -7,10 +7,10 @@ class Game : public BaseGame {
 public:
     Game() : BaseGame() {}
 
-    void onInit() override {
+    void v_onInit() override {
         std::cout << "Game init" << std::endl;
         setLevel<Level>();
     }
 
-    void onTick() override {}
+    void v_onTick() override {}
 };

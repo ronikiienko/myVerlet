@@ -119,8 +119,8 @@ private:
         const float dist2 = vectorBetween.magnitude2();
         // Check overlapping
         if (dist2 < engineDefaults::twoObjectsRadiusSquared) {
-            obj1.m_parent->onCollision(obj2.m_parent);
-            obj2.m_parent->onCollision(obj1.m_parent);
+            obj1.m_parent->v_onCollision(obj2.m_parent);
+            obj2.m_parent->v_onCollision(obj1.m_parent);
 
             const float dist = std::sqrt(dist2);
             if (dist == 0) return;
@@ -258,7 +258,7 @@ public:
         }
     }
 
-    // warning: if setting substeps from onCollision (for example), then m_subSteps number can change while update is running.
+    // warning: if setting substeps from v_onCollision (for example), then m_subSteps number can change while update is running.
     // For that i use localSubSteps variable
     void setSubSteps(int value) {
         if (value > 0 && value < 16) {

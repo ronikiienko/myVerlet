@@ -56,7 +56,7 @@ public:
 
         int index = static_cast<int>(m_objects.size()) - 1;
         m_basicDetails[index].m_parent = m_objects[index].get();
-        m_objects[index]->onInit();
+        m_objects[index]->v_onInit();
         return {m_objects[index]};
     }
 
@@ -118,7 +118,7 @@ public:
 
     void runObjectTicks() {
         forEachObject([](BaseObject &object, int ind) {
-            object.onTick();
+            object.v_onTick();
         });
     }
 
