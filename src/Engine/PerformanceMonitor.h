@@ -16,7 +16,6 @@ private:
     std::unordered_map<std::string, long long> m_times;
     sf::Font m_font;
     sf::Text m_text;
-    int m_objectsCount = 0;
 public:
     explicit PerformanceMonitor(sf::RenderWindow& window): m_window(window) {
         if(!m_font.loadFromFile("./res/Roboto-Medium.ttf")) {
@@ -70,10 +69,6 @@ public:
         }
         m_text.setString(textString);
         m_window.draw(m_text);
-    }
-
-    void setObjectsCount(int count) {
-        m_objectsCount = count;
     }
 
     PerformanceMonitor(const PerformanceMonitor &) = delete;
