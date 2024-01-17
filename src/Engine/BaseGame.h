@@ -38,7 +38,7 @@ public:
         std::unique_ptr<T> ptr = std::make_unique<T>(
                 LevelContext(m_window, m_threadPool, m_eventBus, m_soundManager, m_timerManager, m_inputHandler, m_performanceMonitor));
         m_level = std::move(ptr);
-        m_level->onInit();
+        m_level->init();
     }
 
     void init() {
