@@ -31,6 +31,7 @@ set(SOURCES src/main.cpp
         src/Engine/TimerManager.h
         src/consts.h
         src/Objects/EmptyObject.h
+        src/Engine/CallbackSystems/InputHandler.cpp
 )
 
 project(${PROJECT_NAME})

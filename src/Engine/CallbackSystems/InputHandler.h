@@ -10,31 +10,14 @@ private:
     std::unordered_map<sf::Event::EventType, std::unordered_map<int, std::function<void(const sf::Event &)>>> m_eventHandlers;
     int m_keyCounter = 0;
 public:
-    explicit InputHandler(sf::RenderWindow &window) : m_window(window) {}
-    void update(sf::Event& event) {
-            if (event.type == sf::Event::Closed) {
-                m_window.close();
-            } else {
-                auto &eventTypeCallbacks = m_eventHandlers[event.type];
-                for (auto &pair: eventTypeCallbacks) {
-                    pair.second(event);
-                }
-            }
-    }
+    explicit InputHandler(sf::RenderWindow &window);
+    void update(sf::Event& event);
 
-    void clear() {
-        m_eventHandlers.clear();
-    }
+    void clear();
 
-    int addEventListener(sf::Event::EventType type, const std::function<void(const sf::Event &)>& callback) {
-        m_eventHandlers[type][m_keyCounter] = callback;
-        return m_keyCounter++;
-    }
+    int addEventListener(sf::Event::EventType type, const std::function<void(const sf::Event &)>& callback);
 
-
-    void removeEventListener(sf::Event::EventType type, int key) {
-        m_eventHandlers[type].erase(key);
-    }
+    void removeEventListener(sf::Event::EventType type, int key);
 
     InputHandler(const InputHandler &) = delete;
     InputHandler& operator=(const InputHandler &) = delete;
