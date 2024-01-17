@@ -28,6 +28,8 @@ struct LevelContext {
 
 class BaseLevel {
 private:
+    tgui::Label::Ptr m_debugWidget;
+
     void update() {
         m_performanceMonitor.start("physics");
         m_physics.update();
@@ -40,7 +42,6 @@ private:
         m_performanceMonitor.end("graphics");
 
         m_performanceMonitor.start("gui");
-        m_performanceMonitor.draw();
         m_gui.draw();
         m_performanceMonitor.end("gui");
 
@@ -51,7 +52,7 @@ private:
         m_performanceMonitor.end("object ticks");
 
         m_performanceMonitor.start("level tick");
-        onTick();
+        tick();
         m_performanceMonitor.end("level tick");
 
         m_performanceMonitor.start("removingMarked");
@@ -61,6 +62,15 @@ private:
 
     void init() {
         onInit();
+        m_debugWidget = tgui::Label::create();
+        m_debugWidget->setTextSize(12);
+        m_debugWidget->setPosition(15.0f, 15.0f);
+        m_gui.add(m_debugWidget, "debugWidget");
+    }
+
+    void tick() {
+        onTick();
+        m_debugWidget->setText(m_performanceMonitor.getString());
     }
 protected:
     Scene m_scene;
@@ -105,6 +115,14 @@ protected:
                       levelContext.m_performanceMonitor) {
 
 
+    }
+
+    void setDebugWidgetEnabled(bool enabled) {
+        if (enabled) {
+            m_debugWidget->setVisible(true);
+        } else {
+            m_debugWidget->setVisible(false);
+        }
     }
 public:
     virtual void onInit() = 0;

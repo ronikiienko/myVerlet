@@ -27,7 +27,7 @@ protected:
     InputHandler m_inputHandler{m_window};
     SoundManager m_soundManager;
     TimerManager m_timerManager;
-    PerformanceMonitor m_performanceMonitor{m_window};
+    PerformanceMonitor m_performanceMonitor;
 public:
     explicit BaseGame(int numThreads = engineDefaults::numThreads) : m_threadPool(numThreads) {
         m_window.setFramerateLimit(60);
