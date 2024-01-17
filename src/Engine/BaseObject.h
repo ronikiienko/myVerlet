@@ -70,9 +70,9 @@ class BaseObject {
 public:
     BasicDetails* m_basicDetails = nullptr;
 
-    virtual void onTick() {};
-    virtual void onInit() {};
-    virtual void onCollision(BaseObject* ptr) {};
+    virtual void onTick() = 0;
+    virtual void onInit() = 0;
+    virtual void onCollision(BaseObject* ptr) = 0;
 
     virtual ~BaseObject() = default;
 };

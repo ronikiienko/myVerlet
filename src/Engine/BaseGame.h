@@ -68,11 +68,8 @@ public:
         }
     }
 
-    virtual void onInit() {
-
-    }
-
-    virtual void onTick() {}
+    virtual void onInit() = 0;
+    virtual void onTick() = 0;
 
     BaseGame(const BaseGame&) = delete;
     BaseGame(BaseGame&&) = delete;

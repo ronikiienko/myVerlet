@@ -30,6 +30,7 @@ set(SOURCES src/main.cpp
         src/Engine/SoundManager.h
         src/Engine/TimerManager.h
         src/consts.h
+        src/Objects/EmptyObject.h
 )
 
 project(${PROJECT_NAME})

@@ -20,4 +20,7 @@ public:
             m_explosionHandler.launch(m_basicDetails->m_posCurr + Vector2F::cart(5, 5), 7, 100);
         }
     }
+
+    void onTick() override {};
+    void onInit() override {};
 };

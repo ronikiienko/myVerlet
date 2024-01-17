@@ -104,9 +104,8 @@ public:
         m_performanceMonitor.end("removingMarked");
     }
 
-    virtual void onInit() {}
-
-    virtual void onTick() {}
+    virtual void onInit() = 0;
+    virtual void onTick() = 0;
 
     BaseLevel(const BaseLevel&) = delete;
     BaseLevel(BaseLevel&&) = delete;

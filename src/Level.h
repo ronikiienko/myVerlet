@@ -28,5 +28,5 @@ public:
 //
 //        m_gui.add(label);
     }
-
+    void onTick() override {}
 };

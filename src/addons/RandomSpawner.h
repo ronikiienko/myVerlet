@@ -3,6 +3,7 @@
 #include "../Engine/Scene.h"
 #include "../Engine/EngineConsts.h"
 #include "../Engine/utils/Rand.h"
+#include "../Objects/EmptyObject.h"
 
 class RandomSpawner {
 private:
@@ -15,7 +16,7 @@ public:
         for (int i = 0; i < number; i++) {
             auto ptr = m_scene.addObject(
 
-                    BaseObject(),
+                    EmptyObject(),
                     Vector2F::cart
                             (
                                     m_gen.getInRange

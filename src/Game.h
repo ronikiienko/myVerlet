@@ -11,4 +11,6 @@ public:
         std::cout << "Game init" << std::endl;
         setLevel<Level>();
     }
+
+    void onTick() override {}
 };
