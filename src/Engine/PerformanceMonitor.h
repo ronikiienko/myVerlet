@@ -11,21 +11,10 @@
 
 class PerformanceMonitor {
 private:
-    sf::RenderWindow& m_window;
     std::unordered_map<std::string, sf::Clock> m_clocks;
     std::unordered_map<std::string, long long> m_times;
-    sf::Font m_font;
-    sf::Text m_text;
 public:
-    explicit PerformanceMonitor(sf::RenderWindow& window): m_window(window) {
-        if(!m_font.loadFromFile("./res/Roboto-Medium.ttf")) {
-            throw std::runtime_error("Font could not load. Perhaps it doesn't exist?");
-        }
-        m_text.setFont(m_font);
-        m_text.setFillColor(sf::Color::White);
-        m_text.setCharacterSize(12);
-        m_text.setPosition(5.0f, 5.0f);
-    }
+    explicit PerformanceMonitor() = default;
     void start(const std::string& label) {
         if (!m_clocks.count(label)) {
             m_clocks.insert({label, sf::Clock{}});
@@ -58,17 +47,6 @@ public:
             textString += '\n' + it.first + ":   " + std::to_string(milliseconds) + " ms" + "    /    " + std::to_string(fps) + " FPS";
         }
         return textString;
-    }
-
-    void draw() {
-        std::string textString;
-        for (auto& it : m_times) {
-            double milliseconds = static_cast<double>(it.second) / 1000;
-            short fps = 1000 / milliseconds;
-            textString += '\n' + it.first + ":   " + std::to_string(milliseconds) + " ms" + "    /    " + std::to_string(fps) + " FPS";
-        }
-        m_text.setString(textString);
-        m_window.draw(m_text);
     }
 
     PerformanceMonitor(const PerformanceMonitor &) = delete;
