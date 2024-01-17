@@ -28,8 +28,6 @@ struct LevelContext {
 
 class BaseLevel {
 private:
-    tgui::Label::Ptr m_debugWidget;
-
     void update() {
         m_performanceMonitor.start("physics");
         m_physics.update();
@@ -62,16 +60,16 @@ private:
 
     void init() {
         onInit();
-        m_debugWidget = tgui::Label::create();
-        m_debugWidget->setTextSize(12);
-        m_debugWidget->setPosition(5.0f, 5.0f);
-        m_debugWidget->getRenderer()->setTextColor(sf::Color::White);
-        m_gui.add(m_debugWidget, "debugWidget");
+        tgui::Label::Ptr debugWidget = tgui::Label::create();
+        debugWidget->setTextSize(12);
+        debugWidget->setPosition(5.0f, 5.0f);
+        debugWidget->getRenderer()->setTextColor(sf::Color::White);
+        m_gui.add(debugWidget, "debugWidget");
     }
 
     void tick() {
         onTick();
-        m_debugWidget->setText(m_performanceMonitor.getString());
+        m_gui.get<tgui::Label>("debugWidget")->setText(m_performanceMonitor.getString());
     }
 protected:
     Scene m_scene;
@@ -119,14 +117,14 @@ protected:
     }
 
     void toggleDebugWidget() {
-        setDebugWidgetEnabled(!m_debugWidget->isVisible());
+        setDebugWidgetEnabled(!m_gui.get<tgui::Label>("debugWidget")->isVisible());
     }
 
     void setDebugWidgetEnabled(bool enabled) {
         if (enabled) {
-            m_debugWidget->setVisible(true);
+            m_gui.get<tgui::Label>("debugWidget")->setVisible(true);
         } else {
-            m_debugWidget->setVisible(false);
+            m_gui.get<tgui::Label>("debugWidget")->setVisible(false);
         }
     }
 public:
