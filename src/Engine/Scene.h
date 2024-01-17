@@ -194,12 +194,12 @@ public:
     }
 
     void rebuildGrid() {
-        m_performanceMonitor.start("m_grid clear");
+        m_performanceMonitor.start("grid clear");
         m_threadPool.dispatch(grid.m_length, [this](int start, int end) {
             grid.clear(start, end);
         });
-        m_performanceMonitor.end("m_grid clear");
-        m_performanceMonitor.start("m_grid build");
+        m_performanceMonitor.end("grid clear");
+        m_performanceMonitor.start("grid build");
         m_threadPool.dispatch(static_cast<int>(m_basicDetails.size()), [this](int start, int end) {
             for (int i = start; i < end; i++) {
                 grid.insert(i, m_basicDetails[i].m_posCurr.m_x, m_basicDetails[i].m_posCurr.m_y);
@@ -208,7 +208,7 @@ public:
 //        forEachBasicDetails([this](BasicDetails &object, int i) {
 //            grid.insert(i, object.m_posCurr.m_x, object.m_posCurr.m_y);
 //        });
-        m_performanceMonitor.end("m_grid build");
+        m_performanceMonitor.end("grid build");
     }
 
     Scene(const Scene&) = delete;

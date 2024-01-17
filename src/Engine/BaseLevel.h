@@ -74,17 +74,22 @@ public:
     }
 
     void update() {
-        m_performanceMonitor.start("m_physics");
+        m_performanceMonitor.start("physics");
         m_physics.update();
-        m_performanceMonitor.end("m_physics");
+        m_performanceMonitor.end("physics");
 
-        m_performanceMonitor.start("m_graphics");
         m_window.clear(sf::Color::Black);
+
+        m_performanceMonitor.start("graphics");
         m_graphics.update();
+        m_performanceMonitor.end("graphics");
+
+        m_performanceMonitor.start("gui");
         m_performanceMonitor.draw();
         m_gui.draw();
+        m_performanceMonitor.end("gui");
+
         m_window.display();
-        m_performanceMonitor.end("m_graphics");
 
         m_performanceMonitor.start("object ticks");
         m_scene.runObjectTicks();

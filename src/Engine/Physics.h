@@ -246,9 +246,9 @@ public:
             updatePositionsConstraint(subStepDt);
             m_performanceMonitor.end("gravityConstraintsUpdate");
 
-            m_performanceMonitor.start("m_grid");
+            m_performanceMonitor.start("grid");
             m_scene.rebuildGrid();
-            m_performanceMonitor.end("m_grid");
+            m_performanceMonitor.end("grid");
 
             if (localCollisionsEnabled) {
                 m_performanceMonitor.start("collisions");
