@@ -51,6 +51,16 @@ public:
         m_times.erase(label);
     }
 
+    std::string getString() {
+        std::string textString;
+        for (auto& it : m_times) {
+            double milliseconds = static_cast<double>(it.second) / 1000;
+            short fps = 1000 / milliseconds;
+            textString += '\n' + it.first + ":   " + std::to_string(milliseconds) + " ms" + "    /    " + std::to_string(fps) + " FPS";
+        }
+        return textString;
+    }
+
     void draw() {
         std::string textString;
         for (auto& it : m_times) {
