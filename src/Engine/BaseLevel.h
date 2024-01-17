@@ -40,7 +40,9 @@ private:
         m_graphics.update();
         m_performanceMonitor.end("graphics");
 
-
+        m_performanceMonitor.start("gui");
+        m_gui.draw();
+        m_performanceMonitor.end("gui");
 
         m_window.display();
 
