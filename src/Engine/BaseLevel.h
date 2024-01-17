@@ -118,6 +118,10 @@ protected:
 
     }
 
+    void toggleDebugWidget() {
+        setDebugWidgetEnabled(!m_debugWidget->isVisible());
+    }
+
     void setDebugWidgetEnabled(bool enabled) {
         if (enabled) {
             m_debugWidget->setVisible(true);
