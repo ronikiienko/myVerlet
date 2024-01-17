@@ -7,6 +7,8 @@
 #include "EventBus.h"
 #include "SoundManager.h"
 #include "TimerManager.h"
+#include <TGUI/TGUI.hpp>
+#include <TGUI/Backend/SFML-Graphics.hpp>
 
 struct LevelContext {
     sf::RenderWindow &m_window;
@@ -16,6 +18,7 @@ struct LevelContext {
     TimerManager &m_timerManager;
     InputHandler &m_inputHandler;
     PerformanceMonitor& m_performanceMonitor;
+
 
     LevelContext(sf::RenderWindow &window, ThreadPool &threadPool, EventBus &eventBus, SoundManager &soundManager,
                  TimerManager &timerManager, InputHandler &inputHandler, PerformanceMonitor& performanceMonitor)
@@ -30,6 +33,7 @@ protected:
     Physics m_physics;
     PerformanceMonitor& m_performanceMonitor;
     sf::RenderWindow &m_window;
+    tgui::Gui m_gui{m_window};
     ThreadPool &m_threadPool;
     EventBus &m_eventBus;
     InputHandler &m_inputHandler;
@@ -78,6 +82,7 @@ public:
         m_window.clear(sf::Color::Black);
         m_graphics.update();
         m_performanceMonitor.draw();
+        m_gui.draw();
         m_window.display();
         m_performanceMonitor.end("m_graphics");
 

@@ -53,7 +53,6 @@ public:
 
     void draw() {
         std::string textString;
-        textString += "Objects count:  " + std::to_string(m_objectsCount) + "\n";
         for (auto& it : m_times) {
             double milliseconds = static_cast<double>(it.second) / 1000;
             short fps = 1000 / milliseconds;

@@ -13,6 +13,7 @@
 #include "TimerManager.h"
 #include "EngineConsts.h"
 
+
 class BaseGame {
 protected:
     sf::RenderWindow m_window = sf::RenderWindow(sf::VideoMode(engineDefaults::windowSize.m_x,
