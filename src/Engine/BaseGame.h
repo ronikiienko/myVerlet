@@ -25,7 +25,7 @@ protected:
     std::unique_ptr<BaseLevel> m_level;
     // TODO maby move to m_level because levels may leave their thrash behind (m_callbacks)
     EventBus m_eventBus;
-    InputBus m_inputHandler{m_window};
+    InputBus m_inputBus{m_window};
     SoundManager m_soundManager;
     TimerManager m_timerManager;
     PerformanceMonitor m_performanceMonitor;
@@ -36,10 +36,10 @@ public:
 
     template<typename T>
     void setLevel() {
-        m_inputHandler.clear();
+        m_inputBus.clear();
         m_gui.removeAllWidgets();
         std::unique_ptr<T> ptr = std::make_unique<T>(
-                LevelContext(m_window, m_threadPool, m_eventBus, m_soundManager, m_timerManager, m_inputHandler,
+                LevelContext(m_window, m_threadPool, m_eventBus, m_soundManager, m_timerManager, m_inputBus,
                              m_performanceMonitor, m_gui));
         m_level = std::move(ptr);
         m_level->init();
@@ -58,7 +58,7 @@ public:
             while (m_window.pollEvent(event)) {
                 bool isConsumed = m_gui.handleEvent(event);
                 if(!isConsumed) {
-                    m_inputHandler.update(event);
+                    m_inputBus.update(event);
                 }
             }
             m_performanceMonitor.end("input");

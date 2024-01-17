@@ -29,11 +29,11 @@ private:
 public:
     IdGrid grid{m_collisionGridWidth, m_collisionGridHeight, getSizeI()};
 
-    explicit Scene(float cameraMaxWorldViewSize, Vector2F cameraPosition, InputBus& inputHandler, sf::RenderWindow& window, ThreadPool &threadPool, PerformanceMonitor &performanceMonitor,
+    explicit Scene(float cameraMaxWorldViewSize, Vector2F cameraPosition, InputBus& inputBus, sf::RenderWindow& window, ThreadPool &threadPool, PerformanceMonitor &performanceMonitor,
                    int maxObjectsNum, Vector2I size) :
             m_sizeF(Vector2F::fromOther(size)),
             m_sizeI(size),
-            m_camera(cameraMaxWorldViewSize, cameraPosition, window, inputHandler),
+            m_camera(cameraMaxWorldViewSize, cameraPosition, window, inputBus),
             m_threadPool(threadPool),
             m_performanceMonitor(performanceMonitor),
             m_maxObjectsNum(maxObjectsNum) {

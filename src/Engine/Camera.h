@@ -32,7 +32,7 @@ private:
     float m_windowToCameraZoom;
     float m_zoomFactor = 1;
 
-    InputBus &m_inputHandler;
+    InputBus &m_inputBus;
     sf::RenderWindow &m_window;
 public:
     void move(Vector2F delta) {
@@ -73,9 +73,9 @@ public:
     }
 
 
-    explicit Camera(float maxWorldViewSize, Vector2F position, sf::RenderWindow &window, InputBus &inputHandler) :
+    explicit Camera(float maxWorldViewSize, Vector2F position, sf::RenderWindow &window, InputBus &inputBus) :
             m_worldCenterPos(position),
-            m_inputHandler(inputHandler),
+            m_inputBus(inputBus),
             m_window(window),
             m_maxWorldViewSize(maxWorldViewSize) {
         float aspectRatio = static_cast<float>(window.getSize().x) / static_cast<float>(window.getSize().y);
@@ -93,7 +93,7 @@ public:
         }
 
         // when camera is moved, this is invalidated
-        m_inputHandler.addEventListener(sf::Event::Resized, [this](const sf::Event &event) {
+        m_inputBus.addEventListener(sf::Event::Resized, [this](const sf::Event &event) {
             float aspectRatio = static_cast<float>(event.size.width) / static_cast<float>(event.size.height);
             float biggestDimWindowSize = std::max(static_cast<float>(event.size.width),
                                                   static_cast<float>(event.size.height));

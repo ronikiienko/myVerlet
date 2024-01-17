@@ -7,7 +7,7 @@
 
 class Player : public BaseObject {
 public:
-    InputBus &m_inputHandler;
+    InputBus &m_inputBus;
     Scene &m_scene;
     float m_acceleration = 100;
     bool m_movingUp = false;
@@ -21,23 +21,23 @@ public:
     int m_mouseButtonPressedListenerId = -1;
     int m_mouseWheelScrolledListenerId = -1;
 
-    Player(InputBus &inputHandler, Scene &scene) :
-            m_inputHandler(inputHandler),
+    Player(InputBus &inputBus, Scene &scene) :
+            m_inputBus(inputBus),
             m_scene(scene) {
         // i can't setup events from constructor, because lambda will capture
         // `this` before std::make_unique will fire, which will invalidate `this`, because ownership is transferred to unique_ptr
     }
 
     ~Player() override {
-        m_inputHandler.removeEventListener(sf::Event::KeyPressed, m_keyPressedListenerId);
-        m_inputHandler.removeEventListener(sf::Event::KeyReleased, m_keyReleasedListenerId);
-        m_inputHandler.removeEventListener(sf::Event::MouseButtonPressed, m_mouseButtonPressedListenerId);
-        m_inputHandler.removeEventListener(sf::Event::MouseWheelScrolled, m_mouseWheelScrolledListenerId);
+        m_inputBus.removeEventListener(sf::Event::KeyPressed, m_keyPressedListenerId);
+        m_inputBus.removeEventListener(sf::Event::KeyReleased, m_keyReleasedListenerId);
+        m_inputBus.removeEventListener(sf::Event::MouseButtonPressed, m_mouseButtonPressedListenerId);
+        m_inputBus.removeEventListener(sf::Event::MouseWheelScrolled, m_mouseWheelScrolledListenerId);
     }
 
     void v_onInit() override {
         std::cout << "v_onInit" << std::endl;
-        m_keyPressedListenerId = m_inputHandler.addEventListener(sf::Event::KeyPressed, [this](const sf::Event &event) {
+        m_keyPressedListenerId = m_inputBus.addEventListener(sf::Event::KeyPressed, [this](const sf::Event &event) {
             if (event.key.code == sf::Keyboard::W) {
                 m_movingUp = true;
             }
@@ -54,7 +54,7 @@ public:
                 m_isBraking = true;
             }
         });
-        m_keyReleasedListenerId = m_inputHandler.addEventListener(sf::Event::KeyReleased, [this](const sf::Event &event) {
+        m_keyReleasedListenerId = m_inputBus.addEventListener(sf::Event::KeyReleased, [this](const sf::Event &event) {
             if (event.key.code == sf::Keyboard::W) {
                 m_movingUp = false;
             }
@@ -71,7 +71,7 @@ public:
                 m_isBraking = false;
             }
         });
-        m_inputHandler.addEventListener(sf::Event::MouseWheelScrolled, [&](const sf::Event &event) {
+        m_inputBus.addEventListener(sf::Event::MouseWheelScrolled, [&](const sf::Event &event) {
             if (event.mouseWheelScroll.delta > 0) {
                 m_scene.getCamera().zoom(1.5);
             } else {
