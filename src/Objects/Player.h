@@ -1,13 +1,13 @@
 #pragma once
 
 #include "../Engine/BaseObject.h"
-#include "../Engine/CallbackSystems/InputHandler.h"
+#include "../Engine/CallbackSystems/InputBus.h"
 #include "../Engine/Camera.h"
 #include "../addons/Shooter.h"
 
 class Player : public BaseObject {
 public:
-    InputHandler &m_inputHandler;
+    InputBus &m_inputHandler;
     Scene &m_scene;
     float m_acceleration = 100;
     bool m_movingUp = false;
@@ -21,7 +21,7 @@ public:
     int m_mouseButtonPressedListenerId = -1;
     int m_mouseWheelScrolledListenerId = -1;
 
-    Player(InputHandler &inputHandler, Scene &scene) :
+    Player(InputBus &inputHandler, Scene &scene) :
             m_inputHandler(inputHandler),
             m_scene(scene) {
         // i can't setup events from constructor, because lambda will capture

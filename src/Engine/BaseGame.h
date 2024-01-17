@@ -6,7 +6,7 @@
 #include "Scene.h"
 #include "Graphics.h"
 #include "Physics.h"
-#include "CallbackSystems/InputHandler.h"
+#include "CallbackSystems/InputBus.h"
 #include "BaseLevel.h"
 #include "CallbackSystems/EventBus.h"
 #include "SoundManager.h"
@@ -25,7 +25,7 @@ protected:
     std::unique_ptr<BaseLevel> m_level;
     // TODO maby move to m_level because levels may leave their thrash behind (m_callbacks)
     EventBus m_eventBus;
-    InputHandler m_inputHandler{m_window};
+    InputBus m_inputHandler{m_window};
     SoundManager m_soundManager;
     TimerManager m_timerManager;
     PerformanceMonitor m_performanceMonitor;

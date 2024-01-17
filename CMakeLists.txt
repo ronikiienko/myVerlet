@@ -17,7 +17,7 @@ set(SOURCES src/main.cpp
         src/Engine/PerformanceMonitor.h
         src/addons/RandomSpawner.h
         src/Engine/Camera.h
-        src/Engine/CallbackSystems/InputHandler.h
+        src/Engine/CallbackSystems/InputBus.h
         src/Engine/BaseLevel.h
         src/Engine/BaseGame.h
         src/Game.h
@@ -31,7 +31,7 @@ set(SOURCES src/main.cpp
         src/Engine/TimerManager.h
         src/consts.h
         src/Objects/EmptyObject.h
-        src/Engine/CallbackSystems/InputHandler.cpp
+        src/Engine/CallbackSystems/InputBus.cpp
 )
 
 project(${PROJECT_NAME})

@@ -4,13 +4,13 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Window/Event.hpp>
 
-class InputHandler {
+class InputBus {
 private:
     sf::RenderWindow &m_window;
     std::unordered_map<sf::Event::EventType, std::unordered_map<int, std::function<void(const sf::Event &)>>> m_eventHandlers;
     int m_keyCounter = 0;
 public:
-    explicit InputHandler(sf::RenderWindow &window);
+    explicit InputBus(sf::RenderWindow &window);
     void update(sf::Event& event);
 
     void clear();
@@ -19,8 +19,8 @@ public:
 
     void removeEventListener(sf::Event::EventType type, int key);
 
-    InputHandler(const InputHandler &) = delete;
-    InputHandler& operator=(const InputHandler &) = delete;
-    InputHandler(InputHandler &&) = delete;
-    InputHandler& operator=(InputHandler &&) = delete;
+    InputBus(const InputBus &) = delete;
+    InputBus& operator=(const InputBus &) = delete;
+    InputBus(InputBus &&) = delete;
+    InputBus& operator=(InputBus &&) = delete;
 };

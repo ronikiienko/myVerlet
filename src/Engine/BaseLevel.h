@@ -3,7 +3,7 @@
 
 #include "Scene.h"
 #include "Camera.h"
-#include "CallbackSystems/InputHandler.h"
+#include "CallbackSystems/InputBus.h"
 #include "CallbackSystems/EventBus.h"
 #include "SoundManager.h"
 #include "TimerManager.h"
@@ -16,13 +16,13 @@ struct LevelContext {
     EventBus &m_eventBus;
     SoundManager &m_soundManager;
     TimerManager &m_timerManager;
-    InputHandler &m_inputHandler;
+    InputBus &m_inputHandler;
     PerformanceMonitor& m_performanceMonitor;
     tgui::Gui& m_gui;
 
 
     LevelContext(sf::RenderWindow &window, ThreadPool &threadPool, EventBus &eventBus, SoundManager &soundManager,
-                 TimerManager &timerManager, InputHandler &inputHandler, PerformanceMonitor& performanceMonitor, tgui::Gui& gui)
+                 TimerManager &timerManager, InputBus &inputHandler, PerformanceMonitor& performanceMonitor, tgui::Gui& gui)
             : m_window(window), m_threadPool(threadPool), m_eventBus(eventBus), m_soundManager(soundManager),
               m_timerManager(timerManager), m_inputHandler(inputHandler), m_performanceMonitor(performanceMonitor), m_gui(gui) {}
 };
@@ -84,7 +84,7 @@ protected:
     tgui::Gui& m_gui;
     ThreadPool &m_threadPool;
     EventBus &m_eventBus;
-    InputHandler &m_inputHandler;
+    InputBus &m_inputHandler;
     SoundManager &m_soundManager;
     TimerManager &m_timerManager;
 

@@ -1,21 +1,21 @@
-#include "InputHandler.h"
+#include "InputBus.h"
 
-InputHandler::InputHandler(sf::RenderWindow &window) : m_window(window) {}
+InputBus::InputBus(sf::RenderWindow &window) : m_window(window) {}
 
-void InputHandler::clear() {
+void InputBus::clear() {
     m_eventHandlers.clear();
 }
 
-int InputHandler::addEventListener(sf::Event::EventType type, const std::function<void(const sf::Event &)> &callback) {
+int InputBus::addEventListener(sf::Event::EventType type, const std::function<void(const sf::Event &)> &callback) {
     m_eventHandlers[type][m_keyCounter] = callback;
     return m_keyCounter++;
 }
 
-void InputHandler::removeEventListener(sf::Event::EventType type, int key) {
+void InputBus::removeEventListener(sf::Event::EventType type, int key) {
     m_eventHandlers[type].erase(key);
 }
 
-void InputHandler::update(sf::Event &event) {
+void InputBus::update(sf::Event &event) {
     if (event.type == sf::Event::Closed) {
         m_window.close();
     } else {

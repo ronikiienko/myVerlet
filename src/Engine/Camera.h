@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include "CallbackSystems/InputHandler.h"
+#include "CallbackSystems/InputBus.h"
 
 class Camera {
 private:
@@ -32,7 +32,7 @@ private:
     float m_windowToCameraZoom;
     float m_zoomFactor = 1;
 
-    InputHandler &m_inputHandler;
+    InputBus &m_inputHandler;
     sf::RenderWindow &m_window;
 public:
     void move(Vector2F delta) {
@@ -73,7 +73,7 @@ public:
     }
 
 
-    explicit Camera(float maxWorldViewSize, Vector2F position, sf::RenderWindow &window, InputHandler &inputHandler) :
+    explicit Camera(float maxWorldViewSize, Vector2F position, sf::RenderWindow &window, InputBus &inputHandler) :
             m_worldCenterPos(position),
             m_inputHandler(inputHandler),
             m_window(window),
