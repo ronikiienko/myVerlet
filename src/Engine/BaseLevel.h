@@ -27,6 +27,41 @@ struct LevelContext {
 };
 
 class BaseLevel {
+private:
+    void update() {
+        m_performanceMonitor.start("physics");
+        m_physics.update();
+        m_performanceMonitor.end("physics");
+
+        m_window.clear(sf::Color::Black);
+
+        m_performanceMonitor.start("graphics");
+        m_graphics.update();
+        m_performanceMonitor.end("graphics");
+
+        m_performanceMonitor.start("gui");
+        m_performanceMonitor.draw();
+        m_gui.draw();
+        m_performanceMonitor.end("gui");
+
+        m_window.display();
+
+        m_performanceMonitor.start("object ticks");
+        m_scene.runObjectTicks();
+        m_performanceMonitor.end("object ticks");
+
+        m_performanceMonitor.start("level tick");
+        onTick();
+        m_performanceMonitor.end("level tick");
+
+        m_performanceMonitor.start("removingMarked");
+        m_scene.removeMarkedObjects();
+        m_performanceMonitor.end("removingMarked");
+    }
+
+    void init() {
+        onInit();
+    }
 protected:
     Scene m_scene;
     Graphics m_graphics;
@@ -39,7 +74,6 @@ protected:
     InputHandler &m_inputHandler;
     SoundManager &m_soundManager;
     TimerManager &m_timerManager;
-public:
 
     explicit BaseLevel(
             LevelContext levelContext,
@@ -72,38 +106,7 @@ public:
 
 
     }
-
-    void update() {
-        m_performanceMonitor.start("physics");
-        m_physics.update();
-        m_performanceMonitor.end("physics");
-
-        m_window.clear(sf::Color::Black);
-
-        m_performanceMonitor.start("graphics");
-        m_graphics.update();
-        m_performanceMonitor.end("graphics");
-
-        m_performanceMonitor.start("gui");
-        m_performanceMonitor.draw();
-        m_gui.draw();
-        m_performanceMonitor.end("gui");
-
-        m_window.display();
-
-        m_performanceMonitor.start("object ticks");
-        m_scene.runObjectTicks();
-        m_performanceMonitor.end("object ticks");
-
-        m_performanceMonitor.start("level tick");
-        onTick();
-        m_performanceMonitor.end("level tick");
-
-        m_performanceMonitor.start("removingMarked");
-        m_scene.removeMarkedObjects();
-        m_performanceMonitor.end("removingMarked");
-    }
-
+public:
     virtual void onInit() = 0;
     virtual void onTick() = 0;
 
@@ -111,4 +114,6 @@ public:
     BaseLevel(BaseLevel&&) = delete;
     BaseLevel& operator=(const BaseLevel&) = delete;
     BaseLevel& operator=(BaseLevel&&) = delete;
+
+    friend class BaseGame;
 };
