@@ -3,8 +3,8 @@
 
 #include "Scene.h"
 #include "Camera.h"
-#include "InputHandler.h"
-#include "EventBus.h"
+#include "EventSystems/InputHandler.h"
+#include "CallbackSystems/EventBus.h"
 #include "SoundManager.h"
 #include "TimerManager.h"
 #include <TGUI/TGUI.hpp>

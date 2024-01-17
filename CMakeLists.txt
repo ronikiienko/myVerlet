@@ -17,7 +17,7 @@ set(SOURCES src/main.cpp
         src/Engine/PerformanceMonitor.h
         src/addons/RandomSpawner.h
         src/Engine/Camera.h
-        src/Engine/InputHandler.h
+        src/Engine/CallbackSystems/InputHandler.h
         src/Engine/BaseLevel.h
         src/Engine/BaseGame.h
         src/Game.h
@@ -26,7 +26,7 @@ set(SOURCES src/main.cpp
         src/Objects/Player.h
         src/addons/Shooter.h
         src/Objects/Bullet.h
-        src/Engine/EventBus.h
+        src/Engine/CallbackSystems/EventBus.h
         src/Engine/SoundManager.h
         src/Engine/TimerManager.h
         src/consts.h
