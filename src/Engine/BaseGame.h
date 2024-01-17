@@ -50,12 +50,6 @@ public:
         if (!m_level) {
             throw std::runtime_error("Level should be set in v_onInit() method");
         }
-
-        m_inputHandler.addEventListener(sf::Event::Resized, [&](const sf::Event &event) {
-            sf::View view = sf::View(sf::FloatRect(0.f, 0.f, static_cast<float>(event.size.width),
-                                                   static_cast<float>(event.size.height)));
-            m_window.setView(view);
-        });
         while (m_window.isOpen()) {
             m_performanceMonitor.start("total");
             m_level->update();
