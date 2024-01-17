@@ -64,7 +64,8 @@ private:
         onInit();
         m_debugWidget = tgui::Label::create();
         m_debugWidget->setTextSize(12);
-        m_debugWidget->setPosition(15.0f, 15.0f);
+        m_debugWidget->setPosition(5.0f, 5.0f);
+        m_debugWidget->getRenderer()->setTextColor(sf::Color::White);
         m_gui.add(m_debugWidget, "debugWidget");
     }
 

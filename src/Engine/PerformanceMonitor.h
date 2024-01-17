@@ -44,7 +44,7 @@ public:
         for (auto& it : m_times) {
             double milliseconds = static_cast<double>(it.second) / 1000;
             short fps = 1000 / milliseconds;
-            textString += '\n' + it.first + ":   " + std::to_string(milliseconds) + " ms" + "    /    " + std::to_string(fps) + " FPS";
+            textString += it.first + ":   " + std::to_string(milliseconds) + " ms" + "    /    " + std::to_string(fps) + " FPS";
         }
         return textString;
     }
