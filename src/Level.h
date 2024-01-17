@@ -17,7 +17,7 @@ public:
     }
 
     void v_onInit() override {
-//        m_randomSpawner.spawn(150000);
+        m_randomSpawner.spawn(150000);
         m_scene.addObject(Player{m_inputHandler, m_scene}, Vector2F::cart(100, 100));
         std::cout << "Objects num: " << m_scene.getObjectsCount() << std::endl;
 
