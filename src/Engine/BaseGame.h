@@ -75,4 +75,6 @@ public:
     BaseGame(BaseGame&&) = delete;
     BaseGame& operator=(const BaseGame&) = delete;
     BaseGame& operator=(BaseGame&&) = delete;
+
+    virtual ~BaseGame() = default;
 };

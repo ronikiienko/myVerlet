@@ -115,5 +115,7 @@ public:
     BaseLevel& operator=(const BaseLevel&) = delete;
     BaseLevel& operator=(BaseLevel&&) = delete;
 
+    virtual ~BaseLevel() = default;
+
     friend class BaseGame;
 };
