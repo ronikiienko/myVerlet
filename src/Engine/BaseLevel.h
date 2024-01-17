@@ -86,20 +86,17 @@ public:
         m_window.display();
         m_performanceMonitor.end("m_graphics");
 
-        m_performanceMonitor.start("input");
-        m_inputHandler.update();
-        m_performanceMonitor.end("input");
-
         m_performanceMonitor.start("object ticks");
         m_scene.runObjectTicks();
-        onTick();
         m_performanceMonitor.end("object ticks");
+
+        m_performanceMonitor.start("level tick");
+        onTick();
+        m_performanceMonitor.end("level tick");
 
         m_performanceMonitor.start("removingMarked");
         m_scene.removeMarkedObjects();
         m_performanceMonitor.end("removingMarked");
-
-        m_performanceMonitor.setObjectsCount(m_scene.getObjectsCount());
     }
 
     virtual void onInit() {}

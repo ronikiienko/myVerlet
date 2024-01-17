@@ -55,6 +55,9 @@ public:
         while (m_window.isOpen()) {
             m_performanceMonitor.start("total");
             m_level->update();
+            m_performanceMonitor.start("input");
+            m_inputHandler.update();
+            m_performanceMonitor.end("input");
             onTick();
 
             m_performanceMonitor.start("timer manager");
