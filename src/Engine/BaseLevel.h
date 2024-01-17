@@ -18,12 +18,13 @@ struct LevelContext {
     TimerManager &m_timerManager;
     InputHandler &m_inputHandler;
     PerformanceMonitor& m_performanceMonitor;
+    tgui::Gui& m_gui;
 
 
     LevelContext(sf::RenderWindow &window, ThreadPool &threadPool, EventBus &eventBus, SoundManager &soundManager,
-                 TimerManager &timerManager, InputHandler &inputHandler, PerformanceMonitor& performanceMonitor)
+                 TimerManager &timerManager, InputHandler &inputHandler, PerformanceMonitor& performanceMonitor, tgui::Gui& gui)
             : m_window(window), m_threadPool(threadPool), m_eventBus(eventBus), m_soundManager(soundManager),
-              m_timerManager(timerManager), m_inputHandler(inputHandler), m_performanceMonitor(performanceMonitor) {}
+              m_timerManager(timerManager), m_inputHandler(inputHandler), m_performanceMonitor(performanceMonitor), m_gui(gui) {}
 };
 
 class BaseLevel {
@@ -39,9 +40,7 @@ private:
         m_graphics.update();
         m_performanceMonitor.end("graphics");
 
-        m_performanceMonitor.start("gui");
-        m_gui.draw();
-        m_performanceMonitor.end("gui");
+
 
         m_window.display();
 
@@ -80,7 +79,7 @@ protected:
     Physics m_physics;
     PerformanceMonitor& m_performanceMonitor;
     sf::RenderWindow &m_window;
-    tgui::Gui m_gui{m_window};
+    tgui::Gui& m_gui;
     ThreadPool &m_threadPool;
     EventBus &m_eventBus;
     InputHandler &m_inputHandler;
@@ -100,6 +99,7 @@ protected:
             m_timerManager(levelContext.m_timerManager),
             m_inputHandler(levelContext.m_inputHandler),
             m_performanceMonitor(levelContext.m_performanceMonitor),
+            m_gui(levelContext.m_gui),
             m_scene(
                     cameraMaxWorldViewSize,
                     Vector2F::cart(0, 0),

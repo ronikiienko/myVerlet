@@ -11,9 +11,9 @@ private:
     int m_keyCounter = 0;
 public:
     explicit InputHandler(sf::RenderWindow &window) : m_window(window) {}
-    void update() {
-        sf::Event event{};
-        while (m_window.pollEvent(event)) {
+    void update(sf::Event& event) {
+//        sf::Event event{};
+//        while (m_window.pollEvent(event)) {
             if (event.type == sf::Event::Closed) {
                 m_window.close();
             } else {
@@ -22,7 +22,7 @@ public:
                     pair.second(event);
                 }
             }
-        }
+//        }
     }
 
 
