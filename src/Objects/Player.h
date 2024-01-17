@@ -8,7 +8,6 @@
 class Player : public BaseObject {
 public:
     InputHandler &m_inputHandler;
-    Shooter &m_shooter;
     Scene &m_scene;
     float m_acceleration = 100;
     bool m_movingUp = false;
@@ -22,9 +21,8 @@ public:
     int m_mouseButtonPressedListenerId = -1;
     int m_mouseWheelScrolledListenerId = -1;
 
-    Player(InputHandler &inputHandler, Shooter &shooter, Scene &scene) :
+    Player(InputHandler &inputHandler, Scene &scene) :
             m_inputHandler(inputHandler),
-            m_shooter(shooter),
             m_scene(scene) {
         // i can't setup events from constructor, because lambda will capture
         // `this` before std::make_unique will fire, which will invalidate `this`, because ownership is transferred to unique_ptr
@@ -73,17 +71,6 @@ public:
                 m_isBraking = false;
             }
         });
-        m_mouseButtonPressedListenerId = m_inputHandler.addEventListener(sf::Event::MouseButtonPressed,
-                                                                         [this](const sf::Event &event) {
-                                                                         if (event.mouseButton.button ==
-                                                                             sf::Mouse::Left) {
-                                                                             m_shooter.setPosition(m_basicDetails->m_posCurr);
-                                                                             m_shooter.shoot(m_scene.getCamera().screenPosToWorldPos(
-                                                                                     Vector2F::cart(
-                                                                                             static_cast<float>(event.mouseButton.x),
-                                                                                             static_cast<float>(event.mouseButton.y))));
-                                                                         }
-                                                                     });
         m_inputHandler.addEventListener(sf::Event::MouseWheelScrolled, [&](const sf::Event &event) {
             if (event.mouseWheelScroll.delta > 0) {
                 m_scene.getCamera().zoom(1.5);
