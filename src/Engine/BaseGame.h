@@ -36,6 +36,7 @@ public:
 
     template<typename T>
     void setLevel() {
+        m_inputHandler.clear();
         std::unique_ptr<T> ptr = std::make_unique<T>(
                 LevelContext(m_window, m_threadPool, m_eventBus, m_soundManager, m_timerManager, m_inputHandler,
                              m_performanceMonitor, m_gui));
