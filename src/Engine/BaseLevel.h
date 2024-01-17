@@ -65,6 +65,9 @@ private:
         debugWidget->setPosition(5.0f, 5.0f);
         debugWidget->getRenderer()->setTextColor(sf::Color::White);
         m_gui.add(debugWidget, "debugWidget");
+        m_inputHandler.addEventListener(sf::Event::Resized, [&](const sf::Event &event) {
+            m_gui.setWindow(m_window);
+        });
     }
 
     void tick() {
