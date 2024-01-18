@@ -31,6 +31,7 @@ set(SOURCES src/main.cpp
         src/consts.h
         src/Objects/EmptyObject.h
         src/Engine/CallbackSystems/InputBus.cpp
+        src/Engine/EventBus/EBHandle.cpp
 )
 
 project(${PROJECT_NAME})
