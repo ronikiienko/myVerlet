@@ -26,7 +26,6 @@ set(SOURCES src/main.cpp
         src/Objects/Player.h
         src/addons/Shooter.h
         src/Objects/Bullet.h
-        src/Engine/CallbackSystems/EventBus.h
         src/Engine/SoundManager.h
         src/Engine/TimerManager.h
         src/consts.h

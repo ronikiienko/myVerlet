@@ -8,10 +8,10 @@
 #include "Physics.h"
 #include "CallbackSystems/InputBus.h"
 #include "BaseLevel.h"
-#include "CallbackSystems/EventBus.h"
 #include "SoundManager.h"
 #include "TimerManager.h"
 #include "EngineConsts.h"
+#include "EventBus/EventBus.h"
 
 
 class BaseGame {
