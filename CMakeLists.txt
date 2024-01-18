@@ -35,6 +35,7 @@ set(SOURCES src/main.cpp
 
 project(${PROJECT_NAME})
 
+set(TGUI_STATIC_LIBRARIES FALSE)
 set(TGUI_BACKEND "SFML_GRAPHICS")
 set(SFML_DIR "C:/Libraries/SFML-2.6.1-windows-gcc-13.1.0-mingw-64-bit/SFML-2.6.1/lib/cmake/SFML")
 find_package(SFML 2.6.1 COMPONENTS system window graphics audio REQUIRED)
