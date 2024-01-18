@@ -21,6 +21,8 @@
 // But i decided to wrap EventBus into another class which will store shared_ptr to it.
 // Move assignment operator removes callback of object into which new object was moved to
 
+// TODO there are still some problems and errors when including this file in "Level" and "Game"
+
 class EventBus {
 private:
     std::shared_ptr<EventBusImpl> m_impl;
