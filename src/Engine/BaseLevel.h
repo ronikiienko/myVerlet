@@ -5,7 +5,7 @@
 #include "Camera.h"
 #include "CallbackSystems/InputBus.h"
 #include "SoundManager.h"
-#include "TimerManager.h"
+#include "TimerManager/TimerManager.h"
 #include "EventBus/EventBus.h"
 #include <TGUI/TGUI.hpp>
 #include <TGUI/Backend/SFML-Graphics.hpp>

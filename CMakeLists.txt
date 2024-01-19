@@ -27,7 +27,7 @@ set(SOURCES src/main.cpp
         src/addons/Shooter.h
         src/Objects/Bullet.h
         src/Engine/SoundManager.h
-        src/Engine/TimerManager.h
+        src/Engine/TimerManager/TimerManager.h
         src/consts.h
         src/Objects/EmptyObject.h
         src/Engine/CallbackSystems/InputBus.cpp
