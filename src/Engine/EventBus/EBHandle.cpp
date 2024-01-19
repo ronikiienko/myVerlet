@@ -1,6 +1,5 @@
 //#include "EBHandle.h" //this is not needed. The program will work without this because EventBusImpl.h includes EBHandle.h
 #include "EventBusImpl.h"
-#include "EBHandle.h"
 
 
 EBHandle::EBHandle(std::weak_ptr<EventBusImpl> eventBusPtr, std::type_index type, int key) : m_key(key), m_type(type),

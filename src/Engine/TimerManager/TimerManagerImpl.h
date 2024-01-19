@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <functional>
 #include <memory>
+#include "TMHandle.h"
 
 // better not use it too much because it uses callbacks. so not use for each of for example 50 000 objects lol
 class TimerManagerImpl : std::enable_shared_from_this<TimerManagerImpl> {
@@ -48,9 +49,9 @@ public:
         }
     }
 
-    int setTimeout(int ticks, const std::function<void()>& callback) {
+    TMHandle setTimeout(int ticks, const std::function<void()>& callback) {
         m_tickTimers.emplace(m_keyCounter, TickTimer{ticks, callback});
-        return m_keyCounter++;
+        return {weak_from_this(), false, m_keyCounter++};
     }
 
     void removeTimeout(int key) {
@@ -59,9 +60,9 @@ public:
 
     // TODO add m_interval timer
 
-    int setInterval(int ticks, const std::function<void()>& callback) {
+    TMHandle setInterval(int ticks, const std::function<void()>& callback) {
         m_tickIntervals.emplace(m_keyCounter, TickTimer{ticks, callback});
-        return m_keyCounter++;
+        return {weak_from_this(), false, m_keyCounter++};
     }
 
     void removeInterval(int key) {

@@ -12,11 +12,11 @@ public:
         m_impl->tick();
     }
 
-    int setTimeout(int ticks, const std::function<void()>& callback) {
+    TMHandle setTimeout(int ticks, const std::function<void()>& callback) {
         return m_impl->setTimeout(ticks, callback);
     }
 
-    int setInterval(int ticks, const std::function<void()>& callback) {
+    TMHandle setInterval(int ticks, const std::function<void()>& callback) {
         return m_impl->setInterval(ticks, callback);
     }
 };
