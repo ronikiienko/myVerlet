@@ -1,6 +1,4 @@
 //#include "EBHandle.h" //this is not needed. The program will work without this because EventBusImpl.h includes EBHandle.h
-#include <utility>
-
 #include "EventBusImpl.h"
 #include "EBHandle.h"
 
