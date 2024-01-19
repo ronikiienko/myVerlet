@@ -32,6 +32,9 @@ set(SOURCES src/main.cpp
         src/Objects/EmptyObject.h
         src/Engine/CallbackSystems/InputBus.cpp
         src/Engine/EventBus/EBHandle.cpp
+        src/Engine/TimerManager/TMHandle.h
+        src/Engine/TimerManager/TMHandle.cpp
+        src/Engine/TimerManager/TimerManagerImpl.h
 )
 
 project(${PROJECT_NAME})
