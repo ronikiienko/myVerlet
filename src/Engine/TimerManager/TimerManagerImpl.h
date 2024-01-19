@@ -6,7 +6,7 @@
 #include "TMHandle.h"
 
 // better not use it too much because it uses callbacks. so not use for each of for example 50 000 objects lol
-class TimerManagerImpl : std::enable_shared_from_this<TimerManagerImpl> {
+class TimerManagerImpl : public std::enable_shared_from_this<TimerManagerImpl> {
     struct TickTimer {
         int m_ticks;
         int m_ticksLeft;
