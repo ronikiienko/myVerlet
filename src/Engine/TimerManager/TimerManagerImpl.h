@@ -49,7 +49,7 @@ public:
         }
     }
 
-    TMHandle setTimeout(int ticks, const std::function<void()>& callback) {
+    [[nodiscard]] TMHandle setTimeout(int ticks, const std::function<void()>& callback) {
         m_tickTimers.emplace(m_keyCounter, TickTimer{ticks, callback});
         return {weak_from_this(), false, m_keyCounter++};
     }
@@ -60,7 +60,7 @@ public:
 
     // TODO add m_interval timer
 
-    TMHandle setInterval(int ticks, const std::function<void()>& callback) {
+    [[nodiscard]] TMHandle setInterval(int ticks, const std::function<void()>& callback) {
         m_tickIntervals.emplace(m_keyCounter, TickTimer{ticks, callback});
         return {weak_from_this(), false, m_keyCounter++};
     }
