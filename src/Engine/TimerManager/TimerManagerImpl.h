@@ -62,7 +62,7 @@ public:
 
     [[nodiscard]] TMHandle setInterval(int ticks, const std::function<void()>& callback) {
         m_tickIntervals.emplace(m_keyCounter, TickTimer{ticks, callback});
-        return {weak_from_this(), false, m_keyCounter++};
+        return {weak_from_this(), true, m_keyCounter++};
     }
 
     void removeInterval(int key) {
