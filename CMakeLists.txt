@@ -17,7 +17,6 @@ set(SOURCES src/main.cpp
         src/Engine/PerformanceMonitor.h
         src/addons/RandomSpawner.h
         src/Engine/Camera.h
-        src/Engine/InputBus/InputBus.h
         src/Engine/BaseLevel.h
         src/Engine/BaseGame.h
         src/Game.h
@@ -27,13 +26,16 @@ set(SOURCES src/main.cpp
         src/addons/Shooter.h
         src/Objects/Bullet.h
         src/Engine/SoundManager.h
-        src/Engine/TimerManager/TimerManager.h
         src/consts.h
         src/Objects/EmptyObject.h
         src/Engine/EventBus/EBHandle.cpp
         src/Engine/TimerManager/TMHandle.h
         src/Engine/TimerManager/TMHandle.cpp
+        src/Engine/TimerManager/TimerManager.h
         src/Engine/TimerManager/TimerManagerImpl.h
+        src/Engine/InputBus/IBHandle.h
+        src/Engine/InputBus/IBHandle.cpp
+        src/Engine/InputBus/InputBus.h
         src/Engine/InputBus/InputBusImpl.h
 )
 

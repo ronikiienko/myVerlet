@@ -3,8 +3,10 @@
 #include <functional>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Window/Event.hpp>
+#include <memory>
+#include "IBHandle.h"
 
-class InputBusImpl {
+class InputBusImpl : public std::enable_shared_from_this<InputBusImpl> {
 private:
     sf::RenderWindow &m_window;
     std::unordered_map<sf::Event::EventType, std::unordered_map<int, std::function<void(const sf::Event &)>>> m_eventHandlers;
@@ -26,9 +28,9 @@ public:
         m_eventHandlers.clear();
     };
 
-    int addEventListener(sf::Event::EventType type, const std::function<void(const sf::Event &)>& callback) {
+    IBHandle addEventListener(sf::Event::EventType type, const std::function<void(const sf::Event &)>& callback) {
         m_eventHandlers[type][m_keyCounter] = callback;
-        return m_keyCounter++;
+        return {weak_from_this(), type, m_keyCounter++}
     };
 
     void removeEventListener(sf::Event::EventType type, int key) {

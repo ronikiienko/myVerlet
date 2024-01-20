@@ -1,7 +1,6 @@
 #pragma once
 
 #include "InputBusImpl.h"
-#include <memory>
 
 class InputBus {
 private:
