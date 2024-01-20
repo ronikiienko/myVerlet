@@ -40,4 +40,9 @@ public:
             pair.second(event);
         }
     };
+
+    EventBusImpl(const EventBusImpl &) = delete;
+    EventBusImpl& operator=(const EventBusImpl &) = delete;
+    EventBusImpl(EventBusImpl &&) = delete;
+    EventBusImpl& operator=(EventBusImpl &&) = delete;
 };
