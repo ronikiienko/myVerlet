@@ -4,7 +4,7 @@
 #include "Scene.h"
 #include "Camera.h"
 #include "InputBus/InputBus.h"
-#include "SoundManager.h"
+#include "SoundManager/SoundManager.h"
 #include "TimerManager/TimerManager.h"
 #include "EventBus/EventBus.h"
 #include <TGUI/TGUI.hpp>

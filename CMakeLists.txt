@@ -25,7 +25,7 @@ set(SOURCES src/main.cpp
         src/Objects/Player.h
         src/addons/Shooter.h
         src/Objects/Bullet.h
-        src/Engine/SoundManager.h
+        src/Engine/SoundManager/SoundManager.h
         src/consts.h
         src/Objects/EmptyObject.h
         src/Engine/EventBus/EBHandle.cpp
