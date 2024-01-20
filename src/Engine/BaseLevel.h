@@ -30,6 +30,10 @@ struct LevelContext {
 class BaseLevel {
 private:
     void update() {
+        m_performanceMonitor.start("removingMarked");
+        m_scene.removeMarkedObjects();
+        m_performanceMonitor.end("removingMarked");
+
         m_performanceMonitor.start("physics");
         m_physics.update();
         m_performanceMonitor.end("physics");
@@ -53,10 +57,6 @@ private:
         m_performanceMonitor.start("level tick");
         tick();
         m_performanceMonitor.end("level tick");
-
-        m_performanceMonitor.start("removingMarked");
-        m_scene.removeMarkedObjects();
-        m_performanceMonitor.end("removingMarked");
     }
 
     void init() {
