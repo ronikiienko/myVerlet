@@ -66,7 +66,7 @@ private:
         debugWidget->setPosition(5.0f, 5.0f);
         debugWidget->getRenderer()->setTextColor(sf::Color::White);
         m_gui.add(debugWidget, "debugWidget");
-        m_inputBus.addEventListener(sf::Event::Resized, [&](const sf::Event &event) {
+        windowResizeHandle = m_inputBus.addEventListener(sf::Event::Resized, [&](const sf::Event &event) {
             m_gui.setWindow(m_window);
         });
     }
@@ -75,6 +75,8 @@ private:
         v_onTick();
         m_gui.get<tgui::Label>("debugWidget")->setText(m_performanceMonitor.getString());
     }
+
+    IBHandle windowResizeHandle;
 protected:
     Scene m_scene;
     Graphics m_graphics;

@@ -34,6 +34,8 @@ private:
 
     InputBus &m_inputBus;
     sf::RenderWindow &m_window;
+
+    IBHandle windowResizeHandle;
 public:
     void move(Vector2F delta) {
         m_worldCenterPos += delta;
@@ -93,7 +95,7 @@ public:
         }
 
         // when camera is moved, this is invalidated
-        m_inputBus.addEventListener(sf::Event::Resized, [this](const sf::Event &event) {
+        windowResizeHandle = m_inputBus.addEventListener(sf::Event::Resized, [this](const sf::Event &event) {
             float aspectRatio = static_cast<float>(event.size.width) / static_cast<float>(event.size.height);
             float biggestDimWindowSize = std::max(static_cast<float>(event.size.width),
                                                   static_cast<float>(event.size.height));
