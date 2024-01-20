@@ -16,23 +16,16 @@ public:
     bool m_movingRight = false;
     bool m_isBraking = false;
 
-    int m_keyPressedListenerId = -1;
-    int m_keyReleasedListenerId = -1;
-    int m_mouseButtonPressedListenerId = -1;
-    int m_mouseWheelScrolledListenerId = -1;
+    IBHandle m_keyPressedListenerId;
+    IBHandle m_keyReleasedListenerId;
+    IBHandle m_mouseButtonPressedListenerId;
+    IBHandle m_mouseWheelScrolledListenerId;
 
     Player(InputBus &inputBus, Scene &scene) :
             m_inputBus(inputBus),
             m_scene(scene) {
         // i can't setup events from constructor, because lambda will capture
         // `this` before std::make_unique will fire, which will invalidate `this`, because ownership is transferred to unique_ptr
-    }
-
-    ~Player() override {
-        m_inputBus.removeEventListener(sf::Event::KeyPressed, m_keyPressedListenerId);
-        m_inputBus.removeEventListener(sf::Event::KeyReleased, m_keyReleasedListenerId);
-        m_inputBus.removeEventListener(sf::Event::MouseButtonPressed, m_mouseButtonPressedListenerId);
-        m_inputBus.removeEventListener(sf::Event::MouseWheelScrolled, m_mouseWheelScrolledListenerId);
     }
 
     void v_onInit() override {
