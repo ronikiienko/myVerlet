@@ -16,10 +16,10 @@ public:
     bool m_movingRight = false;
     bool m_isBraking = false;
 
-    IBHandle m_keyPressedListenerId;
-    IBHandle m_keyReleasedListenerId;
-    IBHandle m_mouseButtonPressedListenerId;
-    IBHandle m_mouseWheelScrolledListenerId;
+    IBHandle m_keyPressedListener;
+    IBHandle m_keyReleasedListener;
+    IBHandle m_mouseButtonPressedListener;
+    IBHandle m_mouseWheelScrolledListener;
 
     Player(InputBus &inputBus, Scene &scene) :
             m_inputBus(inputBus),
@@ -30,7 +30,7 @@ public:
 
     void v_onInit() override {
         std::cout << "v_onInit" << std::endl;
-        m_keyPressedListenerId = m_inputBus.addEventListener(sf::Event::KeyPressed, [this](const sf::Event &event) {
+        m_keyPressedListener = m_inputBus.addEventListener(sf::Event::KeyPressed, [this](const sf::Event &event) {
             if (event.key.code == sf::Keyboard::W) {
                 m_movingUp = true;
             }
@@ -47,7 +47,7 @@ public:
                 m_isBraking = true;
             }
         });
-        m_keyReleasedListenerId = m_inputBus.addEventListener(sf::Event::KeyReleased, [this](const sf::Event &event) {
+        m_keyReleasedListener = m_inputBus.addEventListener(sf::Event::KeyReleased, [this](const sf::Event &event) {
             if (event.key.code == sf::Keyboard::W) {
                 m_movingUp = false;
             }
@@ -64,7 +64,7 @@ public:
                 m_isBraking = false;
             }
         });
-        m_inputBus.addEventListener(sf::Event::MouseWheelScrolled, [&](const sf::Event &event) {
+        m_mouseWheelScrolledListener = m_inputBus.addEventListener(sf::Event::MouseWheelScrolled, [&](const sf::Event &event) {
             if (event.mouseWheelScroll.delta > 0) {
                 m_scene.getCamera().zoom(1.5);
             } else {
