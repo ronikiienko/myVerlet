@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../Engine/BaseObject.h"
-#include "../Engine/CallbackSystems/InputBus.h"
+#include "../Engine/InputBus/InputBus.h"
 #include "../Engine/Camera.h"
 #include "../addons/Shooter.h"
 

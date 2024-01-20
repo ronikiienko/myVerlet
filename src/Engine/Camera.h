@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include "CallbackSystems/InputBus.h"
+#include "InputBus/InputBus.h"
 
 class Camera {
 private:
