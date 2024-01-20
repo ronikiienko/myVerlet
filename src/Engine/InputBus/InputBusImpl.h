@@ -30,7 +30,7 @@ public:
 
     IBHandle addEventListener(sf::Event::EventType type, const std::function<void(const sf::Event &)>& callback) {
         m_eventHandlers[type][m_keyCounter] = callback;
-        return {weak_from_this(), type, m_keyCounter++}
+        return {weak_from_this(), type, m_keyCounter++};
     };
 
     void removeEventListener(sf::Event::EventType type, int key) {
