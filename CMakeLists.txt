@@ -30,7 +30,6 @@ set(SOURCES src/main.cpp
         src/Engine/TimerManager/TimerManager.h
         src/consts.h
         src/Objects/EmptyObject.h
-        src/Engine/InputBus/InputBus.cpp
         src/Engine/EventBus/EBHandle.cpp
         src/Engine/TimerManager/TMHandle.h
         src/Engine/TimerManager/TMHandle.cpp
