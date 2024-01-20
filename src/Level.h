@@ -20,12 +20,6 @@ public:
         m_randomSpawner.spawn(150000);
         m_scene.addObject(Player{m_inputBus, m_scene}, Vector2F::cart(100, 100));
         std::cout << "Objects num: " << m_scene.getObjectsCount() << std::endl;
-
-        m_inputBus.addEventListener(sf::Event::Resized, [&](const sf::Event &event) {
-            sf::View view = sf::View(sf::FloatRect(0.f, 0.f, static_cast<float>(event.size.width),
-                                                   static_cast<float>(event.size.height)));
-            m_window.setView(view);
-        });
     }
     void v_onTick() override {}
 };
