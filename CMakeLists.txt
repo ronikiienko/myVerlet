@@ -17,7 +17,7 @@ set(SOURCES src/main.cpp
         src/Engine/PerformanceMonitor.h
         src/addons/RandomSpawner.h
         src/Engine/Camera.h
-        src/Engine/CallbackSystems/InputBus.h
+        src/Engine/InputBus/InputBus.h
         src/Engine/BaseLevel.h
         src/Engine/BaseGame.h
         src/Game.h
@@ -30,7 +30,7 @@ set(SOURCES src/main.cpp
         src/Engine/TimerManager/TimerManager.h
         src/consts.h
         src/Objects/EmptyObject.h
-        src/Engine/CallbackSystems/InputBus.cpp
+        src/Engine/InputBus/InputBus.cpp
         src/Engine/EventBus/EBHandle.cpp
         src/Engine/TimerManager/TMHandle.h
         src/Engine/TimerManager/TMHandle.cpp
