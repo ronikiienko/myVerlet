@@ -4,9 +4,9 @@
 
 namespace engineDefaults {
     extern const Vector2I windowSize;
-    extern const int objectsRadius;
-    extern const int twoObjectsRadius;
-    extern const int twoObjectsRadiusSquared;
+    extern const float objectsRadius;
+    extern const float twoObjectsRadius;
+    extern const float twoObjectsRadiusSquared;
     extern const Vector2I worldSize;
     extern const int maxObjectsNum;
     extern const Vector2F gravity;

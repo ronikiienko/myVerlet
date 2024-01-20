@@ -2,9 +2,9 @@
 
 namespace engineDefaults {
     extern const Vector2I windowSize = Vector2I::cart(2400, 1000);
-    extern const int objectsRadius = 2;
-    extern const int twoObjectsRadius = objectsRadius + objectsRadius;
-    extern const int twoObjectsRadiusSquared = twoObjectsRadius * twoObjectsRadius;
+    extern const float objectsRadius = 2;
+    extern const float twoObjectsRadius = objectsRadius + objectsRadius;
+    extern const float twoObjectsRadiusSquared = twoObjectsRadius * twoObjectsRadius;
 
     extern const Vector2I worldSize = Vector2I::cart(2400, 1800);
     extern const int maxObjectsNum = 200000;
