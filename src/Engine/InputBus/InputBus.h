@@ -15,7 +15,7 @@ public:
         m_impl->clear();
     };
 
-    IBHandle addEventListener(sf::Event::EventType type, const std::function<void(const sf::Event &)>& callback) {
+    [[nodiscard]] IBHandle addEventListener(sf::Event::EventType type, const std::function<void(const sf::Event &)>& callback) {
         return m_impl->addEventListener(type, callback);
     };
 };
