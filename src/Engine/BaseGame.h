@@ -51,6 +51,7 @@ public:
             throw std::runtime_error("Level should be set in v_onInit() method");
         }
         while (m_window.isOpen()) {
+            m_performanceMonitor.startFrame();
             m_performanceMonitor.start("total");
             m_level->update();
             m_performanceMonitor.start("input");
