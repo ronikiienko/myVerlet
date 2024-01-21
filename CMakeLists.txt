@@ -21,7 +21,7 @@ set(SOURCES src/main.cpp
         src/Engine/BaseGame.h
         src/Game.h
         src/Level.h
-        src/addons/ExplosionHandler.h
+        src/Engine/Modules/ExplosionHandler.h
         src/Objects/Player.h
         src/addons/Shooter.h
         src/Objects/Bullet.h

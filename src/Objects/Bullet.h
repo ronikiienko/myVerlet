@@ -2,7 +2,7 @@
 
 
 #include "../Engine/BaseObject.h"
-#include "../addons/ExplosionHandler.h"
+#include "../Engine/Modules/ExplosionHandler.h"
 
 class Bullet : public BaseObject {
 public:
