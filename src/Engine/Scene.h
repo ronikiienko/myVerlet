@@ -150,6 +150,8 @@ public:
         // if we remove 10 first, then 15 will become 14, and we will remove wrong object
         std::sort(m_objectsToRemove.begin(), m_objectsToRemove.end(), std::greater<>());
 
+        // erasing each element requires all elements after it to be shifted, so it's pretty long
+        // but probably removing won't happen too often, so it's ok
         for (int i: m_objectsToRemove) {
             m_objects.erase(m_objects.begin() + i);
             m_basicDetails.erase(m_basicDetails.begin() + i);
