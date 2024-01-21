@@ -39,6 +39,10 @@ public:
         }
     }
 
+    void setSampleFrameSize(int size) {
+        m_sampleFrameSize = size;
+    }
+
     void start(const std::string &label) {
         if (!m_clocks.count(label)) {
             m_clocks.insert({label, sf::Clock{}});
