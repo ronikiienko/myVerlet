@@ -144,6 +144,10 @@ public:
         if (m_objectsToRemove.empty()) {
             return;
         }
+        // sort in descending order to avoid shifting
+        // example of shifting:
+        // need to remove two objects, with indexes 10 and 15
+        // if we remove 10 first, then 15 will become 14, and we will remove wrong object
         std::sort(m_objectsToRemove.begin(), m_objectsToRemove.end(), std::greater<>());
 
         for (int i: m_objectsToRemove) {
