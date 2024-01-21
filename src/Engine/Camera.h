@@ -66,12 +66,20 @@ public:
         return screenPosition / getFinalZoom() + m_worldLeftTopPos;
     }
 
-    [[nodiscard]] float worldSizeToScreenSize(float worldSize) const {
-        return worldSize * getFinalZoom();
+    [[nodiscard]] float worldScalarToScreen(float worldScalar) const {
+        return worldScalar * getFinalZoom();
     }
 
-    [[nodiscard]] float screenSizeToWorldSize(float screenSize) const {
-        return screenSize / getFinalZoom();
+    [[nodiscard]] float screenScalarToWorld(float screenScalar) const {
+        return screenScalar / getFinalZoom();
+    }
+
+    [[nodiscard]] Vector2F worldVectorToScreen(Vector2F worldVector) const {
+        return worldVector * getFinalZoom();
+    }
+
+    [[nodiscard]] Vector2F screenVectorToWorld(Vector2F screenVector) const {
+        return screenVector / getFinalZoom();
     }
 
 

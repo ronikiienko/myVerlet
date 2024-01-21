@@ -34,7 +34,7 @@ public:
     void updateObjectsArray() {
         m_objectVertexArray.resize(m_scene.getObjectsCount() * 4);
         m_threadPool.dispatch(m_scene.getObjectsCount(), [this](int start, int end) {
-            float objectSize = m_scene.getCamera().worldSizeToScreenSize(engineDefaults::objectsRadius);
+            float objectSize = m_scene.getCamera().worldScalarToScreen(engineDefaults::objectsRadius);
             m_scene.forEachBasicDetails([this, objectSize](BasicDetails &object, int i) {
                 Vector2F screenPos = m_scene.getCamera().worldPosToScreenPos(object.m_posCurr);
 
