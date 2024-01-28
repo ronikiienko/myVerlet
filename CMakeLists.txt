@@ -19,10 +19,10 @@ set(SOURCES src/main.cpp
         src/Engine/Camera.h
         src/Engine/BaseLevel.h
         src/Engine/BaseGame.h
-        src/Game.h
-        src/Level.h
+        src/GameTest/Game.h
+        src/GameTest/Levels/Level1.h
         src/Engine/Modules/ExplosionHandler.h
-        src/Objects/Player.h
+        src/GameTest/Entities/Player.h
         src/addons/Shooter.h
         src/Objects/Bullet.h
         src/Engine/SoundManager/SoundManager.h
@@ -37,6 +37,9 @@ set(SOURCES src/main.cpp
         src/Engine/InputBus/IBHandle.cpp
         src/Engine/InputBus/InputBus.h
         src/Engine/InputBus/InputBusImpl.h
+        src/GameTest/Levels/MainMenu.h
+        src/GameTest/Events.h
+        src/GameTest/Entities/Enemy.h
 )
 
 project(${PROJECT_NAME})

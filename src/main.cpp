@@ -1,7 +1,7 @@
 
 
 
-#include "Game.h"
+#include "GameTest/Game.h"
 
 int main() {
     Game game;
