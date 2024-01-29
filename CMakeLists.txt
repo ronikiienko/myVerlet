@@ -24,8 +24,8 @@ set(SOURCES src/main.cpp
         src/Engine/Modules/ExplosionHandler.h
         src/GameTest/Entities/Player.h
         src/Engine/SoundManager/SoundManager.h
-        src/consts.h
-        src/Objects/EmptyObject.h
+        src/GameTest/consts.h
+        src/GameTest/Entities/EmptyObject.h
         src/Engine/EventBus/EBHandle.cpp
         src/Engine/TimerManager/TMHandle.h
         src/Engine/TimerManager/TMHandle.cpp

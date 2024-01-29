@@ -4,7 +4,7 @@
 #include "../../Engine/utils/Rand.h"
 #include "../../addons/RandomSpawner.h"
 #include "../Entities/Player.h"
-#include "../../consts.h"
+#include "../consts.h"
 #include "../Entities/Enemy.h"
 #include "../../Engine/Modules/ExplosionHandler.h"
 

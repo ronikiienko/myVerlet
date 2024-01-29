@@ -3,7 +3,7 @@
 #include "../Engine/Scene.h"
 #include "../Engine/EngineConsts.h"
 #include "../Engine/utils/Rand.h"
-#include "../Objects/EmptyObject.h"
+#include "../GameTest/Entities/EmptyObject.h"
 
 class RandomSpawner {
 private:
