@@ -23,7 +23,7 @@ set(SOURCES src/main.cpp
         src/Level.h
         src/Engine/Modules/ExplosionHandler.h
         src/Objects/Player.h
-        src/addons/Shooter.h
+        src/Engine/Modules/Shooter.h
         src/Objects/Bullet.h
         src/Engine/SoundManager/SoundManager.h
         src/consts.h
