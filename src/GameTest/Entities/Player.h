@@ -10,24 +10,31 @@ class Player : public BaseObject {
 public:
     InputBus &m_inputBus;
     Scene &m_scene;
+    sf::RenderWindow &m_window;
     float m_acceleration = 100;
+    int m_shootCooldown = 50;
+    int m_ticksSinceLastShoot = 0;
     bool m_movingUp = false;
     bool m_movingDown = false;
     bool m_movingLeft = false;
     bool m_movingRight = false;
     bool m_isBraking = false;
+    bool m_isShooting = false;
+
+    bool m_isManualCamera = false;
+    Vector2F m_manualCameraPos = Vector2F::cart(0, 0);
 
     Shooter m_shooter{m_scene};
 
     IBHandle m_keyPressedListener;
     IBHandle m_keyReleasedListener;
-    IBHandle m_mouseButtonPressedListener;
     IBHandle m_mouseWheelScrolledListener;
-    IBHandle m_lmbPressedListener;
+    IBHandle m_mouseButtonPressedListener;
+    IBHandle m_mouseButtonReleasedListener;
 
-    Player(InputBus &inputBus, Scene &scene) :
+    Player(InputBus &inputBus, Scene &scene, sf::RenderWindow &window) :
             m_inputBus(inputBus),
-            m_scene(scene) {
+            m_scene(scene), m_window(window) {
         // i can't setup events from constructor, because lambda will capture
         // `this` before std::make_unique will fire, which will invalidate `this`, because ownership is transferred to unique_ptr
     }
@@ -68,26 +75,64 @@ public:
                 m_isBraking = false;
             }
         });
-        m_mouseWheelScrolledListener = m_inputBus.addEventListener(sf::Event::MouseWheelScrolled, [&](const sf::Event &event) {
-            if (event.mouseWheelScroll.delta > 0) {
-                m_scene.getCamera().zoom(1.5);
-            } else {
-                m_scene.getCamera().zoom(0.75);
-            }
-        });
-        m_lmbPressedListener = m_inputBus.addEventListener(sf::Event::MouseButtonPressed, [this](const sf::Event &event) {
-            if (event.mouseButton.button == sf::Mouse::Left) {
-                m_shooter.shoot(m_basicDetails->m_posCurr, m_scene.getCamera().screenPosToWorldPos(Vector2F::cart(event.mouseButton.x, event.mouseButton.y)), Bullet{m_scene});
-            }
-        });
+        m_mouseWheelScrolledListener = m_inputBus.addEventListener(sf::Event::MouseWheelScrolled,
+                                                                   [&](const sf::Event &event) {
+                                                                       if (event.mouseWheelScroll.delta > 0) {
+                                                                           m_scene.getCamera().zoom(1.5);
+                                                                       } else {
+                                                                           m_scene.getCamera().zoom(0.75);
+                                                                       }
+                                                                   });
+        m_mouseButtonPressedListener = m_inputBus.addEventListener(sf::Event::MouseButtonPressed,
+                                                                   [this](const sf::Event &event) {
+                                                                       if (event.mouseButton.button ==
+                                                                           sf::Mouse::Left) {
+                                                                           m_isShooting = true;
+                                                                       }
+                                                                       if (event.mouseButton.button ==
+                                                                           sf::Mouse::Right) {
+                                                                           m_isManualCamera = true;
+                                                                           m_manualCameraPos = m_scene.getCamera().screenPosToWorldPos(
+                                                                                   Vector2F::cart(
+                                                                                           event.mouseButton.x,
+                                                                                           event.mouseButton.y)
+                                                                           );
+                                                                       }
+                                                                   });
+        m_mouseButtonReleasedListener = m_inputBus.addEventListener(sf::Event::MouseButtonReleased,
+                                                                    [this](const sf::Event &event) {
+                                                                        if (event.mouseButton.button ==
+                                                                            sf::Mouse::Left) {
+                                                                            m_isShooting = false;
+                                                                        }
+                                                                        if (event.mouseButton.button ==
+                                                                            sf::Mouse::Right) {
+                                                                            m_isManualCamera = false;
+                                                                        }
+                                                                    });
     }
 
     void v_onTick() override {
+        m_ticksSinceLastShoot++;
+        if (m_isShooting && m_ticksSinceLastShoot > m_shootCooldown) {
+            sf::Vector2<int> mousePosition = sf::Mouse::getPosition(m_window);
+            m_shooter.shoot(m_basicDetails->m_posCurr,
+                            m_scene.getCamera().screenPosToWorldPos(Vector2F::cart(mousePosition.x, mousePosition.y)),
+                            Bullet{m_scene});
+            m_ticksSinceLastShoot = 0;
+        }
         if (!m_basicDetails) {
             throw std::runtime_error("m_basicDetails is nullptr");
         }
 //        m_scene.getCamera().setPosition((m_basicDetails->m_posCurr * 0.2 + m_scene.getCamera().m_worldCenterPos * 1.8) / 2);
-        m_scene.getCamera().setPosition(m_basicDetails->m_posCurr);
+        Vector2F newCameraPos = Vector2F::cart(0, 0);
+        if (m_isManualCamera) {
+            newCameraPos = m_manualCameraPos;
+        } else {
+            newCameraPos = m_basicDetails->m_posCurr;
+        }
+
+        m_scene.getCamera().setPosition((newCameraPos + m_scene.getCamera().getPosition()) / 2);
         if (m_movingUp) {
 //            setVelocity(Vector2F::cart(0, -m_acceleration));
             m_basicDetails->accelerate(Vector2F::cart(0, -m_acceleration));
