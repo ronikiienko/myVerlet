@@ -10,10 +10,9 @@ class Player : public BaseObject {
 public:
     InputBus &m_inputBus;
     Scene &m_scene;
+    RNGf& m_gen;
     sf::RenderWindow &m_window;
     float m_acceleration = 100;
-    int m_shootCooldown = 50;
-    int m_ticksSinceLastShoot = 0;
     bool m_movingUp = false;
     bool m_movingDown = false;
     bool m_movingLeft = false;
@@ -24,7 +23,7 @@ public:
     bool m_isManualCamera = false;
     Vector2F m_manualCameraPos = Vector2F::cart(0, 0);
 
-    Shooter m_shooter{m_scene};
+    Shooter m_shooter{m_scene, m_gen};
 
     IBHandle m_keyPressedListener;
     IBHandle m_keyReleasedListener;
@@ -32,9 +31,9 @@ public:
     IBHandle m_mouseButtonPressedListener;
     IBHandle m_mouseButtonReleasedListener;
 
-    Player(InputBus &inputBus, Scene &scene, sf::RenderWindow &window) :
+    Player(InputBus &inputBus, Scene &scene, sf::RenderWindow &window, RNGf& gen)  :
             m_inputBus(inputBus),
-            m_scene(scene), m_window(window) {
+            m_scene(scene), m_window(window), m_gen(gen) {
         // i can't setup events from constructor, because lambda will capture
         // `this` before std::make_unique will fire, which will invalidate `this`, because ownership is transferred to unique_ptr
     }
@@ -113,13 +112,12 @@ public:
     }
 
     void v_onTick() override {
-        m_ticksSinceLastShoot++;
-        if (m_isShooting && m_ticksSinceLastShoot > m_shootCooldown) {
+        m_shooter.tick();
+        if (m_isShooting) {
             sf::Vector2<int> mousePosition = sf::Mouse::getPosition(m_window);
-            m_shooter.shoot(m_basicDetails->m_posCurr,
+            m_shooter.tryShoot(m_basicDetails->m_posCurr,
                             m_scene.getCamera().screenPosToWorldPos(Vector2F::cart(mousePosition.x, mousePosition.y)),
                             Bullet{m_scene});
-            m_ticksSinceLastShoot = 0;
         }
         if (!m_basicDetails) {
             throw std::runtime_error("m_basicDetails is nullptr");

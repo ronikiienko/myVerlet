@@ -62,6 +62,14 @@ public:
         return Vector2{m_x / mag, m_y / mag};
     }
 
+    [[nodiscard]] constexpr Vector2 rotate(Angle& angle) const {
+        T angleRadians = angle.getRadians();
+        T cos = std::cos(angleRadians);
+        T sin = std::sin(angleRadians);
+
+        return Vector2{m_x * cos - m_y * sin, m_x * sin + m_y * cos};
+    }
+
     void log() const {
         std::cout << '\n' << "X: " << m_x << " " << "Y: " << m_y << '\n';
     }
