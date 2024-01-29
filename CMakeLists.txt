@@ -23,7 +23,6 @@ set(SOURCES src/main.cpp
         src/GameTest/Levels/Level1.h
         src/Engine/Modules/ExplosionHandler.h
         src/GameTest/Entities/Player.h
-        src/Objects/Bullet.h
         src/Engine/SoundManager/SoundManager.h
         src/consts.h
         src/Objects/EmptyObject.h

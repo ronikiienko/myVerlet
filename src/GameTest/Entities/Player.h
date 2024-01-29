@@ -3,6 +3,8 @@
 #include "../../Engine/BaseObject.h"
 #include "../../Engine/InputBus/InputBus.h"
 #include "../../Engine/Camera.h"
+#include "../../Engine/Modules/Shooter.h"
+#include "./Bullet.h"
 
 class Player : public BaseObject {
 public:
@@ -15,10 +17,13 @@ public:
     bool m_movingRight = false;
     bool m_isBraking = false;
 
+    Shooter m_shooter{m_scene};
+
     IBHandle m_keyPressedListener;
     IBHandle m_keyReleasedListener;
     IBHandle m_mouseButtonPressedListener;
     IBHandle m_mouseWheelScrolledListener;
+    IBHandle m_lmbPressedListener;
 
     Player(InputBus &inputBus, Scene &scene) :
             m_inputBus(inputBus),
@@ -68,6 +73,11 @@ public:
                 m_scene.getCamera().zoom(1.5);
             } else {
                 m_scene.getCamera().zoom(0.75);
+            }
+        });
+        m_lmbPressedListener = m_inputBus.addEventListener(sf::Event::MouseButtonPressed, [this](const sf::Event &event) {
+            if (event.mouseButton.button == sf::Mouse::Left) {
+                m_shooter.shoot(m_basicDetails->m_posCurr, m_scene.getCamera().screenPosToWorldPos(Vector2F::cart(event.mouseButton.x, event.mouseButton.y)), Bullet{m_scene});
             }
         });
     }

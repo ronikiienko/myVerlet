@@ -2,12 +2,10 @@
 
 #include "../Scene.h"
 #include "../EngineConsts.h"
-#include "../../Objects/Bullet.h"
-
 
 class Shooter {
 private:
-    float m_speed = 10;
+    float m_speed = 2;
     Scene &m_scene;
 public:
     Shooter(Scene &scene) : m_scene(scene) {}
