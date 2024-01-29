@@ -3,7 +3,6 @@
 #include "../../Engine/BaseObject.h"
 #include "../../Engine/InputBus/InputBus.h"
 #include "../../Engine/Camera.h"
-#include "../../addons/Shooter.h"
 
 class Player : public BaseObject {
 public:

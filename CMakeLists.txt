@@ -23,7 +23,6 @@ set(SOURCES src/main.cpp
         src/GameTest/Levels/Level1.h
         src/Engine/Modules/ExplosionHandler.h
         src/GameTest/Entities/Player.h
-        src/addons/Shooter.h
         src/Objects/Bullet.h
         src/Engine/SoundManager/SoundManager.h
         src/consts.h
@@ -41,6 +40,7 @@ set(SOURCES src/main.cpp
         src/GameTest/Events.h
         src/GameTest/Entities/Enemy.h
         src/GameTest/Entities/Bullet.h
+        src/Engine/Modules/Shooter.h
 )
 
 project(${PROJECT_NAME})

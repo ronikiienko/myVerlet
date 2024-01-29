@@ -4,13 +4,12 @@
 #include "../../Engine/utils/Rand.h"
 #include "../../addons/RandomSpawner.h"
 #include "../Entities/Player.h"
-#include "../../addons/Shooter.h"
 #include "../../consts.h"
 #include "../Entities/Enemy.h"
+#include "../../Engine/Modules/ExplosionHandler.h"
 
 class Level1 : public BaseLevel {
     ExplosionHandler m_explosionHandler{m_scene};
-    Shooter m_shooter{Vector2F::cart(200, 200), 2, 1, 4, m_scene, 1, m_explosionHandler};
     RNGf m_gen{consts::seed};
     RandomSpawner m_randomSpawner{m_scene, m_gen};
 public:
