@@ -34,6 +34,10 @@ public:
         m_speed = speed;
     }
 
+    void setCooldown(int cooldown) {
+        m_cooldown = cooldown;
+    }
+
     void tick() {
         m_ticksSinceLastShot++;
     }
