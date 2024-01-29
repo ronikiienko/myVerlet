@@ -2,12 +2,13 @@
 
 #include "../Scene.h"
 #include "../EngineConsts.h"
+#include "../utils/Rand.h"
 
 
 class Shooter {
 private:
     RNGf& m_gen;
-    float m_speed = 0.5;
+    float m_speed = 2;
     float m_spread = 10;
     Scene &m_scene;
     int m_cooldown = 0;

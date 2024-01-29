@@ -40,6 +40,7 @@ set(SOURCES src/main.cpp
         src/GameTest/Entities/Enemy.h
         src/GameTest/Entities/Bullet.h
         src/Engine/Modules/Shooter.h
+        src/GameTest/Entities/Bullet.cpp
 )
 
 project(${PROJECT_NAME})
