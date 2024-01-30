@@ -3,6 +3,7 @@
 #include "../Engine/BaseGame.h"
 #include "Levels/Level1.h"
 #include "Levels/MainMenu.h"
+#include "Levels/PerformanceTest.h"
 
 class Game : public BaseGame {
 private:
@@ -12,7 +13,7 @@ public:
 
     void v_onInit() override {
         std::cout << "Game init" << std::endl;
-        setLevel<MainMenu>();
+        setLevel<PerformanceTest>();
 
         setLevel1EventHandle = m_eventBus.addEventListener<SetLevel1Event>([this](const SetLevel1Event& event){
             setLevel<Level1>();
