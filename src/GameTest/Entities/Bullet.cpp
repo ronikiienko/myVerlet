@@ -4,7 +4,6 @@
 //
 // Created by ronik on 29/01/2024.
 //
-Bullet::Bullet(Scene &scene) : m_scene(scene) {}
 
 void Bullet::v_onInit() {}
 
@@ -17,16 +16,16 @@ void Bullet::v_onCollision(BaseObject *ptr) {
     if (bulletPtr) {
         return;
     }
-    m_scene.removeObject(ptr);
+    getScene().removeObject(ptr);
     m_hitsLeft--;
     if (m_hitsLeft <= 0) {
-        m_scene.removeObject(this);
+        getScene().removeObject(this);
     }
 }
 
 void Bullet::v_onTick() {
     m_ticksToLive--;
     if (m_ticksToLive <= 0) {
-        m_scene.removeObject(this);
+        getScene().removeObject(this);
     }
 }
