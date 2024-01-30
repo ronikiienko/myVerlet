@@ -3,6 +3,7 @@
 #include <stdexcept>
 #include <vector>
 #include <array>
+#include <functional>
 #include "../utils/Rectangle.h"
 
 //struct Cell {
@@ -123,8 +124,7 @@ struct IdGrid {
     }
 
     // it's not precise iterator. it just uses m_grid cells to iterate. So it's not precise, but it's fast. To actually iterate precise, needs more checks (it's just a broad phase)
-    template<typename Func>
-    void forEachInRect(RectangleF rect, Func &&callback) {
+    void forEachInRect(RectangleF rect, const std::function<void(int)>&callback) const {
         const int startGridX = std::max(0, static_cast<int>(rect.getX1() * m_inverseWidthRatio));
         const int endGridX = std::min(m_width - 1, static_cast<int>(rect.getX2() * m_inverseWidthRatio));
         const int startGridY = std::max(0, static_cast<int>(rect.getY1() * m_inverseHeightRatio));
