@@ -119,9 +119,6 @@ public:
                             m_scene.getCamera().screenPosToWorldPos(Vector2F::cart(mousePosition.x, mousePosition.y)),
                             Bullet{m_scene});
         }
-        if (!m_basicDetails) {
-            throw std::runtime_error("m_basicDetails is nullptr");
-        }
 //        m_scene.getCamera().setPosition((getBasicDetails().m_posCurr * 0.2 + m_scene.getCamera().m_worldCenterPos * 1.8) / 2);
         Vector2F newCameraPos = Vector2F::cart(0, 0);
         if (m_isManualCamera) {
