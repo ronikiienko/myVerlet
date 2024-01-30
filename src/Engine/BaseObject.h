@@ -65,13 +65,18 @@ public:
     }
 };
 
+class Scene;
 
 class BaseObject {
 private:
     BasicDetails* m_basicDetails = nullptr;
+    Scene* m_scene = nullptr;
 public:
     [[nodiscard]] BasicDetails& getBasicDetails() const {
         return *m_basicDetails;
+    }
+    [[nodiscard]] Scene& getScene() const {
+        return *m_scene;
     }
     virtual void v_onTick() = 0;
     virtual void v_onInit() = 0;
