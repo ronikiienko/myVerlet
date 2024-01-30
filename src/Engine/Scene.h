@@ -65,8 +65,7 @@ public:
     }
 
 
-    template<typename Func>
-    void forEachObject(Func &&callback, int start = 0, int end = -1) {
+    void forEachObject(const std::function<void(BaseObject&, int)> &callback, int start = 0, int end = -1) {
         if (end == -1) {
             end = static_cast<int>(m_objects.size());
         }
@@ -76,8 +75,7 @@ public:
         }
     }
 
-    template<typename Func>
-    void forEachBasicDetails(Func &&callback, int start = 0, int end = -1) {
+    void forEachBasicDetails(const std::function<void(BasicDetails&, int)> &callback, int start = 0, int end = -1) {
         if (end == -1) {
             end = static_cast<int>(m_basicDetails.size());
         }
