@@ -12,11 +12,13 @@ public:
         m_impl->tick();
     }
 
-    [[nodiscard]] TMHandle setTimeout(int ticks, const std::function<void()>& callback) {
-        return m_impl->setTimeout(ticks, callback);
+    template<typename T>
+    [[nodiscard]] TMHandle setTimeout(int ticks, T&& callback) {
+        return m_impl->setTimeout(ticks, std::forward<T>(callback));
     }
 
-    [[nodiscard]] TMHandle setInterval(int ticks, const std::function<void()>& callback) {
-        return m_impl->setInterval(ticks, callback);
+    template<typename T>
+    [[nodiscard]] TMHandle setInterval(int ticks, T&& callback) {
+        return m_impl->setInterval(ticks, std::forward<T>(callback));
     }
 };
