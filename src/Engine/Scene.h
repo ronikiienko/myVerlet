@@ -122,8 +122,7 @@ public:
         });
     }
 
-    // TODO not copy m_callback
-    void forEachInRadius(Vector2F pos, float radius, std::function<void(BaseObject *, int)> callback) {
+    void forEachInRadius(Vector2F pos, float radius, const std::function<void(BaseObject *, int)>& callback) {
 //        forEachBasicDetails([&](BasicDetails &details, int ind) {
 //            if ((details.m_posCurr - pos).magnitude2() < radius * radius) {
 //                m_callback(details.m_parent, ind);
@@ -220,6 +219,7 @@ public:
     ObjectContext getObjectContext() {
         return ObjectContext{*this};
     };
+
 
 
     Scene(const Scene&) = delete;
