@@ -12,7 +12,8 @@ class TimerManagerImpl : public std::enable_shared_from_this<TimerManagerImpl> {
         int m_ticksLeft;
         std::function<void()> m_callback;
 
-        TickTimer(int ticks, const std::function<void()>& callback) : m_ticks(ticks), m_ticksLeft(ticks), m_callback(callback) {
+        template<typename T>
+        TickTimer(int ticks, T&& callback) : m_ticks(ticks), m_ticksLeft(ticks), m_callback(std::forward<T>(callback)) {
 
         }
 
