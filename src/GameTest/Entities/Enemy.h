@@ -15,7 +15,7 @@ private:
     Vector2F m_currentRandomDirection = Vector2F::cart(0, 0);
     float m_viewRadius = 300;
 
-    int m_health = 10;
+    int m_health = 1;
 public:
     Enemy(ObjectContext context, Player *playerPtr, RNGf &gen) : playerPtr(playerPtr), m_gen(gen), BaseObject(context) {};
 

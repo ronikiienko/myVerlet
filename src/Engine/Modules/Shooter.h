@@ -9,9 +9,9 @@ class Shooter {
 private:
     RNGf& m_gen;
     float m_speed = 2;
-    float m_spread = 10;
+    float m_spread = 0;
     Scene &m_scene;
-    int m_cooldown = 0;
+    int m_cooldown = 5;
     int m_ticksSinceLastShot = 0;
 
     template<typename BulletType>
