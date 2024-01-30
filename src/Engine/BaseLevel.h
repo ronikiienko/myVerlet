@@ -4,9 +4,9 @@
 #include "Scene.h"
 #include "Camera.h"
 #include "InputBus/InputBus.h"
-#include "SoundManager/SoundManagerImpl.h"
 #include "TimerManager/TimerManager.h"
 #include "EventBus/EventBus.h"
+#include "SoundManager/SoundManager.h"
 #include <TGUI/TGUI.hpp>
 #include <TGUI/Backend/SFML-Graphics.hpp>
 
@@ -14,14 +14,14 @@ struct LevelContext {
     sf::RenderWindow &m_window;
     ThreadPool &m_threadPool;
     EventBus &m_eventBus;
-    SoundManagerImpl &m_soundManager;
+    SoundManager &m_soundManager;
     TimerManager &m_timerManager;
     InputBus &m_inputBus;
     PerformanceMonitor& m_performanceMonitor;
     tgui::Gui& m_gui;
 
 
-    LevelContext(sf::RenderWindow &window, ThreadPool &threadPool, EventBus &eventBus, SoundManagerImpl &soundManager,
+    LevelContext(sf::RenderWindow &window, ThreadPool &threadPool, EventBus &eventBus, SoundManager &soundManager,
                  TimerManager &timerManager, InputBus &inputBus, PerformanceMonitor& performanceMonitor, tgui::Gui& gui)
             : m_window(window), m_threadPool(threadPool), m_eventBus(eventBus), m_soundManager(soundManager),
               m_timerManager(timerManager), m_inputBus(inputBus), m_performanceMonitor(performanceMonitor), m_gui(gui) {}
@@ -90,7 +90,7 @@ protected:
     ThreadPool &m_threadPool;
     EventBus &m_eventBus;
     InputBus &m_inputBus;
-    SoundManagerImpl &m_soundManager;
+    SoundManager &m_soundManager;
     TimerManager &m_timerManager;
 
     explicit BaseLevel(

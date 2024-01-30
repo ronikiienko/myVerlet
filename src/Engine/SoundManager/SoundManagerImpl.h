@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Audio.hpp>
 #include "SMHandle.h"
+#include <unordered_map>
 
 class SoundManagerImpl : public std::enable_shared_from_this<SoundManagerImpl> {
     std::unordered_map<int, std::pair<sf::SoundBuffer, sf::Sound>> m_sounds;

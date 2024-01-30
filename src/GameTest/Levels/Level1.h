@@ -25,7 +25,7 @@ public:
             m_scene.addObject(Enemy{m_scene.getObjectContext(), dynamic_cast<Player*>(playerPtr.lock().get()), m_gen}, Vector2F::cart(m_gen.getInRange(0, 2000), m_gen.getInRange(0, 2000)));
         }
         std::cout << "Objects num: " << m_scene.getObjectsCount() << std::endl;
-        m_soundManager.play("./res/ride.wav");
+//        m_soundManager.play("./res/ride.wav");
     }
     void v_onTick() override {}
 };
