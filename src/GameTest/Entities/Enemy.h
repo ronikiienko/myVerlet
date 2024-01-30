@@ -2,8 +2,9 @@
 
 #include "../../Engine/BaseObject/BaseObject.h"
 #include "Player.h"
+#include "Interfaces/IDamageable.h"
 
-class Enemy : public BaseObject {
+class Enemy : public BaseObject, public IDamageable {
 private:
     Player *playerPtr;
     float maxAcceleration = 200;
@@ -13,6 +14,8 @@ private:
     int m_ticksToChangeRandomDirection = 100;
     Vector2F m_currentRandomDirection = Vector2F::cart(0, 0);
     float m_viewRadius = 300;
+
+    int m_health = 10;
 public:
     Enemy(ObjectContext context, Player *playerPtr, RNGf &gen) : playerPtr(playerPtr), m_gen(gen), BaseObject(context) {};
 
@@ -48,5 +51,12 @@ public:
 
     void v_onInit() override {
         getBasicDetails().m_color = sf::Color::Red;
+    }
+
+    void damage(int damage) override {
+        m_health -= damage;
+        if (m_health <= 0) {
+            destroy();
+        }
     }
 };

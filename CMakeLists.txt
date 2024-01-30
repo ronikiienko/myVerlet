@@ -40,7 +40,6 @@ set(SOURCES src/main.cpp
         src/GameTest/Entities/Enemy.h
         src/GameTest/Entities/Bullet.h
         src/Engine/Modules/Shooter.h
-        src/GameTest/Entities/Bullet.cpp
         src/GameTest/Entities/Interfaces/IDamageable.h
         src/GameTest/Levels/PerformanceTest.h
         src/Engine/BaseObject/BaseObject.cpp

@@ -1,3 +1,6 @@
+#pragma once
+
 class IDamageable {
-    virtual void damage() = 0;
+public:
+    virtual void damage(int damage) = 0;
 };
