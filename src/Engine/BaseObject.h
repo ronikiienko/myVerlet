@@ -75,4 +75,6 @@ public:
     virtual void v_onCollision(BaseObject* ptr) = 0;
 
     virtual ~BaseObject() = default;
+
+    friend class Scene;
 };

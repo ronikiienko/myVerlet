@@ -42,6 +42,7 @@ set(SOURCES src/main.cpp
         src/Engine/Modules/Shooter.h
         src/GameTest/Entities/Bullet.cpp
         src/GameTest/Entities/Interfaces/IDamageable.h
+        src/GameTest/Levels/PerformanceTest.h
 )
 
 project(${PROJECT_NAME})
