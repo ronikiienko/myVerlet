@@ -23,7 +23,7 @@ set(SOURCES src/main.cpp
         src/GameTest/Levels/Level1.h
         src/Engine/Modules/ExplosionHandler.h
         src/GameTest/Entities/Player.h
-        src/Engine/SoundManager/SoundManager.h
+        src/Engine/SoundManager/SoundManagerImpl.h
         src/GameTest/consts.h
         src/GameTest/Entities/EmptyObject.h
         src/Engine/EventBus/EBHandle.cpp
@@ -43,6 +43,9 @@ set(SOURCES src/main.cpp
         src/GameTest/Entities/Interfaces/IDamageable.h
         src/GameTest/Levels/PerformanceTest.h
         src/Engine/BaseObject/BaseObject.cpp
+        src/Engine/SoundManager/SoundManager.h
+        src/Engine/SoundManager/SMHandle.h
+        src/Engine/SoundManager/SMHandle.cpp
 )
 
 project(${PROJECT_NAME})

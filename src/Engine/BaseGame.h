@@ -8,7 +8,7 @@
 #include "Physics.h"
 #include "InputBus/InputBus.h"
 #include "BaseLevel.h"
-#include "SoundManager/SoundManager.h"
+#include "SoundManager/SoundManagerImpl.h"
 #include "TimerManager/TimerManager.h"
 #include "EngineConsts.h"
 #include "EventBus/EventBus.h"
@@ -26,7 +26,7 @@ protected:
     // TODO maby move to m_level because levels may leave their thrash behind (m_callbacks)
     EventBus m_eventBus;
     InputBus m_inputBus{m_window};
-    SoundManager m_soundManager;
+    SoundManagerImpl m_soundManager;
     TimerManager m_timerManager;
     PerformanceMonitor m_performanceMonitor;
 public:
