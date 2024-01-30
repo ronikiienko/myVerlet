@@ -16,16 +16,20 @@ void Bullet::v_onCollision(BaseObject *ptr) {
     if (bulletPtr) {
         return;
     }
-    getScene().removeObject(ptr);
+    m_scene.removeObject(ptr);
     m_hitsLeft--;
     if (m_hitsLeft <= 0) {
-        getScene().removeObject(this);
+        m_scene.removeObject(this);
     }
 }
 
 void Bullet::v_onTick() {
     m_ticksToLive--;
     if (m_ticksToLive <= 0) {
-        getScene().removeObject(this);
+        m_scene.removeObject(this);
     }
+}
+
+Bullet::Bullet(ObjectContext context) : BaseObject(context){
+
 }

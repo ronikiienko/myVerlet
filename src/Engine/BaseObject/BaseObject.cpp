@@ -8,11 +8,9 @@ BasicDetails &BaseObject::getBasicDetails() const {
     return *m_basicDetails;
 }
 
-Scene &BaseObject::getScene() const {
-    if (m_scene == nullptr) throw std::runtime_error("Getting scene but it's not initialized yet. Call this method only after or inside onInit()");
-    return *m_scene;
+void BaseObject::destroy() {
+    m_scene.removeObject(this);
 }
 
-void BaseObject::destroy() {
-    getScene().removeObject(this);
+BaseObject::BaseObject(ObjectContext objectContext) : m_scene(objectContext.m_scene) {
 }

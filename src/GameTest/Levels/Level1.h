@@ -20,9 +20,9 @@ public:
 //        m_window.setS
         m_physics.setMaxVelocity(1000);
 //        m_randomSpawner.spawn(10000);
-        auto playerPtr = m_scene.addObject(Player{m_inputBus, m_window, m_gen}, Vector2F::cart(100, 100));
+        auto playerPtr = m_scene.addObject(Player{m_scene.getObjectContext(), m_inputBus, m_window, m_gen}, Vector2F::cart(100, 100));
         for (int i = 0; i < 120000; i++) {
-            m_scene.addObject(Enemy{dynamic_cast<Player*>(playerPtr.lock().get()), m_gen}, Vector2F::cart(m_gen.getInRange(0, 2000), m_gen.getInRange(0, 2000)));
+            m_scene.addObject(Enemy{m_scene.getObjectContext(), dynamic_cast<Player*>(playerPtr.lock().get()), m_gen}, Vector2F::cart(m_gen.getInRange(0, 2000), m_gen.getInRange(0, 2000)));
         }
         std::cout << "Objects num: " << m_scene.getObjectsCount() << std::endl;
     }

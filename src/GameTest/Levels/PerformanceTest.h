@@ -18,7 +18,7 @@ public:
 
     void v_onInit() override {
         m_randomSpawner.spawn(150000);
-        auto playerPtr = m_scene.addObject(Player{m_inputBus, m_window, m_gen}, Vector2F::cart(100, 100));
+        auto playerPtr = m_scene.addObject(Player{m_scene.getObjectContext(), m_inputBus, m_window, m_gen}, Vector2F::cart(100, 100));
     }
     void v_onTick() override {}
 };

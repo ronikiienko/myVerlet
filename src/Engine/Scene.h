@@ -50,7 +50,6 @@ public:
 
         m_basicDetails.emplace_back(position);
         object.m_basicDetails = &m_basicDetails.back();
-        object.m_scene = this;
 
         std::shared_ptr<T> ptr = std::make_shared<T>(std::forward<T>(object));
         m_objects.push_back(std::move(ptr));
@@ -217,6 +216,11 @@ public:
 //        });
         m_performanceMonitor.end("grid build");
     }
+
+    ObjectContext getObjectContext() {
+        return ObjectContext{*this};
+    };
+
 
     Scene(const Scene&) = delete;
     Scene(Scene&&) = delete;

@@ -22,7 +22,7 @@ public:
     bool m_isManualCamera = false;
     Vector2F m_manualCameraPos = Vector2F::cart(0, 0);
 
-//    Shooter m_shooter{getScene(), m_gen};
+    Shooter m_shooter{m_scene, m_gen};
 
     IBHandle m_keyPressedListener;
     IBHandle m_keyReleasedListener;
@@ -30,8 +30,8 @@ public:
     IBHandle m_mouseButtonPressedListener;
     IBHandle m_mouseButtonReleasedListener;
 
-    Player(InputBus &inputBus, sf::RenderWindow &window, RNGf& gen)  :
-            m_inputBus(inputBus), m_window(window), m_gen(gen) {
+    Player(ObjectContext context, InputBus &inputBus, sf::RenderWindow &window, RNGf& gen)  :
+            m_inputBus(inputBus), m_window(window), m_gen(gen), BaseObject(context) {
         // i can't setup events from constructor, because lambda will capture
         // `this` before std::make_unique will fire, which will invalidate `this`, because ownership is transferred to unique_ptr
     }
@@ -75,9 +75,9 @@ public:
         m_mouseWheelScrolledListener = m_inputBus.addEventListener(sf::Event::MouseWheelScrolled,
                                                                    [&](const sf::Event &event) {
                                                                        if (event.mouseWheelScroll.delta > 0) {
-                                                                           getScene().getCamera().zoom(1.5);
+                                                                           m_scene.getCamera().zoom(1.5);
                                                                        } else {
-                                                                           getScene().getCamera().zoom(0.75);
+                                                                           m_scene.getCamera().zoom(0.75);
                                                                        }
                                                                    });
         m_mouseButtonPressedListener = m_inputBus.addEventListener(sf::Event::MouseButtonPressed,
@@ -89,7 +89,7 @@ public:
                                                                        if (event.mouseButton.button ==
                                                                            sf::Mouse::Right) {
                                                                            m_isManualCamera = true;
-                                                                           m_manualCameraPos = getScene().getCamera().screenPosToWorldPos(
+                                                                           m_manualCameraPos = m_scene.getCamera().screenPosToWorldPos(
                                                                                    Vector2F::cart(
                                                                                            event.mouseButton.x,
                                                                                            event.mouseButton.y)
@@ -110,14 +110,13 @@ public:
     }
 
     void v_onTick() override {
-//        m_shooter.tick();
-//        if (m_isShooting) {
-//            sf::Vector2<int> mousePosition = sf::Mouse::getPosition(m_window);
-//            m_shooter.tryShoot(getBasicDetails().m_posCurr,
-//                            getScene().getCamera().screenPosToWorldPos(Vector2F::cart(mousePosition.x, mousePosition.y)),
-//                            Bullet{});
-//        }
-//        m_scene.getCamera().setPosition((getBasicDetails().m_posCurr * 0.2 + m_scene.getCamera().m_worldCenterPos * 1.8) / 2);
+        m_shooter.tick();
+        if (m_isShooting) {
+            sf::Vector2<int> mousePosition = sf::Mouse::getPosition(m_window);
+            m_shooter.tryShoot(getBasicDetails().m_posCurr,
+                            m_scene.getCamera().screenPosToWorldPos(Vector2F::cart(mousePosition.x, mousePosition.y)),
+                            Bullet{m_scene.getObjectContext()});
+        }
         Vector2F newCameraPos = Vector2F::cart(0, 0);
         if (m_isManualCamera) {
             newCameraPos = m_manualCameraPos;
@@ -125,7 +124,7 @@ public:
             newCameraPos = getBasicDetails().m_posCurr;
         }
 
-        getScene().getCamera().setPosition((newCameraPos + getScene().getCamera().getPosition()) / 2);
+        m_scene.getCamera().setPosition((newCameraPos + m_scene.getCamera().getPosition()) / 2);
         if (m_movingUp) {
 //            setVelocity(Vector2F::cart(0, -m_acceleration));
             getBasicDetails().accelerate(Vector2F::cart(0, -m_acceleration));

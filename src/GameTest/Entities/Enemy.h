@@ -14,7 +14,7 @@ private:
     Vector2F m_currentRandomDirection = Vector2F::cart(0, 0);
     float m_viewRadius = 300;
 public:
-    Enemy(Player *playerPtr, RNGf &gen) : playerPtr(playerPtr), m_gen(gen) {};
+    Enemy(ObjectContext context, Player *playerPtr, RNGf &gen) : playerPtr(playerPtr), m_gen(gen), BaseObject(context) {};
 
     void v_onTick() override {
 

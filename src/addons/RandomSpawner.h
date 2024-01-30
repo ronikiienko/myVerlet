@@ -16,7 +16,7 @@ public:
         for (int i = 0; i < number; i++) {
             auto ptr = m_scene.addObject(
 
-                    EmptyObject(),
+                    EmptyObject(m_scene.getObjectContext()),
                     Vector2F::cart
                             (
                                     m_gen.getInRange

@@ -67,13 +67,17 @@ public:
 
 class Scene;
 
+struct ObjectContext {
+    explicit ObjectContext(Scene& scene) : m_scene(scene) {};
+    Scene& m_scene;
+};
+
 class BaseObject {
 private:
     BasicDetails* m_basicDetails = nullptr;
-    Scene* m_scene = nullptr;
 public:
+    Scene& m_scene;
     [[nodiscard]] BasicDetails& getBasicDetails() const;
-    [[nodiscard]] Scene& getScene() const;
     virtual void v_onTick() = 0;
     virtual void v_onInit() = 0;
     virtual void v_onCollision(BaseObject* ptr) = 0;
@@ -81,6 +85,8 @@ public:
     void destroy();
 
     virtual ~BaseObject() = default;
+
+    explicit BaseObject(ObjectContext);
 
     friend class Scene;
 };

@@ -10,4 +10,6 @@ public:
     void v_onInit() override;
     void v_onCollision(BaseObject *ptr) override;
     void v_onTick() override;
+
+    explicit Bullet(ObjectContext context);
 };
