@@ -2,7 +2,7 @@
 
 
 #include "SFML/Graphics/Color.hpp"
-#include "EngineConsts.h"
+#include "../EngineConsts.h"
 
 class BaseObject;
 
@@ -72,17 +72,13 @@ private:
     BasicDetails* m_basicDetails = nullptr;
     Scene* m_scene = nullptr;
 public:
-    [[nodiscard]] BasicDetails& getBasicDetails() const {
-//        if (m_scene == nullptr) throw std::runtime_error("Getting scene but it's not initialized yet. Call this method only after or inside onInit()");
-        return *m_basicDetails;
-    }
-    [[nodiscard]] Scene& getScene() const {
-        if (m_scene == nullptr) throw std::runtime_error("Getting scene but it's not initialized yet. Call this method only after or inside onInit()");
-        return *m_scene;
-    }
+    [[nodiscard]] BasicDetails& getBasicDetails() const;
+    [[nodiscard]] Scene& getScene() const;
     virtual void v_onTick() = 0;
     virtual void v_onInit() = 0;
     virtual void v_onCollision(BaseObject* ptr) = 0;
+
+    void destroy();
 
     virtual ~BaseObject() = default;
 

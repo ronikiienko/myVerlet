@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../Engine/BaseObject.h"
+#include "../../Engine/BaseObject/BaseObject.h"
 #include "../../Engine/Scene.h"
 
 class Bullet : public BaseObject {

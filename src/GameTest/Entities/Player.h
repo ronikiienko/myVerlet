@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../Engine/BaseObject.h"
+#include "../../Engine/BaseObject/BaseObject.h"
 #include "../../Engine/InputBus/InputBus.h"
 #include "../../Engine/Camera.h"
 #include "../../Engine/Modules/Shooter.h"

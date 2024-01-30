@@ -6,7 +6,7 @@ set(SOURCES src/main.cpp
         src/Engine/utils/Vector.h
         src/Engine/Graphics.h
         src/Engine/Scene.h
-        src/Engine/BaseObject.h
+        src/Engine/BaseObject/BaseObject.h
         src/Engine/Physics.h
         src/Engine/utils/Rand.h
         src/Engine/utils/Rectangle.h
@@ -43,6 +43,7 @@ set(SOURCES src/main.cpp
         src/GameTest/Entities/Bullet.cpp
         src/GameTest/Entities/Interfaces/IDamageable.h
         src/GameTest/Levels/PerformanceTest.h
+        src/Engine/BaseObject/BaseObject.cpp
 )
 
 project(${PROJECT_NAME})

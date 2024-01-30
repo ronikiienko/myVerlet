@@ -2,7 +2,7 @@
 
 #include <vector>
 #include <bits/shared_ptr.h>
-#include "BaseObject.h"
+#include "BaseObject/BaseObject.h"
 #include "EngineConsts.h"
 #include "utils/Grid.h"
 #include "Camera.h"
