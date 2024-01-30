@@ -16,6 +16,8 @@ public:
     }
 
     void remove(int key) {
+        // TODO if key doesn't exist it will create new useless key
+        m_sounds[key].second.stop();
         m_sounds.erase(key);
     }
 
