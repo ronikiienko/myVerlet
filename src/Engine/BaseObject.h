@@ -67,9 +67,12 @@ public:
 
 
 class BaseObject {
-public:
+private:
     BasicDetails* m_basicDetails = nullptr;
-
+public:
+    [[nodiscard]] BasicDetails& getBasicDetails() const {
+        return *m_basicDetails;
+    }
     virtual void v_onTick() = 0;
     virtual void v_onInit() = 0;
     virtual void v_onCollision(BaseObject* ptr) = 0;

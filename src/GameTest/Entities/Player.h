@@ -115,45 +115,45 @@ public:
         m_shooter.tick();
         if (m_isShooting) {
             sf::Vector2<int> mousePosition = sf::Mouse::getPosition(m_window);
-            m_shooter.tryShoot(m_basicDetails->m_posCurr,
+            m_shooter.tryShoot(getBasicDetails().m_posCurr,
                             m_scene.getCamera().screenPosToWorldPos(Vector2F::cart(mousePosition.x, mousePosition.y)),
                             Bullet{m_scene});
         }
         if (!m_basicDetails) {
             throw std::runtime_error("m_basicDetails is nullptr");
         }
-//        m_scene.getCamera().setPosition((m_basicDetails->m_posCurr * 0.2 + m_scene.getCamera().m_worldCenterPos * 1.8) / 2);
+//        m_scene.getCamera().setPosition((getBasicDetails().m_posCurr * 0.2 + m_scene.getCamera().m_worldCenterPos * 1.8) / 2);
         Vector2F newCameraPos = Vector2F::cart(0, 0);
         if (m_isManualCamera) {
             newCameraPos = m_manualCameraPos;
         } else {
-            newCameraPos = m_basicDetails->m_posCurr;
+            newCameraPos = getBasicDetails().m_posCurr;
         }
 
         m_scene.getCamera().setPosition((newCameraPos + m_scene.getCamera().getPosition()) / 2);
         if (m_movingUp) {
 //            setVelocity(Vector2F::cart(0, -m_acceleration));
-            m_basicDetails->accelerate(Vector2F::cart(0, -m_acceleration));
+            getBasicDetails().accelerate(Vector2F::cart(0, -m_acceleration));
         }
         if (m_movingDown) {
 //            setVelocity(Vector2F::cart(0, m_acceleration));
-            m_basicDetails->accelerate(Vector2F::cart(0, m_acceleration));
+            getBasicDetails().accelerate(Vector2F::cart(0, m_acceleration));
         }
         if (m_movingLeft) {
 //            setVelocity(Vector2F::cart(-m_acceleration, 0));
-            m_basicDetails->accelerate(Vector2F::cart(-m_acceleration, 0));
+            getBasicDetails().accelerate(Vector2F::cart(-m_acceleration, 0));
         }
         if (m_movingRight) {
 //            setVelocity(Vector2F::cart(m_acceleration, 0));
-            m_basicDetails->accelerate(Vector2F::cart(m_acceleration, 0));
+            getBasicDetails().accelerate(Vector2F::cart(m_acceleration, 0));
         }
         if (m_isBraking) {
-            m_basicDetails->setVelocity(m_basicDetails->getVelocity() * 0.95);
+            getBasicDetails().setVelocity(getBasicDetails().getVelocity() * 0.95);
         }
     }
 
     void v_onCollision(BaseObject *ptr) override {
-//        m_scene.forEachInRadius(m_basicDetails->m_posCurr, 50, [&](BaseObject *ptr, int ind) {
+//        m_scene.forEachInRadius(getBasicDetails().m_posCurr, 50, [&](BaseObject *ptr, int ind) {
 //            if (ptr != this) {
 //                m_scene.removeObject(ind);
 //            }

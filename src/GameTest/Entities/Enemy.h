@@ -29,24 +29,24 @@ public:
 
         Vector2F acceleration = Vector2F::cart(0, 0);
 
-        Vector2F playerPos = playerPtr->m_basicDetails->m_posCurr;
-        float distanceToPlayer = (m_basicDetails->m_posCurr - playerPos).magnitude();
+        Vector2F playerPos = playerPtr->getBasicDetails().m_posCurr;
+        float distanceToPlayer = (getBasicDetails().m_posCurr - playerPos).magnitude();
         bool isPlayerInRadius = distanceToPlayer < m_viewRadius;
 
         if (isPlayerInRadius) {
-            Vector2F awayFromPlayer = (m_basicDetails->m_posCurr - playerPos).normalize();
+            Vector2F awayFromPlayer = (getBasicDetails().m_posCurr - playerPos).normalize();
             float speedRatio = 1.0 - std::pow(distanceToPlayer / m_viewRadius, 3);
 
             acceleration = (m_currentRandomDirection + awayFromPlayer) / 2 * maxAcceleration * speedRatio;
         } else {
             acceleration = m_currentRandomDirection * calmAcceleration;
         }
-        m_basicDetails->accelerate(acceleration);
+        getBasicDetails().accelerate(acceleration);
     }
 
     void v_onCollision(BaseObject *ptr) override {}
 
     void v_onInit() override {
-        m_basicDetails->m_color = sf::Color::Red;
+        getBasicDetails().m_color = sf::Color::Red;
     }
 };

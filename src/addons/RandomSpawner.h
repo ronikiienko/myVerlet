@@ -31,9 +31,9 @@ public:
             );
 
             BaseObject &object = *ptr.lock();
-            object.m_basicDetails->m_color = sf::Color(
-                    static_cast<int>(object.m_basicDetails->m_posCurr.m_x / m_scene.getSizeF().m_x * 255),
-                    static_cast<int>(object.m_basicDetails->m_posCurr.m_y / m_scene.getSizeF().m_y * 255), 255);
+            object.getBasicDetails().m_color = sf::Color(
+                    static_cast<int>(object.getBasicDetails().m_posCurr.m_x / m_scene.getSizeF().m_x * 255),
+                    static_cast<int>(object.getBasicDetails().m_posCurr.m_y / m_scene.getSizeF().m_y * 255), 255);
         }
     }
 };

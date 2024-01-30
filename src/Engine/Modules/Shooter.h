@@ -21,7 +21,7 @@ private:
         Vector2F velocity = direction * m_speed;
         Vector2F startPos = source + direction * 4;
         std::weak_ptr<BaseObject> ptr = m_scene.addObject(std::forward<BulletType>(bullet), startPos);
-        ptr.lock()->m_basicDetails->setVelocity(velocity);
+        ptr.lock()->getBasicDetails().setVelocity(velocity);
     }
 public:
     explicit Shooter(Scene &scene, RNGf& gen) : m_scene(scene), m_gen(gen) {}
