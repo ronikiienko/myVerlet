@@ -12,7 +12,7 @@ class Level1 : public BaseLevel {
     ExplosionHandler m_explosionHandler{m_scene};
     RNGf m_gen{consts::seed};
     RandomSpawner m_randomSpawner{m_scene, m_gen};
-    SM
+    SMHandle m_firstSound;
 public:
     explicit Level1(LevelContext levelContext) : BaseLevel(levelContext, 200000, Vector2I::cart(2000, 2000), 600) {
     }
@@ -26,7 +26,7 @@ public:
             m_scene.addObject(Enemy{m_scene.getObjectContext(), dynamic_cast<Player*>(playerPtr.lock().get()), m_gen}, Vector2F::cart(m_gen.getInRange(0, 2000), m_gen.getInRange(0, 2000)));
         }
         std::cout << "Objects num: " << m_scene.getObjectsCount() << std::endl;
-        m_soundManager.play("./res/ride.wav");
+        m_firstSound = m_soundManager.play("./res/ride.wav");
     }
     void v_onTick() override {}
 };

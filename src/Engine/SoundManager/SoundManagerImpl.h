@@ -12,12 +12,13 @@ public:
     [[nodiscard]] SMHandle play(const std::string& path) {
         m_sounds[m_keyCounter].first.loadFromFile(path);
         m_sounds[m_keyCounter].second.setBuffer(m_sounds[m_keyCounter].first);
+        m_sounds[m_keyCounter].second.play();
         return {weak_from_this(), m_keyCounter++};
     }
 
     void remove(int key) {
         // TODO if key doesn't exist it will create new useless key
-        m_sounds[key].second.stop();
+        m_sounds.at(key).second.stop();
         m_sounds.erase(key);
     }
 
