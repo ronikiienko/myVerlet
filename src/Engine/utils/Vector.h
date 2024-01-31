@@ -122,6 +122,10 @@ public:
         m_y += yAdd;
     }
 
+    [[nodiscard]] Angle getAngle() const {
+        return Angle::fromRadians(std::atan2(m_y, m_x));
+    }
+
     template<typename U>
     constexpr static Vector2 fromOther(Vector2<U> other) {
         return Vector2{static_cast<T>(other.m_x), static_cast<T>(other.m_y)};
