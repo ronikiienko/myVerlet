@@ -134,15 +134,15 @@ public:
                            });
     }
 
-    void rayTrace(Vector2F start, Vector2F end, const std::function<void(BaseObject *, int)>& callback) {
-        Vector2F rayVector =  end - start;
-        float rayLength = rayVector.magnitude();
-        Vector2F rayVectorNormalized = rayVector / rayLength;
+    void lineTrace(Vector2F start, Vector2F end, const std::function<void(BaseObject *, int)>& callback) {
+        Vector2F lineVector = end - start;
+        float lineLength = lineVector.magnitude();
+        Vector2F lineVectorNormalized = lineVector / lineLength;
         forEachBasicDetails([&](BasicDetails& basicDetails, int ind){
             Vector2F startToObject = basicDetails.m_posCurr - start;
-            float projectionLength = startToObject.dot(rayVectorNormalized);
-            if (projectionLength >= 0 && projectionLength < rayLength) {
-                Vector2F centerProjectionOnRay = start + rayVectorNormalized * projectionLength;
+            float projectionLength = startToObject.dot(lineVectorNormalized);
+            if (projectionLength >= 0 && projectionLength < lineLength) {
+                Vector2F centerProjectionOnRay = start + lineVectorNormalized * projectionLength;
                 float centerToCenterProjectionMagnitude2 = (basicDetails.m_posCurr - centerProjectionOnRay).magnitude2();
                 bool isInside = centerToCenterProjectionMagnitude2 < engineDefaults::objectsRadiusSquared;
                 if (isInside) {
