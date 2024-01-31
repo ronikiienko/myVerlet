@@ -134,7 +134,7 @@ public:
                            });
     }
 
-    void lineTrace(Vector2F start, Vector2F end, const std::function<void(BaseObject *, int)>& callback) {
+    void rayTrace(Vector2F start, Vector2F end, const std::function<void(BaseObject *, int)>& callback) {
         Vector2F rayVector =  end - start;
         float rayLength = rayVector.magnitude();
         Vector2F rayVectorNormalized = rayVector / rayLength;
