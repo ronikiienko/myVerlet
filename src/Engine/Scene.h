@@ -134,6 +134,21 @@ public:
                            });
     }
 
+    void lineTrace(Vector2F start, Vector2F end, const std::function<void(BaseObject *, int)>& callback) {
+        Vector2F rayVector =  end - start;
+        float rayLength = rayVector.magnitude();
+        Vector2F rayVectorNormalized = rayVector / rayLength;
+        forEachBasicDetails([&](BasicDetails& basicDetails, int ind){
+            Vector2F startToObject = basicDetails.m_posCurr - start;
+            float projectionLength = startToObject.dot(rayVectorNormalized);
+            Vector2F centerProjectionOnRay = start + rayVectorNormalized * projectionLength;
+            float centerToCenterProjectionMagnitude2 = (basicDetails.m_posCurr - centerProjectionOnRay).magnitude2();
+            bool isInside = centerToCenterProjectionMagnitude2 < engineDefaults::objectsRadiusSquared;
+            if (isInside) {
+                callback(basicDetails.m_parent, ind);
+            }
+        });
+    }
 
     void removeMarkedObjects() {
         // need to sort m_objectsToRemove in descending order
