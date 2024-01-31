@@ -141,11 +141,13 @@ public:
         forEachBasicDetails([&](BasicDetails& basicDetails, int ind){
             Vector2F startToObject = basicDetails.m_posCurr - start;
             float projectionLength = startToObject.dot(rayVectorNormalized);
-            Vector2F centerProjectionOnRay = start + rayVectorNormalized * projectionLength;
-            float centerToCenterProjectionMagnitude2 = (basicDetails.m_posCurr - centerProjectionOnRay).magnitude2();
-            bool isInside = centerToCenterProjectionMagnitude2 < engineDefaults::objectsRadiusSquared;
-            if (isInside) {
-                callback(basicDetails.m_parent, ind);
+            if (projectionLength >= 0 && projectionLength < rayLength) {
+                Vector2F centerProjectionOnRay = start + rayVectorNormalized * projectionLength;
+                float centerToCenterProjectionMagnitude2 = (basicDetails.m_posCurr - centerProjectionOnRay).magnitude2();
+                bool isInside = centerToCenterProjectionMagnitude2 < engineDefaults::objectsRadiusSquared;
+                if (isInside) {
+                    callback(basicDetails.m_parent, ind);
+                }
             }
         });
     }
