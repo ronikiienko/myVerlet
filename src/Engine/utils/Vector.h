@@ -10,7 +10,7 @@ private:
     constexpr explicit Vector2(T x = 0, T y = 0) : m_x(x), m_y(y) {}
 
 public:
-    T m_x, m_y;
+    T m_x = 0, m_y = 0;
 
     constexpr static Vector2 cart(T x = 0, T y = 0) {
         return Vector2{x, y};
@@ -130,6 +130,8 @@ public:
     constexpr static Vector2 fromOther(Vector2<U> other) {
         return Vector2{static_cast<T>(other.m_x), static_cast<T>(other.m_y)};
     }
+
+    Vector2() = default;
 };
 
 using Vector2F = Vector2<float>;
