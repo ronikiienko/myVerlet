@@ -27,7 +27,7 @@ private:
     int m_collisionGridWidth = m_sizeI.m_x / (engineDefaults::objectsRadius * 2);
     int m_collisionGridHeight = m_sizeI.m_y / (engineDefaults::objectsRadius * 2);
 public:
-    IdGrid grid{m_collisionGridWidth, m_collisionGridHeight, getSizeI()};
+    IdGrid m_grid{m_collisionGridWidth, m_collisionGridHeight, getSizeI()};
 
     explicit Scene(float cameraMaxWorldViewSize, Vector2F cameraPosition, InputBus& inputBus, sf::RenderWindow& window, ThreadPool &threadPool, PerformanceMonitor &performanceMonitor,
                    int maxObjectsNum, Vector2I size) :
@@ -126,8 +126,8 @@ public:
 //                m_callback(details.m_parent, ind);
 //            }
 //        });
-        grid.forEachInRect(RectangleF::fromCoords(pos.m_x - radius, pos.m_y - radius, pos.m_x + radius, pos.m_y + radius),
-                           [&](int id) {
+        m_grid.forEachInRect(RectangleF::fromCoords(pos.m_x - radius, pos.m_y - radius, pos.m_x + radius, pos.m_y + radius),
+                             [&](int id) {
                                if ((m_basicDetails[id].m_posCurr - pos).magnitude2() < radius * radius) {
                                    callback(m_basicDetails[id].m_parent, id);
                                }
@@ -138,7 +138,8 @@ public:
         Vector2F lineVector = end - start;
         float lineLength = lineVector.magnitude();
         Vector2F lineVectorNormalized = lineVector / lineLength;
-        forEachBasicDetails([&](BasicDetails& basicDetails, int ind){
+        m_grid.forEachInRect(RectangleF::fromCoords(start, end), [&](int id) {
+            BasicDetails &basicDetails = m_basicDetails[id];
             Vector2F startToObject = basicDetails.m_posCurr - start;
             float projectionLength = startToObject.dot(lineVectorNormalized);
             if (projectionLength >= 0 && projectionLength < lineLength) {
@@ -146,10 +147,22 @@ public:
                 float centerToCenterProjectionMagnitude2 = (basicDetails.m_posCurr - centerProjectionOnRay).magnitude2();
                 bool isInside = centerToCenterProjectionMagnitude2 < engineDefaults::objectsRadiusSquared;
                 if (isInside) {
-                    callback(basicDetails.m_parent, ind);
+                    callback(basicDetails.m_parent, id);
                 }
             }
         });
+//        forEachBasicDetails([&](BasicDetails& basicDetails, int ind){
+//            Vector2F startToObject = basicDetails.m_posCurr - start;
+//            float projectionLength = startToObject.dot(lineVectorNormalized);
+//            if (projectionLength >= 0 && projectionLength < lineLength) {
+//                Vector2F centerProjectionOnRay = start + lineVectorNormalized * projectionLength;
+//                float centerToCenterProjectionMagnitude2 = (basicDetails.m_posCurr - centerProjectionOnRay).magnitude2();
+//                bool isInside = centerToCenterProjectionMagnitude2 < engineDefaults::objectsRadiusSquared;
+//                if (isInside) {
+//                    callback(basicDetails.m_parent, ind);
+//                }
+//            }
+//        });
     }
 
     void removeMarkedObjects() {
@@ -214,21 +227,21 @@ public:
     }
 
     void rebuildGrid() {
-        m_performanceMonitor.start("grid clear");
-        m_threadPool.dispatch(grid.m_length, [this](int start, int end) {
-            grid.clear(start, end);
+        m_performanceMonitor.start("m_grid clear");
+        m_threadPool.dispatch(m_grid.m_length, [this](int start, int end) {
+            m_grid.clear(start, end);
         });
-        m_performanceMonitor.end("grid clear");
-        m_performanceMonitor.start("grid build");
+        m_performanceMonitor.end("m_grid clear");
+        m_performanceMonitor.start("m_grid build");
         m_threadPool.dispatch(static_cast<int>(m_basicDetails.size()), [this](int start, int end) {
             for (int i = start; i < end; i++) {
-                grid.insert(i, m_basicDetails[i].m_posCurr.m_x, m_basicDetails[i].m_posCurr.m_y);
+                m_grid.insert(i, m_basicDetails[i].m_posCurr.m_x, m_basicDetails[i].m_posCurr.m_y);
             }
         });
 //        forEachBasicDetails([this](BasicDetails &object, int i) {
-//            grid.insert(i, object.m_posCurr.m_x, object.m_posCurr.m_y);
+//            m_grid.insert(i, object.m_posCurr.m_x, object.m_posCurr.m_y);
 //        });
-        m_performanceMonitor.end("grid build");
+        m_performanceMonitor.end("m_grid build");
     }
 
     ObjectContext getObjectContext() {
