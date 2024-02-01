@@ -11,7 +11,6 @@ set(SOURCES src/main.cpp
         src/Engine/utils/Rand.h
         src/Engine/utils/Rectangle.h
         src/Engine/utils/Angle.h
-        src/Engine/utils/ThreadsTest.h
         src/Engine/utils/Grid.h
         src/Engine/utils/ThreadPool.h
         src/Engine/PerformanceMonitor.h
