@@ -152,6 +152,13 @@ struct IdGrid {
         }
     }
 
+    // it's not precise. it's just a broad phase.
+    // Iterates on every id in cells around line.
+    // uses DDA algorithm, but with vectors.
+    // this iterator is conservative (it can iterate more than needed, but not less)
+    // to achieve it, it uses 1 cell around all cells that line passes through
+    // it was important to avoid duplicate iterations.
+    // To avoid them, it uses prevGridX and prevGridY
     void forEachAroundLine(Vector2F start, Vector2F end, const std::function<void(int)> &callback) const {
         Vector2F startGrid = start * m_cellWidthInverse;
         Vector2F endGrid = end * m_cellHeightInverse;
