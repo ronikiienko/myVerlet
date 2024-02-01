@@ -153,45 +153,43 @@ struct IdGrid {
     }
 
     void forEachAroundLine(Vector2F start, Vector2F end, const std::function<void(int)> &callback) const {
-        Vector2F delta = end - start;
+        Vector2F startGrid = start * m_cellWidthInverse;
+        Vector2F endGrid = end * m_cellHeightInverse;
+        Vector2F deltaGrid = endGrid - startGrid;
 
         int steps;
 
-        if (std::abs(delta.m_x) > std::abs(delta.m_y)) {
-            steps = static_cast<int>(std::abs(delta.m_x) * m_cellWidthInverse);
+        if (std::abs(deltaGrid.m_x) > std::abs(deltaGrid.m_y)) {
+            steps = static_cast<int>(std::abs(deltaGrid.m_x));
         } else {
-            steps = static_cast<int>(std::abs(delta.m_y) * m_cellHeightInverse);
+            steps = static_cast<int>(std::abs(deltaGrid.m_y));
         }
 
-        Vector2F increment = delta / static_cast<float>(steps);
+        Vector2F increment = deltaGrid / static_cast<float>(steps);
 
-        Vector2F current = start;
+        Vector2F current = startGrid;
 
         int prevGridX = -1000;
         int prevGridY = -1000;
 
         for (int i = 0; i < steps; i++) {
-            int gridX = static_cast<int>(current.m_x * m_cellWidthInverse);
-            int gridY = static_cast<int>(current.m_y * m_cellHeightInverse);
+            int gridX = static_cast<int>(current.m_x);
+            int gridY = static_cast<int>(current.m_y);
 
             for (int column = gridX - 1; column <= gridX + 1; column++) {
                 for (int row = gridY - 1; row <= gridY + 1; row++) {
                     if (
-                            column < prevGridX - 1 || column > prevGridX + 1 &&
-                            row < prevGridY - 1 || row > prevGridY + 1
+                            column >= prevGridX - 1 && column <= prevGridX + 1 &&
+                            row >= prevGridY - 1 && row <= prevGridY + 1
                             ) {
-                        const Cell &cell = get(column, row);
-                        for (int k = 0; k < cell.activeCount; k++) {
-                            callback(cell.ids[k]);
-                        }
+                        continue;
+                    }
+                    const Cell &cell = get(column, row);
+                    for (int k = 0; k < cell.activeCount; k++) {
+                        callback(cell.ids[k]);
                     }
                 }
             }
-
-//            const Cell &cell = get(gridX, gridY);
-//            for (int k = 0; k < cell.activeCount; k++) {
-//                callback(cell.ids[k]);
-//            }
 
 
             current += increment;

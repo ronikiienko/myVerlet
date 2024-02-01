@@ -114,7 +114,7 @@ public:
         m_shooter.tick();
         if (m_isShooting) {
             sf::Vector2<int> mousePosition = sf::Mouse::getPosition(m_window);
-            for (int i = 0; i< 10; i++) {
+            for (int i = 0; i< 100; i++) {
                 m_scene.lineTrace(
                         getBasicDetails().m_posCurr,
                         m_scene.getCamera().screenPosToWorldPos(Vector2F::cart(mousePosition.x, mousePosition.y)),

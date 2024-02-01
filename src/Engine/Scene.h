@@ -29,7 +29,8 @@ private:
 public:
     IdGrid m_grid{m_collisionGridWidth, m_collisionGridHeight, getSizeI()};
 
-    explicit Scene(float cameraMaxWorldViewSize, Vector2F cameraPosition, InputBus& inputBus, sf::RenderWindow& window, ThreadPool &threadPool, PerformanceMonitor &performanceMonitor,
+    explicit Scene(float cameraMaxWorldViewSize, Vector2F cameraPosition, InputBus &inputBus, sf::RenderWindow &window,
+                   ThreadPool &threadPool, PerformanceMonitor &performanceMonitor,
                    int maxObjectsNum, Vector2I size) :
             m_sizeF(Vector2F::fromOther(size)),
             m_sizeI(size),
@@ -65,7 +66,7 @@ public:
     }
 
 
-    void forEachObject(const std::function<void(BaseObject&, int)> &callback, int start = 0, int end = -1) {
+    void forEachObject(const std::function<void(BaseObject &, int)> &callback, int start = 0, int end = -1) {
         if (end == -1) {
             end = static_cast<int>(m_objects.size());
         }
@@ -75,7 +76,7 @@ public:
         }
     }
 
-    void forEachBasicDetails(const std::function<void(BasicDetails&, int)> &callback, int start = 0, int end = -1) {
+    void forEachBasicDetails(const std::function<void(BasicDetails &, int)> &callback, int start = 0, int end = -1) {
         if (end == -1) {
             end = static_cast<int>(m_basicDetails.size());
         }
@@ -120,54 +121,45 @@ public:
         });
     }
 
-    void forEachInRadius(Vector2F pos, float radius, const std::function<void(BaseObject *, int)>& callback) {
+    void forEachInRadius(Vector2F pos, float radius, const std::function<void(BaseObject *, int)> &callback) {
 //        forEachBasicDetails([&](BasicDetails &details, int ind) {
 //            if ((details.m_posCurr - pos).magnitude2() < radius * radius) {
 //                m_callback(details.m_parent, ind);
 //            }
 //        });
-        m_grid.forEachInRect(RectangleF::fromCoords(pos.m_x - radius, pos.m_y - radius, pos.m_x + radius, pos.m_y + radius),
-                             [&](int id) {
-                               if ((m_basicDetails[id].m_posCurr - pos).magnitude2() < radius * radius) {
-                                   callback(m_basicDetails[id].m_parent, id);
-                               }
-                           });
+        m_grid.forEachInRect(
+                RectangleF::fromCoords(pos.m_x - radius, pos.m_y - radius, pos.m_x + radius, pos.m_y + radius),
+                [&](int id) {
+                    if ((m_basicDetails[id].m_posCurr - pos).magnitude2() < radius * radius) {
+                        callback(m_basicDetails[id].m_parent, id);
+                    }
+                });
     }
 
-    void lineTrace(Vector2F start, Vector2F end, const std::function<void(BaseObject *, int)>& callback) {
+    void lineTrace(Vector2F start, Vector2F end, const std::function<void(BaseObject *, int)> &callback) {
         Vector2F lineVector = end - start;
         float lineLength = lineVector.magnitude();
         Vector2F lineVectorNormalized = lineVector / lineLength;
-//        m_grid.forEachInRect(RectangleF::fromCoords(start, end), [&](int id) {
-//            BasicDetails &basicDetails = m_basicDetails[id];
-//            Vector2F startToObject = basicDetails.m_posCurr - start;
-//            float projectionLength = startToObject.dot(lineVectorNormalized);
-//            if (projectionLength >= 0 && projectionLength < lineLength) {
-//                Vector2F centerProjectionOnRay = start + lineVectorNormalized * projectionLength;
-//                float centerToCenterProjectionMagnitude2 = (basicDetails.m_posCurr - centerProjectionOnRay).magnitude2();
-//                bool isInside = centerToCenterProjectionMagnitude2 < engineDefaults::objectsRadiusSquared;
-//                if (isInside) {
-//                    callback(basicDetails.m_parent, id);
-//                }
-//            }
-//        });
 
         m_grid.forEachAroundLine(start,end, [&](int id){
             BasicDetails &basicDetails = m_basicDetails[id];
-//            Vector2F startToObject = basicDetails.m_posCurr - start;
-//            float projectionLength = startToObject.dot(lineVectorNormalized);
-//            if (projectionLength >= 0 && projectionLength < lineLength) {
-//                Vector2F centerProjectionOnRay = start + lineVectorNormalized * projectionLength;
-//                float centerToCenterProjectionMagnitude2 = (basicDetails.m_posCurr -
-//                                                            centerProjectionOnRay).magnitude2();
-//                bool isInside = centerToCenterProjectionMagnitude2 < engineDefaults::objectsRadiusSquared;
-//                if (isInside) {
-//                    std::cout << "hi" << '\n';
-
+            Vector2F startToObject = basicDetails.m_posCurr - start;
+            float projectionLength = startToObject.dot(lineVectorNormalized);
+            if (projectionLength >= 0 && projectionLength < lineLength) {
+                Vector2F centerProjectionOnRay = start + lineVectorNormalized * projectionLength;
+                float centerToCenterProjectionMagnitude2 = (basicDetails.m_posCurr -
+                                                            centerProjectionOnRay).magnitude2();
+                bool isInside = centerToCenterProjectionMagnitude2 < engineDefaults::objectsRadiusSquared;
+                if (isInside) {
                     callback(basicDetails.m_parent, id);
-//                }
-//            }
+                }
+            }
         });
+
+//        m_grid.forEachAroundLine(start, end, [&](int id) {
+//            BasicDetails &basicDetails = m_basicDetails[id];
+//            callback(basicDetails.m_parent, id);
+//        });
     }
 
     void removeMarkedObjects() {
@@ -254,9 +246,11 @@ public:
     };
 
 
+    Scene(const Scene &) = delete;
 
-    Scene(const Scene&) = delete;
-    Scene(Scene&&) = delete;
-    Scene& operator=(const Scene&) = delete;
-    Scene& operator=(Scene&&) = delete;
+    Scene(Scene &&) = delete;
+
+    Scene &operator=(const Scene &) = delete;
+
+    Scene &operator=(Scene &&) = delete;
 };

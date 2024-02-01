@@ -19,14 +19,21 @@ public:
 
     void v_onInit() override {
 //        m_window.setS
+//        m_debugGraphics.setDebugGridEnabled(true);
+        m_physics.setCollisionsEnabled(false);
         m_physics.setMaxVelocity(1000);
+        m_scene.forEachBasicDetails([this](BasicDetails& basicDetails, int id){
+            basicDetails.m_isPinned = true;
+        });
         m_randomSpawner.spawn(150000);
-        auto playerPtr = m_scene.addObject(Player{m_scene.getObjectContext(), m_inputBus, m_window, m_gen}, Vector2F::cart(100, 100));
+        auto playerPtr = m_scene.addObject(Player{m_scene.getObjectContext(), m_inputBus, m_window, m_gen},
+                                           Vector2F::cart(102, 102));
 //        for (int i = 0; i < 1000; i++) {
 //            m_scene.addObject(Enemy{m_scene.getObjectContext(), dynamic_cast<Player*>(playerPtr.lock().get()), m_gen}, Vector2F::cart(m_gen.getInRange(0, 2000), m_gen.getInRange(0, 2000)));
 //        }
         std::cout << "Objects num: " << m_scene.getObjectsCount() << std::endl;
         m_firstSound = m_soundManager.play("./res/ride.wav");
     }
+
     void v_onTick() override {}
 };
