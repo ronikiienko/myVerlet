@@ -174,24 +174,24 @@ struct IdGrid {
             int gridX = static_cast<int>(current.m_x * m_cellWidthInverse);
             int gridY = static_cast<int>(current.m_y * m_cellHeightInverse);
 
-//            for (int column = gridX - 1; column <= gridX + 1; column++) {
-//                for (int row = gridY - 1; row <= gridY + 1; row++) {
-//                    if (
-//                            column < prevGridX - 1 || column > prevGridX + 1 &&
-//                            row < prevGridY - 1 || row > prevGridY + 1
-//                            ) {
-//                        const Cell &cell = get(column, row);
-//                        for (int k = 0; k < cell.activeCount; k++) {
-//                            callback(cell.ids[k]);
-//                        }
-//                    }
-//                }
-//            }
-
-            const Cell &cell = get(gridX, gridY);
-            for (int k = 0; k < cell.activeCount; k++) {
-                callback(cell.ids[k]);
+            for (int column = gridX - 1; column <= gridX + 1; column++) {
+                for (int row = gridY - 1; row <= gridY + 1; row++) {
+                    if (
+                            column < prevGridX - 1 || column > prevGridX + 1 &&
+                            row < prevGridY - 1 || row > prevGridY + 1
+                            ) {
+                        const Cell &cell = get(column, row);
+                        for (int k = 0; k < cell.activeCount; k++) {
+                            callback(cell.ids[k]);
+                        }
+                    }
+                }
             }
+
+//            const Cell &cell = get(gridX, gridY);
+//            for (int k = 0; k < cell.activeCount; k++) {
+//                callback(cell.ids[k]);
+//            }
 
 
             current += increment;

@@ -38,6 +38,7 @@ public:
 
     void v_onInit() override {
         std::cout << "v_onInit" << std::endl;
+        getBasicDetails().m_isCollisionOn = false;
         m_keyPressedListener = m_inputBus.addEventListener(sf::Event::KeyPressed, [this](const sf::Event &event) {
             if (event.key.code == sf::Keyboard::W) {
                 m_movingUp = true;
