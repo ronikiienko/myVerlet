@@ -7,6 +7,7 @@
 #include "TimerManager/TimerManager.h"
 #include "EventBus/EventBus.h"
 #include "SoundManager/SoundManager.h"
+#include "DebugGraphics.h"
 #include <TGUI/TGUI.hpp>
 #include <TGUI/Backend/SFML-Graphics.hpp>
 
@@ -17,14 +18,15 @@ struct LevelContext {
     SoundManager &m_soundManager;
     TimerManager &m_timerManager;
     InputBus &m_inputBus;
-    PerformanceMonitor& m_performanceMonitor;
-    tgui::Gui& m_gui;
+    PerformanceMonitor &m_performanceMonitor;
+    tgui::Gui &m_gui;
 
 
     LevelContext(sf::RenderWindow &window, ThreadPool &threadPool, EventBus &eventBus, SoundManager &soundManager,
-                 TimerManager &timerManager, InputBus &inputBus, PerformanceMonitor& performanceMonitor, tgui::Gui& gui)
+                 TimerManager &timerManager, InputBus &inputBus, PerformanceMonitor &performanceMonitor, tgui::Gui &gui)
             : m_window(window), m_threadPool(threadPool), m_eventBus(eventBus), m_soundManager(soundManager),
-              m_timerManager(timerManager), m_inputBus(inputBus), m_performanceMonitor(performanceMonitor), m_gui(gui) {}
+              m_timerManager(timerManager), m_inputBus(inputBus), m_performanceMonitor(performanceMonitor),
+              m_gui(gui) {}
 };
 
 class BaseLevel {
@@ -43,6 +45,9 @@ private:
         m_performanceMonitor.start("graphics");
         m_graphics.update();
         m_performanceMonitor.end("graphics");
+        m_performanceMonitor.start("debugGraphics");
+        m_debugGraphics.update();
+        m_performanceMonitor.end("debugGraphics");
 
         m_performanceMonitor.start("gui");
         m_gui.draw();
@@ -83,10 +88,11 @@ private:
 protected:
     Scene m_scene;
     Graphics m_graphics;
+    DebugGraphics m_debugGraphics;
     Physics m_physics;
-    PerformanceMonitor& m_performanceMonitor;
+    PerformanceMonitor &m_performanceMonitor;
     sf::RenderWindow &m_window;
-    tgui::Gui& m_gui;
+    tgui::Gui &m_gui;
     ThreadPool &m_threadPool;
     EventBus &m_eventBus;
     InputBus &m_inputBus;
@@ -120,6 +126,8 @@ protected:
             m_graphics(m_scene, levelContext.m_window,
                        levelContext.m_threadPool,
                        levelContext.m_performanceMonitor),
+            m_debugGraphics(m_scene, levelContext.m_window, levelContext.m_threadPool,
+                            levelContext.m_performanceMonitor),
             m_physics(m_scene, levelContext.m_threadPool,
                       levelContext.m_performanceMonitor) {
 
@@ -137,14 +145,19 @@ protected:
             m_gui.get<tgui::Label>("debugWidget")->setVisible(false);
         }
     }
+
 public:
     virtual void v_onInit() = 0;
+
     virtual void v_onTick() = 0;
 
-    BaseLevel(const BaseLevel&) = delete;
-    BaseLevel(BaseLevel&&) = delete;
-    BaseLevel& operator=(const BaseLevel&) = delete;
-    BaseLevel& operator=(BaseLevel&&) = delete;
+    BaseLevel(const BaseLevel &) = delete;
+
+    BaseLevel(BaseLevel &&) = delete;
+
+    BaseLevel &operator=(const BaseLevel &) = delete;
+
+    BaseLevel &operator=(BaseLevel &&) = delete;
 
     virtual ~BaseLevel() = default;
 

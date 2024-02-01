@@ -18,7 +18,7 @@ private:
     PerformanceMonitor &m_performanceMonitor;
     float m_textureSize;
 public:
-    explicit Graphics(Scene &scene, sf::RenderWindow &window, ThreadPool &threadPool,
+    Graphics(Scene &scene, sf::RenderWindow &window, ThreadPool &threadPool,
                       PerformanceMonitor &performanceMonitor)
             : m_scene(scene), m_window(window), m_threadPool(threadPool), m_performanceMonitor(performanceMonitor) {
         m_objectVertexArray.setPrimitiveType(sf::Quads);  // Initialize with Quads

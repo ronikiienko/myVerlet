@@ -45,6 +45,7 @@ set(SOURCES src/main.cpp
         src/Engine/SoundManager/SoundManager.h
         src/Engine/SoundManager/SMHandle.h
         src/Engine/SoundManager/SMHandle.cpp
+        src/Engine/DebugGraphics.h
 )
 
 project(${PROJECT_NAME})
