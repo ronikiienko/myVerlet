@@ -128,8 +128,10 @@ private:
             const Vector2F normal = vectorBetween / dist;
             const float delta = 0.5f * m_collisionRestitution * (dist - engineDefaults::twoObjectsRadius);
             // Update positions
-            if (!obj1.m_isPinned) obj1.m_posCurr -= normal * delta;
-            if (!obj2.m_isPinned) obj2.m_posCurr += normal * delta;
+            if (obj1.m_isCollisionOn && obj2.m_isCollisionOn) {
+                obj1.m_posCurr -= normal * delta;
+                obj2.m_posCurr += normal * delta;
+            }
         }
     }
 //    void solveContact(BaseObject &obj1, BaseObject &obj2) {

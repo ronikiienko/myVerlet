@@ -12,6 +12,7 @@ public:
     Vector2F m_posCurr, m_posOld, m_acceleration = Vector2F::cart();
     sf::Color m_color = sf::Color::White;
     bool m_isPinned = false;
+    bool m_isCollisionOn = true;
 
     void setVelocity(Vector2F v) {
         m_posOld = m_posCurr - v;
