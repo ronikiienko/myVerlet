@@ -43,7 +43,9 @@ public:
         m_isGridOn = enabled;
     }
     void update() {
-        updateGridVertexArray();
-        m_window.draw(m_linesVertexArray);
+        if (m_isGridOn) {
+            updateGridVertexArray();
+            m_window.draw(m_linesVertexArray);
+        }
     }
 };
