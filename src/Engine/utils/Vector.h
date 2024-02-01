@@ -2,6 +2,7 @@
 
 #include <cmath>
 #include <iostream>
+#include <algorithm>
 #include "Angle.h"
 
 template<typename T>
@@ -68,6 +69,18 @@ public:
         T sin = std::sin(angleRadians);
 
         return Vector2{m_x * cos - m_y * sin, m_x * sin + m_y * cos};
+    }
+
+    [[nodiscard]] constexpr Vector2 min(const Vector2 &other) const {
+        return Vector2{std::min(m_x, other.m_x), std::min(m_y, other.m_y)};
+    }
+
+    [[nodiscard]] constexpr Vector2 max(const Vector2 &other) const {
+        return Vector2{std::max(m_x, other.m_x), std::max(m_y, other.m_y)};
+    }
+
+    [[nodiscard]] constexpr Vector2 clamp(const Vector2 &min, const Vector2 &max) const {
+        return Vector2{std::clamp(m_x, min.m_x, max.m_x), std::clamp(m_y, min.m_y, max.m_y)};
     }
 
     void log() const {
