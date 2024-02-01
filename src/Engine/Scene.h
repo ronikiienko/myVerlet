@@ -152,32 +152,21 @@ public:
 //            }
 //        });
 
-//        forEachBasicDetails([&](BasicDetails& basicDetails, int ind){
+        m_grid.forEachAroundLine(start,end, [&](int id){
+            BasicDetails &basicDetails = m_basicDetails[id];
 //            Vector2F startToObject = basicDetails.m_posCurr - start;
 //            float projectionLength = startToObject.dot(lineVectorNormalized);
 //            if (projectionLength >= 0 && projectionLength < lineLength) {
 //                Vector2F centerProjectionOnRay = start + lineVectorNormalized * projectionLength;
-//                float centerToCenterProjectionMagnitude2 = (basicDetails.m_posCurr - centerProjectionOnRay).magnitude2();
+//                float centerToCenterProjectionMagnitude2 = (basicDetails.m_posCurr -
+//                                                            centerProjectionOnRay).magnitude2();
 //                bool isInside = centerToCenterProjectionMagnitude2 < engineDefaults::objectsRadiusSquared;
 //                if (isInside) {
-//                    callback(basicDetails.m_parent, ind);
+//                    std::cout << "hi" << '\n';
+
+                    callback(basicDetails.m_parent, id);
 //                }
 //            }
-//        });
-
-        m_grid.forEachAroundLine(start,end, [&](int id){
-            BasicDetails &basicDetails = m_basicDetails[id];
-            Vector2F startToObject = basicDetails.m_posCurr - start;
-            float projectionLength = startToObject.dot(lineVectorNormalized);
-            if (projectionLength >= 0 && projectionLength < lineLength) {
-                Vector2F centerProjectionOnRay = start + lineVectorNormalized * projectionLength;
-                float centerToCenterProjectionMagnitude2 = (basicDetails.m_posCurr -
-                                                            centerProjectionOnRay).magnitude2();
-                bool isInside = centerToCenterProjectionMagnitude2 < engineDefaults::objectsRadiusSquared;
-                if (isInside) {
-                    callback(basicDetails.m_parent, id);
-                }
-            }
         });
     }
 
