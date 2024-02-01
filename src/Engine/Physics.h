@@ -233,7 +233,7 @@ private:
 public:
     explicit Physics(Scene &scene, ThreadPool &threadPool, PerformanceMonitor &performanceMonitor)
             : m_scene(scene),
-              m_grid(scene.grid),
+              m_grid(scene.m_grid),
               m_threadPool(threadPool), m_performanceMonitor(performanceMonitor) {}
 
     void update() {
@@ -247,9 +247,9 @@ public:
             updatePositionsConstraint(subStepDt);
             m_performanceMonitor.end("gravityConstraintsUpdate");
 
-            m_performanceMonitor.start("grid");
+            m_performanceMonitor.start("m_grid");
             m_scene.rebuildGrid();
-            m_performanceMonitor.end("grid");
+            m_performanceMonitor.end("m_grid");
 
             if (localCollisionsEnabled) {
                 m_performanceMonitor.start("collisions");

@@ -9,7 +9,7 @@
 class Player : public BaseObject {
 public:
     InputBus &m_inputBus;
-    RNGf& m_gen;
+    RNGf &m_gen;
     sf::RenderWindow &m_window;
     float m_acceleration = 100;
     bool m_movingUp = false;
@@ -30,7 +30,7 @@ public:
     IBHandle m_mouseButtonPressedListener;
     IBHandle m_mouseButtonReleasedListener;
 
-    Player(ObjectContext context, InputBus &inputBus, sf::RenderWindow &window, RNGf& gen)  :
+    Player(ObjectContext context, InputBus &inputBus, sf::RenderWindow &window, RNGf &gen) :
             m_inputBus(inputBus), m_window(window), m_gen(gen), BaseObject(context) {
         // i can't setup events from constructor, because lambda will capture
         // `this` before std::make_unique will fire, which will invalidate `this`, because ownership is transferred to unique_ptr
@@ -113,9 +113,22 @@ public:
         m_shooter.tick();
         if (m_isShooting) {
             sf::Vector2<int> mousePosition = sf::Mouse::getPosition(m_window);
-            m_shooter.tryShoot(getBasicDetails().m_posCurr,
-                            m_scene.getCamera().screenPosToWorldPos(Vector2F::cart(mousePosition.x, mousePosition.y)),
-                            Bullet{m_scene.getObjectContext()});
+            for (int i = 0; i< 10; i++) {
+                m_scene.lineTrace(
+                        getBasicDetails().m_posCurr,
+                        m_scene.getCamera().screenPosToWorldPos(Vector2F::cart(mousePosition.x, mousePosition.y)),
+                        [this](BaseObject *obj, int ind) {
+                            if (obj != this) {
+                                obj->getBasicDetails().m_color = sf::Color::Red;
+                            }
+                        }
+                );
+            }
+
+//            sf::Vector2<int> mousePosition = sf::Mouse::getPosition(m_window);
+//            m_shooter.tryShoot(getBasicDetails().m_posCurr,
+//                            m_scene.getCamera().screenPosToWorldPos(Vector2F::cart(mousePosition.x, mousePosition.y)),
+//                            Bullet{m_scene.getObjectContext()});
         }
         Vector2F newCameraPos = Vector2F::cart(0, 0);
         if (m_isManualCamera) {

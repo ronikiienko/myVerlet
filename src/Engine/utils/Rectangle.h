@@ -19,7 +19,7 @@ public:
     }
 
     constexpr static Rectangle fromCoords(Vector2<T> p1, Vector2<T> p2) {
-        return {p1.m_x, p1.m_y, p2.m_x, p2.m_y};
+        return fromCoords(p1.m_x, p1.m_y, p2.m_x, p2.m_y);
     }
 
     constexpr static Rectangle fromSize(T x1, T y1, T width, T height) {
