@@ -79,7 +79,10 @@ private:
     BasicDetails* m_basicDetails = nullptr;
 public:
     Scene& m_scene;
-    [[nodiscard]] BasicDetails& getBasicDetails() const;
+    [[nodiscard]] BasicDetails& getBasicDetails() const {
+//        if (m_scene == nullptr) throw std::runtime_error("Getting scene but it's not initialized yet. Call this method only after or inside onInit()");
+        return *m_basicDetails;
+    };
     virtual void v_onTick() = 0;
     virtual void v_onInit() = 0;
     virtual void v_onCollision(BaseObject* ptr) = 0;
