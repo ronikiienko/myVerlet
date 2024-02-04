@@ -29,6 +29,7 @@ public:
     IBHandle m_mouseWheelScrolledListener;
     IBHandle m_mouseButtonPressedListener;
     IBHandle m_mouseButtonReleasedListener;
+    IBHandle m_mouseMoveListener;
 
     Player(ObjectContext context, InputBus &inputBus, sf::RenderWindow &window, RNGf &gen) :
             m_inputBus(inputBus), m_window(window), m_gen(gen), BaseObject(context) {
@@ -107,21 +108,25 @@ public:
                                                                             m_isManualCamera = false;
                                                                         }
                                                                     });
+        m_mouseMoveListener = m_inputBus.addEventListener(sf::Event::MouseMoved, [this](const sf::Event &event) {
+            getBasicDetails().m_direction =( m_scene.getCamera().screenPosToWorldPos(Vector2F::cart(event.mouseMove.x, event.mouseMove.y)) - getBasicDetails().m_posCurr).normalize();
+        });
     }
 
     void v_onTick() override {
         m_shooter.tick();
         if (m_isShooting) {
             sf::Vector2<int> mousePosition = sf::Mouse::getPosition(m_window);
-            m_scene.lineTrace(
-                    getBasicDetails().m_posCurr,
-                    m_scene.getCamera().screenPosToWorldPos(Vector2F::cart(mousePosition.x, mousePosition.y)),
-                    [this](BaseObject *obj, int ind) {
-                        if (obj != this) {
-                            obj->getBasicDetails().m_color = sf::Color::Red;
-                        }
-                    }
-            );
+
+//            m_scene.lineTrace(
+//                    getBasicDetails().m_posCurr,
+//                    m_scene.getCamera().screenPosToWorldPos(Vector2F::cart(mousePosition.x, mousePosition.y)),
+//                    [this](BaseObject *obj, int ind) {
+//                        if (obj != this) {
+//                            obj->getBasicDetails().m_color = sf::Color::Red;
+//                        }
+//                    }
+//            );
 
 //            sf::Vector2<int> mousePosition = sf::Mouse::getPosition(m_window);
             m_shooter.tryShoot(getBasicDetails().m_posCurr,

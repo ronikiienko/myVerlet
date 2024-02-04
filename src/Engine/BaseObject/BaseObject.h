@@ -13,6 +13,7 @@ public:
     sf::Color m_color = sf::Color::White;
     bool m_isPinned = false;
     bool m_isCollisionOn = true;
+    Vector2F m_direction = Vector2F::polar(1, Angle::fromDegrees(0));
 
     void setVelocity(Vector2F v) {
         m_posOld = m_posCurr - v;
