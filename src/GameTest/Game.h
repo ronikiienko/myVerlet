@@ -13,7 +13,7 @@ public:
 
     void v_onInit() override {
         std::cout << "Game init" << std::endl;
-        setLevel<PerformanceTest>();
+        setLevel<Level1>();
 
         setLevel1EventHandle = m_eventBus.addEventListener<SetLevel1Event>([this](const SetLevel1Event& event){
             setLevel<Level1>();

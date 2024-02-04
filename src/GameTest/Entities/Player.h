@@ -113,22 +113,21 @@ public:
         m_shooter.tick();
         if (m_isShooting) {
             sf::Vector2<int> mousePosition = sf::Mouse::getPosition(m_window);
-//            for (int i = 0; i< 100; i++) {
-//                m_scene.lineTrace(
-//                        getBasicDetails().m_posCurr,
-//                        m_scene.getCamera().screenPosToWorldPos(Vector2F::cart(mousePosition.x, mousePosition.y)),
-//                        [this](BaseObject *obj, int ind) {
-//                            if (obj != this) {
-//                                obj->getBasicDetails().m_color = sf::Color::Red;
-//                            }
-//                        }
-//                );
-//            }
+            m_scene.lineTrace(
+                    getBasicDetails().m_posCurr,
+                    m_scene.getCamera().screenPosToWorldPos(Vector2F::cart(mousePosition.x, mousePosition.y)),
+                    [this](BaseObject *obj, int ind) {
+                        if (obj != this) {
+                            obj->getBasicDetails().m_color = sf::Color::Red;
+                        }
+                    }
+            );
 
 //            sf::Vector2<int> mousePosition = sf::Mouse::getPosition(m_window);
-//            m_shooter.tryShoot(getBasicDetails().m_posCurr,
-//                            m_scene.getCamera().screenPosToWorldPos(Vector2F::cart(mousePosition.x, mousePosition.y)),
-//                            Bullet{m_scene.getObjectContext()});
+            m_shooter.tryShoot(getBasicDetails().m_posCurr,
+                               m_scene.getCamera().screenPosToWorldPos(
+                                       Vector2F::cart(mousePosition.x, mousePosition.y)),
+                               Bullet{m_scene.getObjectContext()});
         }
         Vector2F newCameraPos = Vector2F::cart(0, 0);
         if (m_isManualCamera) {
