@@ -123,7 +123,8 @@ public:
         });
     }
 
-    void forEachInRadius(Vector2F pos, float radius, const std::function<void(BaseObject *, int)> &callback) {
+    template<typename T>
+    void forEachInRadius(Vector2F pos, float radius, const T &callback) {
 //        forEachBasicDetails([&](BasicDetails &details, int ind) {
 //            if ((details.m_posCurr - pos).magnitude2() < radius * radius) {
 //                m_callback(details.m_parent, ind);

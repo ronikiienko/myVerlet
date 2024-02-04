@@ -135,7 +135,8 @@ struct IdGrid {
     }
 
     // it's not precise iterator. it just uses m_grid cells to iterate. So it's not precise, but it's fast. To actually iterate precise, needs more checks (it's just a broad phase)
-    void forEachInRect(RectangleF rect, const std::function<void(int)> &callback) const {
+    template<typename T>
+    void forEachInRect(RectangleF rect, const T &callback) const {
         const int startGridX = std::max(0, realXToGridX(rect.getX1()));
         const int endGridX = std::min(m_width - 1, realXToGridX(rect.getX2()));
         const int startGridY = std::max(0, realYToGridY(rect.getY1()));
