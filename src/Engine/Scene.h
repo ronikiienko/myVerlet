@@ -65,8 +65,9 @@ public:
         return m_camera;
     }
 
-
-    void forEachObject(const std::function<void(BaseObject &, int)> &callback, int start = 0, int end = -1) {
+    // as i've discovered.. std::function HAS overhead. It was taking around 2 fps. So, i use T here. for performance-critical code parts better to not use std::function
+    template<typename T>
+    void forEachObject(const T &callback, int start = 0, int end = -1) {
         if (end == -1) {
             end = static_cast<int>(m_objects.size());
         }
@@ -76,7 +77,8 @@ public:
         }
     }
 
-    void forEachBasicDetails(const std::function<void(BasicDetails &, int)> &callback, int start = 0, int end = -1) {
+    template<typename T>
+    void forEachBasicDetails(const T&callback, int start = 0, int end = -1) {
         if (end == -1) {
             end = static_cast<int>(m_basicDetails.size());
         }
