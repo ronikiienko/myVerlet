@@ -20,7 +20,7 @@ public:
     void v_onInit() override {
 //        m_window.setS
 //        m_debugGraphics.setDebugGridEnabled(true);
-        m_physics.setCollisionsEnabled(false);
+//        m_physics.setCollisionsEnabled(false);
         m_physics.setMaxVelocity(1000);
         m_scene.forEachBasicDetails([this](BasicDetails& basicDetails, int id){
             basicDetails.m_isPinned = true;

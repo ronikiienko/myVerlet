@@ -38,7 +38,6 @@ public:
 
     void v_onInit() override {
         std::cout << "v_onInit" << std::endl;
-        getBasicDetails().m_isCollisionOn = false;
         m_keyPressedListener = m_inputBus.addEventListener(sf::Event::KeyPressed, [this](const sf::Event &event) {
             if (event.key.code == sf::Keyboard::W) {
                 m_movingUp = true;
@@ -114,17 +113,17 @@ public:
         m_shooter.tick();
         if (m_isShooting) {
             sf::Vector2<int> mousePosition = sf::Mouse::getPosition(m_window);
-            for (int i = 0; i< 100; i++) {
-                m_scene.lineTrace(
-                        getBasicDetails().m_posCurr,
-                        m_scene.getCamera().screenPosToWorldPos(Vector2F::cart(mousePosition.x, mousePosition.y)),
-                        [this](BaseObject *obj, int ind) {
-                            if (obj != this) {
-                                obj->getBasicDetails().m_color = sf::Color::Red;
-                            }
-                        }
-                );
-            }
+//            for (int i = 0; i< 100; i++) {
+//                m_scene.lineTrace(
+//                        getBasicDetails().m_posCurr,
+//                        m_scene.getCamera().screenPosToWorldPos(Vector2F::cart(mousePosition.x, mousePosition.y)),
+//                        [this](BaseObject *obj, int ind) {
+//                            if (obj != this) {
+//                                obj->getBasicDetails().m_color = sf::Color::Red;
+//                            }
+//                        }
+//                );
+//            }
 
 //            sf::Vector2<int> mousePosition = sf::Mouse::getPosition(m_window);
 //            m_shooter.tryShoot(getBasicDetails().m_posCurr,
