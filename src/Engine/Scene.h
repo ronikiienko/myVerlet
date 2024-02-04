@@ -139,7 +139,8 @@ public:
                 });
     }
 
-    void lineTrace(Vector2F start, Vector2F end, const std::function<void(BaseObject *, int)> &callback) {
+    template<typename T>
+    void lineTrace(Vector2F start, Vector2F end, const T &callback) {
         Vector2F lineVector = end - start;
         float lineLength = lineVector.magnitude();
         Vector2F lineVectorNormalized = lineVector / lineLength;

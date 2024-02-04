@@ -160,7 +160,8 @@ struct IdGrid {
     // to achieve it, it uses 1 cell around all cells that line passes through
     // it was important to avoid duplicate iterations.
     // To avoid them, it uses prevGridX and prevGridY
-    void forEachAroundLine(Vector2F start, Vector2F end, const std::function<void(int)> &callback) const {
+    template<typename T>
+    void forEachAroundLine(Vector2F start, Vector2F end, const T &callback) const {
         Vector2F startGrid = start * m_cellWidthInverse;
         Vector2F endGrid = end * m_cellHeightInverse;
         Vector2F deltaGrid = endGrid - startGrid;
