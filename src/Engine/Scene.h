@@ -217,11 +217,11 @@ public:
         // use swap & pop to remove objects without a lot of shifting
         for (int i: m_objectsToRemove) {
             for (int j = getObjectsWithRotationCount() - 1; j >= 0; j--) {
-//                if (m_objectsWithRotation[j] == i) {
-//                    std::swap(m_objectsWithRotation[j], m_objectsWithRotation.back());
-//                    m_objectsWithRotation.pop_back();
-//                    continue;
-//                }
+                if (m_objectsWithRotation[j] == i) {
+                    std::swap(m_objectsWithRotation[j], m_objectsWithRotation.back());
+                    m_objectsWithRotation.pop_back();
+                    continue;
+                }
                 if (m_objectsWithRotation[j] == getObjectsCount() - 1) {
                     m_objectsWithRotation[j] = i;
                 }
