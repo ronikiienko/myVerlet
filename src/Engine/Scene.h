@@ -86,7 +86,7 @@ public:
 
     template<typename T>
     std::weak_ptr<BaseObject> addObject(T &&object, Vector2F position) {
-        if (m_objects.size() >= m_maxObjectsNum) {
+        if (m_objects.size() > m_maxObjectsNum) {
             throw std::runtime_error("Exceeded Scene capacity");
         }
 
