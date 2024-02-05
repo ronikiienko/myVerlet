@@ -4,6 +4,7 @@
 
 namespace engineDefaults {
     extern const Vector2I windowSize;
+    extern const float rotationCircleRadius;
     extern const float objectsRadius;
     extern const float objectsRadiusSquared;
     extern const float twoObjectsRadius;

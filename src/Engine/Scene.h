@@ -13,8 +13,9 @@
 class Scene {
 private:
     std::vector<std::shared_ptr<BaseObject>> m_objects;
-    std::vector<BasicDetails> m_basicDetails;
     std::vector<int> m_objectsToRemove;
+    std::vector<int> m_objectsWithRotation;
+    std::vector<BasicDetails> m_basicDetails;
     Vector2F m_sizeF;
     Vector2I m_sizeI;
     Camera m_camera;
@@ -26,7 +27,9 @@ private:
     // Conclusion: best if m_grid is divided by threads * 2 without remainder
     int m_collisionGridWidth = m_sizeI.m_x / (engineDefaults::objectsRadius * 2);
     int m_collisionGridHeight = m_sizeI.m_y / (engineDefaults::objectsRadius * 2);
+
 public:
+
     IdGrid m_grid{m_collisionGridWidth, m_collisionGridHeight, getSizeI()};
 
     explicit Scene(float cameraMaxWorldViewSize, Vector2F cameraPosition, InputBus &inputBus, sf::RenderWindow &window,
@@ -41,6 +44,30 @@ public:
         m_objects.reserve(maxObjectsNum);
         m_basicDetails.reserve(maxObjectsNum);
         m_objectsToRemove.reserve(maxObjectsNum);
+    }
+
+    int getIndexByPtr(BaseObject* ptr) {
+        auto it = m_objects.end();
+        for (auto i = m_objects.begin(); i != m_objects.end(); i++) {
+            if (i->get() == ptr) {
+                it = i;
+                break;
+            }
+        }
+        if (it == m_objects.end()) {
+            throw std::runtime_error("Trying to get index of ptr to object that does not exist");
+        }
+        return static_cast<int>(it - m_objects.begin());
+    }
+
+    void setObjectRotation(BaseObject* ptr, bool enabled) {
+        int index = getIndexByPtr(ptr);
+        auto it = std::find(m_objectsWithRotation.begin(), m_objectsWithRotation.end(), index);
+        if (it == m_objectsWithRotation.end() && enabled) {
+            m_objectsWithRotation.push_back(index);
+        } else if (!enabled) {
+            m_objectsWithRotation.erase(it);
+        }
     }
 
     template<typename T>
@@ -88,6 +115,17 @@ public:
         }
     }
 
+    template<typename T>
+    void forEachBasicDetailsWithRotation(const T &callback, int start = 0, int end = -1) {
+        if (end == -1) {
+            end = static_cast<int>(m_basicDetails.size());
+        }
+
+        for (int i = start; i < end; i++) {
+            callback(m_basicDetails[m_objectsWithRotation[i]], i);
+        }
+    }
+
 
     BaseObject &getObject(int ind) {
         return *m_objects[ind];
@@ -103,6 +141,10 @@ public:
 
     [[nodiscard]] int getObjectsCount() {
         return static_cast<int>(m_objects.size());
+    }
+
+    [[nodiscard]] int getObjectsWithRotationCount() const {
+        return static_cast<int>(m_objectsWithRotation.size());
     }
 
     [[nodiscard]] Vector2F &getSizeF() {

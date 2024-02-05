@@ -111,6 +111,8 @@ public:
         m_mouseMoveListener = m_inputBus.addEventListener(sf::Event::MouseMoved, [this](const sf::Event &event) {
             getBasicDetails().m_direction =( m_scene.getCamera().screenPosToWorldPos(Vector2F::cart(event.mouseMove.x, event.mouseMove.y)) - getBasicDetails().m_posCurr).normalize();
         });
+
+        m_scene.setObjectRotation(this, true);
     }
 
     void v_onTick() override {

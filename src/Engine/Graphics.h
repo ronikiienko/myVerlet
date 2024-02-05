@@ -37,10 +37,10 @@ public:
         m_objectVertexArray.resize(m_scene.getObjectsCount() * 4);
         m_threadPool.dispatch(m_scene.getObjectsCount(), [this](int start, int end) {
             float objectSize = m_scene.getCamera().worldScalarToScreen(engineDefaults::objectsRadius);
-            m_scene.forEachBasicDetails([this, objectSize](BasicDetails &object, int i) {
+            m_scene.forEachBasicDetails([this, objectSize](BasicDetails &object, int index) {
                 Vector2F screenPos = m_scene.getCamera().worldPosToScreenPos(object.m_posCurr);
 
-                const int ind = i * 4;
+                const int ind = index * 4;
 
                 m_objectVertexArray[ind].position = {screenPos.m_x - objectSize, screenPos.m_y - objectSize};
                 m_objectVertexArray[ind + 1].position = {screenPos.m_x + objectSize,
@@ -64,21 +64,21 @@ public:
     }
 
     void updateRotationsArray() {
-        m_rotationsVertexArray.resize(m_scene.getObjectsCount() * 4 / 16);
-        m_threadPool.dispatch(m_scene.getObjectsCount() / 16, [this](int start, int end) {
-            float objectSize = m_scene.getCamera().worldScalarToScreen(0.5);
-            m_scene.forEachBasicDetails([this, objectSize](BasicDetails &object, int i) {
+        m_rotationsVertexArray.resize(m_scene.getObjectsWithRotationCount() * 4);
+        m_threadPool.dispatch(m_scene.getObjectsWithRotationCount(), [this](int start, int end) {
+            float objectSize = m_scene.getCamera().worldScalarToScreen(engineDefaults::rotationCircleRadius);
+            m_scene.forEachBasicDetailsWithRotation([this,objectSize](BasicDetails& object, int index){
                 Vector2F screenPos = m_scene.getCamera().worldPosToScreenPos(object.m_posCurr + object.m_direction);
 
-                const int ind = i * 4;
+                const int ind = index * 4;
 
                 m_rotationsVertexArray[ind].position = {screenPos.m_x - objectSize, screenPos.m_y - objectSize};
                 m_rotationsVertexArray[ind + 1].position = {screenPos.m_x + objectSize,
-                                                         screenPos.m_y - objectSize};
+                                                            screenPos.m_y - objectSize};
                 m_rotationsVertexArray[ind + 2].position = {screenPos.m_x + objectSize,
-                                                         screenPos.m_y + objectSize};
+                                                            screenPos.m_y + objectSize};
                 m_rotationsVertexArray[ind + 3].position = {screenPos.m_x - objectSize,
-                                                         screenPos.m_y + objectSize};
+                                                            screenPos.m_y + objectSize};
 
                 m_rotationsVertexArray[ind].texCoords = {0.0f, 0.0f};
                 m_rotationsVertexArray[ind + 1].texCoords = {m_textureSize, 0.0f};
@@ -95,9 +95,9 @@ public:
 
     void update() {
         updateObjectsArray();
-//        updateRotationsArray();
+        updateRotationsArray();
         m_window.draw(m_objectVertexArray, &m_objectTexture);
-//        m_window.draw(m_rotationsVertexArray, &m_objectTexture);
+        m_window.draw(m_rotationsVertexArray, &m_objectTexture);
     }
 
     Graphics(const Graphics &) = delete;

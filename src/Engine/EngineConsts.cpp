@@ -2,6 +2,9 @@
 
 namespace engineDefaults {
     extern const Vector2I windowSize = Vector2I::cart(800, 800);
+
+    extern const float rotationCircleRadius = 0.5;
+
     extern const float objectsRadius = 2;
     extern const float objectsRadiusSquared = objectsRadius * objectsRadius;
     extern const float twoObjectsRadius = objectsRadius + objectsRadius;
