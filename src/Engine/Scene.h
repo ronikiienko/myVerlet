@@ -74,7 +74,7 @@ public:
         m_objectsToRemove.reserve(maxObjectsNum);
     }
 
-    void setObjectRotation(BaseObject *ptr, bool enabled) {
+    void toggleObjectRotation(BaseObject *ptr, bool enabled) {
         int index = getIndexByPtr(ptr);
         auto it = std::find(m_objectsWithRotation.begin(), m_objectsWithRotation.end(), index);
         if (it == m_objectsWithRotation.end() && enabled) {
