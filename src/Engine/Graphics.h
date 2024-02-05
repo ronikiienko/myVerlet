@@ -1,5 +1,6 @@
 #pragma once
 
+#include <SFML/Graphics/RectangleShape.hpp>
 #include "Scene.h"
 #include "SFML/Graphics/RenderWindow.hpp"
 #include "SFML/Graphics/VertexArray.hpp"
@@ -20,10 +21,10 @@ private:
     float m_textureSize;
 public:
     Graphics(Scene &scene, sf::RenderWindow &window, ThreadPool &threadPool,
-                      PerformanceMonitor &performanceMonitor)
+             PerformanceMonitor &performanceMonitor)
             : m_scene(scene), m_window(window), m_threadPool(threadPool), m_performanceMonitor(performanceMonitor) {
-        m_objectVertexArray.setPrimitiveType(sf::Quads);  // Initialize with Quads
-        m_rotationsVertexArray.setPrimitiveType(sf::Quads);  // Initialize with Quads
+        m_objectVertexArray.setPrimitiveType(sf::Quads);
+        m_rotationsVertexArray.setPrimitiveType(sf::Quads);
         // TODO somehow organise resources, because now path depends on where executable is. Same for fonts in performance monitor
         if (!m_objectTexture.loadFromFile("./res/circle.png")) {
             throw std::runtime_error("Could not load circle texture file");
@@ -44,11 +45,11 @@ public:
 
                 m_objectVertexArray[ind].position = {screenPos.m_x - objectSize, screenPos.m_y - objectSize};
                 m_objectVertexArray[ind + 1].position = {screenPos.m_x + objectSize,
-                                                       screenPos.m_y - objectSize};
+                                                         screenPos.m_y - objectSize};
                 m_objectVertexArray[ind + 2].position = {screenPos.m_x + objectSize,
-                                                       screenPos.m_y + objectSize};
+                                                         screenPos.m_y + objectSize};
                 m_objectVertexArray[ind + 3].position = {screenPos.m_x - objectSize,
-                                                       screenPos.m_y + objectSize};
+                                                         screenPos.m_y + objectSize};
 
                 m_objectVertexArray[ind].texCoords = {0.0f, 0.0f};
                 m_objectVertexArray[ind + 1].texCoords = {m_textureSize, 0.0f};
@@ -67,7 +68,7 @@ public:
         m_rotationsVertexArray.resize(m_scene.getObjectsWithRotationCount() * 4);
         m_threadPool.dispatch(m_scene.getObjectsWithRotationCount(), [this](int start, int end) {
             float objectSize = m_scene.getCamera().worldScalarToScreen(engineDefaults::rotationCircleRadius);
-            m_scene.forEachBasicDetailsWithRotation([this,objectSize](BasicDetails& object, int index){
+            m_scene.forEachBasicDetailsWithRotation([this, objectSize](BasicDetails &object, int index) {
                 Vector2F screenPos = m_scene.getCamera().worldPosToScreenPos(object.m_posCurr + object.m_direction);
 
                 const int ind = index * 4;
@@ -93,7 +94,47 @@ public:
         });
     }
 
+    void updateWalls() {
+        float wallsThickness = 40;
+
+        Camera &camera = m_scene.getCamera();
+
+        Vector2F startPos = camera.worldPosToScreenPos(Vector2F::cart(-wallsThickness, -wallsThickness));
+        Vector2F size = Vector2F::cart(
+                camera.worldScalarToScreen(m_scene.getSizeF().m_x + wallsThickness * 2),
+                camera.worldScalarToScreen(m_scene.getSizeF().m_y + wallsThickness * 2)
+        );
+
+        sf::RectangleShape wallShape;
+        wallShape.setFillColor(sf::Color{255, 255, 255, 30});
+        wallShape.setPosition(sf::Vector2f(startPos.m_x, startPos.m_y));
+        wallShape.setSize(sf::Vector2f(size.m_x, size.m_y));
+
+        m_window.draw(wallShape);
+    }
+
+    void updateBackground() {
+        Camera &camera = m_scene.getCamera();
+
+        Vector2F startPos = camera.worldPosToScreenPos(Vector2F::cart(0, 0));
+        Vector2F size = Vector2F::cart(
+                camera.worldScalarToScreen(m_scene.getSizeF().m_x),
+                camera.worldScalarToScreen(m_scene.getSizeF().m_y)
+        );
+
+        sf::RectangleShape backgroundShape;
+        backgroundShape.setFillColor(sf::Color::Black);
+        backgroundShape.setPosition(sf::Vector2f(startPos.m_x, startPos.m_y));
+        backgroundShape.setSize(sf::Vector2f(size.m_x, size.m_y));
+
+        m_window.draw(backgroundShape);
+    }
+
     void update() {
+        m_performanceMonitor.start("walls");
+        updateWalls();
+        updateBackground();
+        m_performanceMonitor.end("walls");
         updateObjectsArray();
         updateRotationsArray();
         m_window.draw(m_objectVertexArray, &m_objectTexture);
@@ -101,7 +142,10 @@ public:
     }
 
     Graphics(const Graphics &) = delete;
-    Graphics& operator=(const Graphics &) = delete;
+
+    Graphics &operator=(const Graphics &) = delete;
+
     Graphics(Graphics &&) = delete;
-    Graphics& operator=(Graphics &&) = delete;
+
+    Graphics &operator=(Graphics &&) = delete;
 };
