@@ -88,6 +88,7 @@ public:
     virtual void v_onCollision(BaseObject* ptr) = 0;
 
     void destroy();
+    void toggleRotation(bool enabled);
 
     virtual ~BaseObject() = default;
 

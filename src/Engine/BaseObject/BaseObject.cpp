@@ -9,3 +9,7 @@ void BaseObject::destroy() {
 
 BaseObject::BaseObject(ObjectContext objectContext) : m_scene(objectContext.m_scene) {
 }
+
+void BaseObject::toggleRotation(bool enabled) {
+    m_scene.toggleObjectRotation(this, enabled);
+}

@@ -112,7 +112,7 @@ public:
             getBasicDetails().m_direction =( m_scene.getCamera().screenPosToWorldPos(Vector2F::cart(event.mouseMove.x, event.mouseMove.y)) - getBasicDetails().m_posCurr).normalize();
         });
 
-        m_scene.toggleObjectRotation(this, true);
+        toggleRotation(true);
     }
 
     void v_onTick() override {
