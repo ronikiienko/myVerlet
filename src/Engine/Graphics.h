@@ -19,6 +19,9 @@ private:
     sf::Texture m_objectTexture;
     PerformanceMonitor &m_performanceMonitor;
     float m_textureSize;
+
+    sf::RectangleShape m_backgroundShape;
+    sf::RectangleShape m_wallShape;
 public:
     Graphics(Scene &scene, sf::RenderWindow &window, ThreadPool &threadPool,
              PerformanceMonitor &performanceMonitor)
@@ -105,12 +108,11 @@ public:
                 camera.worldScalarToScreen(m_scene.getSizeF().m_y + wallsThickness * 2)
         );
 
-        sf::RectangleShape wallShape;
-        wallShape.setFillColor(sf::Color{255, 255, 255, 30});
-        wallShape.setPosition(sf::Vector2f(startPos.m_x, startPos.m_y));
-        wallShape.setSize(sf::Vector2f(size.m_x, size.m_y));
+        m_wallShape.setFillColor(sf::Color{255, 255, 255, 30});
+        m_wallShape.setPosition(sf::Vector2f(startPos.m_x, startPos.m_y));
+        m_wallShape.setSize(sf::Vector2f(size.m_x, size.m_y));
 
-        m_window.draw(wallShape);
+        m_window.draw(m_wallShape);
     }
 
     void updateBackground() {
@@ -122,12 +124,11 @@ public:
                 camera.worldScalarToScreen(m_scene.getSizeF().m_y)
         );
 
-        sf::RectangleShape backgroundShape;
-        backgroundShape.setFillColor(sf::Color::Black);
-        backgroundShape.setPosition(sf::Vector2f(startPos.m_x, startPos.m_y));
-        backgroundShape.setSize(sf::Vector2f(size.m_x, size.m_y));
+        m_backgroundShape.setFillColor(sf::Color::Black);
+        m_backgroundShape.setPosition(sf::Vector2f(startPos.m_x, startPos.m_y));
+        m_backgroundShape.setSize(sf::Vector2f(size.m_x, size.m_y));
 
-        m_window.draw(backgroundShape);
+        m_window.draw(m_backgroundShape);
     }
 
     void update() {
