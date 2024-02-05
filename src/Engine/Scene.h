@@ -33,7 +33,8 @@ private:
             m_objectsToRemove.push_back(index);
         }
     }
-    int getIndexByPtr(BaseObject* ptr) {
+
+    int getIndexByPtr(BaseObject *ptr) {
         auto it = m_objects.end();
         for (auto i = m_objects.begin(); i != m_objects.end(); i++) {
             if (i->get() == ptr) {
@@ -46,6 +47,15 @@ private:
         }
         return static_cast<int>(it - m_objects.begin());
     }
+
+    int getIndexByPtr(std::weak_ptr<BaseObject> &ptr) {
+        auto it = std::find(m_objects.begin(), m_objects.end(), ptr.lock());
+        if (it == m_objects.end()) {
+            throw std::runtime_error("Trying to get index of ptr to object that does not exist");
+        }
+        return static_cast<int>(it - m_objects.begin());
+    }
+
 public:
 
     IdGrid m_grid{m_collisionGridWidth, m_collisionGridHeight, getSizeI()};
@@ -64,7 +74,7 @@ public:
         m_objectsToRemove.reserve(maxObjectsNum);
     }
 
-    void setObjectRotation(BaseObject* ptr, bool enabled) {
+    void setObjectRotation(BaseObject *ptr, bool enabled) {
         int index = getIndexByPtr(ptr);
         auto it = std::find(m_objectsWithRotation.begin(), m_objectsWithRotation.end(), index);
         if (it == m_objectsWithRotation.end() && enabled) {
@@ -109,7 +119,7 @@ public:
     }
 
     template<typename T>
-    void forEachBasicDetails(const T&callback, int start = 0, int end = -1) {
+    void forEachBasicDetails(const T &callback, int start = 0, int end = -1) {
         if (end == -1) {
             end = static_cast<int>(m_basicDetails.size());
         }
@@ -178,7 +188,7 @@ public:
         float lineLength = lineVector.magnitude();
         Vector2F lineVectorNormalized = lineVector / lineLength;
 
-        m_grid.forEachAroundLine(start,end, [&](int id){
+        m_grid.forEachAroundLine(start, end, [&](int id) {
             BasicDetails &basicDetails = m_basicDetails[id];
             Vector2F startToObject = basicDetails.m_posCurr - start;
             float projectionLength = startToObject.dot(lineVectorNormalized);
@@ -230,28 +240,16 @@ public:
     }
 
     void removeObject(std::weak_ptr<BaseObject> &ptr) {
-        auto it = std::find(m_objects.begin(), m_objects.end(), ptr.lock());
-        if (it != m_objects.end()) {
-            int index = static_cast<int>(it - m_objects.begin());
-            markObjectForRemoval(index);
-        }
+        int index = getIndexByPtr(ptr);
+        markObjectForRemoval(index);
     }
 
     // theres was bug: if you remove an object during m_physics calculations, it will cause some m_grid m_objects to become invalid (because everything is shifted), and m_grid uses id's
     // this can happen primarily if we for example remove an object in collision m_callback
     // to fix this we  use a stack of m_objects to remove, and remove them after m_physics calculations (and input handling)
     void removeObject(BaseObject *ptr) {
-        auto it = m_objects.end();
-        for (auto i = m_objects.begin(); i != m_objects.end(); i++) {
-            if (i->get() == ptr) {
-                it = i;
-                break;
-            }
-        }
-        if (it != m_objects.end()) {
-            int index = static_cast<int>(it - m_objects.begin());
-            markObjectForRemoval(index);
-        }
+        int index = getIndexByPtr(ptr);
+        markObjectForRemoval(index);
     }
 
     void rebuildGrid() {
