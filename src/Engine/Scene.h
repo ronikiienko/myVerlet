@@ -210,25 +210,16 @@ public:
     }
 
     void removeMarkedObjects() {
-        // need to sort m_objectsToRemove in descending order
-
         if (m_objectsToRemove.empty()) {
             return;
         }
-        // sort in descending order to avoid shifting
-        // example of shifting:
-        // need to remove two objects, with indexes 10 and 15
-        // if we remove 10 first, then 15 will become 14, and we will remove wrong object
-        std::sort(m_objectsToRemove.begin(), m_objectsToRemove.end(), std::greater<>());
 
-        // erasing each element requires all elements after it to be shifted, so it's pretty long
-        // but probably removing won't happen too often, so it's ok
+        // use swap & pop to remove objects without a lot of shifting
         for (int i: m_objectsToRemove) {
-            m_objects.erase(m_objects.begin() + i);
-            m_basicDetails.erase(m_basicDetails.begin() + i);
-        }
-
-        for (int i = 0; i < m_objects.size(); i++) {
+            std::swap(m_objects[i], m_objects.back());
+            std::swap(m_basicDetails[i], m_basicDetails.back());
+            m_objects.pop_back();
+            m_basicDetails.pop_back();
             m_objects[i]->m_basicDetails = &m_basicDetails[i];
         }
         m_objectsToRemove.clear();
