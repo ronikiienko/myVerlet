@@ -28,6 +28,24 @@ private:
     int m_collisionGridWidth = m_sizeI.m_x / (engineDefaults::objectsRadius * 2);
     int m_collisionGridHeight = m_sizeI.m_y / (engineDefaults::objectsRadius * 2);
 
+    void markObjectForRemoval(int index) {
+        if (std::find(m_objectsToRemove.begin(), m_objectsToRemove.end(), index) == m_objectsToRemove.end()) {
+            m_objectsToRemove.push_back(index);
+        }
+    }
+    int getIndexByPtr(BaseObject* ptr) {
+        auto it = m_objects.end();
+        for (auto i = m_objects.begin(); i != m_objects.end(); i++) {
+            if (i->get() == ptr) {
+                it = i;
+                break;
+            }
+        }
+        if (it == m_objects.end()) {
+            throw std::runtime_error("Trying to get index of ptr to object that does not exist");
+        }
+        return static_cast<int>(it - m_objects.begin());
+    }
 public:
 
     IdGrid m_grid{m_collisionGridWidth, m_collisionGridHeight, getSizeI()};
@@ -44,20 +62,6 @@ public:
         m_objects.reserve(maxObjectsNum);
         m_basicDetails.reserve(maxObjectsNum);
         m_objectsToRemove.reserve(maxObjectsNum);
-    }
-
-    int getIndexByPtr(BaseObject* ptr) {
-        auto it = m_objects.end();
-        for (auto i = m_objects.begin(); i != m_objects.end(); i++) {
-            if (i->get() == ptr) {
-                it = i;
-                break;
-            }
-        }
-        if (it == m_objects.end()) {
-            throw std::runtime_error("Trying to get index of ptr to object that does not exist");
-        }
-        return static_cast<int>(it - m_objects.begin());
     }
 
     void setObjectRotation(BaseObject* ptr, bool enabled) {
@@ -135,10 +139,6 @@ public:
         return m_basicDetails[ind];
     }
 
-    void clear() {
-        m_objects.clear();
-    }
-
     [[nodiscard]] int getObjectsCount() {
         return static_cast<int>(m_objects.size());
     }
@@ -155,10 +155,6 @@ public:
         return m_sizeI;
     }
 
-    void removeObjects() {
-        m_objects.clear();
-    }
-
     void runObjectTicks() {
         forEachObject([](BaseObject &object, int ind) {
             object.v_onTick();
@@ -167,11 +163,6 @@ public:
 
     template<typename T>
     void forEachInRadius(Vector2F pos, float radius, const T &callback) {
-//        forEachBasicDetails([&](BasicDetails &details, int ind) {
-//            if ((details.m_posCurr - pos).magnitude2() < radius * radius) {
-//                m_callback(details.m_parent, ind);
-//            }
-//        });
         m_grid.forEachInRect(
                 RectangleF::fromCoords(pos.m_x - radius, pos.m_y - radius, pos.m_x + radius, pos.m_y + radius),
                 [&](int id) {
@@ -231,12 +222,6 @@ public:
             m_objects[i]->m_basicDetails = &m_basicDetails[i];
         }
         m_objectsToRemove.clear();
-    }
-
-    void markObjectForRemoval(int index) {
-        if (std::find(m_objectsToRemove.begin(), m_objectsToRemove.end(), index) == m_objectsToRemove.end()) {
-            m_objectsToRemove.push_back(index);
-        }
     }
 
 
