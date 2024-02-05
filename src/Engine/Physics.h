@@ -114,14 +114,14 @@ private:
 //        });
 //    }
 
+    template<bool WithCallback>
     void solveContact(BasicDetails &obj1, BasicDetails &obj2) {
         const Vector2F vectorBetween = obj1.m_posCurr - obj2.m_posCurr;
         const float dist2 = vectorBetween.magnitude2();
         // Check overlapping
         if (dist2 < engineDefaults::twoObjectsRadiusSquared) {
             // TODO i should not call onCollision from here. because it is called from different threads. then removing other object from onCollision would be very risky
-            obj1.m_parent->v_onCollision(obj2.m_parent);
-            obj2.m_parent->v_onCollision(obj1.m_parent);
+
 
             const float dist = std::sqrt(dist2);
             if (dist == 0) return;
@@ -131,6 +131,10 @@ private:
             if (obj1.m_isCollisionOn && obj2.m_isCollisionOn) {
                 obj1.m_posCurr -= normal * delta;
                 obj2.m_posCurr += normal * delta;
+                if constexpr (WithCallback) {
+                    obj1.m_parent->v_onCollision(obj2.m_parent);
+                    obj2.m_parent->v_onCollision(obj1.m_parent);
+                }
             }
         }
     }
@@ -156,38 +160,41 @@ private:
 //            });
 //        });
 //    }
+    template<bool WithCallback>
     void solveCollisionsTwoCells(const Cell &cell1, const Cell &cell2) {
         for (int i = 0; i < cell1.activeCount; i++) {
             const int id1 = cell1.ids[i];
             for (int j = 0; j < cell2.activeCount; j++) {
                 const int id2 = cell2.ids[j];
                 if (id1 == id2) continue;
-                solveContact(m_scene.getBasicDetails(id1), m_scene.getBasicDetails(id2));
+                solveContact<WithCallback>(m_scene.getBasicDetails(id1), m_scene.getBasicDetails(id2));
             }
         }
     }
 
+    template<bool WithCallback>
     void solveCollisionsSubgrid(int startX, int endX, int startY, int endY) {
         for (int i = startX; i < endX; i++) {
             for (int j = startY; j < endY; j++) {
                 const Cell &cell1 = m_grid.get(i, j);
-                solveCollisionsTwoCells(cell1, cell1);
+                solveCollisionsTwoCells<WithCallback>(cell1, cell1);
                 if (i + 1 < m_grid.m_width && j - 1 >= 0) {
-                    solveCollisionsTwoCells(cell1, m_grid.get(i + 1, j - 1));
+                    solveCollisionsTwoCells<WithCallback>(cell1, m_grid.get(i + 1, j - 1));
                 }
                 if (i + 1 < m_grid.m_width) {
-                    solveCollisionsTwoCells(cell1, m_grid.get(i + 1, j));
+                    solveCollisionsTwoCells<WithCallback>(cell1, m_grid.get(i + 1, j));
                 }
                 if (i + 1 < m_grid.m_width && j + 1 < m_grid.m_height) {
-                    solveCollisionsTwoCells(cell1, m_grid.get(i + 1, j + 1));
+                    solveCollisionsTwoCells<WithCallback>(cell1, m_grid.get(i + 1, j + 1));
                 }
                 if (j + 1 < m_grid.m_height) {
-                    solveCollisionsTwoCells(cell1, m_grid.get(i, j + 1));
+                    solveCollisionsTwoCells<WithCallback>(cell1, m_grid.get(i, j + 1));
                 }
             }
         }
     }
 
+    template<bool WithCallback>
     void solveCollisions() {
         const int threadCount = m_threadPool.m_threadsNum;
         const int sliceCount = threadCount * 2;
@@ -197,7 +204,7 @@ private:
             m_threadPool.addTask([i, sliceSize, this]() {
                 int startCol = (i * 2) * sliceSize;
                 int endCol = startCol + sliceSize;
-                solveCollisionsSubgrid(startCol, endCol, 0, m_grid.m_height);
+                solveCollisionsSubgrid<WithCallback>(startCol, endCol, 0, m_grid.m_height);
             });
         }
         m_threadPool.waitForCompletion();
@@ -206,7 +213,7 @@ private:
             m_threadPool.addTask([i, sliceSize, this]() {
                 int startCol = (i * 2 + 1) * sliceSize;
                 int endCol = startCol + sliceSize;
-                solveCollisionsSubgrid(startCol, endCol, 0, m_grid.m_height);
+                solveCollisionsSubgrid<WithCallback>(startCol, endCol, 0, m_grid.m_height);
             });
         };
         m_threadPool.waitForCompletion();
@@ -215,7 +222,7 @@ private:
             m_threadPool.addTask([sliceSize, sliceCount, this]() {
                 int startCol = sliceSize * sliceCount;
                 int endCol = m_grid.m_width;
-                solveCollisionsSubgrid(startCol, endCol, 0, m_grid.m_height);
+                solveCollisionsSubgrid<WithCallback>(startCol, endCol, 0, m_grid.m_height);
             });
         }
         m_threadPool.waitForCompletion();
@@ -255,7 +262,11 @@ public:
 
             if (localCollisionsEnabled) {
                 m_performanceMonitor.start("collisions");
-                solveCollisions();
+                if (i == 0) {
+                    solveCollisions<true>();
+                } else {
+                    solveCollisions<false>();
+                }
                 m_performanceMonitor.end("collisions");
             }
         }
