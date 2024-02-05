@@ -21,6 +21,9 @@ private:
     float m_linearDamping = engineDefaults::linearDamping;
     float m_wallsDamping = engineDefaults::wallsDamping;
 
+    int m_subStepsCallbackInterval = 1;
+    int m_subStepsCallbackCounter = 0;
+
     void updatePositionsConstraint(float dt) {
         const Vector2F size = m_scene.getSizeF();
         const int objectsCount = m_scene.getObjectsCount();
@@ -70,50 +73,6 @@ private:
         });
     }
 
-//    void applyGravity() {
-//        m_threadPool.dispatch(m_scene.getObjectsCount(), [this](int start, int end) {
-//            m_scene.forEachObject([](BaseObject& object, int i) {
-//                if (!object.m_isPinned) object.accelerate(m_gravity);
-//            }, start, end);
-//        });
-//    }
-//
-//    void applyConstraints() {
-//        const Rectangle bounds = m_scene.getSizeF();
-//        const int m_objectsCount = m_scene.getObjectsCount();
-//        m_threadPool.dispatch(m_objectsCount, [this, &bounds](int start, int end) {
-//            m_scene.forEachObject([&bounds](BaseObject& object, int i) {
-//                // problem was that for example: m_scene is 100x100. Then both m_objects are outside of field on same m_direction, like obj1(101.256, 102.399) and obj2(105.936, 110.87). both will be pushed to (100,100) resulting in zero distance.
-//                // offset is trying to fix this problem
-//                const float offset = static_cast<float>(i) * 1e-6f;
-//
-//                const Vector2F velocity = (object.m_posCurr - object.m_posOld) * m_wallsDamping;
-//                if (object.m_posCurr.m_x < bounds.getWorldX1() + objectsRadius) {
-//                    object.m_posCurr.m_x = bounds.getWorldX1() + objectsRadius + offset;
-//                    object.m_posOld.m_x = object.m_posCurr.m_x + velocity.m_x;
-//                } else if (object.m_posCurr.m_x > bounds.getX2() - objectsRadius) {
-//                    object.m_posCurr.m_x = bounds.getX2() - objectsRadius - offset;
-//                    object.m_posOld.m_x = object.m_posCurr.m_x + velocity.m_x;
-//                }
-//
-//                if (object.m_posCurr.m_y < bounds.getWorldY1() + objectsRadius) {
-//                    object.m_posCurr.m_y = bounds.getWorldY1() + objectsRadius + offset;
-//                    object.m_posOld.m_y = object.m_posCurr.m_y + velocity.m_y;
-//                } else if (object.m_posCurr.m_y > bounds.getY2() - objectsRadius) {
-//                    object.m_posCurr.m_y = bounds.getY2() - objectsRadius - offset;
-//                    object.m_posOld.m_y = object.m_posCurr.m_y + velocity.m_y;
-//                }
-//            }, start, end);
-//        });
-//    }
-//    void updatePositions(float dt) {
-//        m_threadPool.dispatch(m_scene.getObjectsCount(), [this, dt](int start, int end) {
-//            m_scene.forEachObject([dt](BaseObject& object, int i) {
-//                if (!object.m_isPinned) object.update(dt);
-//            }, start, end);
-//        });
-//    }
-
     template<bool WithCallback>
     void solveContact(BasicDetails &obj1, BasicDetails &obj2) {
         const Vector2F vectorBetween = obj1.m_posCurr - obj2.m_posCurr;
@@ -138,28 +97,7 @@ private:
             }
         }
     }
-//    void solveContact(BaseObject &obj1, BaseObject &obj2) {
-//        Vector2F move = obj1.m_posCurr - obj2.m_posCurr;
-//        const float dist2 = move.magnitude2();
-//        const float min_dist = obj1.radius + obj2.radius;
-//        // Check overlapping
-//        if (dist2 < min_dist * min_dist) {
-//            const float dist = sqrt(dist2);
-//            move *= 0.5f * m_collisionRestitution * (dist - min_dist) / dist;
-//            // Update positions
-//            if (!obj1.m_isPinned) obj1.m_posCurr -= move;
-//            if (!obj2.m_isPinned) obj2.m_posCurr += move;
-//        }
-//    }
 
-//    void solveCollisionsTwoCells(const Cell &cell1, const Cell &cell2) {
-//        cell1.forEachId([&](int id1, int i){
-//            cell2.forEachId([&](int id2, int i){
-//                if (id1 == id2) return;
-//                solveContact(m_scene.getObject(id1), m_scene.getObject(id2));
-//            });
-//        });
-//    }
     template<bool WithCallback>
     void solveCollisionsTwoCells(const Cell &cell1, const Cell &cell2) {
         for (int i = 0; i < cell1.activeCount; i++) {
@@ -227,18 +165,6 @@ private:
         }
         m_threadPool.waitForCompletion();
     }
-
-
-//    void rebuildGrid() {
-//        m_grid.clear();
-//        m_threadPool.dispatch(m_scene.getObjectsCount(), [this](int start, int end){
-//            m_scene.forEachObject([this](BaseObject& object, int i) {
-//                m_grid.insert(i, object.m_posCurr.m_x, object.m_posCurr.m_y);
-//            }, start, end);
-//        });
-//    }
-
-
 public:
     explicit Physics(Scene &scene, ThreadPool &threadPool, PerformanceMonitor &performanceMonitor)
             : m_scene(scene),
@@ -262,11 +188,12 @@ public:
 
             if (localCollisionsEnabled) {
                 m_performanceMonitor.start("collisions");
-                if (i == 0) {
+                if (m_subStepsCallbackCounter % m_subStepsCallbackInterval == 0) {
                     solveCollisions<true>();
                 } else {
                     solveCollisions<false>();
                 }
+                m_subStepsCallbackCounter++;
                 m_performanceMonitor.end("collisions");
             }
         }
@@ -288,6 +215,17 @@ public:
 
     void setCollisionsEnabled(bool enabled) {
         m_collisionsEnabled = enabled;
+    }
+
+    // sets interval of how often onCollision callback will be called (in substeps)
+    // if set to 1, then onCollision will be called on every substep
+    // done to avoid calling onCollision too often (it's virtual method call, can be very slow)
+    void setSubStepsCallbackInterval(int value) {
+        m_subStepsCallbackInterval = value;
+    }
+
+    [[nodiscard]] int getSubStepsCallbackInterval() const {
+        return m_subStepsCallbackInterval;
     }
 
     [[nodiscard]] bool getCollisionsEnabled() const {
@@ -360,4 +298,78 @@ public:
     Physics& operator=(Physics&&) = delete;
 };
 
-// m_grid(),
+//    void applyGravity() {
+//        m_threadPool.dispatch(m_scene.getObjectsCount(), [this](int start, int end) {
+//            m_scene.forEachObject([](BaseObject& object, int i) {
+//                if (!object.m_isPinned) object.accelerate(m_gravity);
+//            }, start, end);
+//        });
+//    }
+//
+//    void applyConstraints() {
+//        const Rectangle bounds = m_scene.getSizeF();
+//        const int m_objectsCount = m_scene.getObjectsCount();
+//        m_threadPool.dispatch(m_objectsCount, [this, &bounds](int start, int end) {
+//            m_scene.forEachObject([&bounds](BaseObject& object, int i) {
+//                // problem was that for example: m_scene is 100x100. Then both m_objects are outside of field on same m_direction, like obj1(101.256, 102.399) and obj2(105.936, 110.87). both will be pushed to (100,100) resulting in zero distance.
+//                // offset is trying to fix this problem
+//                const float offset = static_cast<float>(i) * 1e-6f;
+//
+//                const Vector2F velocity = (object.m_posCurr - object.m_posOld) * m_wallsDamping;
+//                if (object.m_posCurr.m_x < bounds.getWorldX1() + objectsRadius) {
+//                    object.m_posCurr.m_x = bounds.getWorldX1() + objectsRadius + offset;
+//                    object.m_posOld.m_x = object.m_posCurr.m_x + velocity.m_x;
+//                } else if (object.m_posCurr.m_x > bounds.getX2() - objectsRadius) {
+//                    object.m_posCurr.m_x = bounds.getX2() - objectsRadius - offset;
+//                    object.m_posOld.m_x = object.m_posCurr.m_x + velocity.m_x;
+//                }
+//
+//                if (object.m_posCurr.m_y < bounds.getWorldY1() + objectsRadius) {
+//                    object.m_posCurr.m_y = bounds.getWorldY1() + objectsRadius + offset;
+//                    object.m_posOld.m_y = object.m_posCurr.m_y + velocity.m_y;
+//                } else if (object.m_posCurr.m_y > bounds.getY2() - objectsRadius) {
+//                    object.m_posCurr.m_y = bounds.getY2() - objectsRadius - offset;
+//                    object.m_posOld.m_y = object.m_posCurr.m_y + velocity.m_y;
+//                }
+//            }, start, end);
+//        });
+//    }
+//    void updatePositions(float dt) {
+//        m_threadPool.dispatch(m_scene.getObjectsCount(), [this, dt](int start, int end) {
+//            m_scene.forEachObject([dt](BaseObject& object, int i) {
+//                if (!object.m_isPinned) object.update(dt);
+//            }, start, end);
+//        });
+//    }
+
+//    void solveContact(BaseObject &obj1, BaseObject &obj2) {
+//        Vector2F move = obj1.m_posCurr - obj2.m_posCurr;
+//        const float dist2 = move.magnitude2();
+//        const float min_dist = obj1.radius + obj2.radius;
+//        // Check overlapping
+//        if (dist2 < min_dist * min_dist) {
+//            const float dist = sqrt(dist2);
+//            move *= 0.5f * m_collisionRestitution * (dist - min_dist) / dist;
+//            // Update positions
+//            if (!obj1.m_isPinned) obj1.m_posCurr -= move;
+//            if (!obj2.m_isPinned) obj2.m_posCurr += move;
+//        }
+//    }
+
+//    void solveCollisionsTwoCells(const Cell &cell1, const Cell &cell2) {
+//        cell1.forEachId([&](int id1, int i){
+//            cell2.forEachId([&](int id2, int i){
+//                if (id1 == id2) return;
+//                solveContact(m_scene.getObject(id1), m_scene.getObject(id2));
+//            });
+//        });
+//    }
+
+//    void rebuildGrid() {
+//        m_grid.clear();
+//        m_threadPool.dispatch(m_scene.getObjectsCount(), [this](int start, int end){
+//            m_scene.forEachObject([this](BaseObject& object, int i) {
+//                m_grid.insert(i, object.m_posCurr.m_x, object.m_posCurr.m_y);
+//            }, start, end);
+//        });
+//    }
