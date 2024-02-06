@@ -57,7 +57,7 @@ private:
                     object.m_posCurr.m_x = minX + offset;
                     object.m_posOld.m_x = object.m_posCurr.m_x + newVelocity.m_x;
                 } else if (object.m_posCurr.m_x > maxX) {
-                    object.m_posCurr.m_x = maxX - engineDefaults::objectsRadius - offset;
+                    object.m_posCurr.m_x = maxX - offset;
                     object.m_posOld.m_x = object.m_posCurr.m_x + newVelocity.m_x;
                 }
 
