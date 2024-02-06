@@ -1,21 +1,15 @@
 #pragma once
-#include <SFML/Audio.hpp>
+
+#include <memory>
+#include "SoundManagerImpl.h"
 
 class SoundManager {
-    sf::Music m_music;
-
+private:
+    std::shared_ptr<SoundManagerImpl> m_impl;
 public:
-    SoundManager() = default;
+    SoundManager() : m_impl(std::make_shared<SoundManagerImpl>()) {}
 
-    void play(const std::string& path) {
-        if (!m_music.openFromFile(path)) {
-            throw std::runtime_error("Sound file could not be loaded" + path);
-        }
-        m_music.play();
+    [[nodiscard]] SMHandle play(const std::string& path) {
+        return m_impl->play(path);
     }
-
-    SoundManager(const SoundManager &) = delete;
-    SoundManager& operator=(const SoundManager &) = delete;
-    SoundManager(SoundManager &&) = delete;
-    SoundManager& operator=(SoundManager &&) = delete;
 };

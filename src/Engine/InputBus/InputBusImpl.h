@@ -28,8 +28,9 @@ public:
         m_eventHandlers.clear();
     };
 
-    IBHandle addEventListener(sf::Event::EventType type, const std::function<void(const sf::Event &)>& callback) {
-        m_eventHandlers[type][m_keyCounter] = callback;
+    template<typename T>
+    IBHandle addEventListener(sf::Event::EventType type, T&& callback) {
+        m_eventHandlers[type][m_keyCounter] = std::forward<T>(callback);
         return {weak_from_this(), type, m_keyCounter++};
     };
 

@@ -3,6 +3,7 @@
 #include <stdexcept>
 #include <vector>
 #include <array>
+#include <functional>
 #include "../utils/Rectangle.h"
 
 //struct Cell {
@@ -34,7 +35,7 @@
 
 // this cell  uses fixed size array - more performant. but it relies on fact that only 4 m_objects can fit in one cell (all should have same radius). Commented one - vector, which allows different radiuses.
 struct Cell {
-    std::array<int, 4> ids = {0,0,0,0};  // Fixed-size array
+    std::array<int, 4> ids = {0, 0, 0, 0};  // Fixed-size array
     char activeCount = 0;  // Keeps track of how many ids are currently active.
 
     void insert(int id) {
@@ -66,10 +67,10 @@ struct IdGrid {
     int m_height;
     int m_realWidth;
     int m_realHeight;
-    float m_widthRatio;
-    float m_heightRatio;
-    float m_inverseWidthRatio;
-    float m_inverseHeightRatio;
+    float m_cellWidth;
+    float m_cellHeight;
+    float m_cellWidthInverse;
+    float m_cellHeightInverse;
     std::vector<Cell> m_data;
     int m_length;
 
@@ -77,23 +78,26 @@ struct IdGrid {
         m_realWidth = realSize.m_x;
         m_realHeight = realSize.m_y;
 
-        m_widthRatio = static_cast<float>(m_realWidth) / static_cast<float>(width);
-        m_heightRatio = static_cast<float>(m_realHeight) / static_cast<float>(height);
-        m_inverseWidthRatio = 1 / m_widthRatio;
-        m_inverseHeightRatio = 1 / m_heightRatio;
+        m_cellWidth = static_cast<float>(m_realWidth) / static_cast<float>(width);
+        m_cellHeight = static_cast<float>(m_realHeight) / static_cast<float>(height);
+        m_cellWidthInverse = 1 / m_cellWidth;
+        m_cellHeightInverse = 1 / m_cellHeight;
 
         m_length = width * height;
         m_data.resize(m_length);
     }
 
+    // this method is called huge number of times
     void insert(int id, float realX, float realY) {
         // Convert real-m_scene coordinates to m_grid coordinates
-        const int gridX = static_cast<int>(realX * m_inverseWidthRatio);
-        const int gridY = static_cast<int>(realY * m_inverseHeightRatio);
+        const int gridX = static_cast<int>(realX * m_cellWidthInverse);
+        const int gridY = static_cast<int>(realY * m_cellHeightInverse);
 
         // TODO remove checks - they are for debuggin
         if (gridX < 0 || gridX >= m_width || gridY < 0 || gridY >= m_height) {
-            throw std::runtime_error("Trying to set outside the m_grid. Grid m_x: " + std::to_string(gridX) + " Grid m_y: " + std::to_string(gridY) + " Id: " + std::to_string(id));
+            throw std::runtime_error(
+                    "Trying to set outside the m_grid. Grid m_x: " + std::to_string(gridX) + " Grid m_y: " +
+                    std::to_string(gridY) + " Id: " + std::to_string(id));
         }
 
         const int index = gridY * m_width + gridX;
@@ -113,7 +117,7 @@ struct IdGrid {
         }
     }
 
-    [[nodiscard]] const Cell& get(int gridX, int gridY) const {
+    [[nodiscard]] const Cell &get(int gridX, int gridY) const {
         // TODO remove safety checks
         if (gridX < 0 || gridX >= m_width || gridY < 0 || gridY >= m_height) {
             throw std::runtime_error("Trying to get outside the m_grid.");
@@ -122,22 +126,84 @@ struct IdGrid {
         return m_data[index];
     }
 
+    [[nodiscard]] int realXToGridX(float realX) const {
+        return static_cast<int>(realX * m_cellWidthInverse);
+    }
+
+    [[nodiscard]] int realYToGridY(float realY) const {
+        return static_cast<int>(realY * m_cellHeightInverse);
+    }
+
     // it's not precise iterator. it just uses m_grid cells to iterate. So it's not precise, but it's fast. To actually iterate precise, needs more checks (it's just a broad phase)
-    template<typename Func>
-    void forEachInRect(RectangleF rect, Func &&callback) {
-        const int startGridX = std::max(0, static_cast<int>(rect.getX1() * m_inverseWidthRatio));
-        const int endGridX = std::min(m_width - 1, static_cast<int>(rect.getX2() * m_inverseWidthRatio));
-        const int startGridY = std::max(0, static_cast<int>(rect.getY1() * m_inverseHeightRatio));
-        const int endGridY = std::min(m_height - 1, static_cast<int>(rect.getY2() * m_inverseHeightRatio));
+    template<typename T>
+    void forEachInRect(RectangleF rect, const T &callback) const {
+        const int startGridX = std::max(0, realXToGridX(rect.getX1()));
+        const int endGridX = std::min(m_width - 1, realXToGridX(rect.getX2()));
+        const int startGridY = std::max(0, realYToGridY(rect.getY1()));
+        const int endGridY = std::min(m_height - 1, realYToGridY(rect.getY2()));
 
         for (int i = startGridX; i <= endGridX; i++) {
             for (int j = startGridY; j <= endGridY; j++) {
-                const Cell &cell = get(i,j);
+                const Cell &cell = get(i, j);
 
                 for (int k = 0; k < cell.activeCount; k++) {
                     callback(cell.ids[k]);
                 }
             }
+        }
+    }
+
+    // it's not precise. it's just a broad phase.
+    // Iterates on every id in cells around line.
+    // uses DDA algorithm, but with vectors.
+    // this iterator is conservative (it can iterate more than needed, but not less)
+    // to achieve it, it uses 1 cell around all cells that line passes through
+    // it was important to avoid duplicate iterations.
+    // To avoid them, it uses prevGridX and prevGridY
+    template<typename T>
+    void forEachAroundLine(Vector2F start, Vector2F end, const T &callback) const {
+        Vector2F startGrid = start * m_cellWidthInverse;
+        Vector2F endGrid = end * m_cellHeightInverse;
+        Vector2F deltaGrid = endGrid - startGrid;
+
+        int steps;
+
+        if (std::abs(deltaGrid.m_x) > std::abs(deltaGrid.m_y)) {
+            steps = static_cast<int>(std::abs(deltaGrid.m_x));
+        } else {
+            steps = static_cast<int>(std::abs(deltaGrid.m_y));
+        }
+
+        Vector2F increment = deltaGrid / static_cast<float>(steps);
+
+        Vector2F current = startGrid;
+
+        int prevGridX = -1000;
+        int prevGridY = -1000;
+
+        for (int i = 0; i < steps; i++) {
+            int gridX = static_cast<int>(current.m_x);
+            int gridY = static_cast<int>(current.m_y);
+
+            for (int column = gridX - 1; column <= gridX + 1; column++) {
+                for (int row = gridY - 1; row <= gridY + 1; row++) {
+                    if (
+                            column >= prevGridX - 1 && column <= prevGridX + 1 &&
+                            row >= prevGridY - 1 && row <= prevGridY + 1
+                            ) {
+                        continue;
+                    }
+                    const Cell &cell = get(column, row);
+                    for (int k = 0; k < cell.activeCount; k++) {
+                        callback(cell.ids[k]);
+                    }
+                }
+            }
+
+
+            current += increment;
+            prevGridX = gridX;
+            prevGridY = gridY;
         }
     }
 };

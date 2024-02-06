@@ -9,11 +9,17 @@ private:
 public:
 
     constexpr static Rectangle fromCoords(T x1, T y1, T x2, T y2) {
+        if (x1 > x2) {
+            std::swap(x1, x2);
+        }
+        if (y1 > y2) {
+            std::swap(y1, y2);
+        }
         return {x1, y1, x2, y2};
     }
 
     constexpr static Rectangle fromCoords(Vector2<T> p1, Vector2<T> p2) {
-        return {p1.m_x, p1.m_y, p2.m_x, p2.m_y};
+        return fromCoords(p1.m_x, p1.m_y, p2.m_x, p2.m_y);
     }
 
     constexpr static Rectangle fromSize(T x1, T y1, T width, T height) {

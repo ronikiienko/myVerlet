@@ -2,7 +2,7 @@
 
 #include <vector>
 #include <bits/shared_ptr.h>
-#include "BaseObject.h"
+#include "BaseObject/BaseObject.h"
 #include "EngineConsts.h"
 #include "utils/Grid.h"
 #include "Camera.h"
@@ -13,8 +13,9 @@
 class Scene {
 private:
     std::vector<std::shared_ptr<BaseObject>> m_objects;
-    std::vector<BasicDetails> m_basicDetails;
     std::vector<int> m_objectsToRemove;
+    std::vector<int> m_objectsWithRotation;
+    std::vector<BasicDetails> m_basicDetails;
     Vector2F m_sizeF;
     Vector2I m_sizeI;
     Camera m_camera;
@@ -26,10 +27,41 @@ private:
     // Conclusion: best if m_grid is divided by threads * 2 without remainder
     int m_collisionGridWidth = m_sizeI.m_x / (engineDefaults::objectsRadius * 2);
     int m_collisionGridHeight = m_sizeI.m_y / (engineDefaults::objectsRadius * 2);
-public:
-    IdGrid grid{m_collisionGridWidth, m_collisionGridHeight, getSizeI()};
 
-    explicit Scene(float cameraMaxWorldViewSize, Vector2F cameraPosition, InputBus& inputBus, sf::RenderWindow& window, ThreadPool &threadPool, PerformanceMonitor &performanceMonitor,
+    void markObjectForRemoval(int index) {
+        if (std::find(m_objectsToRemove.begin(), m_objectsToRemove.end(), index) == m_objectsToRemove.end()) {
+            m_objectsToRemove.push_back(index);
+        }
+    }
+
+    int getIndexByPtr(BaseObject *ptr) {
+        auto it = m_objects.end();
+        for (auto i = m_objects.begin(); i != m_objects.end(); i++) {
+            if (i->get() == ptr) {
+                it = i;
+                break;
+            }
+        }
+        if (it == m_objects.end()) {
+            throw std::runtime_error("Trying to get index of ptr to object that does not exist");
+        }
+        return static_cast<int>(it - m_objects.begin());
+    }
+
+    int getIndexByPtr(std::weak_ptr<BaseObject> &ptr) {
+        auto it = std::find(m_objects.begin(), m_objects.end(), ptr.lock());
+        if (it == m_objects.end()) {
+            throw std::runtime_error("Trying to get index of ptr to object that does not exist");
+        }
+        return static_cast<int>(it - m_objects.begin());
+    }
+
+public:
+
+    IdGrid m_grid{m_collisionGridWidth, m_collisionGridHeight, getSizeI()};
+
+    explicit Scene(float cameraMaxWorldViewSize, Vector2F cameraPosition, InputBus &inputBus, sf::RenderWindow &window,
+                   ThreadPool &threadPool, PerformanceMonitor &performanceMonitor,
                    int maxObjectsNum, Vector2I size) :
             m_sizeF(Vector2F::fromOther(size)),
             m_sizeI(size),
@@ -42,9 +74,19 @@ public:
         m_objectsToRemove.reserve(maxObjectsNum);
     }
 
+    void toggleObjectRotation(BaseObject *ptr, bool enabled) {
+        int index = getIndexByPtr(ptr);
+        auto it = std::find(m_objectsWithRotation.begin(), m_objectsWithRotation.end(), index);
+        if (it == m_objectsWithRotation.end() && enabled) {
+            m_objectsWithRotation.push_back(index);
+        } else if (!enabled) {
+            m_objectsWithRotation.erase(it);
+        }
+    }
+
     template<typename T>
     std::weak_ptr<BaseObject> addObject(T &&object, Vector2F position) {
-        if (m_objects.size() >= m_maxObjectsNum) {
+        if (m_objects.size() > m_maxObjectsNum) {
             throw std::runtime_error("Exceeded Scene capacity");
         }
 
@@ -64,9 +106,9 @@ public:
         return m_camera;
     }
 
-
-    template<typename Func>
-    void forEachObject(Func &&callback, int start = 0, int end = -1) {
+    // as i've discovered.. std::function HAS overhead. It was taking around 2 fps. So, i use T here. for performance-critical code parts better to not use std::function
+    template<typename T>
+    void forEachObject(const T &callback, int start = 0, int end = -1) {
         if (end == -1) {
             end = static_cast<int>(m_objects.size());
         }
@@ -76,14 +118,25 @@ public:
         }
     }
 
-    template<typename Func>
-    void forEachBasicDetails(Func &&callback, int start = 0, int end = -1) {
+    template<typename T>
+    void forEachBasicDetails(const T &callback, int start = 0, int end = -1) {
         if (end == -1) {
             end = static_cast<int>(m_basicDetails.size());
         }
 
         for (int i = start; i < end; i++) {
             callback(m_basicDetails[i], i);
+        }
+    }
+
+    template<typename T>
+    void forEachBasicDetailsWithRotation(const T &callback, int start = 0, int end = -1) {
+        if (end == -1) {
+            end = static_cast<int>(m_basicDetails.size());
+        }
+
+        for (int i = start; i < end; i++) {
+            callback(m_basicDetails[m_objectsWithRotation[i]], i);
         }
     }
 
@@ -96,12 +149,12 @@ public:
         return m_basicDetails[ind];
     }
 
-    void clear() {
-        m_objects.clear();
-    }
-
     [[nodiscard]] int getObjectsCount() {
         return static_cast<int>(m_objects.size());
+    }
+
+    [[nodiscard]] int getObjectsWithRotationCount() const {
+        return static_cast<int>(m_objectsWithRotation.size());
     }
 
     [[nodiscard]] Vector2F &getSizeF() {
@@ -112,61 +165,74 @@ public:
         return m_sizeI;
     }
 
-    void removeObjects() {
-        m_objects.clear();
-    }
-
     void runObjectTicks() {
         forEachObject([](BaseObject &object, int ind) {
             object.v_onTick();
         });
     }
 
-    // TODO not copy m_callback
-    void forEachInRadius(Vector2F pos, float radius, std::function<void(BaseObject *, int)> callback) {
-//        forEachBasicDetails([&](BasicDetails &details, int ind) {
-//            if ((details.m_posCurr - pos).magnitude2() < radius * radius) {
-//                m_callback(details.m_parent, ind);
-//            }
-//        });
-        grid.forEachInRect(RectangleF::fromCoords(pos.m_x - radius, pos.m_y - radius, pos.m_x + radius, pos.m_y + radius),
-                           [&](int id) {
-                               if ((m_basicDetails[id].m_posCurr - pos).magnitude2() < radius * radius) {
-                                   callback(m_basicDetails[id].m_parent, id);
-                               }
-                           });
+    template<typename T>
+    void forEachInRadius(Vector2F pos, float radius, const T &callback) {
+        m_grid.forEachInRect(
+                RectangleF::fromCoords(pos.m_x - radius, pos.m_y - radius, pos.m_x + radius, pos.m_y + radius),
+                [&](int id) {
+                    if ((m_basicDetails[id].m_posCurr - pos).magnitude2() < radius * radius) {
+                        callback(m_basicDetails[id].m_parent, id);
+                    }
+                });
     }
 
+    template<typename T>
+    void lineTrace(Vector2F start, Vector2F end, const T &callback) {
+        Vector2F lineVector = end - start;
+        float lineLength = lineVector.magnitude();
+        Vector2F lineVectorNormalized = lineVector / lineLength;
+
+        m_grid.forEachAroundLine(start, end, [&](int id) {
+            BasicDetails &basicDetails = m_basicDetails[id];
+            Vector2F startToObject = basicDetails.m_posCurr - start;
+            float projectionLength = startToObject.dot(lineVectorNormalized);
+            if (projectionLength >= 0 && projectionLength < lineLength) {
+                Vector2F centerProjectionOnRay = start + lineVectorNormalized * projectionLength;
+                float centerToCenterProjectionMagnitude2 = (basicDetails.m_posCurr -
+                                                            centerProjectionOnRay).magnitude2();
+                bool isInside = centerToCenterProjectionMagnitude2 < engineDefaults::objectsRadiusSquared;
+                if (isInside) {
+                    callback(basicDetails.m_parent, id);
+                }
+            }
+        });
+
+//        m_grid.forEachAroundLine(start, end, [&](int id) {
+//            BasicDetails &basicDetails = m_basicDetails[id];
+//            callback(basicDetails.m_parent, id);
+//        });
+    }
 
     void removeMarkedObjects() {
-        // need to sort m_objectsToRemove in descending order
-
         if (m_objectsToRemove.empty()) {
             return;
         }
-        // sort in descending order to avoid shifting
-        // example of shifting:
-        // need to remove two objects, with indexes 10 and 15
-        // if we remove 10 first, then 15 will become 14, and we will remove wrong object
-        std::sort(m_objectsToRemove.begin(), m_objectsToRemove.end(), std::greater<>());
 
-        // erasing each element requires all elements after it to be shifted, so it's pretty long
-        // but probably removing won't happen too often, so it's ok
+        // use swap & pop to remove objects without a lot of shifting
         for (int i: m_objectsToRemove) {
-            m_objects.erase(m_objects.begin() + i);
-            m_basicDetails.erase(m_basicDetails.begin() + i);
-        }
-
-        for (int i = 0; i < m_objects.size(); i++) {
+            for (int j = getObjectsWithRotationCount() - 1; j >= 0; j--) {
+                if (m_objectsWithRotation[j] == i) {
+                    std::swap(m_objectsWithRotation[j], m_objectsWithRotation.back());
+                    m_objectsWithRotation.pop_back();
+                    continue;
+                }
+                if (m_objectsWithRotation[j] == getObjectsCount() - 1) {
+                    m_objectsWithRotation[j] = i;
+                }
+            }
+            std::swap(m_objects[i], m_objects.back());
+            std::swap(m_basicDetails[i], m_basicDetails.back());
+            m_objects.pop_back();
+            m_basicDetails.pop_back();
             m_objects[i]->m_basicDetails = &m_basicDetails[i];
         }
         m_objectsToRemove.clear();
-    }
-
-    void markObjectForRemoval(int index) {
-        if (std::find(m_objectsToRemove.begin(), m_objectsToRemove.end(), index) == m_objectsToRemove.end()) {
-            m_objectsToRemove.push_back(index);
-        }
     }
 
 
@@ -175,50 +241,46 @@ public:
     }
 
     void removeObject(std::weak_ptr<BaseObject> &ptr) {
-        auto it = std::find(m_objects.begin(), m_objects.end(), ptr.lock());
-        if (it != m_objects.end()) {
-            int index = static_cast<int>(it - m_objects.begin());
-            markObjectForRemoval(index);
-        }
+        int index = getIndexByPtr(ptr);
+        markObjectForRemoval(index);
     }
 
     // theres was bug: if you remove an object during m_physics calculations, it will cause some m_grid m_objects to become invalid (because everything is shifted), and m_grid uses id's
     // this can happen primarily if we for example remove an object in collision m_callback
     // to fix this we  use a stack of m_objects to remove, and remove them after m_physics calculations (and input handling)
     void removeObject(BaseObject *ptr) {
-        auto it = m_objects.end();
-        for (auto i = m_objects.begin(); i != m_objects.end(); i++) {
-            if (i->get() == ptr) {
-                it = i;
-                break;
-            }
-        }
-        if (it != m_objects.end()) {
-            int index = static_cast<int>(it - m_objects.begin());
-            markObjectForRemoval(index);
-        }
+        int index = getIndexByPtr(ptr);
+        markObjectForRemoval(index);
     }
 
     void rebuildGrid() {
-        m_performanceMonitor.start("grid clear");
-        m_threadPool.dispatch(grid.m_length, [this](int start, int end) {
-            grid.clear(start, end);
+        m_performanceMonitor.start("m_grid clear");
+        m_threadPool.dispatch(m_grid.m_length, [this](int start, int end) {
+            m_grid.clear(start, end);
         });
-        m_performanceMonitor.end("grid clear");
-        m_performanceMonitor.start("grid build");
+        m_performanceMonitor.end("m_grid clear");
+        m_performanceMonitor.start("m_grid build");
         m_threadPool.dispatch(static_cast<int>(m_basicDetails.size()), [this](int start, int end) {
             for (int i = start; i < end; i++) {
-                grid.insert(i, m_basicDetails[i].m_posCurr.m_x, m_basicDetails[i].m_posCurr.m_y);
+                m_grid.insert(i, m_basicDetails[i].m_posCurr.m_x, m_basicDetails[i].m_posCurr.m_y);
             }
         });
 //        forEachBasicDetails([this](BasicDetails &object, int i) {
-//            grid.insert(i, object.m_posCurr.m_x, object.m_posCurr.m_y);
+//            m_grid.insert(i, object.m_posCurr.m_x, object.m_posCurr.m_y);
 //        });
-        m_performanceMonitor.end("grid build");
+        m_performanceMonitor.end("m_grid build");
     }
 
-    Scene(const Scene&) = delete;
-    Scene(Scene&&) = delete;
-    Scene& operator=(const Scene&) = delete;
-    Scene& operator=(Scene&&) = delete;
+    ObjectContext getObjectContext() {
+        return ObjectContext{*this};
+    };
+
+
+    Scene(const Scene &) = delete;
+
+    Scene(Scene &&) = delete;
+
+    Scene &operator=(const Scene &) = delete;
+
+    Scene &operator=(Scene &&) = delete;
 };

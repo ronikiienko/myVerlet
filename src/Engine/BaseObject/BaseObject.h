@@ -2,7 +2,7 @@
 
 
 #include "SFML/Graphics/Color.hpp"
-#include "EngineConsts.h"
+#include "../EngineConsts.h"
 
 class BaseObject;
 
@@ -12,6 +12,8 @@ public:
     Vector2F m_posCurr, m_posOld, m_acceleration = Vector2F::cart();
     sf::Color m_color = sf::Color::White;
     bool m_isPinned = false;
+    bool m_isCollisionOn = true;
+    Vector2F m_direction = Vector2F::polar(1, Angle::fromDegrees(0));
 
     void setVelocity(Vector2F v) {
         m_posOld = m_posCurr - v;
@@ -65,14 +67,32 @@ public:
     }
 };
 
+class Scene;
+
+struct ObjectContext {
+    explicit ObjectContext(Scene& scene) : m_scene(scene) {};
+    Scene& m_scene;
+};
 
 class BaseObject {
-public:
+private:
     BasicDetails* m_basicDetails = nullptr;
-
+public:
+    Scene& m_scene;
+    [[nodiscard]] BasicDetails& getBasicDetails() const {
+//        if (m_scene == nullptr) throw std::runtime_error("Getting scene but it's not initialized yet. Call this method only after or inside onInit()");
+        return *m_basicDetails;
+    };
     virtual void v_onTick() = 0;
     virtual void v_onInit() = 0;
     virtual void v_onCollision(BaseObject* ptr) = 0;
 
+    void destroy();
+    void toggleRotation(bool enabled);
+
     virtual ~BaseObject() = default;
+
+    explicit BaseObject(ObjectContext);
+
+    friend class Scene;
 };

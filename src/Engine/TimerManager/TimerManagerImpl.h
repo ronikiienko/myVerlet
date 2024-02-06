@@ -12,7 +12,8 @@ class TimerManagerImpl : public std::enable_shared_from_this<TimerManagerImpl> {
         int m_ticksLeft;
         std::function<void()> m_callback;
 
-        TickTimer(int ticks, const std::function<void()>& callback) : m_ticks(ticks), m_ticksLeft(ticks), m_callback(callback) {
+        template<typename T>
+        TickTimer(int ticks, T&& callback) : m_ticks(ticks), m_ticksLeft(ticks), m_callback(std::forward<T>(callback)) {
 
         }
 
@@ -49,8 +50,9 @@ public:
         }
     }
 
-    [[nodiscard]] TMHandle setTimeout(int ticks, const std::function<void()>& callback) {
-        m_tickTimers.emplace(m_keyCounter, TickTimer{ticks, callback});
+    template<typename T>
+    [[nodiscard]] TMHandle setTimeout(int ticks, T&& callback) {
+        m_tickTimers.emplace(m_keyCounter, TickTimer{ticks, std::forward<T>(callback)});
         return {weak_from_this(), false, m_keyCounter++};
     }
 
@@ -59,9 +61,9 @@ public:
     }
 
     // TODO add m_interval timer
-
-    [[nodiscard]] TMHandle setInterval(int ticks, const std::function<void()>& callback) {
-        m_tickIntervals.emplace(m_keyCounter, TickTimer{ticks, callback});
+    template<typename T>
+    [[nodiscard]] TMHandle setInterval(int ticks, T&& callback) {
+        m_tickIntervals.emplace(m_keyCounter, TickTimer{ticks, std::forward<T>(callback)});
         return {weak_from_this(), true, m_keyCounter++};
     }
 

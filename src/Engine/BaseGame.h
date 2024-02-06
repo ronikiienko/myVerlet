@@ -8,7 +8,6 @@
 #include "Physics.h"
 #include "InputBus/InputBus.h"
 #include "BaseLevel.h"
-#include "SoundManager/SoundManager.h"
 #include "TimerManager/TimerManager.h"
 #include "EngineConsts.h"
 #include "EventBus/EventBus.h"
@@ -48,7 +47,7 @@ public:
     void init() {
         v_onInit();
         if (!m_level) {
-            throw std::runtime_error("Level should be set in v_onInit() method");
+            throw std::runtime_error("Level1 should be set in v_onInit() method");
         }
         while (m_window.isOpen()) {
             m_performanceMonitor.startFrame();

@@ -6,12 +6,11 @@ set(SOURCES src/main.cpp
         src/Engine/utils/Vector.h
         src/Engine/Graphics.h
         src/Engine/Scene.h
-        src/Engine/BaseObject.h
+        src/Engine/BaseObject/BaseObject.h
         src/Engine/Physics.h
         src/Engine/utils/Rand.h
         src/Engine/utils/Rectangle.h
         src/Engine/utils/Angle.h
-        src/Engine/utils/ThreadsTest.h
         src/Engine/utils/Grid.h
         src/Engine/utils/ThreadPool.h
         src/Engine/PerformanceMonitor.h
@@ -19,15 +18,13 @@ set(SOURCES src/main.cpp
         src/Engine/Camera.h
         src/Engine/BaseLevel.h
         src/Engine/BaseGame.h
-        src/Game.h
-        src/Level.h
+        src/GameTest/Game.h
+        src/GameTest/Levels/Level1.h
         src/Engine/Modules/ExplosionHandler.h
-        src/Objects/Player.h
-        src/Engine/Modules/Shooter.h
-        src/Objects/Bullet.h
-        src/Engine/SoundManager/SoundManager.h
-        src/consts.h
-        src/Objects/EmptyObject.h
+        src/GameTest/Entities/Player.h
+        src/Engine/SoundManager/SoundManagerImpl.h
+        src/GameTest/consts.h
+        src/GameTest/Entities/EmptyObject.h
         src/Engine/EventBus/EBHandle.cpp
         src/Engine/TimerManager/TMHandle.h
         src/Engine/TimerManager/TMHandle.cpp
@@ -37,6 +34,19 @@ set(SOURCES src/main.cpp
         src/Engine/InputBus/IBHandle.cpp
         src/Engine/InputBus/InputBus.h
         src/Engine/InputBus/InputBusImpl.h
+        src/GameTest/Levels/MainMenu.h
+        src/GameTest/Events.h
+        src/GameTest/Entities/Enemy.h
+        src/GameTest/Entities/Bullet.h
+        src/Engine/Modules/Shooter.h
+        src/GameTest/Entities/Interfaces/IDamageable.h
+        src/GameTest/Levels/PerformanceTest.h
+        src/Engine/BaseObject/BaseObject.cpp
+        src/Engine/SoundManager/SoundManager.h
+        src/Engine/SoundManager/SMHandle.h
+        src/Engine/SoundManager/SMHandle.cpp
+        src/Engine/DebugGraphics.h
+        src/Engine/utils/lineClip.h
 )
 
 project(${PROJECT_NAME})

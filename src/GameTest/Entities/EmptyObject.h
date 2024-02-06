@@ -1,10 +1,10 @@
 #pragma once
 
-#include "../Engine/BaseObject.h"
+#include "../../Engine/BaseObject/BaseObject.h"
 
 class EmptyObject : public BaseObject {
 public:
-    explicit EmptyObject() : BaseObject() {}
+    explicit EmptyObject(ObjectContext context) : BaseObject(context) {}
 
     void v_onTick() override {};
     void v_onInit() override {};
