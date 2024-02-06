@@ -54,18 +54,18 @@ private:
 
                 const Vector2F newVelocity = object.getVelocity() * m_wallsDamping;
                 if (object.m_posCurr.m_x < minX) {
-                    object.m_posCurr.m_x = 0 + engineDefaults::objectsRadius + offset;
+                    object.m_posCurr.m_x = minX + offset;
                     object.m_posOld.m_x = object.m_posCurr.m_x + newVelocity.m_x;
                 } else if (object.m_posCurr.m_x > maxX) {
-                    object.m_posCurr.m_x = size.m_x - engineDefaults::objectsRadius - offset;
+                    object.m_posCurr.m_x = maxX - engineDefaults::objectsRadius - offset;
                     object.m_posOld.m_x = object.m_posCurr.m_x + newVelocity.m_x;
                 }
 
                 if (object.m_posCurr.m_y < minY) {
-                    object.m_posCurr.m_y = 0 + engineDefaults::objectsRadius + offset;
+                    object.m_posCurr.m_y = minY + offset;
                     object.m_posOld.m_y = object.m_posCurr.m_y + newVelocity.m_y;
                 } else if (object.m_posCurr.m_y > maxY) {
-                    object.m_posCurr.m_y = size.m_y - engineDefaults::objectsRadius - offset;
+                    object.m_posCurr.m_y = maxY - offset;
                     object.m_posOld.m_y = object.m_posCurr.m_y + newVelocity.m_y;
                 }
 
