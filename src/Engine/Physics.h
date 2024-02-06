@@ -79,7 +79,6 @@ private:
         const float dist2 = vectorBetween.magnitude2();
         // Check overlapping
         if (dist2 < engineDefaults::twoObjectsRadiusSquared) {
-            // TODO i should not call onCollision from here. because it is called from different threads. then removing other object from onCollision would be very risky
 
 
             const float dist = std::sqrt(dist2);
@@ -90,6 +89,7 @@ private:
             if (obj1.m_isCollisionOn && obj2.m_isCollisionOn) {
                 obj1.m_posCurr -= normal * delta;
                 obj2.m_posCurr += normal * delta;
+                // TODO i should not call onCollision from here. because it is called from different threads. then removing other object from onCollision would be very risky
                 if constexpr (WithCallback) {
                     obj1.m_parent->v_onCollision(obj2.m_parent);
                     obj2.m_parent->v_onCollision(obj1.m_parent);
