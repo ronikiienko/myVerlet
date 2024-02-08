@@ -32,6 +32,9 @@ struct LevelContext {
 class BaseLevel {
 private:
     void update() {
+        m_performanceMonitor.start("removeCollisionRecords");
+        m_physics.removeCollisionRecords();
+        m_performanceMonitor.end("removeCollisionRecords");
         m_performanceMonitor.start("removingMarked");
         m_scene.removeMarkedObjects();
         m_performanceMonitor.end("removingMarked");

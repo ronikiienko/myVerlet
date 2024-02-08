@@ -196,6 +196,14 @@ public:
         }
     }
 
+    void removeCollisionRecords() {
+        m_threadPool.dispatch(m_scene.getObjectsCount(), [this](int start, int end) {
+            m_scene.forEachBasicDetails([](BasicDetails &object, int i) {
+                object.m_collidedWith = nullptr;
+            }, start, end);
+        });
+    }
+
     // warning: if setting substeps from v_onCollision (for example), then m_subSteps number can change while update is running.
     // For that i use localSubSteps variable
     void setSubSteps(int value) {
