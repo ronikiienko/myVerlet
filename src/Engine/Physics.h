@@ -203,6 +203,7 @@ public:
     // To solve that, i created m_collidedWith pointer in BasicDetails. Then from solveContact i set it to collided object.
     // Then from onTick i can do whatever i want with it.
     // And after frame ends, i can reset all pointers so that one collision is not handled multiple times
+    // This has problem: low accuracy. Each frame collision with only one object can be handled.
     void removeCollisionRecords() {
         m_threadPool.dispatch(m_scene.getObjectsCount(), [this](int start, int end) {
             m_scene.forEachBasicDetails([](BasicDetails &object, int i) {
