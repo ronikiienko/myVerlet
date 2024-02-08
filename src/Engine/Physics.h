@@ -199,7 +199,8 @@ public:
     // First, i created onCollision virtual methods in all BaseObjects. Then from physics i called them.
     // But this had two problems: 1. they were called from different threads. 2. They were virtual, so calling them was very expensive
     // To solve that, i created m_collidedWith pointer in BasicDetails. Then from physics i set it to collided object.
-    // Then from onTick i can do whatever i want with it. And after frame ends, i can reset it.
+    // Then from onTick i can do whatever i want with it.
+    // And after frame ends, i can reset all pointers so that one collision is not handled multiple times
     void removeCollisionRecords() {
         m_threadPool.dispatch(m_scene.getObjectsCount(), [this](int start, int end) {
             m_scene.forEachBasicDetails([](BasicDetails &object, int i) {
