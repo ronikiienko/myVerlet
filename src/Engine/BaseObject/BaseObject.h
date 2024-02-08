@@ -14,6 +14,7 @@ public:
     bool m_isPinned = false;
     bool m_isCollisionOn = true;
     Vector2F m_direction = Vector2F::polar(1, Angle::fromDegrees(0));
+    BaseObject* m_collidedWith = nullptr;
 
     void setVelocity(Vector2F v) {
         m_posOld = m_posCurr - v;
@@ -85,7 +86,6 @@ public:
     };
     virtual void v_onTick() = 0;
     virtual void v_onInit() = 0;
-    virtual void v_onCollision(BaseObject* ptr) = 0;
 
     void destroy();
     void toggleRotation(bool enabled);
