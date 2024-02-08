@@ -196,7 +196,7 @@ public:
         }
     }
 
-    // First, i created onCollision virtual methods in all BaseObjects. I was callling them from solveCollision.
+    // First, i created onCollision virtual methods in all BaseObjects. I was callling them from solveContact.
     // But this had two problems:
     // 1. they were called from different threads (if object that onCollision is called on wants to do something with object far away. Object far away may be in that moment be in different thread)
     // 2. They were virtual, so calling them was very expensive
