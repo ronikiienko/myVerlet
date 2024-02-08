@@ -200,7 +200,7 @@ public:
     // But this had two problems:
     // 1. they were called from different threads (if object that onCollision is called on wants to do something with object far away. Object far away may be in that moment be in different thread)
     // 2. They were virtual, so calling them was very expensive
-    // To solve that, i created m_collidedWith pointer in BasicDetails. Then from physics i set it to collided object.
+    // To solve that, i created m_collidedWith pointer in BasicDetails. Then from solveContact i set it to collided object.
     // Then from onTick i can do whatever i want with it.
     // And after frame ends, i can reset all pointers so that one collision is not handled multiple times
     void removeCollisionRecords() {
