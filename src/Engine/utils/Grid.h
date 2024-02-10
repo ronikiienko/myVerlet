@@ -173,6 +173,7 @@ struct IdGrid {
         } else {
             steps = static_cast<int>(std::abs(deltaGrid.m_y));
         }
+        steps++;
 
         Vector2F increment = deltaGrid / static_cast<float>(steps);
 
