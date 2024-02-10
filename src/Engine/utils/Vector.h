@@ -128,18 +128,26 @@ public:
         }
     }
 
-    constexpr void minByX(T limit) {
-        static_assert(std::is_floating_point<T>::value, "minByX only works with floating point types");
+    constexpr void limitByXSaveRatio(T limit) {
+        static_assert(std::is_floating_point<T>::value, "limitByXSaveRatio only works with floating point types");
         float oldRatio = static_cast<T>(m_y) / static_cast<T>(m_x);
         m_x = std::min(m_x, limit);
+        m_x = std::max(m_x, -limit);
         m_y = m_x * oldRatio;
     }
 
-    constexpr void minByY(T limit) {
-        static_assert(std::is_floating_point<T>::value, "minByY only works with floating point types");
+    constexpr void limitByYSaveRatio(T limit) {
+        static_assert(std::is_floating_point<T>::value, "limitByYSaveRatio only works with floating point types");
         float oldRatio = static_cast<T>(m_x) / static_cast<T>(m_y);
         m_y = std::min(m_y, limit);
+        m_y = std::max(m_y, -limit);
         m_x = m_y * oldRatio;
+    }
+
+    constexpr void limitByXYSaveRatio(T maxX, T maxY) {
+        static_assert(std::is_floating_point<T>::value, "limitByXYSaveRatio only works with floating point types");
+        limitByXSaveRatio(maxX);
+        limitByYSaveRatio(maxY);
     }
 
     void addX(T xAdd) {
