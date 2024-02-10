@@ -63,7 +63,7 @@ public:
         return Vector2{m_x / mag, m_y / mag};
     }
 
-    [[nodiscard]] constexpr Vector2 rotate(const Angle& angle) const {
+    [[nodiscard]] constexpr Vector2 rotate(const Angle &angle) const {
         T angleRadians = angle.getRadians();
         T cos = std::cos(angleRadians);
         T sin = std::sin(angleRadians);
@@ -128,9 +128,24 @@ public:
         }
     }
 
+    constexpr void minByX(T limit) {
+        static_assert(std::is_floating_point<T>::value, "minByX only works with floating point types");
+        float oldRatio = static_cast<T>(m_y) / static_cast<T>(m_x);
+        m_x = std::min(m_x, limit);
+        m_y = m_x * oldRatio;
+    }
+
+    constexpr void minByY(T limit) {
+        static_assert(std::is_floating_point<T>::value, "minByY only works with floating point types");
+        float oldRatio = static_cast<T>(m_x) / static_cast<T>(m_y);
+        m_y = std::min(m_y, limit);
+        m_x = m_y * oldRatio;
+    }
+
     void addX(T xAdd) {
         m_x += xAdd;
     }
+
     void addY(T yAdd) {
         m_y += yAdd;
     }
