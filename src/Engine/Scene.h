@@ -205,6 +205,20 @@ public:
 
 //        m_grid.forEachAroundLine(start, end, [&](int id) {
 //            BasicDetails &basicDetails = m_basicDetails[id];
+//            Vector2F startToObject = basicDetails.m_posCurr - start;
+//            float startToObjectLengthSquared = startToObject.magnitude2();
+//            float projectionLength = startToObject.dot(lineVectorNormalized);
+//            if (projectionLength >= 0 && projectionLength < lineLength) {
+//                float projectionLengthSquared = projectionLength * projectionLength;
+//                bool isInside = startToObjectLengthSquared - projectionLengthSquared < engineDefaults::objectsRadiusSquared;
+//                if (isInside) {
+//                    callback(basicDetails.m_parent, id);
+//                }
+//            }
+//        });
+
+//        m_grid.forEachAroundLine(start, end, [&](int id) {
+//            BasicDetails &basicDetails = m_basicDetails[id];
 //            callback(basicDetails.m_parent, id);
 //        });
     }
