@@ -167,15 +167,16 @@ struct IdGrid {
         Vector2F deltaGrid = endGrid - startGrid;
 
 
-        int xCellsDistance = std::abs(static_cast<int>(endGrid.m_x) - static_cast<int>(startGrid.m_x)) ;
-        int yCellsDistance = std::abs(static_cast<int>(endGrid.m_y) - static_cast<int>(startGrid.m_y));
+        Vector2I cellsDelta = Vector2I::cart(static_cast<int>(endGrid.m_x) - static_cast<int>(startGrid.m_x), static_cast<int>(endGrid.m_y) - static_cast<int>(startGrid.m_y));
+        Vector2I cellsDistance = Vector2I::cart(std::abs(cellsDelta.m_x), std::abs(cellsDelta.m_y));
+
 
         int steps;
 
-        if (xCellsDistance > yCellsDistance) {
-            steps = xCellsDistance;
+        if (cellsDistance.m_x > cellsDistance.m_y) {
+            steps = cellsDistance.m_x;
         } else {
-            steps = yCellsDistance;
+            steps = cellsDistance.m_y;
         }
 
         Vector2F increment = Vector2F::cart();
