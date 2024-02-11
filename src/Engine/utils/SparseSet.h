@@ -15,6 +15,14 @@ public:
         sparse.resize(maxIndex + 1, -1);
     }
 
+    void clear() {
+        dense.clear();
+        for (int & i : sparse) {
+            i = -1;
+        };
+        realSize = 0;
+    }
+
     void insert(int index) {
         // TODO remove debug checks
         if (index > maxIndex || realSize >= maxIndex || index < 0) {
