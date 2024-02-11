@@ -86,4 +86,8 @@ public:
             callback(dense[i]);
         }
     }
+
+    [[nodiscard]] bool empty() const {
+        return realSize == 0;
+    }
 };
