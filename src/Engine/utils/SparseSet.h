@@ -31,7 +31,7 @@ public:
         }
 
         if (sparse[index] != -1) {
-            throw std::runtime_error("Trying to insert element which is already in the set");
+//            throw std::runtime_error("Trying to insert element which is already in the set");
             return;
         }
 
@@ -51,7 +51,7 @@ public:
             return;
         }
         if (sparse[index] == -1) {
-            throw std::runtime_error("Trying to remove element which is already empty");
+//            throw std::runtime_error("Trying to remove element which is already empty");
             return;
         }
 

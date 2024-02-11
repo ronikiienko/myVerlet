@@ -16,7 +16,7 @@ class Scene {
 private:
     std::vector<std::shared_ptr<BaseObject>> m_objects;
     std::set<int, std::greater<>> m_objectsToRemove;
-    std::vector<int> m_objectsWithRotation;
+    SparseSet m_objectsWithRotation;
     std::vector<BasicDetails> m_basicDetails;
     Vector2F m_sizeF;
     Vector2I m_sizeI;
@@ -68,18 +68,18 @@ public:
             m_camera(cameraMaxWorldViewSize, cameraPosition, window, inputBus),
             m_threadPool(threadPool),
             m_performanceMonitor(performanceMonitor),
-            m_maxObjectsNum(maxObjectsNum) {
+            m_maxObjectsNum(maxObjectsNum),
+            m_objectsWithRotation(maxObjectsNum) {
         m_objects.reserve(maxObjectsNum);
         m_basicDetails.reserve(maxObjectsNum);
     }
 
     void toggleObjectRotation(BaseObject *ptr, bool enabled) {
         int index = getIndexByPtr(ptr);
-        auto it = std::find(m_objectsWithRotation.begin(), m_objectsWithRotation.end(), index);
-        if (it == m_objectsWithRotation.end() && enabled) {
-            m_objectsWithRotation.push_back(index);
-        } else if (!enabled) {
-            m_objectsWithRotation.erase(it);
+        if (enabled) {
+            m_objectsWithRotation.insert(index);
+        } else {
+            m_objectsWithRotation.remove(index);
         }
     }
 
@@ -130,13 +130,9 @@ public:
 
     template<typename T>
     void forEachBasicDetailsWithRotation(const T &callback, int start = 0, int end = -1) {
-        if (end == -1) {
-            end = static_cast<int>(m_basicDetails.size());
-        }
-
-        for (int i = start; i < end; i++) {
-            callback(m_basicDetails[m_objectsWithRotation[i]], i);
-        }
+        m_objectsWithRotation.forEach([&](int id) {
+            callback(m_basicDetails[id], id);
+        }, start, end);
     }
 
 
@@ -224,7 +220,7 @@ public:
 
     // use std::set to have objectsToRemove in descending order
     // Because there's bad corner case:
-    // if hypotetically vector is of size 100, and "removal set" is {15, 20, 99, 98),
+    // if hypotetically vector is of size 100, and "removal set" is {15, 20, 99, 98},
     // then we would remove 15, swapped it with 99, popped, and element 99 would be at position 15. And removal at position 99 would fail
     void removeMarkedObjects() {
         if (m_objectsToRemove.empty()) {
@@ -232,13 +228,27 @@ public:
         }
 
         // use swap & pop to remove objects without a lot of shifting
-        for (const auto& i : m_objectsToRemove) {
+        for (const auto &i: m_objectsToRemove) {
             int lastIndex = getObjectsCount() - 1;
-            std::swap(m_objects[i], m_objects[lastIndex]);
-            std::swap(m_basicDetails[i], m_basicDetails[lastIndex]);
-            m_objects.pop_back();
-            m_basicDetails.pop_back();
+            if (i > lastIndex || i < 0) {
+                throw std::runtime_error("Trying to remove object that does not exist");
+            }
+            if (i == lastIndex) {
+                m_objectsWithRotation.remove(i);
+                m_objects.pop_back();
+                m_basicDetails.pop_back();
+            }
             if (i < lastIndex) {
+                if (m_objectsWithRotation.contains(lastIndex)) {
+                    m_objectsWithRotation.insert(i);
+                    m_objectsWithRotation.remove(lastIndex);
+                } else {
+                    m_objectsWithRotation.remove(i);
+                }
+                std::swap(m_objects[i], m_objects[lastIndex]);
+                std::swap(m_basicDetails[i], m_basicDetails[lastIndex]);
+                m_objects.pop_back();
+                m_basicDetails.pop_back();
                 m_objects[i]->m_basicDetails = &m_basicDetails[i];
             }
         }
