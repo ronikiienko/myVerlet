@@ -8,12 +8,13 @@
 #include "Camera.h"
 #include "PerformanceMonitor.h"
 #include "./utils/ThreadPool.h"
+#include "utils/SparseSet.h"
 
 
 class Scene {
 private:
     std::vector<std::shared_ptr<BaseObject>> m_objects;
-    std::vector<int> m_objectsToRemove;
+    SparseSet m_objectsToRemove;
     std::vector<int> m_objectsWithRotation;
     std::vector<BasicDetails> m_basicDetails;
     Vector2F m_sizeF;
@@ -29,9 +30,7 @@ private:
     int m_collisionGridHeight = m_sizeI.m_y / (engineDefaults::objectsRadius * 2);
 
     void markObjectForRemoval(int index) {
-        if (std::find(m_objectsToRemove.begin(), m_objectsToRemove.end(), index) == m_objectsToRemove.end()) {
-            m_objectsToRemove.push_back(index);
-        }
+        m_objectsToRemove.insert(index);
     }
 
     int getIndexByPtr(BaseObject *ptr) {
@@ -68,10 +67,10 @@ public:
             m_camera(cameraMaxWorldViewSize, cameraPosition, window, inputBus),
             m_threadPool(threadPool),
             m_performanceMonitor(performanceMonitor),
-            m_maxObjectsNum(maxObjectsNum) {
+            m_maxObjectsNum(maxObjectsNum),
+            m_objectsToRemove(maxObjectsNum) {
         m_objects.reserve(maxObjectsNum);
         m_basicDetails.reserve(maxObjectsNum);
-        m_objectsToRemove.reserve(maxObjectsNum);
     }
 
     void toggleObjectRotation(BaseObject *ptr, bool enabled) {
@@ -229,23 +228,13 @@ public:
         }
 
         // use swap & pop to remove objects without a lot of shifting
-        for (int i: m_objectsToRemove) {
-            for (int j = getObjectsWithRotationCount() - 1; j >= 0; j--) {
-                if (m_objectsWithRotation[j] == i) {
-                    std::swap(m_objectsWithRotation[j], m_objectsWithRotation.back());
-                    m_objectsWithRotation.pop_back();
-                    continue;
-                }
-                if (m_objectsWithRotation[j] == getObjectsCount() - 1) {
-                    m_objectsWithRotation[j] = i;
-                }
-            }
+        m_objectsToRemove.forEach([&](int i) {
             std::swap(m_objects[i], m_objects.back());
             std::swap(m_basicDetails[i], m_basicDetails.back());
             m_objects.pop_back();
             m_basicDetails.pop_back();
             m_objects[i]->m_basicDetails = &m_basicDetails[i];
-        }
+        });
         m_objectsToRemove.clear();
     }
 
