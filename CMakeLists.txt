@@ -47,6 +47,7 @@ set(SOURCES src/main.cpp
         src/Engine/SoundManager/SMHandle.cpp
         src/Engine/DebugGraphics.h
         src/Engine/utils/lineClip.h
+        src/Engine/utils/SparseSet.h
 )
 
 project(${PROJECT_NAME})
