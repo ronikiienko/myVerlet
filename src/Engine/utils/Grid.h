@@ -153,6 +153,47 @@ struct IdGrid {
         }
     }
 
+    void clipLinePoints(Vector2F &start, Vector2F &end, float gridPadding) const {
+        float minX = 0 + gridPadding;
+        float minY = 0 + gridPadding;
+        float maxX = static_cast<float>(m_width) - gridPadding;
+        float maxY = static_cast<float>(m_height) - gridPadding;
+
+        Vector2F vectorToClippedStart = end - start;
+
+        if (start.m_x < minX) {
+            vectorToClippedStart.limitByXSaveRatio(minX - start.m_x);
+        } else if (start.m_x > maxX) {
+            vectorToClippedStart.limitByXSaveRatio(maxX - start.m_x);
+        }
+        if (start.m_y < minY) {
+            vectorToClippedStart.limitByYSaveRatio(minY - start.m_y);
+        } else if (start.m_y > maxY) {
+            vectorToClippedStart.limitByYSaveRatio(maxY - start.m_y);
+        }
+
+        start += vectorToClippedStart;
+
+
+        std::cout << "end was: " << end.m_x << " " << end.m_y << "\n";
+        Vector2F vectorToClippedEnd = start - end;
+        if (end.m_x < minX) {
+            vectorToClippedEnd.limitByXSaveRatio(minX - end.m_x);
+        } else if (end.m_x > maxX) {
+            vectorToClippedEnd.limitByXSaveRatio(maxX - end.m_x);
+        }
+
+        if (end.m_y < minY) {
+            vectorToClippedEnd.limitByYSaveRatio(minY - end.m_y);
+        } else if (end.m_y > maxY) {
+            vectorToClippedEnd.limitByYSaveRatio(maxY - end.m_y);
+        }
+        std::cout << "vectorToClippedEnd is: " << vectorToClippedEnd.m_x << " " << vectorToClippedEnd.m_y << "\n";
+        end += vectorToClippedEnd;
+
+        std::cout << "end is: " << end.m_x << " " << end.m_y << "\n";
+    }
+
     // it's not precise. it's just a broad phase.
     // Iterates on every id in cells around line.
     // uses DDA algorithm, but with vectors.
@@ -164,12 +205,12 @@ struct IdGrid {
     void forEachAroundLine(Vector2F start, Vector2F end, const T &callback) const {
         Vector2F startGrid = start * m_cellWidthInverse;
         Vector2F endGrid = end * m_cellHeightInverse;
-        Vector2F deltaGrid = endGrid - startGrid;
+//        clipLinePoints(startGrid, endGrid, 1.1f);
 
+        Vector2F deltaGrid = endGrid - startGrid;
 
         Vector2I cellsDelta = Vector2I::cart(static_cast<int>(endGrid.m_x) - static_cast<int>(startGrid.m_x), static_cast<int>(endGrid.m_y) - static_cast<int>(startGrid.m_y));
         Vector2I cellsDistance = Vector2I::cart(std::abs(cellsDelta.m_x), std::abs(cellsDelta.m_y));
-
 
         int steps;
 
@@ -192,6 +233,7 @@ struct IdGrid {
         for (int i = 0; i <= steps; i++) {
             int gridX = static_cast<int>(current.m_x);
             int gridY = static_cast<int>(current.m_y);
+
 
             for (int column = gridX - 1; column <= gridX + 1; column++) {
                 for (int row = gridY - 1; row <= gridY + 1; row++) {
