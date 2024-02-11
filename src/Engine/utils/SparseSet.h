@@ -70,8 +70,11 @@ public:
     }
 
     template<typename T>
-    void forEach(const T& callback) {
-        for (int i = 0; i < realSize; i++) {
+    void forEach(const T& callback, int start = 0, int end = -1) {
+        if (end == -1) {
+            end = size();
+        }
+        for (int i = start; i < end; i++) {
             callback(dense[i]);
         }
     }
