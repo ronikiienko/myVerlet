@@ -83,7 +83,7 @@ public:
             end = size();
         }
         for (int i = start; i < end; i++) {
-            callback(dense[i]);
+            callback(dense[i], i);
         }
     }
 

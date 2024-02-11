@@ -71,10 +71,10 @@ public:
         m_rotationsVertexArray.resize(m_scene.getObjectsWithRotationCount() * 4);
         m_threadPool.dispatch(m_scene.getObjectsWithRotationCount(), [this](int start, int end) {
             float objectSize = m_scene.getCamera().worldScalarToScreen(engineDefaults::rotationCircleRadius);
-            m_scene.forEachBasicDetailsWithRotation([this, objectSize](BasicDetails &object, int index) {
+            m_scene.forEachBasicDetailsWithRotation([this, objectSize](BasicDetails &object, int index, int iteration) {
                 Vector2F screenPos = m_scene.getCamera().worldPosToScreenPos(object.m_posCurr + object.m_direction);
 
-                const int ind = index * 4;
+                const int ind = iteration * 4;
 
                 m_rotationsVertexArray[ind].position = {screenPos.m_x - objectSize, screenPos.m_y - objectSize};
                 m_rotationsVertexArray[ind + 1].position = {screenPos.m_x + objectSize,

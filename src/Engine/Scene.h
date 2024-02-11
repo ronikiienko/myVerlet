@@ -130,8 +130,8 @@ public:
 
     template<typename T>
     void forEachBasicDetailsWithRotation(const T &callback, int start = 0, int end = -1) {
-        m_objectsWithRotation.forEach([&](int id) {
-            callback(m_basicDetails[id], id);
+        m_objectsWithRotation.forEach([&](int id, int iteration) {
+            callback(m_basicDetails[id], id, iteration);
         }, start, end);
     }
 
