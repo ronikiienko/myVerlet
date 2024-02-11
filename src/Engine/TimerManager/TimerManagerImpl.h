@@ -34,13 +34,19 @@ public:
     TimerManagerImpl() = default;
 
     void tick() {
+        // previously i erased timers from loop..... this was big mistake.. iterator invalidation..
+        std::vector<int> timersToRemove;
         for (auto &pair : m_tickTimers) {
             pair.second.tick();
             if (pair.second.isDone()) {
                 pair.second.m_callback();
-                m_tickTimers.erase(pair.first);
+                timersToRemove.push_back(pair.first);
             }
         }
+        for (int key : timersToRemove) {
+            m_tickTimers.erase(key);
+        }
+
         for (auto &pair : m_tickIntervals) {
             pair.second.tick();
             if (pair.second.isDone()) {
