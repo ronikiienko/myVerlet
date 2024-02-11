@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <bits/shared_ptr.h>
+#include <set>
 #include "BaseObject/BaseObject.h"
 #include "EngineConsts.h"
 #include "utils/Grid.h"
@@ -14,7 +15,7 @@
 class Scene {
 private:
     std::vector<std::shared_ptr<BaseObject>> m_objects;
-    SparseSet m_objectsToRemove;
+    std::set<int, std::greater<>> m_objectsToRemove;
     std::vector<int> m_objectsWithRotation;
     std::vector<BasicDetails> m_basicDetails;
     Vector2F m_sizeF;
@@ -67,8 +68,7 @@ public:
             m_camera(cameraMaxWorldViewSize, cameraPosition, window, inputBus),
             m_threadPool(threadPool),
             m_performanceMonitor(performanceMonitor),
-            m_maxObjectsNum(maxObjectsNum),
-            m_objectsToRemove(maxObjectsNum) {
+            m_maxObjectsNum(maxObjectsNum) {
         m_objects.reserve(maxObjectsNum);
         m_basicDetails.reserve(maxObjectsNum);
     }
@@ -222,19 +222,25 @@ public:
 //        });
     }
 
+    // use std::set to have objectsToRemove in descending order
+    // Because there's bad corner case:
+    // if hypotetically vector is of size 100, and "removal set" is {15, 20, 99, 98),
+    // then we would remove 15, swapped it with 99, popped, and element 99 would be at position 15. And removal at position 99 would fail
     void removeMarkedObjects() {
         if (m_objectsToRemove.empty()) {
             return;
         }
 
         // use swap & pop to remove objects without a lot of shifting
-        m_objectsToRemove.forEach([&](int i) {
-            std::swap(m_objects[i], m_objects.back());
-            std::swap(m_basicDetails[i], m_basicDetails.back());
+        for (const auto& i : m_objectsToRemove) {
+            int lastIndex = getObjectsCount() - 1;
+            std::swap(m_objects[i], m_objects[lastIndex]);
+            std::swap(m_basicDetails[i], m_basicDetails[lastIndex]);
             m_objects.pop_back();
             m_basicDetails.pop_back();
             m_objects[i]->m_basicDetails = &m_basicDetails[i];
-        });
+        }
+
         m_objectsToRemove.clear();
     }
 
