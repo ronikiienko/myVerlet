@@ -69,7 +69,7 @@ public:
         realSize--;
     }
 
-    bool search(int index) {
+    bool contains(int index) {
         return sparse[index] != -1;
     }
 
