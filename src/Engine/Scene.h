@@ -149,7 +149,7 @@ public:
     }
 
     [[nodiscard]] int getObjectsWithRotationCount() const {
-        return static_cast<int>(m_objectsWithRotation.size());
+        return m_objectsWithRotation.size();
     }
 
     [[nodiscard]] Vector2F &getSizeF() {
