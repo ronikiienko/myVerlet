@@ -8,6 +8,7 @@ class Bullet : public BaseObject {
     int m_ticksToLive = 100;
     int m_hitsLeft = 10;
 public:
+    explicit Bullet(ObjectContext context) : BaseObject(context) {}
     void v_onInit() override {};
     void v_onTick() override {
         m_ticksToLive--;
