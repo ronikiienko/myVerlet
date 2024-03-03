@@ -8,4 +8,5 @@ public:
 
     void v_onTick() override {};
     void v_onInit() override {};
+    void v_onCollision(BaseObject* ptr) override {};
 };

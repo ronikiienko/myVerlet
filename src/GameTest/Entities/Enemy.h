@@ -47,6 +47,8 @@ public:
         getBasicDetails().accelerate(acceleration);
     }
 
+    void v_onCollision(BaseObject *ptr) override {}
+
     void v_onInit() override {
         getBasicDetails().m_color = sf::Color::Red;
     }

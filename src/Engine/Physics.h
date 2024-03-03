@@ -21,7 +21,7 @@ private:
     float m_linearDamping = engineDefaults::linearDamping;
     float m_wallsDamping = engineDefaults::wallsDamping;
 
-    template<bool RemoveCollisionRecords>
+
     void updatePositionsConstraint(float dt) {
         const Vector2F size = m_scene.getSizeF();
         const int objectsCount = m_scene.getObjectsCount();
@@ -30,10 +30,7 @@ private:
             const float maxX = size.m_x - engineDefaults::objectsRadius;
             const float minY = 0 + engineDefaults::objectsRadius;
             const float maxY = size.m_y - engineDefaults::objectsRadius;
-            m_scene.forEachBasicDetails([dt, minX, maxX, minY, maxY, this](BasicDetails &object, int i) {
-                if constexpr (RemoveCollisionRecords) {
-                    object.m_collidedWith = nullptr;
-                }
+            m_scene.forEachBasicDetails([&size, dt, minX, maxX, minY, maxY, this](BasicDetails &object, int i) {
                 // TODO when all m_grid filled with m_objects, you can see that some start falling faster and some slower (on lower m_gravity levels like 10) - this is because of floats precision
                 if (!object.m_isPinned) {
                     object.accelerate(m_gravity);
@@ -92,16 +89,8 @@ private:
                 obj2.m_posCurr += normal * delta;
                 // TODO i should not call onCollision from here. because it is called from different threads. then removing other object from onCollision would be very risky
                 if constexpr (WithCallback) {
-                    // First, i created onCollision virtual methods in all BaseObjects. I was callling them from solveContact.
-                    // But this had two problems:
-                    // 1. they were called from different threads (if object that onCollision is called on wants to do something with object far away. Object far away may be in that moment be in different thread)
-                    // 2. They were virtual, so calling them was very expensive
-                    // To solve that, i created m_collidedWith pointer in BasicDetails. Then from solveContact i set it to collided object.
-                    // Then from onTick i can do whatever i want with it.
-                    // And after frame ends, i can reset all pointers so that one collision is not handled multiple times
-                    // This has problem: low accuracy. Each frame collision with only one object can be handled.
-                    obj1.m_collidedWith = obj2.m_parent;
-                    obj2.m_collidedWith = obj1.m_parent;
+                    obj1.m_parent->v_onCollision(obj2.m_parent);
+                    obj2.m_parent->v_onCollision(obj1.m_parent);
                 }
             }
         }
@@ -188,11 +177,7 @@ public:
 
         for (int i = 0; i < localSubSteps; i++) {
             m_performanceMonitor.start("gravityConstraintsUpdate");
-            if (i == 0) {
-                updatePositionsConstraint<true>(subStepDt);
-            } else {
-                updatePositionsConstraint<false>(subStepDt);
-            }
+            updatePositionsConstraint(subStepDt);
             m_performanceMonitor.end("gravityConstraintsUpdate");
 
             m_performanceMonitor.start("m_grid");

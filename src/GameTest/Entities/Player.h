@@ -163,4 +163,12 @@ public:
             getBasicDetails().setVelocity(getBasicDetails().getVelocity() * 0.95);
         }
     }
+
+    void v_onCollision(BaseObject *ptr) override {
+//        m_scene.forEachInRadius(getBasicDetails().m_posCurr, 50, [&](BaseObject *ptr, int ind) {
+//            if (ptr != this) {
+//                m_scene.removeObject(ind);
+//            }
+//        });
+    }
 };
