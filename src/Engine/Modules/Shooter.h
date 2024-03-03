@@ -24,7 +24,7 @@ private:
         ptr.lock()->getBasicDetails().setVelocity(velocity);
     }
 public:
-    explicit Shooter(Scene &scene, RNGf& gen) : m_scene(scene), m_gen(gen) {}
+    Shooter(Scene &scene, RNGf& gen) : m_scene(scene), m_gen(gen) {}
 
 
     void setSpread(float spread) {
