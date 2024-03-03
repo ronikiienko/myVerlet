@@ -21,6 +21,8 @@ private:
     float m_linearDamping = engineDefaults::linearDamping;
     float m_wallsDamping = engineDefaults::wallsDamping;
 
+    int m_subStepsCallbackInterval = 1;
+    int m_subStepsCallbackCounter = 0;
 
     void updatePositionsConstraint(float dt) {
         const Vector2F size = m_scene.getSizeF();
@@ -186,11 +188,12 @@ public:
 
             if (localCollisionsEnabled) {
                 m_performanceMonitor.start("collisions");
-                if (i == localSubSteps - 1) {
+                if (m_subStepsCallbackCounter % m_subStepsCallbackInterval == 0) {
                     solveCollisions<true>();
                 } else {
                     solveCollisions<false>();
                 }
+                m_subStepsCallbackCounter++;
                 m_performanceMonitor.end("collisions");
             }
         }
@@ -212,6 +215,17 @@ public:
 
     void setCollisionsEnabled(bool enabled) {
         m_collisionsEnabled = enabled;
+    }
+
+    // sets interval of how often onCollision callback will be called (in substeps)
+    // if set to 1, then onCollision will be called on every substep
+    // done to avoid calling onCollision too often (it's virtual method call, can be very slow)
+    void setSubStepsCallbackInterval(int value) {
+        m_subStepsCallbackInterval = value;
+    }
+
+    [[nodiscard]] int getSubStepsCallbackInterval() const {
+        return m_subStepsCallbackInterval;
     }
 
     [[nodiscard]] bool getCollisionsEnabled() const {
