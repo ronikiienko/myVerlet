@@ -23,7 +23,7 @@ set(SOURCES src/main.cpp
         src/GameTest/Entities/Player.h
         src/Engine/SoundManager/SoundManagerImpl.h
         src/GameTest/consts.h
-        src/GameTest/Entities/EmptyObject.h
+        src/GameTest/Levels/PerformanceTest/EmptyObject.h
         src/Engine/EventBus/EBHandle.cpp
         src/Engine/TimerManager/TMHandle.h
         src/Engine/TimerManager/TMHandle.cpp
@@ -33,13 +33,12 @@ set(SOURCES src/main.cpp
         src/Engine/InputBus/IBHandle.cpp
         src/Engine/InputBus/InputBus.h
         src/Engine/InputBus/InputBusImpl.h
-        src/GameTest/Levels/MainMenu.h
         src/GameTest/Events.h
         src/GameTest/Entities/Enemy.h
         src/GameTest/Entities/Bullet.h
         src/Engine/Modules/Shooter.h
         src/GameTest/Entities/Interfaces/IDamageable.h
-        src/GameTest/Levels/PerformanceTest.h
+        src/GameTest/Levels/PerformanceTest/PerformanceTest.h
         src/Engine/BaseObject/BaseObject.cpp
         src/Engine/SoundManager/SoundManager.h
         src/Engine/SoundManager/SMHandle.h

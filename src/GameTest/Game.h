@@ -2,7 +2,7 @@
 
 #include "../Engine/BaseGame.h"
 #include "Levels/Level1.h"
-#include "Levels/PerformanceTest.h"
+#include "Levels/PerformanceTest/PerformanceTest.h"
 
 class Game : public BaseGame {
 private:

@@ -7,7 +7,6 @@
 #include "../Entities/Enemy.h"
 #include "../../Engine/Modules/ExplosionHandler.h"
 #include "../../Engine/Modules/RandomPositionGenerator.h"
-#include "../Entities/EmptyObject.h"
 
 class Level1 : public BaseLevel {
     ExplosionHandler m_explosionHandler{m_scene};
@@ -19,9 +18,9 @@ public:
     }
 
     void v_onInit() override {
-        for (int i = 0; i < 150000; i++) {
-            m_scene.addObject(EmptyObject{m_scene.getObjectContext()}, m_randomPositionGenerator.get());
-        }
+//        for (int i = 0; i < 150000; i++) {
+//            m_scene.addObject(EmptyObject{m_scene.getObjectContext()}, m_randomPositionGenerator.get());
+//        }
         auto playerPtr = m_scene.addObject(Player{m_scene.getObjectContext(), m_inputBus, m_window, m_gen},
                                            Vector2F::cart(102, 102));
 //        for (int i = 0; i < 1000; i++) {

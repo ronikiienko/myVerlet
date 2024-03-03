@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../Engine/BaseObject/BaseObject.h"
+#include "../../../Engine/BaseObject/BaseObject.h"
 
 class EmptyObject : public BaseObject {
 public:
