@@ -14,7 +14,6 @@ set(SOURCES src/main.cpp
         src/Engine/utils/Grid.h
         src/Engine/utils/ThreadPool.h
         src/Engine/PerformanceMonitor.h
-        src/addons/RandomSpawner.h
         src/Engine/Camera.h
         src/Engine/BaseLevel.h
         src/Engine/BaseGame.h
@@ -48,6 +47,7 @@ set(SOURCES src/main.cpp
         src/Engine/DebugGraphics.h
         src/Engine/utils/lineClip.h
         src/Engine/utils/SparseSet.h
+        src/Engine/Modules/RandomPositionGenerator.h
 )
 
 project(${PROJECT_NAME})
