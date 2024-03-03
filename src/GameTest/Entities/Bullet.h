@@ -25,6 +25,4 @@ public:
             m_scene.removeObject(this);
         }
     };
-
-    explicit Bullet(ObjectContext context) : BaseObject(context) {};
 };
