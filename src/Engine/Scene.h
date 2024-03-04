@@ -11,6 +11,10 @@
 #include "./utils/ThreadPool.h"
 #include "utils/SparseSet.h"
 
+enum BOUNDARY_TYPE {
+    SOLID = 10,
+    WRAP = 11,
+};
 
 class Scene {
 private:
@@ -24,6 +28,7 @@ private:
     ThreadPool &m_threadPool;
     PerformanceMonitor &m_performanceMonitor;
     int m_maxObjectsNum;
+    BOUNDARY_TYPE m_boundaryType = BOUNDARY_TYPE::SOLID;
 
     Vector2F m_gravity = engineDefaults::gravity;
     float m_maxVelocity = engineDefaults::maxVelocity;
@@ -326,6 +331,14 @@ public:
     }
     [[nodiscard]] bool getCollisionsEnabled() const {
         return m_collisionsEnabled;
+    }
+
+    void setBoundaryType(BOUNDARY_TYPE boundaryType) {
+        m_boundaryType = boundaryType;
+    }
+
+    [[nodiscard]] BOUNDARY_TYPE getBoundaryType() const {
+        return m_boundaryType;
     }
 
     Scene(const Scene &) = delete;
