@@ -29,6 +29,9 @@ public:
     constexpr Vector2 operator-(const Vector2 &other) const {
         return Vector2{m_x - other.m_x, m_y - other.m_y};
     }
+    constexpr Vector2 operator-() const {
+        return Vector2{-m_x, -m_y};
+    }
 
     constexpr Vector2 operator+(const Vector2 &other) const {
         return Vector2{m_x + other.m_x, m_y + other.m_y};
