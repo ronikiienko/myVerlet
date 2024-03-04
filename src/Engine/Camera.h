@@ -7,7 +7,9 @@ class Camera {
 private:
     InputBus &m_inputBus;
     sf::RenderWindow &m_window;
-
+    float m_minZoom = 0.1;
+    float m_zoom = 1;
+    float m_maxZoom = 10;
     IBHandle windowResizeHandle;
 public:
     void move(Vector2F delta) {
@@ -23,6 +25,32 @@ public:
     }
 
     void zoom(float zoomFactor) {
+        if (m_zoom * zoomFactor < m_minZoom) {
+            zoomFactor = m_minZoom / m_zoom;
+        } else if (m_zoom * zoomFactor > m_maxZoom) {
+            zoomFactor = m_maxZoom / m_zoom;
+        }
+
+        m_zoom *= zoomFactor;
+        sf::View view = m_window.getView();
+        view.zoom(zoomFactor);
+        m_window.setView(view);
+    }
+
+    void setZoom(float targetZoom) {
+        float zoomFactor = targetZoom / m_zoom;
+        zoom(zoomFactor);
+    }
+
+    void setMinZoom(float minZoom) {
+        m_minZoom = minZoom;
+    }
+    void setMaxZoom(float maxZoom) {
+        m_maxZoom = maxZoom;
+    }
+    void resetZoom() {
+        float zoomFactor = 1 / m_zoom;
+        m_zoom *= zoomFactor;
         sf::View view = m_window.getView();
         view.zoom(zoomFactor);
         m_window.setView(view);
