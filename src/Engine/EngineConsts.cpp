@@ -21,7 +21,7 @@ namespace engineDefaults {
     extern const short numThreads = 4;
     // actually, only thing it does is affecting how much given m_acceleration affects velocity
     // To make it affect more, increase this value
-    extern const float physicsInterval = 0.001f;
+    extern const float physicsInterval = 1.0f;
 
     extern const Vector2F cameraDefaultPosition = Vector2F::cart(0, 0);
     extern const float cameraMaxWorldViewSize = 400;
