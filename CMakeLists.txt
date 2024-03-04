@@ -48,7 +48,7 @@ set(SOURCES src/main.cpp
         src/Engine/utils/SparseSet.h
         src/Engine/Modules/RandomPositionGenerator.h
         src/GameTest/Entities/Boid.h
-        src/GameTest/Levels/Move.h
+        src/GameTest/Levels/CameraControls.h
 )
 
 project(${PROJECT_NAME})
