@@ -11,7 +11,7 @@ public:
     InputBus &m_inputBus;
     RNGf &m_gen;
     sf::RenderWindow &m_window;
-    float m_acceleration = 100;
+    float m_acceleration = 0.3;
     bool m_movingUp = false;
     bool m_movingDown = false;
     bool m_movingLeft = false;
