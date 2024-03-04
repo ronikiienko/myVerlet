@@ -71,12 +71,6 @@ private:
         debugWidget->setPosition(5.0f, 5.0f);
         debugWidget->getRenderer()->setTextColor(sf::Color::White);
         m_gui.add(debugWidget, "debugWidget");
-        windowResizeHandle = m_inputBus.addEventListener(sf::Event::Resized, [&](const sf::Event &event) {
-            sf::View view = sf::View(sf::FloatRect(0.f, 0.f, static_cast<float>(event.size.width),
-                                                   static_cast<float>(event.size.height)));
-            m_window.setView(view);
-            m_gui.setWindow(m_window);
-        });
     }
 
     void tick() {

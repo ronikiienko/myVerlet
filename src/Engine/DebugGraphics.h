@@ -18,16 +18,16 @@ private:
         m_linesVertexArray.resize(gridWidth * gridHeight + 4);
         int vertexIndex = 0;
         for (int column = 0; column <= gridWidth; column++) {
-            Vector2F start = m_scene.getCamera().worldPosToScreenPos(Vector2F::cart(static_cast<float>(column) * m_scene.m_grid.m_cellWidth, 0)) ;
-            Vector2F end = m_scene.getCamera().worldPosToScreenPos(Vector2F::cart(static_cast<float>(column) * m_scene.m_grid.m_cellWidth, static_cast<float>(m_scene.m_grid.m_realHeight))) ;
+            Vector2F start = Vector2F::cart(static_cast<float>(column) * m_scene.m_grid.m_cellWidth, 0);
+            Vector2F end = Vector2F::cart(static_cast<float>(column) * m_scene.m_grid.m_cellWidth, static_cast<float>(m_scene.m_grid.m_realHeight)) ;
             m_linesVertexArray[vertexIndex].position = sf::Vector2f(start.m_x, start.m_y);
             m_linesVertexArray[vertexIndex + 1].position = sf::Vector2f(end.m_x, end.m_y);
             vertexIndex += 2;
         }
 
         for (int row = 0; row <= gridHeight; row++) {
-            Vector2F start = m_scene.getCamera().worldPosToScreenPos(Vector2F::cart(0, static_cast<float>(row) * m_scene.m_grid.m_cellHeight)) ;
-            Vector2F end = m_scene.getCamera().worldPosToScreenPos(Vector2F::cart(static_cast<float>(m_scene.m_grid.m_realWidth), static_cast<float>(row) * m_scene.m_grid.m_cellHeight));
+            Vector2F start = Vector2F::cart(0, static_cast<float>(row) * m_scene.m_grid.m_cellHeight) ;
+            Vector2F end = Vector2F::cart(static_cast<float>(m_scene.m_grid.m_realWidth), static_cast<float>(row) * m_scene.m_grid.m_cellHeight);
             m_linesVertexArray[vertexIndex].position = sf::Vector2f(start.m_x, start.m_y);
             m_linesVertexArray[vertexIndex + 1].position = sf::Vector2f(end.m_x, end.m_y);
             vertexIndex += 2;

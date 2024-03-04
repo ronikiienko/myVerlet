@@ -5,123 +5,89 @@
 
 class Camera {
 private:
-    [[nodiscard]] float getWorldX1() const {
-        return m_worldCenterPos.m_x - (m_baseWorldViewWidth / m_zoomFactor) / 2;
-    }
-
-    [[nodiscard]] float getWorldY1() const {
-        return m_worldCenterPos.m_y - (m_baseWorldViewHeight / m_zoomFactor) / 2;
-    }
-
-    void updateWorldLeftTopPos() {
-        m_worldLeftTopPos = Vector2F::cart(getWorldX1(), getWorldY1());
-    }
-
-    [[nodiscard]] float getFinalZoom() const {
-        return m_zoomFactor * m_windowToCameraZoom;
-    }
-
-    float m_maxWorldViewSize;
-
-    Vector2F m_worldCenterPos = Vector2F::cart(0, 0);
-    Vector2F m_worldLeftTopPos = Vector2F::cart(0, 0);
-
-    float m_baseWorldViewWidth;
-    float m_baseWorldViewHeight;
-
-    float m_windowToCameraZoom;
-    float m_zoomFactor = 1;
-
     InputBus &m_inputBus;
     sf::RenderWindow &m_window;
 
     IBHandle windowResizeHandle;
 public:
     void move(Vector2F delta) {
-        m_worldCenterPos += delta;
-        updateWorldLeftTopPos();
+        sf::View view = m_window.getView();
+        view.move(sf::Vector2f{delta.m_x, delta.m_y});
+        m_window.setView(view);
     }
 
     void setPosition(Vector2F vector) {
-        m_worldCenterPos = vector;
-        updateWorldLeftTopPos();
+        sf::View view = m_window.getView();
+        view.setCenter(sf::Vector2f{vector.m_x, vector.m_y});
+        m_window.setView(view);
     }
 
     void zoom(float zoomFactor) {
-        m_zoomFactor *= zoomFactor;
-        m_zoomFactor = std::max(0.1f, m_zoomFactor);
-        m_zoomFactor = std::min(64.0f, m_zoomFactor);
-        updateWorldLeftTopPos();
-    }
-
-    [[nodiscard]] Vector2F getPosition() const {
-        return m_worldCenterPos;
+        sf::View view = m_window.getView();
+        view.zoom(zoomFactor);
+        m_window.setView(view);
     }
 
     [[nodiscard]] Vector2F worldPosToScreenPos(Vector2F worldPos) const {
-        return (worldPos - m_worldLeftTopPos) * getFinalZoom();
+        sf::Vector2i screenPos = m_window.mapCoordsToPixel(sf::Vector2f{worldPos.m_x, worldPos.m_y});
+        return Vector2F::cart(static_cast<float>(screenPos.x) , static_cast<float>(screenPos.y));
     }
 
     [[nodiscard]] Vector2F screenPosToWorldPos(Vector2F screenPosition) const {
-        return screenPosition / getFinalZoom() + m_worldLeftTopPos;
+        sf::Vector2f worldPos = m_window.mapPixelToCoords({static_cast<int>(screenPosition.m_x), static_cast<int>(screenPosition.m_y)});
+        return Vector2F::cart(worldPos.x, worldPos.y);
     }
-
-    [[nodiscard]] float worldScalarToScreen(float worldScalar) const {
-        return worldScalar * getFinalZoom();
+    [[nodiscard]] Vector2F screenPosToWorldPos(sf::Vector2i screenPosition) const {
+        sf::Vector2f worldPos = m_window.mapPixelToCoords({screenPosition.x, screenPosition.y});
+        return Vector2F::cart(worldPos.x, worldPos.y);
     }
-
-    [[nodiscard]] float screenScalarToWorld(float screenScalar) const {
-        return screenScalar / getFinalZoom();
-    }
-
-    [[nodiscard]] Vector2F worldVectorToScreen(Vector2F worldVector) const {
-        return worldVector * getFinalZoom();
-    }
-
-    [[nodiscard]] Vector2F screenVectorToWorld(Vector2F screenVector) const {
-        return screenVector / getFinalZoom();
-    }
-
 
     explicit Camera(float maxWorldViewSize, Vector2F position, sf::RenderWindow &window, InputBus &inputBus) :
-            m_worldCenterPos(position),
             m_inputBus(inputBus),
-            m_window(window),
-            m_maxWorldViewSize(maxWorldViewSize) {
+            m_window(window) {
+        sf::View view = window.getView();
+        view.setCenter(sf::Vector2f{position.m_x, position.m_y});
+
         float aspectRatio = static_cast<float>(window.getSize().x) / static_cast<float>(window.getSize().y);
 
-        float biggestDimWindowSize = std::max(static_cast<float>(window.getSize().x),
-                                              static_cast<float>(window.getSize().y));
-        m_windowToCameraZoom = biggestDimWindowSize / maxWorldViewSize;
-
+        float newWorldViewWidth;
+        float newWorldViewHeight;
         if (aspectRatio > 1) {
-            m_baseWorldViewWidth = m_maxWorldViewSize;
-            m_baseWorldViewHeight = m_maxWorldViewSize / aspectRatio;
+            newWorldViewWidth = maxWorldViewSize;
+            newWorldViewHeight = maxWorldViewSize / aspectRatio;
         } else {
-            m_baseWorldViewWidth = m_maxWorldViewSize * aspectRatio;
-            m_baseWorldViewHeight = m_maxWorldViewSize;
+            newWorldViewWidth = maxWorldViewSize * aspectRatio;
+            newWorldViewHeight = maxWorldViewSize;
         }
-
+        view.setSize({newWorldViewWidth, newWorldViewHeight});
+        window.setView(view);
         // when camera is moved, this is invalidated
         windowResizeHandle = m_inputBus.addEventListener(sf::Event::Resized, [this](const sf::Event &event) {
-            float aspectRatio = static_cast<float>(event.size.width) / static_cast<float>(event.size.height);
-            float biggestDimWindowSize = std::max(static_cast<float>(event.size.width),
-                                                  static_cast<float>(event.size.height));
-            m_windowToCameraZoom = biggestDimWindowSize / m_maxWorldViewSize;
-            if (aspectRatio > 1) {
-                m_baseWorldViewWidth = m_maxWorldViewSize;
-                m_baseWorldViewHeight = m_maxWorldViewSize / aspectRatio;
-            } else {
-                m_baseWorldViewWidth = m_maxWorldViewSize * aspectRatio;
-                m_baseWorldViewHeight = m_maxWorldViewSize;
-            }
-        });
+            float aspectRatio = static_cast<float>(m_window.getSize().x) / static_cast<float>(m_window.getSize().y);
 
-        updateWorldLeftTopPos();
+            sf::View view = m_window.getView();
+
+            float maxViewSize = std::max(view.getSize().x, view.getSize().y);
+
+            float newWorldViewWidth;
+            float newWorldViewHeight;
+            if (aspectRatio > 1) {
+                newWorldViewWidth = maxViewSize;
+                newWorldViewHeight = maxViewSize / aspectRatio;
+            } else {
+                newWorldViewWidth = maxViewSize * aspectRatio;
+                newWorldViewHeight = maxViewSize;
+            }
+            view.setSize({newWorldViewWidth, newWorldViewHeight});
+            m_window.setView(view);
+        });
     };
 
     Camera(const Camera &) = delete;
-    Camera& operator=(const Camera &) = delete;
+
+    Camera &operator=(const Camera &) = delete;
+
     Camera(Camera &&) = delete;
-    Camera& operator=(Camera &&) = delete;
+
+    Camera &operator=(Camera &&) = delete;
 };

@@ -40,9 +40,9 @@ public:
     void updateObjectsArray() {
         m_objectVertexArray.resize(m_scene.getObjectsCount() * 4);
         m_threadPool.dispatch(m_scene.getObjectsCount(), [this](int start, int end) {
-            float objectSize = m_scene.getCamera().worldScalarToScreen(engineDefaults::objectsRadius);
+            float objectSize = engineDefaults::objectsRadius;
             m_scene.forEachBasicDetails([this, objectSize](BasicDetails &object, int index) {
-                Vector2F screenPos = m_scene.getCamera().worldPosToScreenPos(object.m_posCurr);
+                Vector2F screenPos = object.m_posCurr;
 
                 const int ind = index * 4;
 
@@ -70,9 +70,9 @@ public:
     void updateRotationsArray() {
         m_rotationsVertexArray.resize(m_scene.getObjectsWithRotationCount() * 4);
         m_threadPool.dispatch(m_scene.getObjectsWithRotationCount(), [this](int start, int end) {
-            float objectSize = m_scene.getCamera().worldScalarToScreen(engineDefaults::rotationCircleRadius);
+            float objectSize = engineDefaults::rotationCircleRadius;
             m_scene.forEachBasicDetailsWithRotation([this, objectSize](BasicDetails &object, int index, int iteration) {
-                Vector2F screenPos = m_scene.getCamera().worldPosToScreenPos(object.m_posCurr + object.m_direction);
+                Vector2F screenPos = object.m_posCurr + object.m_direction;
 
                 const int ind = iteration * 4;
 
@@ -100,12 +100,10 @@ public:
     void updateWalls() {
         float wallsThickness = 40;
 
-        Camera &camera = m_scene.getCamera();
-
-        Vector2F startPos = camera.worldPosToScreenPos(Vector2F::cart(-wallsThickness, -wallsThickness));
+        Vector2F startPos = Vector2F::cart(-wallsThickness, -wallsThickness);
         Vector2F size = Vector2F::cart(
-                camera.worldScalarToScreen(m_scene.getSizeF().m_x + wallsThickness * 2),
-                camera.worldScalarToScreen(m_scene.getSizeF().m_y + wallsThickness * 2)
+                m_scene.getSizeF().m_x + wallsThickness * 2,
+                m_scene.getSizeF().m_y + wallsThickness * 2
         );
 
         m_wallShape.setFillColor(sf::Color{255, 255, 255, 30});
@@ -116,12 +114,10 @@ public:
     }
 
     void updateBackground() {
-        Camera &camera = m_scene.getCamera();
-
-        Vector2F startPos = camera.worldPosToScreenPos(Vector2F::cart(0, 0));
+        Vector2F startPos = Vector2F::cart(0, 0);
         Vector2F size = Vector2F::cart(
-                camera.worldScalarToScreen(m_scene.getSizeF().m_x),
-                camera.worldScalarToScreen(m_scene.getSizeF().m_y)
+                m_scene.getSizeF().m_x,
+                m_scene.getSizeF().m_y
         );
 
         m_backgroundShape.setFillColor(sf::Color::Black);
