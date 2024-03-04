@@ -24,6 +24,11 @@ private:
     ThreadPool &m_threadPool;
     PerformanceMonitor &m_performanceMonitor;
     int m_maxObjectsNum;
+
+    Vector2F m_gravity = engineDefaults::gravity;
+    float m_maxVelocity = engineDefaults::maxVelocity;
+    bool m_collisionsEnabled = true;
+
     // collision m_grid when finding collisions is split on many threads (by columns). To avoid race conditions i use two pass method. This means that m_grid in fact will be split on numberOfThreads * 2 m_tasks. So, if we have 10threads
     // and m_grid of, say, size 39 will mean that each m_thread gets 1 m_task, and 19 remain for "cleanup" function, which is inefficient, because cleanup function (it solves remaining colums) runs on one core
     // Conclusion: best if m_grid is divided by threads * 2 without remainder
@@ -296,6 +301,32 @@ public:
         return ObjectContext{*this};
     };
 
+    Vector2F &getGravity() {
+        return m_gravity;
+    }
+
+    // set gravity.
+    // high values can cause m_objects to pass through each other and other weird stuff
+    void setGravity(Vector2F gravity) {
+        m_gravity = gravity;
+    }
+
+    // limit velocity of each object on each update() call.
+    // This can prevent full chaos.
+    void setMaxVelocity(float value) {
+        m_maxVelocity = value;
+    }
+
+    [[nodiscard]] float getMaxVelocity() const {
+        return m_maxVelocity;
+    }
+
+    void setCollisionsEnabled(bool enabled) {
+        m_collisionsEnabled = enabled;
+    }
+    [[nodiscard]] bool getCollisionsEnabled() const {
+        return m_collisionsEnabled;
+    }
 
     Scene(const Scene &) = delete;
 

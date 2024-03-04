@@ -14,9 +14,6 @@ private:
     PerformanceMonitor &m_performanceMonitor;
 
     int m_subSteps = engineDefaults::physicsSubSteps;
-    bool m_collisionsEnabled = true;
-    float m_maxVelocity = engineDefaults::maxVelocity;
-    Vector2F m_gravity = engineDefaults::gravity;
     float m_collisionRestitution = engineDefaults::collisionRestitution;
     float m_linearDamping = engineDefaults::linearDamping;
     float m_wallsDamping = engineDefaults::wallsDamping;
@@ -35,12 +32,12 @@ private:
             m_scene.forEachBasicDetails([&size, dt, minX, maxX, minY, maxY, this](BasicDetails &object, int i) {
                 // TODO when all m_grid filled with m_objects, you can see that some start falling faster and some slower (on lower m_gravity levels like 10) - this is because of floats precision
                 if (!object.m_isPinned) {
-                    object.accelerate(m_gravity);
+                    object.accelerate(m_scene.getGravity());
 //                    object.update(dt);
                     Vector2F velocity = object.m_posCurr - object.m_posOld;
                     velocity *= m_linearDamping;
                     // TODO review maby limiting not needed
-                    velocity.limitMagnitude(m_maxVelocity);
+                    velocity.limitMagnitude(m_scene.getMaxVelocity());
 
                     object.m_posOld = object.m_posCurr;
                     object.m_posCurr += velocity + (object.m_acceleration * dt);
@@ -173,7 +170,7 @@ public:
 
     void update() {
         int localSubSteps = m_subSteps;
-        bool localCollisionsEnabled = m_collisionsEnabled;
+        bool localCollisionsEnabled = m_scene.getCollisionsEnabled();
 
         const float subStepDt = engineDefaults::physicsInterval / static_cast<float>(localSubSteps);
 
@@ -213,9 +210,7 @@ public:
         return m_subSteps;
     }
 
-    void setCollisionsEnabled(bool enabled) {
-        m_collisionsEnabled = enabled;
-    }
+
 
     // sets interval of how often onCollision callback will be called (in substeps)
     // if set to 1, then onCollision will be called on every substep
@@ -228,29 +223,7 @@ public:
         return m_subStepsCallbackInterval;
     }
 
-    [[nodiscard]] bool getCollisionsEnabled() const {
-        return m_collisionsEnabled;
-    }
 
-    // limit velocity of each object on each update() call.
-    // This can prevent full chaos.
-    void setMaxVelocity(float value) {
-        m_maxVelocity = value;
-    }
-
-    [[nodiscard]] float getMaxVelocity() const {
-        return m_maxVelocity;
-    }
-
-    // set m_gravity.
-    // high values can cause m_objects to pass through each other and other weird stuff
-    void setGravity(Vector2F value) {
-        m_gravity = value;
-    }
-
-    [[nodiscard]] Vector2F getGravity() const {
-        return m_gravity;
-    }
 
     // adjusts how much m_objects will be "splitted" when resolving collisions.
     // 0 - not splitted no collision resolving happens. 1 - m_objects are fully splitted
