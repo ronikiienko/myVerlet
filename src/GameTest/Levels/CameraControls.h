@@ -2,7 +2,7 @@
 
 #include "../../Engine/Scene.h"
 
-class Move {
+class CameraControls {
 private:
     Scene &m_scene;
     InputBus &m_inputBus;
@@ -12,12 +12,11 @@ private:
     IBHandle m_mouseWheelScrolledHandle;
     bool m_isMoving = false;
     bool m_isRotating = false;
-    sf::RenderWindow &m_window;
     sf::Vector2i m_oldMouseScreenPos{0, 0};
-    float m_arrowMoveSpeed = 50;
 public:
-    explicit Move(Scene &scene, InputBus &inputBus, sf::RenderWindow &window) : m_scene(scene), m_inputBus(inputBus),
-                                                                                m_window(window) {
+    explicit CameraControls(Scene &scene, InputBus &inputBus) : m_scene(scene), m_inputBus(inputBus){
+        m_scene.getCamera().setMinZoom(0.1);
+        m_scene.getCamera().setMaxZoom(10);
         m_mouseClickHandle = m_inputBus.addEventListener(sf::Event::MouseButtonPressed, [this](sf::Event event) {
             if (event.mouseButton.button == sf::Mouse::Right) {
                 m_isMoving = true;

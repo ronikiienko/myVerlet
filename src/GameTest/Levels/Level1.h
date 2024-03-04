@@ -8,7 +8,7 @@
 #include "../../Engine/Modules/ExplosionHandler.h"
 #include "../../Engine/Modules/RandomPositionGenerator.h"
 #include "../Entities/Boid.h"
-#include "Move.h"
+#include "CameraControls.h"
 
 class Level1 : public BaseLevel {
     ExplosionHandler m_explosionHandler{m_scene};
@@ -17,7 +17,7 @@ class Level1 : public BaseLevel {
     SMHandle m_firstSound;
     IBHandle m_inputHandle;
     BoidsBlackboard m_blackboard;
-    Move m_move{m_scene, m_inputBus, m_window};
+    CameraControls m_move{m_scene, m_inputBus};
 public:
     explicit Level1(LevelContext levelContext) : BaseLevel(levelContext, 200000, Vector2I::cart(1000, 1000), 600) {
     }
