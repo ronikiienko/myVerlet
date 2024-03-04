@@ -42,7 +42,7 @@ public:
 //        Vector2F velocity = m_posCurr - m_posOld;
 //        velocity *= engineDefaults::m_linearDamping;
 //        // TODO review maby limiting not needed
-//        velocity.limitMagnitude(engineDefaults::m_maxVelocity);
+//        velocity.limitMagnitudeModify(engineDefaults::m_maxVelocity);
 //
 //        m_posOld = m_posCurr;
 //        m_posCurr += velocity + (m_acceleration * (dt * dt));
