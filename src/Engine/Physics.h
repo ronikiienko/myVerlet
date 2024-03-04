@@ -37,7 +37,7 @@ private:
                     Vector2F velocity = object.m_posCurr - object.m_posOld;
                     velocity *= m_linearDamping;
                     // TODO review maby limiting not needed
-                    velocity.limitMagnitude(m_scene.getMaxVelocity());
+                    velocity.limitMagnitudeModify(m_scene.getMaxVelocity());
 
                     object.m_posOld = object.m_posCurr;
                     object.m_posCurr += velocity + (object.m_acceleration * dt);

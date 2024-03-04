@@ -119,12 +119,22 @@ public:
         return *this;
     }
 
-    constexpr void limitMagnitude(T limit) {
+    constexpr void limitMagnitudeModify(T limit) {
         const T mag2 = magnitude2();
         if (mag2 > limit * limit) {
             const T scale = limit / std::sqrt(mag2);
             m_x *= scale;
             m_y *= scale;
+        }
+    }
+
+    constexpr Vector2<T> limitMagnitude(T limit) {
+        const T mag2 = magnitude2();
+        if (mag2 > limit * limit) {
+            const T scale = limit / std::sqrt(mag2);
+            return Vector2::cart(m_x * scale, m_y * scale);
+        } else {
+            return Vector2::cart(m_x, m_y);
         }
     }
 
