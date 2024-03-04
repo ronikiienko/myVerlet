@@ -28,6 +28,12 @@ public:
         m_window.setView(view);
     }
 
+    void rotate(Angle angle) {
+        sf::View view = m_window.getView();
+        view.rotate(angle.getDegrees());
+        m_window.setView(view);
+    }
+
     [[nodiscard]] Vector2F worldPosToScreenPos(Vector2F worldPos) const {
         sf::Vector2i screenPos = m_window.mapCoordsToPixel(sf::Vector2f{worldPos.m_x, worldPos.m_y});
         return Vector2F::cart(static_cast<float>(screenPos.x) , static_cast<float>(screenPos.y));
