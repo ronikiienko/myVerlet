@@ -19,7 +19,7 @@ public:
         m_posOld = m_posCurr - v;
     }
 
-    [[nodiscard]] Vector2F getVelocity()const {
+    [[nodiscard]] const Vector2F getVelocity()const {
         return m_posCurr - m_posOld;
     }
 
