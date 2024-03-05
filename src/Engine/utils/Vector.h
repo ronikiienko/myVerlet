@@ -131,7 +131,7 @@ public:
         }
     }
 
-    constexpr Vector2<T> limitMagnitude(T limit) {
+    constexpr Vector2<T> limitMagnitude(T limit) const {
         const T mag2 = magnitude2();
         if (mag2 > limit * limit) {
             const T scale = limit / std::sqrt(mag2);
