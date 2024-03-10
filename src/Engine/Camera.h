@@ -42,6 +42,10 @@ public:
         zoom(zoomFactor);
     }
 
+    sf::RenderWindow &getWindow() {
+        return m_window;
+    }
+
     void setMinZoom(float minZoom) {
         m_minZoom = minZoom;
     }

@@ -341,6 +341,23 @@ public:
         return m_boundaryType;
     }
 
+    [[nodiscard]] float getDistanceToTop(Vector2F pos) const {
+        return pos.m_y - 0;
+    }
+
+    [[nodiscard]] float getDistanceToBottom(Vector2F pos) const {
+        return m_sizeF.m_y - pos.m_y;
+    }
+
+    [[nodiscard]] float getDistanceToLeft(Vector2F pos) const {
+        return pos.m_x - 0;
+    }
+
+    [[nodiscard]] float getDistanceToRight(Vector2F pos) const {
+        return m_sizeF.m_x - pos.m_x;
+    }
+
+
     Scene(const Scene &) = delete;
 
     Scene(Scene &&) = delete;
