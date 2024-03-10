@@ -53,7 +53,7 @@ public:
         getBasicDetails().m_color = sf::Color::Red;
     }
 
-    void damage(int damage) override {
+    void receiveDamage(int damage) override {
         m_health -= damage;
         if (m_health <= 0) {
             destroy();

@@ -12,7 +12,7 @@ public:
     void v_onInit() override {};
     void v_onCollision(BaseObject *ptr) override {
         if (auto enemy = dynamic_cast<IDamageable *>(ptr)) {
-            enemy->damage(1);
+            enemy->receiveDamage(1);
         }
         m_hitsLeft--;
         if (m_hitsLeft <= 0) {

@@ -2,5 +2,5 @@
 
 class IDamageable {
 public:
-    virtual void damage(int damage) = 0;
+    virtual void receiveDamage(int damage) = 0;
 };

@@ -49,6 +49,9 @@ set(SOURCES src/main.cpp
         src/Engine/Modules/RandomPositionGenerator.h
         src/GameTest/Entities/Boid.h
         src/GameTest/Levels/CameraControls.h
+        src/GameTest/Entities/Predator.h
+        src/GameTest/Entities/Interfaces/IPrey.h
+        src/GameTest/Entities/Interfaces/IPredator.h
 )
 
 project(${PROJECT_NAME})
