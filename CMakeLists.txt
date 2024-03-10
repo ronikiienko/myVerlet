@@ -48,7 +48,7 @@ set(SOURCES src/main.cpp
         src/Engine/utils/SparseSet.h
         src/Engine/Modules/RandomPositionGenerator.h
         src/GameTest/Entities/Boid.h
-        src/GameTest/Levels/CameraControls.h
+        src/Engine/Modules/CameraControls.h
         src/GameTest/Entities/Predator.h
         src/GameTest/Entities/Interfaces/IPrey.h
         src/GameTest/Entities/Interfaces/IPredator.h

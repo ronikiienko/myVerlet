@@ -9,7 +9,7 @@
 #include "../../Engine/Modules/RandomPositionGenerator.h"
 #include "../Entities/Boid.h"
 #include "../Entities/Predator.h"
-#include "CameraControls.h"
+#include "../../Engine/Modules/CameraControls.h"
 
 class Level1 : public BaseLevel {
     ExplosionHandler m_explosionHandler{m_scene};
