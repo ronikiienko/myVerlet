@@ -24,6 +24,11 @@ public:
         m_window.setView(view);
     }
 
+    Vector2F getPosition() {
+        sf::View view = m_window.getView();
+        return Vector2F::cart(view.getCenter().x, view.getCenter().y);
+    }
+
     void zoom(float zoomFactor) {
         if (m_zoom * zoomFactor < m_minZoom) {
             zoomFactor = m_minZoom / m_zoom;
