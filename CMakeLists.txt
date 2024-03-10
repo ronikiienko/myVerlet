@@ -20,10 +20,8 @@ set(SOURCES src/main.cpp
         src/GameTest/Game.h
         src/GameTest/Levels/Level1.h
         src/Engine/Modules/ExplosionHandler.h
-        src/GameTest/Entities/Player.h
         src/Engine/SoundManager/SoundManagerImpl.h
-        src/GameTest/consts.h
-        src/GameTest/Levels/PerformanceTest/EmptyObject.h
+        src/Engine/Modules/PerformanceTest/EmptyObject.h
         src/Engine/EventBus/EBHandle.cpp
         src/Engine/TimerManager/TMHandle.h
         src/Engine/TimerManager/TMHandle.cpp
@@ -34,11 +32,8 @@ set(SOURCES src/main.cpp
         src/Engine/InputBus/InputBus.h
         src/Engine/InputBus/InputBusImpl.h
         src/GameTest/Events.h
-        src/GameTest/Entities/Enemy.h
-        src/GameTest/Entities/Bullet.h
         src/Engine/Modules/Shooter.h
-        src/GameTest/Entities/Interfaces/IDamageable.h
-        src/GameTest/Levels/PerformanceTest/PerformanceTest.h
+        src/Engine/Modules/PerformanceTest/PerformanceTest.h
         src/Engine/BaseObject/BaseObject.cpp
         src/Engine/SoundManager/SoundManager.h
         src/Engine/SoundManager/SMHandle.h
@@ -47,11 +42,7 @@ set(SOURCES src/main.cpp
         src/Engine/utils/lineClip.h
         src/Engine/utils/SparseSet.h
         src/Engine/Modules/RandomPositionGenerator.h
-        src/GameTest/Entities/Boid.h
         src/Engine/Modules/CameraControls.h
-        src/GameTest/Entities/Predator.h
-        src/GameTest/Entities/Interfaces/IPrey.h
-        src/GameTest/Entities/Interfaces/IPredator.h
 )
 
 project(${PROJECT_NAME})

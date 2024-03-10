@@ -1,11 +1,11 @@
 #pragma once
 
-#include "../../../Engine/BaseLevel.h"
-#include "../../../Engine/utils/Rand.h"
+#include "../../BaseLevel.h"
+#include "../../utils/Rand.h"
 #include "../../Entities/Player.h"
-#include "../../consts.h"
+#include "../../../GameTest/consts.h"
 #include "../../Entities/Enemy.h"
-#include "../../../Engine/Modules/ExplosionHandler.h"
+#include "../ExplosionHandler.h"
 #include "EmptyObject.h"
 
 class PerformanceTest : public BaseLevel {
