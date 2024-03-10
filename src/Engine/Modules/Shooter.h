@@ -9,14 +9,14 @@ class Shooter {
 private:
     RNGf& m_gen;
     float m_speed = 2;
-    float m_spread = 0;
+    float m_spreadDegrees = 0;
     Scene &m_scene;
     int m_cooldown = 5;
     int m_ticksSinceLastShot = 0;
 
     template<typename BulletType>
     void shoot(Vector2F source, Vector2F target, BulletType &&bullet) {
-        Angle spreadAngle = Angle::fromDegrees(m_gen.getInRange(-m_spread, m_spread));
+        Angle spreadAngle = Angle::fromDegrees(m_gen.getInRange(-m_spreadDegrees, m_spreadDegrees));
         Vector2F direction = (target - source).rotate(spreadAngle).normalize();
         Vector2F velocity = direction * m_speed;
         Vector2F startPos = source + direction * 2;
@@ -27,8 +27,8 @@ public:
     Shooter(Scene &scene, RNGf& gen) : m_scene(scene), m_gen(gen) {}
 
 
-    void setSpread(float spread) {
-        m_spread = spread;
+    void setSpread(Angle spread) {
+        m_spreadDegrees = spread.getDegrees();
     }
 
     void setSpeed(float speed) {
