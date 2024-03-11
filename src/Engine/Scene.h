@@ -395,6 +395,11 @@ public:
         return m_sizeF.m_x - pos.m_x;
     }
 
+    void logDifferentTypeCounts() {
+        for (const auto &i: m_objectTypesIndexLists) {
+            std::cout << i.first.name() << " " << i.second.size() << std::endl;
+        }
+    }
 
     Scene(const Scene &) = delete;
 
