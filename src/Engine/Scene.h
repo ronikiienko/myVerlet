@@ -266,7 +266,8 @@ public:
         m_objectsToRemove.clear();
     }
 
-
+    // Important node: removal itself happens in the end of the frame. After all physics substeps and input handling.
+    // So, for example, checking weakPointer.expired() in the same frame after removeObject() will return false
     void removeObject(int index) {
         markObjectForRemoval(index);
     }
