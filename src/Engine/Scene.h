@@ -3,6 +3,7 @@
 #include <vector>
 #include <bits/shared_ptr.h>
 #include <set>
+#include <typeindex>
 #include "BaseObject/BaseObject.h"
 #include "EngineConsts.h"
 #include "utils/Grid.h"
@@ -18,19 +19,25 @@ enum BOUNDARY_TYPE {
 
 class Scene {
 private:
+    int m_maxObjectsNum;
     std::vector<std::shared_ptr<BaseObject>> m_objects;
     std::set<int, std::greater<>> m_objectsToRemove;
     SparseSet m_objectsWithRotation;
     std::vector<BasicDetails> m_basicDetails;
+    std::unordered_map<std::type_index, std::set<int>> m_objectTypesIndexLists;
+
     Vector2F m_sizeF;
     Vector2I m_sizeI;
+
     Camera m_camera;
+
     ThreadPool &m_threadPool;
+
     PerformanceMonitor &m_performanceMonitor;
-    int m_maxObjectsNum;
     BOUNDARY_TYPE m_boundaryType = BOUNDARY_TYPE::SOLID;
 
     Vector2F m_gravity = engineDefaults::gravity;
+
     float m_maxVelocity = engineDefaults::maxVelocity;
     bool m_collisionsEnabled = true;
 
@@ -102,13 +109,88 @@ public:
         m_basicDetails.emplace_back(position);
         object.m_basicDetails = &m_basicDetails.back();
 
-        std::shared_ptr<T> ptr = std::make_shared<T>(std::forward<T>(object));
-        m_objects.push_back(std::move(ptr));
+        m_objects.push_back(std::make_shared<T>(std::forward<T>(object)));
 
         int index = static_cast<int>(m_objects.size()) - 1;
         m_basicDetails[index].m_parent = m_objects[index].get();
         m_objects[index]->v_onInit();
+        m_objectTypesIndexLists[typeid(T)].insert(index);
         return {m_objects[index]};
+    }
+
+    [[nodiscard]] int getObjectsCount() {
+        return static_cast<int>(m_objects.size());
+    }
+
+    // use std::set to have objectsToRemove in descending order
+    // Because there's bad corner case:
+    // if hypotetically vector is of size 100, and "removal set" is {15, 20, 99, 98},
+    // then we would remove 15, swapped it with 99, popped, and element 99 would be at position 15. And removal at position 99 would fail
+    void removeMarkedObjects() {
+        if (m_objectsToRemove.empty()) {
+            return;
+        }
+
+        // use swap & pop to remove objects without a lot of shifting
+        for (const auto &i: m_objectsToRemove) {
+            int lastIndex = getObjectsCount() - 1;
+            if (i > lastIndex || i < 0) {
+                throw std::runtime_error("Trying to remove object that does not exist");
+            }
+
+            if (i == lastIndex) {
+                // this actually works. typeid(removedObjectRef) returns the type of the derived object, not BaseObject
+                // be cautious, that if I would use typeid directly on pointer, it would return BaseObject for any derived object
+                BaseObject& removedObjectRef = *(m_objects[i].get());
+                m_objectTypesIndexLists[typeid(removedObjectRef)].erase(i);
+
+                m_objectsWithRotation.remove(i);
+                m_objects.pop_back();
+                m_basicDetails.pop_back();
+            }
+            if (i < lastIndex) {
+                BaseObject& removedObjectRef = *m_objects[i];
+                BaseObject& lastObjectRef = *m_objects[lastIndex];
+                std::type_index removedTypeIndex = typeid(removedObjectRef);
+                std::type_index lastTypeIndex = typeid(lastObjectRef);
+                m_objectTypesIndexLists[removedTypeIndex].erase(i);
+                m_objectTypesIndexLists[lastTypeIndex].erase(lastIndex);
+                m_objectTypesIndexLists[lastTypeIndex].insert(i);
+
+                if (m_objectsWithRotation.contains(lastIndex)) {
+                    m_objectsWithRotation.insert(i);
+                    m_objectsWithRotation.remove(lastIndex);
+                } else {
+                    m_objectsWithRotation.remove(i);
+                }
+                std::swap(m_objects[i], m_objects[lastIndex]);
+                std::swap(m_basicDetails[i], m_basicDetails[lastIndex]);
+                m_objects.pop_back();
+                m_basicDetails.pop_back();
+                m_objects[i]->m_basicDetails = &m_basicDetails[i];
+            }
+        }
+
+        m_objectsToRemove.clear();
+    }
+
+    // Important node: removal itself happens in the end of the frame. After all physics substeps and input handling.
+    // So, for example, checking weakPointer.expired() in the same frame after removeObject() will return false
+    void removeObject(int index) {
+        markObjectForRemoval(index);
+    }
+
+    void removeObject(std::weak_ptr<BaseObject> &ptr) {
+        int index = getIndexByPtr(ptr);
+        markObjectForRemoval(index);
+    }
+
+    // theres was bug: if you remove an object during m_physics calculations, it will cause some m_grid m_objects to become invalid (because everything is shifted), and m_grid uses id's
+    // this can happen primarily if we for example remove an object in collision m_callback
+    // to fix this we  use a stack of m_objects to remove, and remove them after m_physics calculations (and input handling)
+    void removeObject(BaseObject *ptr) {
+        int index = getIndexByPtr(ptr);
+        markObjectForRemoval(index);
     }
 
     Camera &getCamera() {
@@ -125,6 +207,18 @@ public:
         for (int i = start; i < end; i++) {
             callback(*m_objects[i], i);
         }
+    }
+
+    template<typename ObjectType, typename T>
+    void forEachObjectOfType(const T &callback) {
+        for (int i: m_objectTypesIndexLists[typeid(ObjectType)]) {
+            callback(static_cast<ObjectType&>(*m_objects[i]), i);
+        }
+    }
+
+    template<typename ObjectType>
+    int getObjectsOfTypeCount() {
+        return static_cast<int>(m_objectTypesIndexLists[typeid(ObjectType)].size());
     }
 
     template<typename T>
@@ -154,9 +248,7 @@ public:
         return m_basicDetails[ind];
     }
 
-    [[nodiscard]] int getObjectsCount() {
-        return static_cast<int>(m_objects.size());
-    }
+
 
     [[nodiscard]] int getObjectsWithRotationCount() const {
         return m_objectsWithRotation.size();
@@ -228,62 +320,7 @@ public:
 //        });
     }
 
-    // use std::set to have objectsToRemove in descending order
-    // Because there's bad corner case:
-    // if hypotetically vector is of size 100, and "removal set" is {15, 20, 99, 98},
-    // then we would remove 15, swapped it with 99, popped, and element 99 would be at position 15. And removal at position 99 would fail
-    void removeMarkedObjects() {
-        if (m_objectsToRemove.empty()) {
-            return;
-        }
 
-        // use swap & pop to remove objects without a lot of shifting
-        for (const auto &i: m_objectsToRemove) {
-            int lastIndex = getObjectsCount() - 1;
-            if (i > lastIndex || i < 0) {
-                throw std::runtime_error("Trying to remove object that does not exist");
-            }
-            if (i == lastIndex) {
-                m_objectsWithRotation.remove(i);
-                m_objects.pop_back();
-                m_basicDetails.pop_back();
-            }
-            if (i < lastIndex) {
-                if (m_objectsWithRotation.contains(lastIndex)) {
-                    m_objectsWithRotation.insert(i);
-                    m_objectsWithRotation.remove(lastIndex);
-                } else {
-                    m_objectsWithRotation.remove(i);
-                }
-                std::swap(m_objects[i], m_objects[lastIndex]);
-                std::swap(m_basicDetails[i], m_basicDetails[lastIndex]);
-                m_objects.pop_back();
-                m_basicDetails.pop_back();
-                m_objects[i]->m_basicDetails = &m_basicDetails[i];
-            }
-        }
-
-        m_objectsToRemove.clear();
-    }
-
-    // Important node: removal itself happens in the end of the frame. After all physics substeps and input handling.
-    // So, for example, checking weakPointer.expired() in the same frame after removeObject() will return false
-    void removeObject(int index) {
-        markObjectForRemoval(index);
-    }
-
-    void removeObject(std::weak_ptr<BaseObject> &ptr) {
-        int index = getIndexByPtr(ptr);
-        markObjectForRemoval(index);
-    }
-
-    // theres was bug: if you remove an object during m_physics calculations, it will cause some m_grid m_objects to become invalid (because everything is shifted), and m_grid uses id's
-    // this can happen primarily if we for example remove an object in collision m_callback
-    // to fix this we  use a stack of m_objects to remove, and remove them after m_physics calculations (and input handling)
-    void removeObject(BaseObject *ptr) {
-        int index = getIndexByPtr(ptr);
-        markObjectForRemoval(index);
-    }
 
     void rebuildGrid() {
         m_performanceMonitor.start("m_grid clear");
