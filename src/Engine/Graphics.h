@@ -132,10 +132,16 @@ public:
         updateWalls();
         updateBackground();
         m_performanceMonitor.end("walls");
+        m_performanceMonitor.start("objects");
         updateObjectsArray();
+        m_performanceMonitor.end("objects");
+        m_performanceMonitor.start("rotations");
         updateRotationsArray();
+        m_performanceMonitor.end("rotations");
+        m_performanceMonitor.start("draw");
         m_window.draw(m_objectVertexArray, &m_objectTexture);
         m_window.draw(m_rotationsVertexArray, &m_objectTexture);
+        m_performanceMonitor.end("draw");
     }
 
     Graphics(const Graphics &) = delete;
