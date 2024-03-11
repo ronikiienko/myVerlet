@@ -211,7 +211,8 @@ public:
 
     // function is pretty fast. It uses static_cast for casting.
     // And internal list of indices for each type of object
-    // But can be improved by using std::vector instead of std::set
+    // But can be improved by using std::vector instead of std::set,
+    // and storing pointers instead of indices to avoid indirection
     template<typename ObjectType, typename T>
     void forEachObjectOfType(const T &callback) {
         for (int i: m_objectTypesIndexLists[typeid(ObjectType)]) {
