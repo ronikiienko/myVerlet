@@ -43,6 +43,12 @@ set(SOURCES src/main.cpp
         src/Engine/utils/SparseSet.h
         src/Engine/Modules/RandomPositionGenerator.h
         src/Engine/Modules/CameraControls.h
+        src/GameTest/Entities/Player.h
+        src/GameTest/Entities/Enemy.h
+        src/GameTest/Entities/IDamageable.h
+        src/GameTest/Entities/Bullet.h
+        src/Engine/Modules/CameraFollowing.h
+        src/GameTest/UiRenderer.h
 )
 
 project(${PROJECT_NAME})
