@@ -85,6 +85,9 @@ public:
     };
     virtual void v_onTick() = 0;
     virtual void v_onInit() = 0;
+
+    // Important note: this method can be called many times for same collision. It doesn't check if objects were colliding in previous frame.
+    // Also, it can be called after object is destroyed (because destruction is delayed to the end of the frame, so during subSteps it can be called).
     virtual void v_onCollision(BaseObject* ptr) = 0;
 
     void destroy();
