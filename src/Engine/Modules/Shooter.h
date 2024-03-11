@@ -19,7 +19,7 @@ private:
         Angle spreadAngle = Angle::fromDegrees(m_gen.getInRange(-m_spreadDegrees, m_spreadDegrees));
         Vector2F direction = (target - source).rotate(spreadAngle).normalize();
         Vector2F velocity = direction * m_speed;
-        Vector2F startPos = source + direction * 2;
+        Vector2F startPos = source + direction * engineDefaults::objectsRadius * 2;
         std::weak_ptr<BaseObject> ptr = m_scene.addObject(std::forward<BulletType>(bullet), startPos);
         ptr.lock()->getBasicDetails().setVelocity(velocity);
     }
