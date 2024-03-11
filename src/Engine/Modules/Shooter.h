@@ -44,10 +44,13 @@ public:
     }
 
     template<typename BulletType>
-    void tryShoot(Vector2F source, Vector2F target, BulletType &&bullet) {
+    bool tryShoot(Vector2F source, Vector2F target, BulletType &&bullet) {
         if (m_ticksSinceLastShot > m_cooldown) {
             shoot(source, target, std::forward<BulletType>(bullet));
             m_ticksSinceLastShot = 0;
+            return true;
+        } else {
+            return false;
         }
     }
 };
