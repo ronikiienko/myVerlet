@@ -2,6 +2,7 @@
 
 #include "../Engine/BaseGame.h"
 #include "Levels/Level1.h"
+#include "../Engine/Modules/PerformanceTest/PerformanceTest.h"
 
 class Game : public BaseGame {
 private:
@@ -11,7 +12,7 @@ public:
 
     void v_onInit() override {
         std::cout << "Game init" << std::endl;
-        setLevel<Level1>();
+        setLevel<PerformanceTest>();
     }
 
     void v_onTick() override {}

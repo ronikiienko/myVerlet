@@ -28,7 +28,7 @@ Label.bulletCount {
     Position = (690, 20);
     Renderer = &1;
     Size = (39, 17);
-    Text = Label;
+    Text = "";
     TextSize = 13;
 }
 
@@ -46,15 +46,15 @@ Label.Label2 {
     Position = (550, 50);
     Renderer = &1;
     Size = (132, 17);
-    Text = "EnemiesDestroyed:";
+    Text = "Enemy count:";
     TextSize = 13;
 }
 
-Label.enemiesDestroyedCount {
+Label.enemyCount {
     AutoSize = true;
     Position = (690, 50);
     Renderer = &1;
     Size = (39, 17);
-    Text = Label;
+    Text = "";
     TextSize = 13;
 }
