@@ -41,7 +41,23 @@ public:
     }
 };
 
+class BooleanNumberGenerator : public NumberGenerator {
+public:
+    explicit BooleanNumberGenerator(int seed) : NumberGenerator(seed) {}
+    BooleanNumberGenerator() : NumberGenerator() {}
+
+    bool operator()() {
+        std::bernoulli_distribution distribution(0.5); // 50% chance for true or false
+        return distribution(m_gen);
+    }
+    bool operator()(double probability) {
+        std::bernoulli_distribution distribution(probability); // 50% chance for true or false
+        return distribution(m_gen);
+    }
+};
+
 using RNGf = RealNumberGenerator<float>;
 using RNGd = RealNumberGenerator<double>;
 using RNGi = IntNumberGenerator<int>;
 using RNGs = IntNumberGenerator<short>;
+using RNGb = BooleanNumberGenerator;
