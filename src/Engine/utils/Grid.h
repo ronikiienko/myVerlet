@@ -93,13 +93,13 @@ struct IdGrid {
         const int gridX = static_cast<int>(realX * m_cellWidthInverse);
         const int gridY = static_cast<int>(realY * m_cellHeightInverse);
 
-        // TODO remove checks - they are for debuggin
+#ifdef IT_IS_DEBUG
         if (gridX < 0 || gridX >= m_width || gridY < 0 || gridY >= m_height) {
             throw std::runtime_error(
                     "Trying to set outside the m_grid. Grid m_x: " + std::to_string(gridX) + " Grid m_y: " +
                     std::to_string(gridY) + " Id: " + std::to_string(id));
         }
-
+#endif
         const int index = gridY * m_width + gridX;
 
         m_data[index].insert(id);
@@ -118,10 +118,12 @@ struct IdGrid {
     }
 
     [[nodiscard]] const Cell &get(int gridX, int gridY) const {
-        // TODO remove safety checks
+#ifdef IT_IS_DEBUG
         if (gridX < 0 || gridX >= m_width || gridY < 0 || gridY >= m_height) {
             throw std::runtime_error("Trying to get outside the m_grid.");
         }
+#endif
+
         int index = gridY * m_width + gridX;
         return m_data[index];
     }
@@ -209,7 +211,8 @@ struct IdGrid {
 
         Vector2F deltaGrid = endGrid - startGrid;
 
-        Vector2I cellsDelta = Vector2I::cart(static_cast<int>(endGrid.m_x) - static_cast<int>(startGrid.m_x), static_cast<int>(endGrid.m_y) - static_cast<int>(startGrid.m_y));
+        Vector2I cellsDelta = Vector2I::cart(static_cast<int>(endGrid.m_x) - static_cast<int>(startGrid.m_x),
+                                             static_cast<int>(endGrid.m_y) - static_cast<int>(startGrid.m_y));
         Vector2I cellsDistance = Vector2I::cart(std::abs(cellsDelta.m_x), std::abs(cellsDelta.m_y));
 
         int steps;
