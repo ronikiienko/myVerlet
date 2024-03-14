@@ -62,6 +62,9 @@ set(TGUI_DIR "C:/Libraries/TGUI-1.1/lib/cmake/TGUI")
 find_package(TGUI REQUIRED)
 include_directories("C:/Libraries/TGUI-1.1/include/TGUI")
 
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    add_compile_definitions(IT_IS_DEBUG)
+endif()
 
 #first to generate profile second to startLoop
 #set(CMAKE_CXX_FLAGS_RELEASE  "-Ofast -frename-registers -funroll-loops -fprofile-generate -fprofile-correction")
