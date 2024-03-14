@@ -220,6 +220,7 @@ public:
         }
     }
 
+    // this fast, as it doesn't actually count anything in loop, but just get's size of set
     template<typename ObjectType>
     int getObjectsOfTypeCount() {
         return static_cast<int>(m_objectTypesIndexLists[typeid(ObjectType)].size());
