@@ -16,7 +16,7 @@ private:
     IBHandle m_mousePressHandle;
     IBHandle m_mouseReleaseHandle;
 
-    float m_speed = 0.01;
+    float m_speed = 0.02;
 
     bool m_isMovingRight = false;
     bool m_isMovingLeft = false;
@@ -58,15 +58,15 @@ public:
             bool didShoot = m_shooter.tryShoot(getBasicDetails().m_posCurr, m_scene.getCamera().screenPosToWorldPos(sf::Mouse::getPosition(m_scene.getCamera().getWindow())), Bullet{m_scene.getObjectContext()});
             if (didShoot) {
                 m_bulletsLeft--;
-                m_eventBus.emit(PlayerBulletCountUpdate{m_bulletsLeft});
+                m_eventBus.emit(GameEvents::PlayerBulletCountUpdate{m_bulletsLeft});
             }
         }
     };
     void v_onInit() override {
         m_cameraFollowing.setTransitionCoefficient(0.1);
         m_shooter.setSpread(Angle::fromDegrees(5));
-        m_shooter.setCooldown(0);
-        m_shooter.setSpeed(2);
+        m_shooter.setCooldown(20);
+        m_shooter.setSpeed(0.8);
         getBasicDetails().m_color = sf::Color::Green;
         m_keyPressHandle = m_inputBus.addEventListener(sf::Event::KeyPressed, [this](sf::Event event) {
             if (event.key.code == sf::Keyboard::D) {

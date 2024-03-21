@@ -31,7 +31,7 @@ public:
         for (int i = 0; i < 100; i++) {
             m_scene.addObject(Enemy{m_scene.getObjectContext(), playerPtr, m_gen, m_eventBus}, m_randomPositionGenerator.get());
         }
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10000; i++) {
             m_scene.addObject(EmptyObject{m_scene.getObjectContext()}, m_randomPositionGenerator.get());
         }
 
@@ -53,6 +53,6 @@ public:
     }
 
     void v_onTick() override {
-        m_eventBus.emit(EnemyCountUpdate{m_scene.getObjectsOfTypeCount<Enemy>()});
+        m_eventBus.emit(GameEvents::EnemyCountUpdate{m_scene.getObjectsOfTypeCount<Enemy>()});
     }
 };
