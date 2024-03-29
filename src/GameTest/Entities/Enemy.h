@@ -69,7 +69,7 @@ public:
         weight = std::max(xWeight, yWeight);
 
         wallAvoidanceDirection = wallAvoidanceDirection.normalize();
-        return {wallAvoidanceDirection, weight, 1};
+        return {wallAvoidanceDirection, weight, 0.5};
     }
 
     BehaviourResult playerAvoidance() {
@@ -84,7 +84,7 @@ public:
                                            player->getBasicDetails().m_posCurr).normalize();
             }
         }
-        return {awayFromPlayerDirection, weight, 1};
+        return {awayFromPlayerDirection, weight, 0.5};
     }
 
     BehaviourResult randomMovement() {
@@ -97,6 +97,23 @@ public:
 
     }
 
+    BehaviourResult bulletAvoidance() {
+        Vector2F direction = Vector2F::cart();
+        int bulletCount = 0;
+        m_scene.forEachInRadius(getBasicDetails().m_posCurr, 1000, [&](BaseObject* object, int id){
+            if (auto bullet = dynamic_cast<Bullet*>(object)) {
+                bulletCount++;
+                direction += (getBasicDetails().m_posCurr - bullet->getBasicDetails().m_posCurr);
+            }
+        });
+        if (bulletCount > 0) {
+            direction = direction.normalize();
+            return {direction, 1, 1};
+        } else {
+            return {direction , 0, 1};
+        }
+    }
+
     void v_onTick() override {
         Vector2F totalAcceleration = Vector2F::cart();
 
@@ -105,6 +122,7 @@ public:
         behaviourResults.push_back(playerAvoidance());
         behaviourResults.push_back(wallAvoidance());
         behaviourResults.push_back(randomMovement());
+        behaviourResults.push_back(bulletAvoidance());
 
         std::vector<Vector2F> directions(behaviourResults.size());
         std::vector<float> localWeights(behaviourResults.size());
