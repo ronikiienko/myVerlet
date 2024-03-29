@@ -141,7 +141,7 @@ public:
             if (i == lastIndex) {
                 // this actually works. typeid(removedObjectRef) returns the type of the derived object, not BaseObject
                 // be cautious, that if I would use typeid directly on pointer, it would return BaseObject for any derived object
-                BaseObject& removedObjectRef = *(m_objects[i].get());
+                BaseObject &removedObjectRef = *(m_objects[i].get());
                 m_objectTypesIndexLists[typeid(removedObjectRef)].erase(i);
 
                 m_objectsWithRotation.remove(i);
@@ -149,8 +149,8 @@ public:
                 m_basicDetails.pop_back();
             }
             if (i < lastIndex) {
-                BaseObject& removedObjectRef = *m_objects[i];
-                BaseObject& lastObjectRef = *m_objects[lastIndex];
+                BaseObject &removedObjectRef = *m_objects[i];
+                BaseObject &lastObjectRef = *m_objects[lastIndex];
                 std::type_index removedTypeIndex = typeid(removedObjectRef);
                 std::type_index lastTypeIndex = typeid(lastObjectRef);
                 m_objectTypesIndexLists[removedTypeIndex].erase(i);
@@ -216,7 +216,7 @@ public:
     template<typename ObjectType, typename T>
     void forEachObjectOfType(const T &callback) {
         for (int i: m_objectTypesIndexLists[typeid(ObjectType)]) {
-            callback(static_cast<ObjectType&>(*m_objects[i]), i);
+            callback(static_cast<ObjectType &>(*m_objects[i]), i);
         }
     }
 
@@ -254,7 +254,6 @@ public:
     }
 
 
-
     [[nodiscard]] int getObjectsWithRotationCount() const {
         return m_objectsWithRotation.size();
     }
@@ -283,6 +282,16 @@ public:
                     }
                 });
     }
+
+    template<typename T>
+    void forEachInSquare(Vector2F pos, float radius, const T &callback) {
+        m_grid.forEachInRect(
+                RectangleF::fromCoords(pos.m_x - radius, pos.m_y - radius, pos.m_x + radius, pos.m_y + radius),
+                [&](int id) {
+                    callback(m_basicDetails[id].m_parent, id);
+                });
+    }
+
 
     template<typename T>
     void lineTrace(Vector2F start, Vector2F end, const T &callback) {
@@ -324,7 +333,6 @@ public:
 //            callback(basicDetails.m_parent, id);
 //        });
     }
-
 
 
     void rebuildGrid() {
@@ -372,6 +380,7 @@ public:
     void setCollisionsEnabled(bool enabled) {
         m_collisionsEnabled = enabled;
     }
+
     [[nodiscard]] bool getCollisionsEnabled() const {
         return m_collisionsEnabled;
     }
