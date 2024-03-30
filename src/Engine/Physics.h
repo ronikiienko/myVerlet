@@ -91,16 +91,15 @@ private:
         const float dist2 = vectorBetween.magnitude2();
         // Check overlapping
         if (dist2 < engineDefaults::twoObjectsRadiusSquared) {
-
-
             const float dist = std::sqrt(dist2);
             if (dist == 0) return;
             const Vector2F normal = vectorBetween / dist;
-            const float delta = 0.5f * m_collisionRestitution * (dist - engineDefaults::twoObjectsRadius);
+            float weightRatio = obj1.m_mass / (obj1.m_mass + obj2.m_mass);
+            const float delta = m_collisionRestitution * (dist - engineDefaults::twoObjectsRadius);
             // Update positions
             if (obj1.m_isCollisionOn && obj2.m_isCollisionOn) {
-                if (!obj1.m_isPinned) obj1.m_posCurr -= normal * delta;
-                if (!obj2.m_isPinned) obj2.m_posCurr += normal * delta;
+                if (!obj1.m_isPinned) obj1.m_posCurr -= normal * delta * (1 - weightRatio);
+                if (!obj2.m_isPinned) obj2.m_posCurr += normal * delta * weightRatio;
                 // TODO i should not call onCollision from here. because it is called from different threads. then removing other object from onCollision would be very risky
                 if constexpr (WithCallback) {
                     obj1.m_parent->v_onCollision(obj2.m_parent);

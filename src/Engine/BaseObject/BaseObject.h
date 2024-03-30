@@ -12,6 +12,7 @@ public:
     Vector2F m_posCurr, m_posOld, m_acceleration = Vector2F::cart();
     sf::Color m_color = sf::Color::White;
     bool m_isPinned = false;
+    float m_mass = 1;
     bool m_isCollisionOn = true;
     Vector2F m_direction = Vector2F::polar(1, Angle::fromDegrees(0));
 
