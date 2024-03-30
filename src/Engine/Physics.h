@@ -99,8 +99,8 @@ private:
             const float delta = 0.5f * m_collisionRestitution * (dist - engineDefaults::twoObjectsRadius);
             // Update positions
             if (obj1.m_isCollisionOn && obj2.m_isCollisionOn) {
-                obj1.m_posCurr -= normal * delta;
-                obj2.m_posCurr += normal * delta;
+                if (!obj1.m_isPinned) obj1.m_posCurr -= normal * delta;
+                if (!obj2.m_isPinned) obj2.m_posCurr += normal * delta;
                 // TODO i should not call onCollision from here. because it is called from different threads. then removing other object from onCollision would be very risky
                 if constexpr (WithCallback) {
                     obj1.m_parent->v_onCollision(obj2.m_parent);
