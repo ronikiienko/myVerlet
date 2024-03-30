@@ -49,6 +49,7 @@ set(SOURCES src/main.cpp
         src/GameTest/Entities/Bullet.h
         src/Engine/Modules/CameraFollowing.h
         src/GameTest/UiRenderer.h
+        src/GameTest/Entities/Food.h
 )
 
 project(${PROJECT_NAME})

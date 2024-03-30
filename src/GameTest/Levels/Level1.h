@@ -10,6 +10,7 @@
 #include "../Entities/Player.h"
 #include "../Entities/Enemy.h"
 #include "../UiRenderer.h"
+#include "../Entities/Food.h"
 
 class Level1 : public BaseLevel {
     ExplosionHandler m_explosionHandler{m_scene};
@@ -31,8 +32,11 @@ public:
         for (int i = 0; i < 100; i++) {
             m_scene.addObject(Enemy{m_scene.getObjectContext(), playerPtr, m_gen, m_eventBus}, m_randomPositionGenerator.get());
         }
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < 0; i++) {
             m_scene.addObject(EmptyObject{m_scene.getObjectContext()}, m_randomPositionGenerator.get());
+        }
+        for (int i = 0; i < 100; i++) {
+            m_scene.addObject(Food{m_scene.getObjectContext()}, m_randomPositionGenerator.get());
         }
 
         m_keyPressHandle = m_inputBus.addEventListener(sf::Event::KeyPressed,[this](sf::Event event) {

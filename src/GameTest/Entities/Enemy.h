@@ -34,6 +34,7 @@ private:
 
     float m_viewDistance = 100;
     float m_maxAcceleration = 0.2;
+    float bulletAvoidanceDistance = 30;
     float m_health = 100;
 
     EventBus &m_eventBus;
@@ -100,17 +101,17 @@ public:
     BehaviourResult bulletAvoidance() {
         Vector2F direction = Vector2F::cart();
         int bulletCount = 0;
-        m_scene.forEachInRadius(getBasicDetails().m_posCurr, 1000, [&](BaseObject* object, int id){
-            if (auto bullet = dynamic_cast<Bullet*>(object)) {
+        m_scene.forEachObjectOfType<Bullet>([&](Bullet &bullet, int id) {
+            if ((bullet.getBasicDetails().m_posCurr - getBasicDetails().m_posCurr).magnitude2() < bulletAvoidanceDistance * bulletAvoidanceDistance) {
                 bulletCount++;
-                direction += (getBasicDetails().m_posCurr - bullet->getBasicDetails().m_posCurr);
+                direction += (getBasicDetails().m_posCurr - bullet.getBasicDetails().m_posCurr);
             }
         });
         if (bulletCount > 0) {
             direction = direction.normalize();
             return {direction, 1, 1};
         } else {
-            return {direction , 0, 1};
+            return {direction, 0, 1};
         }
     }
 
