@@ -5,6 +5,7 @@
 #include "../../Engine/BaseObject/BaseObject.h"
 #include "../../Engine/InputBus/InputBus.h"
 #include "IDamageable.h"
+#include "Food.h"
 
 std::vector<float> getNormalizedWeights(std::vector<float> weights) {
     float sum = 0;
@@ -91,7 +92,7 @@ public:
     BehaviourResult randomMovement() {
         if (m_gen.getInRange(1, 30) > 1) {
             Vector2F direction = Vector2F::polar(1, Angle::fromDegrees(m_gen.getInRange(0, 360)));
-            return {direction, 0.2, 0.01};
+            return {direction, 1, 1};
         } else {
             return {Vector2F::cart(), 0, 0.01};
         }
@@ -102,16 +103,36 @@ public:
         Vector2F direction = Vector2F::cart();
         int bulletCount = 0;
         m_scene.forEachObjectOfType<Bullet>([&](Bullet &bullet, int id) {
-            if ((bullet.getBasicDetails().m_posCurr - getBasicDetails().m_posCurr).magnitude2() < bulletAvoidanceDistance * bulletAvoidanceDistance) {
+            if ((bullet.getBasicDetails().m_posCurr - getBasicDetails().m_posCurr).magnitude2() <
+                bulletAvoidanceDistance * bulletAvoidanceDistance) {
                 bulletCount++;
                 direction += (getBasicDetails().m_posCurr - bullet.getBasicDetails().m_posCurr);
             }
         });
         if (bulletCount > 0) {
             direction = direction.normalize();
-            return {direction, 1, 1};
+            return {direction, 1, 0.8};
         } else {
             return {direction, 0, 1};
+        }
+    }
+
+    BehaviourResult foodSearching() {
+        float nearestDistance = -10;
+        Food *nearestFood = nullptr;
+        m_scene.forEachInRadius(getBasicDetails().m_posCurr, 32, [&](BaseObject *object, int id) {
+            if (auto food = dynamic_cast<Food *>(object)) {
+                float distance = (food->getBasicDetails().m_posCurr - getBasicDetails().m_posCurr).magnitude2();
+                if (distance > nearestDistance) {
+                    nearestFood = food;
+                }
+            }
+        });
+        if (nearestFood) {
+            Vector2F direction = (nearestFood->getBasicDetails().m_posCurr - getBasicDetails().m_posCurr).normalize();
+            return {direction, 1, 0.3};
+        } else {
+            return {Vector2F(), 0, 0};
         }
     }
 
@@ -120,10 +141,11 @@ public:
 
         std::vector<BehaviourResult> behaviourResults;
 
-        behaviourResults.push_back(playerAvoidance());
-        behaviourResults.push_back(wallAvoidance());
+//        behaviourResults.push_back(playerAvoidance());
+//        behaviourResults.push_back(wallAvoidance());
         behaviourResults.push_back(randomMovement());
-        behaviourResults.push_back(bulletAvoidance());
+//        behaviourResults.push_back(bulletAvoidance());
+//        behaviourResults.push_back(foodSearching());
 
         std::vector<Vector2F> directions(behaviourResults.size());
         std::vector<float> localWeights(behaviourResults.size());
@@ -158,9 +180,15 @@ public:
 
     void v_onInit() override {
         getBasicDetails().m_color = sf::Color::Red;
+        getBasicDetails().setVelocity(Vector2F::cart(-2, 0));
     };
 
-    void v_onCollision(BaseObject *ptr) override {};
+    void v_onCollision(BaseObject *ptr) override {
+        if (auto food = dynamic_cast<Food *>(ptr)) {
+            m_health += 10;
+            food->receiveDamage(1);
+        }
+    };
 
     void receiveDamage(float damage) override {
         destroy();
