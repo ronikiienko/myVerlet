@@ -41,21 +41,13 @@ struct Cell {
     void insert(int id) {
         if (activeCount < 4) {
             ids[activeCount] = id;
+            activeCount++;
         } else {
             // TODO throw if cell overflow happens. For now i spawn many m_objects randomly and one can be in other, so overflow will initially happen
             // TODO overflow can happen also if many object are dense and "smashed" together. It happens pretty rare so probably can ignore that
 //            throw std::runtime_error("cell overflow");
         }
-        activeCount++;
     }
-
-    // good thing but affects performance. Because should be called for each cell.
-//    template<typename Func>
-//    void forEachId(Func&& m_callback)const {
-//        for (int i = 0; i < activeCount; i++) {
-//            m_callback(ids[i], i);
-//        }
-//    }
 
     void clear() {
         activeCount = 0;  // Reset counter

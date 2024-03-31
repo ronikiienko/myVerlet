@@ -12,7 +12,7 @@ public:
 
     void v_onInit() override {
         std::cout << "Game init" << std::endl;
-        setLevel<Level1>();
+        setLevel<PerformanceTest>();
     }
 
     void v_onTick() override {}
