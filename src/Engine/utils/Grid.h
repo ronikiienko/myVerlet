@@ -8,7 +8,7 @@
 
 // this cell  uses fixed size array - more performant. but it relies on fact that only 4 m_objects can fit in one cell (all should have same radius). Commented one - vector, which allows different radiuses.
 struct Cell {
-    std::vector<int> ids = {0, 0, 0, 0};  // Fixed-size array
+    std::array<int, 4> ids = {0, 0, 0, 0};  // Fixed-size array
     char activeCount = 0;  // Keeps track of how many ids are currently active.
 
     void insert(int id) {
