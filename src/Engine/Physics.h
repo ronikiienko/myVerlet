@@ -146,7 +146,9 @@ private:
 
     template<bool WithCallback>
     void solveCollisions() {
-        auto solveCont = [&](BasicDetails &obj1, BasicDetails &obj2) {
+        auto solveCont = [&](int id1, int id2) {
+            BasicDetails &obj1 = m_scene.getBasicDetails(id1);
+            BasicDetails &obj2 = m_scene.getBasicDetails(id2);
             const Vector2F vectorBetween = obj1.m_posCurr - obj2.m_posCurr;
             const float dist2 = vectorBetween.magnitude2();
             // Check overlapping
@@ -168,39 +170,37 @@ private:
                 }
             }
         };
-        auto getObject = [this](int id) -> BasicDetails & {
-            return m_scene.getBasicDetails(id);
-        };
+
         const int threadCount = m_threadPool.m_threadsNum;
         const int sliceCount = threadCount * 2;
         const int sliceSize = m_grid.m_width / sliceCount;
         //  to avoid m_data races - process in two passes. So that no threads are assigned to neighbouring columns
         for (int i = 0; i < threadCount; i++) {
-            m_threadPool.addTask([i, sliceSize, this, &solveCont, &getObject]() {
+            m_threadPool.addTask([i, sliceSize, this, &solveCont]() {
                 int startCol = (i * 2) * sliceSize;
                 int endCol = startCol + sliceSize;
-                m_grid.eachWithEach(startCol, endCol, 0, m_grid.m_height, solveCont, getObject);
+                m_grid.eachWithEach(startCol, endCol, 0, m_grid.m_height, solveCont);
 //                solveCollisionsSubgrid<WithCallback>(startCol, endCol, 0, m_grid.m_height);
             });
         }
         m_threadPool.waitForCompletion();
 
         for (int i = 0; i < threadCount; i++) {
-            m_threadPool.addTask([i, sliceSize, this, &solveCont, &getObject]() {
+            m_threadPool.addTask([i, sliceSize, this, &solveCont]() {
                 int startCol = (i * 2 + 1) * sliceSize;
                 int endCol = startCol + sliceSize;
 //                solveCollisionsSubgrid<WithCallback>(startCol, endCol, 0, m_grid.m_height);
-                m_grid.eachWithEach(startCol, endCol, 0, m_grid.m_height, solveCont, getObject);
+                m_grid.eachWithEach(startCol, endCol, 0, m_grid.m_height, solveCont);
             });
         };
         m_threadPool.waitForCompletion();
 
         if (sliceSize * sliceCount < m_grid.m_width) {
-            m_threadPool.addTask([sliceSize, sliceCount, this, &solveCont, &getObject]() {
+            m_threadPool.addTask([sliceSize, sliceCount, this, &solveCont]() {
                 int startCol = sliceSize * sliceCount;
                 int endCol = m_grid.m_width;
 //                solveCollisionsSubgrid<WithCallback>(startCol, endCol, 0, m_grid.m_height);
-                m_grid.eachWithEach(startCol, endCol, 0, m_grid.m_height, solveCont, getObject);
+                m_grid.eachWithEach(startCol, endCol, 0, m_grid.m_height, solveCont);
             });
         }
         m_threadPool.waitForCompletion();

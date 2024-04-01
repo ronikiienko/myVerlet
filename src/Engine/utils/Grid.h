@@ -225,37 +225,35 @@ struct IdGrid {
         }
     }
 
-    template<typename Callback, typename GetObject>
-    void eachInCellWithEachInAnotherCell(const Cell& cell1, const Cell& cell2, const Callback& callback, const GetObject& getObject) {
+    template<typename Callback>
+    void eachInCellWithEachInAnotherCell(const Cell& cell1, const Cell& cell2, const Callback& callback) {
         for (int i = 0; i < cell1.activeCount; i++) {
             const int id1 = cell1.ids[i];
-            auto& object1 = getObject(id1);
             for (int j = 0; j < cell2.activeCount; j++) {
                 const int id2 = cell2.ids[j];
                 if (id1 == id2) continue;
-                auto& object2 = getObject(id2);
-                callback(object1, object2);
+                callback(id1, id2);
             }
         }
     }
 
-    template<typename Callback, typename GetObject>
-    void eachWithEach(int startX, int endX, int startY, int endY, const Callback& callback, const GetObject& getObject) {
+    template<typename Callback>
+    void eachWithEach(int startX, int endX, int startY, int endY, const Callback& callback) {
         for (int i = startX; i < endX; i++) {
             for (int j = startY; j < endY; j++) {
                 const Cell &cell1 = get(i, j);
-                eachInCellWithEachInAnotherCell(cell1, cell1, callback, getObject);
+                eachInCellWithEachInAnotherCell(cell1, cell1, callback);
                 if (i + 1 < m_width && j - 1 >= 0) {
-                    eachInCellWithEachInAnotherCell(cell1, get(i + 1, j - 1), callback, getObject);
+                    eachInCellWithEachInAnotherCell(cell1, get(i + 1, j - 1), callback);
                 }
                 if (i + 1 < m_width) {
-                    eachInCellWithEachInAnotherCell(cell1, get(i + 1, j), callback, getObject);
+                    eachInCellWithEachInAnotherCell(cell1, get(i + 1, j), callback);
                 }
                 if (i + 1 < m_width && j + 1 < m_height) {
-                    eachInCellWithEachInAnotherCell(cell1, get(i + 1, j + 1), callback, getObject);
+                    eachInCellWithEachInAnotherCell(cell1, get(i + 1, j + 1), callback);
                 }
                 if (j + 1 < m_height) {
-                    eachInCellWithEachInAnotherCell(cell1, get(i, j + 1), callback, getObject);
+                    eachInCellWithEachInAnotherCell(cell1, get(i, j + 1), callback);
                 }
             }
         }
