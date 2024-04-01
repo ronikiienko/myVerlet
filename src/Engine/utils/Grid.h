@@ -36,7 +36,10 @@ struct IdGrid {
     float m_cellHeight;
     float m_cellWidthInverse;
     float m_cellHeightInverse;
-    std::vector<Cell> m_data;
+//    std::vector<Cell> m_data;
+//    std::vector<int> m_activeCounts;
+    // data holds following: activeCount, id1, id2, id3, activeCount, id1, id2, id3, ... so that there's not need to fetch activeCount from another array
+    std::vector<int> m_data;
     int m_length;
 
     IdGrid(int width, int height, Vector2I realSize) : m_width(width), m_height(height) {
@@ -49,7 +52,12 @@ struct IdGrid {
         m_cellHeightInverse = 1 / m_cellHeight;
 
         m_length = width * height;
-        m_data.resize(m_length);
+
+        m_data.resize(m_length * 4, -1);
+        // set activeCount to 0 for every active count
+        for (int i = 0; i < m_length; i++) {
+            m_data[i * 4] = 0;
+        }
     }
 
     // this method is called huge number of times
@@ -65,33 +73,42 @@ struct IdGrid {
                     std::to_string(gridY) + " Id: " + std::to_string(id));
         }
 #endif
-        const int index = gridY * m_width + gridX;
-
-        m_data[index].insert(id);
+        const int cellIndex = gridY * m_width + gridX;
+        int& activeCount = m_data[cellIndex * 4];
+        if (activeCount < 3) {
+            m_data[cellIndex * 4 + 1 + activeCount] = id;
+            activeCount++;
+        }
     }
 
     void clear() {
-        for (auto &cell: m_data) {
-            cell.clear();
+//        for (int i = 0; i < m_length; i++) {
+//            m_activeCounts[i] = 0;
+//        }
+        for (int i = 0; i < m_length; i++) {
+            m_data[i * 4] = 0;
         }
     }
 
     void clear(int startCellIndex, int endCellIndex) {
+//        for (int i = startCellIndex; i < endCellIndex; i++) {
+//            m_activeCounts[i] = 0;
+//        }
         for (int i = startCellIndex; i < endCellIndex; i++) {
-            m_data[i].clear();
+            m_data[i * 4] = 0;
         }
     }
 
-    [[nodiscard]] const Cell &get(int gridX, int gridY) const {
-#ifdef IT_IS_DEBUG
-        if (gridX < 0 || gridX >= m_width || gridY < 0 || gridY >= m_height) {
-            throw std::runtime_error("Trying to get outside the m_grid.");
-        }
-#endif
-
-        int index = gridY * m_width + gridX;
-        return m_data[index];
-    }
+//    [[nodiscard]] const Cell &get(int gridX, int gridY) const {
+//#ifdef IT_IS_DEBUG
+//        if (gridX < 0 || gridX >= m_width || gridY < 0 || gridY >= m_height) {
+//            throw std::runtime_error("Trying to get outside the m_grid.");
+//        }
+//#endif
+//
+//        int index = gridY * m_width + gridX;
+//        return m_data[index];
+//    }
 
     [[nodiscard]] int realXToGridX(float realX) const {
         return static_cast<int>(realX * m_cellWidthInverse);
@@ -109,15 +126,15 @@ struct IdGrid {
         const int startGridY = std::max(0, realYToGridY(rect.getY1()));
         const int endGridY = std::min(m_height - 1, realYToGridY(rect.getY2()));
 
-        for (int i = startGridX; i <= endGridX; i++) {
-            for (int j = startGridY; j <= endGridY; j++) {
-                const Cell &cell = get(i, j);
-
-                for (int k = 0; k < cell.activeCount; k++) {
-                    callback(cell.ids[k]);
-                }
-            }
-        }
+//        for (int i = startGridX; i <= endGridX; i++) {
+//            for (int j = startGridY; j <= endGridY; j++) {
+//                const Cell &cell = get(i, j);
+//
+//                for (int k = 0; k < cell.activeCount; k++) {
+//                    callback(cell.ids[k]);
+//                }
+//            }
+//        }
     }
 
     void clipLinePoints(Vector2F &start, Vector2F &end, float gridPadding) const {
@@ -170,67 +187,81 @@ struct IdGrid {
     // To avoid them, it uses prevGridX and prevGridY
     template<typename T>
     void forEachAroundLine(Vector2F start, Vector2F end, const T &callback) const {
-        Vector2F startGrid = start * m_cellWidthInverse;
-        Vector2F endGrid = end * m_cellHeightInverse;
-//        clipLinePoints(startGrid, endGrid, 1.1f);
-
-        Vector2F deltaGrid = endGrid - startGrid;
-
-        Vector2I cellsDelta = Vector2I::cart(static_cast<int>(endGrid.m_x) - static_cast<int>(startGrid.m_x),
-                                             static_cast<int>(endGrid.m_y) - static_cast<int>(startGrid.m_y));
-        Vector2I cellsDistance = Vector2I::cart(std::abs(cellsDelta.m_x), std::abs(cellsDelta.m_y));
-
-        int steps;
-
-        if (cellsDistance.m_x > cellsDistance.m_y) {
-            steps = cellsDistance.m_x;
-        } else {
-            steps = cellsDistance.m_y;
-        }
-
-        Vector2F increment = Vector2F::cart();
-        if (steps != 0) {
-            increment = deltaGrid / static_cast<float>(steps);
-        }
-
-        Vector2F current = startGrid;
-
-        int prevGridX = -1000;
-        int prevGridY = -1000;
-
-        for (int i = 0; i <= steps; i++) {
-            int gridX = static_cast<int>(current.m_x);
-            int gridY = static_cast<int>(current.m_y);
-
-
-            for (int column = gridX - 1; column <= gridX + 1; column++) {
-                for (int row = gridY - 1; row <= gridY + 1; row++) {
-                    if (
-                            column >= prevGridX - 1 && column <= prevGridX + 1 &&
-                            row >= prevGridY - 1 && row <= prevGridY + 1
-                            ) {
-                        continue;
-                    }
-                    const Cell &cell = get(column, row);
-                    for (int k = 0; k < cell.activeCount; k++) {
-                        callback(cell.ids[k]);
-                    }
-                }
-            }
-
-
-            current += increment;
-            prevGridX = gridX;
-            prevGridY = gridY;
-        }
+//        Vector2F startGrid = start * m_cellWidthInverse;
+//        Vector2F endGrid = end * m_cellHeightInverse;
+////        clipLinePoints(startGrid, endGrid, 1.1f);
+//
+//        Vector2F deltaGrid = endGrid - startGrid;
+//
+//        Vector2I cellsDelta = Vector2I::cart(static_cast<int>(endGrid.m_x) - static_cast<int>(startGrid.m_x),
+//                                             static_cast<int>(endGrid.m_y) - static_cast<int>(startGrid.m_y));
+//        Vector2I cellsDistance = Vector2I::cart(std::abs(cellsDelta.m_x), std::abs(cellsDelta.m_y));
+//
+//        int steps;
+//
+//        if (cellsDistance.m_x > cellsDistance.m_y) {
+//            steps = cellsDistance.m_x;
+//        } else {
+//            steps = cellsDistance.m_y;
+//        }
+//
+//        Vector2F increment = Vector2F::cart();
+//        if (steps != 0) {
+//            increment = deltaGrid / static_cast<float>(steps);
+//        }
+//
+//        Vector2F current = startGrid;
+//
+//        int prevGridX = -1000;
+//        int prevGridY = -1000;
+//
+//        for (int i = 0; i <= steps; i++) {
+//            int gridX = static_cast<int>(current.m_x);
+//            int gridY = static_cast<int>(current.m_y);
+//
+//
+//            for (int column = gridX - 1; column <= gridX + 1; column++) {
+//                for (int row = gridY - 1; row <= gridY + 1; row++) {
+//                    if (
+//                            column >= prevGridX - 1 && column <= prevGridX + 1 &&
+//                            row >= prevGridY - 1 && row <= prevGridY + 1
+//                            ) {
+//                        continue;
+//                    }
+//                    const Cell &cell = get(column, row);
+//                    for (int k = 0; k < cell.activeCount; k++) {
+//                        callback(cell.ids[k]);
+//                    }
+//                }
+//            }
+//
+//
+//            current += increment;
+//            prevGridX = gridX;
+//            prevGridY = gridY;
+//        }
     }
 
     template<typename Callback>
-    void eachInCellWithEachInAnotherCell(const Cell& cell1, const Cell& cell2, const Callback& callback) {
-        for (int i = 0; i < cell1.activeCount; i++) {
-            const int id1 = cell1.ids[i];
-            for (int j = 0; j < cell2.activeCount; j++) {
-                const int id2 = cell2.ids[j];
+    void eachInCellWithEachInAnotherCell(int cell1x, int cell1y, int cell2x, int cell2y, const Callback &callback) {
+        int cell1Index = cell1y * m_width + cell1x;
+        int cell2Index = cell2y * m_width + cell2x;
+        int cell1ActiveCount = m_data[cell1Index * 4];
+        int cell2ActiveCount = m_data[cell2Index * 4];
+        int cell1Start = cell1Index * 4 + 1;
+        int cell2Start = cell2Index * 4 + 1;
+//        for (int i = 0; i < cell1.activeCount; i++) {
+//            const int id1 = cell1.ids[i];
+//            for (int j = 0; j < cell2.activeCount; j++) {
+//                const int id2 = cell2.ids[j];
+//                if (id1 == id2) continue;
+//                callback(id1, id2);
+//            }
+//        }
+        for (int i = 0; i < cell1ActiveCount; i++) {
+            const int id1 = m_data[cell1Start + i];
+            for (int j = 0; j < cell2ActiveCount; j++) {
+                const int id2 = m_data[cell2Start + j];
                 if (id1 == id2) continue;
                 callback(id1, id2);
             }
@@ -241,22 +272,21 @@ struct IdGrid {
     // this results in all neighbour combinations.
     // but with range of only 1 cell around.
     template<typename Callback>
-    void eachWithEachEachFromNeighbours(int startX, int endX, int startY, int endY, const Callback& callback) {
+    void eachWithEachEachFromNeighbours(int startX, int endX, int startY, int endY, const Callback &callback) {
         for (int i = startX; i < endX; i++) {
             for (int j = startY; j < endY; j++) {
-                const Cell &cell1 = get(i, j);
-                eachInCellWithEachInAnotherCell(cell1, cell1, callback);
+                eachInCellWithEachInAnotherCell(i, j, i, j, callback);
                 if (i + 1 < m_width && j - 1 >= 0) {
-                    eachInCellWithEachInAnotherCell(cell1, get(i + 1, j - 1), callback);
+                    eachInCellWithEachInAnotherCell(i,j, i + 1, j - 1, callback);
                 }
                 if (i + 1 < m_width) {
-                    eachInCellWithEachInAnotherCell(cell1, get(i + 1, j), callback);
+                    eachInCellWithEachInAnotherCell(i,j, i + 1, j, callback);
                 }
                 if (i + 1 < m_width && j + 1 < m_height) {
-                    eachInCellWithEachInAnotherCell(cell1, get(i + 1, j + 1), callback);
+                    eachInCellWithEachInAnotherCell(i,j, i + 1, j + 1, callback);
                 }
                 if (j + 1 < m_height) {
-                    eachInCellWithEachInAnotherCell(cell1, get(i, j + 1), callback);
+                    eachInCellWithEachInAnotherCell(i,j, i, j + 1, callback);
                 }
             }
         }
