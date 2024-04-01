@@ -85,65 +85,6 @@ private:
         });
     }
 
-//    template<bool WithCallback>
-//    void solveContact(BasicDetails &obj1, BasicDetails &obj2) {
-//        const Vector2F vectorBetween = obj1.m_posCurr - obj2.m_posCurr;
-//        const float dist2 = vectorBetween.magnitude2();
-//        // Check overlapping
-//        if (dist2 < engineDefaults::twoObjectsRadiusSquared) {
-//            const float dist = std::sqrt(dist2);
-//            if (dist == 0) return;
-//            const Vector2F normal = vectorBetween / dist;
-//            float weightRatio = obj1.m_mass / (obj1.m_mass + obj2.m_mass);
-//            const float delta = m_collisionRestitution * (dist - engineDefaults::twoObjectsRadius);
-//            // Update positions
-//            if (obj1.m_isCollisionOn && obj2.m_isCollisionOn) {
-//                if (!obj1.m_isPinned) obj1.m_posCurr -= normal * delta * (1 - weightRatio);
-//                if (!obj2.m_isPinned) obj2.m_posCurr += normal * delta * weightRatio;
-//                // TODO i should not call onCollision from here. because it is called from different threads. then removing other object from onCollision would be very risky
-//                if constexpr (WithCallback) {
-//                    obj1.m_parent->v_onCollision(obj2.m_parent);
-//                    obj2.m_parent->v_onCollision(obj1.m_parent);
-//                }
-//            }
-//        }
-//    }
-//
-//    template<bool WithCallback>
-//    void solveCollisionsTwoCells(const Cell &cell1, const Cell &cell2) {
-//        for (int i = 0; i < cell1.activeCount; i++) {
-//            const int id1 = cell1.ids[i];
-//            for (int j = 0; j < cell2.activeCount; j++) {
-//                const int id2 = cell2.ids[j];
-//                if (id1 == id2) continue;
-//                solveContact<WithCallback>(m_scene.getBasicDetails(id1), m_scene.getBasicDetails(id2));
-//            }
-//        }
-//    }
-//
-//    template<bool WithCallback>
-//    void solveCollisionsSubgrid(int startX, int endX, int startY, int endY) {
-//
-//        for (int i = startX; i < endX; i++) {
-//            for (int j = startY; j < endY; j++) {
-//                const Cell &cell1 = m_grid.get(i, j);
-//                solveCollisionsTwoCells<WithCallback>(cell1, cell1);
-//                if (i + 1 < m_grid.m_width && j - 1 >= 0) {
-//                    solveCollisionsTwoCells<WithCallback>(cell1, m_grid.get(i + 1, j - 1));
-//                }
-//                if (i + 1 < m_grid.m_width) {
-//                    solveCollisionsTwoCells<WithCallback>(cell1, m_grid.get(i + 1, j));
-//                }
-//                if (i + 1 < m_grid.m_width && j + 1 < m_grid.m_height) {
-//                    solveCollisionsTwoCells<WithCallback>(cell1, m_grid.get(i + 1, j + 1));
-//                }
-//                if (j + 1 < m_grid.m_height) {
-//                    solveCollisionsTwoCells<WithCallback>(cell1, m_grid.get(i, j + 1));
-//                }
-//            }
-//        }
-//    }
-
     template<bool WithCallback>
     void solveCollisions() {
         auto solveCont = [&](int id1, int id2) {
@@ -180,7 +121,6 @@ private:
                 int startCol = (i * 2) * sliceSize;
                 int endCol = startCol + sliceSize;
                 m_grid.eachWithEach(startCol, endCol, 0, m_grid.m_height, solveCont);
-//                solveCollisionsSubgrid<WithCallback>(startCol, endCol, 0, m_grid.m_height);
             });
         }
         m_threadPool.waitForCompletion();
@@ -189,7 +129,6 @@ private:
             m_threadPool.addTask([i, sliceSize, this, &solveCont]() {
                 int startCol = (i * 2 + 1) * sliceSize;
                 int endCol = startCol + sliceSize;
-//                solveCollisionsSubgrid<WithCallback>(startCol, endCol, 0, m_grid.m_height);
                 m_grid.eachWithEach(startCol, endCol, 0, m_grid.m_height, solveCont);
             });
         };
@@ -199,7 +138,6 @@ private:
             m_threadPool.addTask([sliceSize, sliceCount, this, &solveCont]() {
                 int startCol = sliceSize * sliceCount;
                 int endCol = m_grid.m_width;
-//                solveCollisionsSubgrid<WithCallback>(startCol, endCol, 0, m_grid.m_height);
                 m_grid.eachWithEach(startCol, endCol, 0, m_grid.m_height, solveCont);
             });
         }
