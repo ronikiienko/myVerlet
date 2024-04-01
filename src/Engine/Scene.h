@@ -337,9 +337,10 @@ public:
 
     void rebuildGrid() {
         m_performanceMonitor.start("m_grid clear");
-        m_threadPool.dispatch(m_grid.m_length, [this](int start, int end) {
-            m_grid.clear(start, end);
-        });
+//        m_threadPool.dispatch(m_grid.m_length, [this](int start, int end) {
+//            m_grid.clear(start, end);
+//        });
+        m_grid.clear();
         m_performanceMonitor.end("m_grid clear");
         m_performanceMonitor.start("m_grid build");
         m_threadPool.dispatch(static_cast<int>(m_basicDetails.size()), [this](int start, int end) {
