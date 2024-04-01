@@ -120,7 +120,7 @@ private:
             m_threadPool.addTask([i, sliceSize, this, &solveCont]() {
                 int startCol = (i * 2) * sliceSize;
                 int endCol = startCol + sliceSize;
-                m_grid.eachWithEach(startCol, endCol, 0, m_grid.m_height, solveCont);
+                m_grid.eachWithEachEachFromNeighbours(startCol, endCol, 0, m_grid.m_height, solveCont);
             });
         }
         m_threadPool.waitForCompletion();
@@ -129,7 +129,7 @@ private:
             m_threadPool.addTask([i, sliceSize, this, &solveCont]() {
                 int startCol = (i * 2 + 1) * sliceSize;
                 int endCol = startCol + sliceSize;
-                m_grid.eachWithEach(startCol, endCol, 0, m_grid.m_height, solveCont);
+                m_grid.eachWithEachEachFromNeighbours(startCol, endCol, 0, m_grid.m_height, solveCont);
             });
         };
         m_threadPool.waitForCompletion();
@@ -138,7 +138,7 @@ private:
             m_threadPool.addTask([sliceSize, sliceCount, this, &solveCont]() {
                 int startCol = sliceSize * sliceCount;
                 int endCol = m_grid.m_width;
-                m_grid.eachWithEach(startCol, endCol, 0, m_grid.m_height, solveCont);
+                m_grid.eachWithEachEachFromNeighbours(startCol, endCol, 0, m_grid.m_height, solveCont);
             });
         }
         m_threadPool.waitForCompletion();

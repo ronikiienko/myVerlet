@@ -237,8 +237,11 @@ struct IdGrid {
         }
     }
 
+    // iterates on every stored id in cells around cell. To be more precise, only right top, right, right bottom, and bottom cells are iterated.
+    // this results in all neighbour combinations.
+    // but with range of only 1 cell around.
     template<typename Callback>
-    void eachWithEach(int startX, int endX, int startY, int endY, const Callback& callback) {
+    void eachWithEachEachFromNeighbours(int startX, int endX, int startY, int endY, const Callback& callback) {
         for (int i = startX; i < endX; i++) {
             for (int j = startY; j < endY; j++) {
                 const Cell &cell1 = get(i, j);
