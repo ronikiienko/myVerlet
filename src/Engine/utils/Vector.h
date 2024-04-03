@@ -29,6 +29,7 @@ public:
     constexpr Vector2 operator-(const Vector2 &other) const {
         return Vector2{m_x - other.m_x, m_y - other.m_y};
     }
+
     constexpr Vector2 operator-() const {
         return Vector2{-m_x, -m_y};
     }
@@ -47,6 +48,14 @@ public:
             throw std::runtime_error("Trying to divide by 0 (/)");
         }
         return Vector2{m_x / scalar, m_y / scalar};
+    }
+
+    [[nodiscard]] constexpr T perpClockwise() {
+        return Vector2{m_y, -m_x};
+    }
+
+    [[nodiscard]] constexpr T perpCounterClockwise() {
+        return Vector2{-m_y, m_x};
     }
 
     [[nodiscard]] constexpr T dot(const Vector2 &other) const {
