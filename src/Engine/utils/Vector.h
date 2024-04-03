@@ -50,11 +50,11 @@ public:
         return Vector2{m_x / scalar, m_y / scalar};
     }
 
-    [[nodiscard]] constexpr T perpClockwise() {
+    [[nodiscard]] constexpr Vector2<T> perpClockwise() {
         return Vector2{m_y, -m_x};
     }
 
-    [[nodiscard]] constexpr T perpCounterClockwise() {
+    [[nodiscard]] constexpr Vector2<T> perpCounterClockwise() {
         return Vector2{-m_y, m_x};
     }
 
