@@ -40,7 +40,6 @@ struct IdGrid {
 //    std::vector<int> m_activeCounts;
     // data holds following: activeCount, id1, id2, id3, activeCount, id1, id2, id3, ... so that there's not need to fetch activeCount from another array
     std::vector<int> m_data;
-    std::vector<int> m_activeCounts;
     int m_length;
 
     IdGrid(int width, int height, Vector2I realSize) : m_width(width), m_height(height) {
@@ -54,8 +53,11 @@ struct IdGrid {
 
         m_length = width * height;
 
-        m_data.resize(m_length * 3, -1);
-        m_activeCounts.resize(m_length, 0);
+        m_data.resize(m_length * 4, -1);
+        // set activeCount to 0 for every active count
+        for (int i = 0; i < m_length; i++) {
+            m_data[i * 4] = 0;
+        }
     }
 
     // this method is called huge number of times
@@ -72,22 +74,28 @@ struct IdGrid {
         }
 #endif
         const int cellIndex = gridY * m_width + gridX;
-        int& activeCount = m_activeCounts[cellIndex];
+        int& activeCount = m_data[cellIndex * 4];
         if (activeCount < 3) {
-            m_data[cellIndex * 3 + activeCount] = id;
+            m_data[cellIndex * 4 + 1 + activeCount] = id;
             activeCount++;
         }
     }
 
     void clear() {
+//        for (int i = 0; i < m_length; i++) {
+//            m_activeCounts[i] = 0;
+//        }
         for (int i = 0; i < m_length; i++) {
-            m_activeCounts[i] = 0;
+            m_data[i * 4] = 0;
         }
     }
 
     void clear(int startCellIndex, int endCellIndex) {
+//        for (int i = startCellIndex; i < endCellIndex; i++) {
+//            m_activeCounts[i] = 0;
+//        }
         for (int i = startCellIndex; i < endCellIndex; i++) {
-            m_activeCounts[i] = 0;
+            m_data[i * 4] = 0;
         }
     }
 
@@ -238,10 +246,10 @@ struct IdGrid {
     void eachInCellWithEachInAnotherCell(int cell1x, int cell1y, int cell2x, int cell2y, const Callback &callback) {
         int cell1Index = cell1y * m_width + cell1x;
         int cell2Index = cell2y * m_width + cell2x;
-        int cell1ActiveCount = m_activeCounts[cell1Index];
-        int cell2ActiveCount = m_activeCounts[cell2Index];
-        int cell1Start = cell1Index * 3;
-        int cell2Start = cell2Index * 3;
+        int cell1ActiveCount = m_data[cell1Index * 4];
+        int cell2ActiveCount = m_data[cell2Index * 4];
+        int cell1Start = cell1Index * 4 + 1;
+        int cell2Start = cell2Index * 4 + 1;
 //        for (int i = 0; i < cell1.activeCount; i++) {
 //            const int id1 = cell1.ids[i];
 //            for (int j = 0; j < cell2.activeCount; j++) {
