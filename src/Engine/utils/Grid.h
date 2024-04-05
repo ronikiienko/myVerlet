@@ -63,8 +63,14 @@ private:
             }
         }
     }
-    std::vector<Cell> m_data;
 
+    void clearInRange(int startCellIndex, int endCellIndex) {
+        for (int i = startCellIndex; i < endCellIndex; i++) {
+            m_data[i].clear();
+        }
+    }
+
+    std::vector<Cell> m_data;
 public:
     int m_width;
     int m_height;
@@ -107,15 +113,21 @@ public:
         m_data[index].insert(id);
     }
 
-    void clear() {
-        for (auto &cell: m_data) {
-            cell.clear();
-        }
-    }
-
-    void clear(int startCellIndex, int endCellIndex) {
-        for (int i = startCellIndex; i < endCellIndex; i++) {
-            m_data[i].clear();
+    void clear(int threadCount = 1, int threadIndex = 0) {
+        if (threadCount == 1) {
+            clearInRange(0, m_length);
+        } else if (threadIndex == threadCount) {
+            int batchSize = m_length / threadCount;
+            if (batchSize * threadCount < m_length) {
+                int start = batchSize * threadCount;
+                int end = m_length;
+                clearInRange(start, end);
+            }
+        } else {
+            int batchSize = m_length / threadCount;
+            int start = batchSize * threadIndex;
+            int end = start + batchSize;
+            clearInRange(start, end);
         }
     }
 
