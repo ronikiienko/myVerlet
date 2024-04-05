@@ -343,6 +343,7 @@ public:
                 m_grid.clear(threadCount, i);
             });
         }
+        m_threadPool.waitForCompletion();
         m_grid.clear(threadCount, threadCount);
 
         m_performanceMonitor.end("m_grid clear");
