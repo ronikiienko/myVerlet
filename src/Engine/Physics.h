@@ -116,19 +116,19 @@ private:
 
         for (int i = 0; i < threadCount; i++) {
             m_threadPool.addTask([this, threadCount, &solveCont, i]() {
-                m_grid.eachWithEachEachNeighbour(solveCont, threadCount, i, 0);
+                m_grid.eachWithEachNeighbour(solveCont, threadCount, i, 0);
             });
         }
         m_threadPool.waitForCompletion();
 
         for (int i = 0; i < threadCount; i++) {
             m_threadPool.addTask([this, threadCount, &solveCont, i]() {
-                m_grid.eachWithEachEachNeighbour(solveCont, threadCount, i, 1);
+                m_grid.eachWithEachNeighbour(solveCont, threadCount, i, 1);
             });
         };
         m_threadPool.waitForCompletion();
 
-        m_grid.eachWithEachEachNeighbour(solveCont, threadCount, threadCount);
+        m_grid.eachWithEachNeighbour(solveCont, threadCount, threadCount);
     }
 
 public:

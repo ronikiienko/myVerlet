@@ -29,6 +29,43 @@ struct Cell {
 };
 
 struct IdGrid {
+private:
+    template<typename Callback>
+    void eachInCellWithEachInAnotherCell(const Cell &cell1, const Cell &cell2, const Callback &callback) {
+        for (int i = 0; i < cell1.activeCount; i++) {
+            const int id1 = cell1.ids[i];
+            for (int j = 0; j < cell2.activeCount; j++) {
+                const int id2 = cell2.ids[j];
+                if (id1 == id2) continue;
+                callback(id1, id2);
+            }
+        }
+    }
+
+    template<typename Callback>
+    void eachWithEachNeighbourInSlice(int startX, int endX, int startY, int endY, const Callback &callback) {
+        for (int i = startX; i < endX; i++) {
+            for (int j = startY; j < endY; j++) {
+                const Cell &cell1 = get(i, j);
+                eachInCellWithEachInAnotherCell(cell1, cell1, callback);
+                if (i + 1 < m_width && j - 1 >= 0) {
+                    eachInCellWithEachInAnotherCell(cell1, get(i + 1, j - 1), callback);
+                }
+                if (i + 1 < m_width) {
+                    eachInCellWithEachInAnotherCell(cell1, get(i + 1, j), callback);
+                }
+                if (i + 1 < m_width && j + 1 < m_height) {
+                    eachInCellWithEachInAnotherCell(cell1, get(i + 1, j + 1), callback);
+                }
+                if (j + 1 < m_height) {
+                    eachInCellWithEachInAnotherCell(cell1, get(i, j + 1), callback);
+                }
+            }
+        }
+    }
+    std::vector<Cell> m_data;
+
+public:
     int m_width;
     int m_height;
     int m_realWidth;
@@ -37,7 +74,6 @@ struct IdGrid {
     float m_cellHeight;
     float m_cellWidthInverse;
     float m_cellHeightInverse;
-    std::vector<Cell> m_data;
     int m_length;
 
     IdGrid(int width, int height, Vector2I realSize) : m_width(width), m_height(height) {
@@ -226,39 +262,7 @@ struct IdGrid {
         }
     }
 
-    template<typename Callback>
-    void eachInCellWithEachInAnotherCell(const Cell &cell1, const Cell &cell2, const Callback &callback) {
-        for (int i = 0; i < cell1.activeCount; i++) {
-            const int id1 = cell1.ids[i];
-            for (int j = 0; j < cell2.activeCount; j++) {
-                const int id2 = cell2.ids[j];
-                if (id1 == id2) continue;
-                callback(id1, id2);
-            }
-        }
-    }
 
-    template<typename Callback>
-    void eachWithEachNeighbourInSlice(int startX, int endX, int startY, int endY, const Callback &callback) {
-        for (int i = startX; i < endX; i++) {
-            for (int j = startY; j < endY; j++) {
-                const Cell &cell1 = get(i, j);
-                eachInCellWithEachInAnotherCell(cell1, cell1, callback);
-                if (i + 1 < m_width && j - 1 >= 0) {
-                    eachInCellWithEachInAnotherCell(cell1, get(i + 1, j - 1), callback);
-                }
-                if (i + 1 < m_width) {
-                    eachInCellWithEachInAnotherCell(cell1, get(i + 1, j), callback);
-                }
-                if (i + 1 < m_width && j + 1 < m_height) {
-                    eachInCellWithEachInAnotherCell(cell1, get(i + 1, j + 1), callback);
-                }
-                if (j + 1 < m_height) {
-                    eachInCellWithEachInAnotherCell(cell1, get(i, j + 1), callback);
-                }
-            }
-        }
-    }
 
     // runs callback on every possible combination of neighbours (either in same cell, or neighbouring cell). callback(id1, id2)
     // to abstract away thread separation of grid, this function handles it
@@ -269,8 +273,8 @@ struct IdGrid {
     // if threadCount is 1, it will run on one thread
     // if threadIndex is same as threadCount, it will run remainder of cells (it's necessary to avoid missing cells)
     template<typename Callback>
-    void eachWithEachEachNeighbour(const Callback &callback, int threadCount = 1, int threadIndex = 0,
-                                   int passIndex = 0) {
+    void eachWithEachNeighbour(const Callback &callback, int threadCount = 1, int threadIndex = 0,
+                               int passIndex = 0) {
         if (threadCount > 1) {
             const int sliceCount = threadCount * 2;
             const int sliceSize = m_width / sliceCount;
