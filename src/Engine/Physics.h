@@ -113,35 +113,22 @@ private:
         };
 
         const int threadCount = m_threadPool.m_threadsNum;
-        const int sliceCount = threadCount * 2;
-        const int sliceSize = m_grid.m_width / sliceCount;
-        //  to avoid m_data races - process in two passes. So that no threads are assigned to neighbouring columns
+
         for (int i = 0; i < threadCount; i++) {
-            m_threadPool.addTask([i, sliceSize, this, &solveCont]() {
-                int startCol = (i * 2) * sliceSize;
-                int endCol = startCol + sliceSize;
-                m_grid.eachWithEachEachFromNeighbours(startCol, endCol, 0, m_grid.m_height, solveCont);
+            m_threadPool.addTask([this, threadCount, &solveCont, i]() {
+                m_grid.eachWithEachEachNeighbour(solveCont, threadCount, i, 0);
             });
         }
         m_threadPool.waitForCompletion();
 
         for (int i = 0; i < threadCount; i++) {
-            m_threadPool.addTask([i, sliceSize, this, &solveCont]() {
-                int startCol = (i * 2 + 1) * sliceSize;
-                int endCol = startCol + sliceSize;
-                m_grid.eachWithEachEachFromNeighbours(startCol, endCol, 0, m_grid.m_height, solveCont);
+            m_threadPool.addTask([this, threadCount, &solveCont, i]() {
+                m_grid.eachWithEachEachNeighbour(solveCont, threadCount, i, 1);
             });
         };
         m_threadPool.waitForCompletion();
 
-        if (sliceSize * sliceCount < m_grid.m_width) {
-            m_threadPool.addTask([sliceSize, sliceCount, this, &solveCont]() {
-                int startCol = sliceSize * sliceCount;
-                int endCol = m_grid.m_width;
-                m_grid.eachWithEachEachFromNeighbours(startCol, endCol, 0, m_grid.m_height, solveCont);
-            });
-        }
-        m_threadPool.waitForCompletion();
+        m_grid.eachWithEachEachNeighbour(solveCont, threadCount, threadCount);
     }
 
 public:

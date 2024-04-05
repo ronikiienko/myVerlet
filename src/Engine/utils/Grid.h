@@ -5,6 +5,7 @@
 #include <array>
 #include <functional>
 #include "../utils/Rectangle.h"
+#include "Vector.h"
 
 // this cell  uses fixed size array - more performant. but it relies on fact that only 4 m_objects can fit in one cell (all should have same radius). Commented one - vector, which allows different radiuses.
 struct Cell {
@@ -226,7 +227,7 @@ struct IdGrid {
     }
 
     template<typename Callback>
-    void eachInCellWithEachInAnotherCell(const Cell& cell1, const Cell& cell2, const Callback& callback) {
+    void eachInCellWithEachInAnotherCell(const Cell &cell1, const Cell &cell2, const Callback &callback) {
         for (int i = 0; i < cell1.activeCount; i++) {
             const int id1 = cell1.ids[i];
             for (int j = 0; j < cell2.activeCount; j++) {
@@ -237,9 +238,8 @@ struct IdGrid {
         }
     }
 
-    // runs callback on every possible combination of neighbours (either in same cell, or neighbouring cell). callback(id1, id2)
     template<typename Callback>
-    void eachWithEachEachFromNeighbours(int startX, int endX, int startY, int endY, const Callback& callback) {
+    void eachWithEachNeighbourInSlice(int startX, int endX, int startY, int endY, const Callback &callback) {
         for (int i = startX; i < endX; i++) {
             for (int j = startY; j < endY; j++) {
                 const Cell &cell1 = get(i, j);
@@ -258,5 +258,39 @@ struct IdGrid {
                 }
             }
         }
+    }
+
+    // runs callback on every possible combination of neighbours (either in same cell, or neighbouring cell). callback(id1, id2)
+    // to abstract away thread separation of grid, this function handles it
+    // threadCount - how many threads are there
+    // threadIndex - index of current thread (0-based)
+    // passIndex - 0 or 1. To avoid two threads working on nearby cells at the same time, solve do everything in two passes (make each thread "spaced away" from others
+    // In first pass, threadIndex should be 0, in second 1
+    // if threadCount is 1, it will run on one thread
+    // if threadIndex is same as threadCount, it will run remainder of cells (it's necessary to avoid missing cells)
+    template<typename Callback>
+    void eachWithEachEachNeighbour(const Callback &callback, int threadCount = 1, int threadIndex = 0,
+                                   int passIndex = 0) {
+        if (threadCount > 1) {
+            const int sliceCount = threadCount * 2;
+            const int sliceSize = m_width / sliceCount;
+
+            if (threadIndex == threadCount) {
+                if (sliceSize * sliceCount < m_width) {
+                    int startCol = sliceSize * sliceCount;
+                    int endCol = m_width;
+                    eachWithEachNeighbourInSlice(startCol, endCol, 0, m_height, callback);
+                }
+            } else {
+                int startCol = (threadIndex * 2 + passIndex) * sliceSize;
+                int endCol = startCol + sliceSize;
+                eachWithEachNeighbourInSlice(startCol, endCol, 0, m_height, callback);
+            }
+        } else if (threadCount == 1) {
+            eachWithEachNeighbourInSlice(0, m_width, 0, m_height, callback);
+        } else {
+            throw std::runtime_error("threadCount must be at least 1");
+        }
+
     }
 };
