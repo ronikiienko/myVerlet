@@ -5,7 +5,7 @@ set(SOURCES src/main.cpp
         src/Engine/EngineConsts.cpp
         src/Engine/utils/Vector.h
         src/Engine/Graphics.h
-        src/Engine/Scene.h
+        src/Engine/Scene/Scene.h
         src/Engine/BaseObject/BaseObject.h
         src/Engine/Physics.h
         src/Engine/utils/Rand.h
@@ -50,6 +50,7 @@ set(SOURCES src/main.cpp
         src/Engine/Modules/CameraFollowing.h
         src/GameTest/UiRenderer.h
         src/GameTest/Entities/Food.h
+        src/Engine/Scene/ObjectStorage.h
 )
 
 project(${PROJECT_NAME})

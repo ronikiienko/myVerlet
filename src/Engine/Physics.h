@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Scene.h"
+#include "Scene/Scene.h"
 #include "SFML/Graphics/RenderWindow.hpp"
 #include "utils/Grid.h"
 #include "PerformanceMonitor.h"
@@ -23,13 +23,13 @@ private:
 
     void updatePositionsConstraint(float dt) {
         const Vector2F size = m_scene.getSizeF();
-        const int objectsCount = m_scene.getObjectsCount();
+        const int objectsCount = m_scene.getObjectStorage().getObjectsCount();
         m_threadPool.dispatch(objectsCount, [this, &size, dt](int start, int end) {
             const float minX = 0 + engineDefaults::objectsRadius;
             const float maxX = size.m_x - engineDefaults::objectsRadius;
             const float minY = 0 + engineDefaults::objectsRadius;
             const float maxY = size.m_y - engineDefaults::objectsRadius;
-            m_scene.forEachBasicDetails([&size, dt, minX, maxX, minY, maxY, this](BasicDetails &object, int i) {
+            m_scene.getObjectStorage().forEachBasicDetails([&size, dt, minX, maxX, minY, maxY, this](BasicDetails &object, int i) {
                 // TODO when all m_grid filled with m_objects, you can see that some start falling faster and some slower (on lower m_gravity levels like 10) - this is because of floats precision
                 if (!object.m_isPinned) {
                     object.accelerate(m_scene.getGravity());
@@ -88,8 +88,8 @@ private:
     template<bool WithCallback>
     void solveCollisions() {
         auto solveCont = [&](int id1, int id2) {
-            BasicDetails &obj1 = m_scene.getBasicDetails(id1);
-            BasicDetails &obj2 = m_scene.getBasicDetails(id2);
+            BasicDetails &obj1 = m_scene.getObjectStorage().getBasicDetails(id1);
+            BasicDetails &obj2 = m_scene.getObjectStorage().getBasicDetails(id2);
             const Vector2F vectorBetween = obj1.m_posCurr - obj2.m_posCurr;
             const float dist2 = vectorBetween.magnitude2();
             // Check overlapping

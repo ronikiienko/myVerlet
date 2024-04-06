@@ -98,5 +98,5 @@ public:
 
     explicit BaseObject(ObjectContext);
 
-    friend class Scene;
+    friend class ObjectStorage;
 };

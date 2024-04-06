@@ -18,7 +18,7 @@ public:
 
     void v_onInit() override {
         for (int i = 0; i < 150000; i++) {
-            m_scene.addObject(EmptyObject{m_scene.getObjectContext()}, m_randomPositionGenerator.get());
+            m_scene.getObjectStorage().addObject(EmptyObject{m_scene.getObjectContext()}, m_randomPositionGenerator.get());
         };
     }
     void v_onTick() override {}

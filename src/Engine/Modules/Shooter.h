@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Scene.h"
+#include "../Scene/Scene.h"
 #include "../EngineConsts.h"
 #include "../utils/Rand.h"
 
@@ -20,7 +20,7 @@ private:
         Vector2F direction = (target - source).rotate(spreadAngle).normalize();
         Vector2F velocity = direction * m_speed;
         Vector2F startPos = source + direction * engineDefaults::objectsRadius * 2;
-        std::weak_ptr<BaseObject> ptr = m_scene.addObject(std::forward<BulletType>(bullet), startPos);
+        std::weak_ptr<BaseObject> ptr = m_scene.getObjectStorage().addObject(std::forward<BulletType>(bullet), startPos);
         ptr.lock()->getBasicDetails().setVelocity(velocity);
     }
 public:

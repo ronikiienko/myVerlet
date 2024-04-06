@@ -27,29 +27,29 @@ public:
     }
 
     void v_onInit() override {
-        std::weak_ptr<BaseObject> playerGeneralPtr = m_scene.addObject(Player{m_scene.getObjectContext(), m_inputBus, m_gen, m_eventBus}, Vector2F::cart(100, 100));
+        std::weak_ptr<BaseObject> playerGeneralPtr = m_scene.getObjectStorage().addObject(Player{m_scene.getObjectContext(), m_inputBus, m_gen, m_eventBus}, Vector2F::cart(100, 100));
         std::weak_ptr<Player> playerPtr = std::static_pointer_cast<Player>(playerGeneralPtr.lock());
         for (int i = 0; i < 100; i++) {
-            m_scene.addObject(Enemy{m_scene.getObjectContext(), playerPtr, m_gen, m_eventBus}, m_randomPositionGenerator.get());
+            m_scene.getObjectStorage().addObject(Enemy{m_scene.getObjectContext(), playerPtr, m_gen, m_eventBus}, m_randomPositionGenerator.get());
         }
         for (int i = 0; i < 0; i++) {
-            m_scene.addObject(EmptyObject{m_scene.getObjectContext()}, m_randomPositionGenerator.get());
+            m_scene.getObjectStorage().addObject(EmptyObject{m_scene.getObjectContext()}, m_randomPositionGenerator.get());
         }
         for (int i = 0; i < 100; i++) {
-            m_scene.addObject(Food{m_scene.getObjectContext()}, m_randomPositionGenerator.get());
+            m_scene.getObjectStorage().addObject(Food{m_scene.getObjectContext()}, m_randomPositionGenerator.get());
         }
 
         m_keyPressHandle = m_inputBus.addEventListener(sf::Event::KeyPressed,[this](sf::Event event) {
             if (event.key.code == sf::Keyboard::O) {
-                m_scene.logDifferentTypeCounts();
+                m_scene.getObjectStorage().logDifferentTypeCounts();
             }
             if (event.key.code == sf::Keyboard::R) {
-                m_scene.forEachObjectOfType<Enemy>([this](Enemy& enemy, int id){
+                m_scene.getObjectStorage().forEachObjectOfType<Enemy>([this](Enemy& enemy, int id){
                     enemy.destroy();
                 });
             }
             if (event.key.code == sf::Keyboard::P) {
-                m_scene.forEachObjectOfType<Bullet>([this](Bullet& bullet, int id){
+                m_scene.getObjectStorage().forEachObjectOfType<Bullet>([this](Bullet& bullet, int id){
                     bullet.destroy();
                 });
             }
@@ -57,6 +57,6 @@ public:
     }
 
     void v_onTick() override {
-        m_eventBus.emit(GameEvents::EnemyCountUpdate{m_scene.getObjectsOfTypeCount<Enemy>()});
+        m_eventBus.emit(GameEvents::EnemyCountUpdate{m_scene.getObjectStorage().getObjectsOfTypeCount<Enemy>()});
     }
 };

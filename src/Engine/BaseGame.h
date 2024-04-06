@@ -3,7 +3,7 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "EngineConsts.h"
 #include "utils/ThreadPool.h"
-#include "Scene.h"
+#include "Scene/Scene.h"
 #include "Graphics.h"
 #include "Physics.h"
 #include "InputBus/InputBus.h"

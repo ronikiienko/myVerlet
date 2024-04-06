@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics/RectangleShape.hpp>
-#include "Scene.h"
+#include "Scene/Scene.h"
 #include "SFML/Graphics/RenderWindow.hpp"
 #include "SFML/Graphics/VertexArray.hpp"
 #include "PerformanceMonitor.h"
@@ -38,10 +38,10 @@ public:
     };
 
     void updateObjectsArray() {
-        m_objectVertexArray.resize(m_scene.getObjectsCount() * 4);
-        m_threadPool.dispatch(m_scene.getObjectsCount(), [this](int start, int end) {
+        m_objectVertexArray.resize(m_scene.getObjectStorage().getObjectsCount() * 4);
+        m_threadPool.dispatch(m_scene.getObjectStorage().getObjectsCount(), [this](int start, int end) {
             float objectSize = engineDefaults::objectsRadius;
-            m_scene.forEachBasicDetails([this, objectSize](BasicDetails &object, int index) {
+            m_scene.getObjectStorage().forEachBasicDetails([this, objectSize](BasicDetails &object, int index) {
                 Vector2F screenPos = object.m_posCurr;
 
                 const int ind = index * 4;
@@ -68,10 +68,10 @@ public:
     }
 
     void updateRotationsArray() {
-        m_rotationsVertexArray.resize(m_scene.getObjectsWithRotationCount() * 4);
-        m_threadPool.dispatch(m_scene.getObjectsWithRotationCount(), [this](int start, int end) {
+        m_rotationsVertexArray.resize(m_scene.getObjectStorage().getObjectsWithRotationCount() * 4);
+        m_threadPool.dispatch(m_scene.getObjectStorage().getObjectsWithRotationCount(), [this](int start, int end) {
             float objectSize = engineDefaults::rotationCircleRadius;
-            m_scene.forEachBasicDetailsWithRotation([this, objectSize](BasicDetails &object, int index, int iteration) {
+            m_scene.getObjectStorage().forEachBasicDetailsWithRotation([this, objectSize](BasicDetails &object, int index, int iteration) {
                 Vector2F screenPos = object.m_posCurr + object.m_direction;
 
                 const int ind = iteration * 4;

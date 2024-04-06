@@ -1,7 +1,7 @@
 #pragma once
 
 
-#include "Scene.h"
+#include "Scene/Scene.h"
 #include "Camera.h"
 #include "InputBus/InputBus.h"
 #include "TimerManager/TimerManager.h"
@@ -33,7 +33,7 @@ class BaseLevel {
 private:
     void update() {
         m_performanceMonitor.start("removingMarked");
-        m_scene.removeMarkedObjects();
+        m_scene.getObjectStorage().removeMarkedObjects();
         m_performanceMonitor.end("removingMarked");
 
         m_performanceMonitor.start("physics");

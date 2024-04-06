@@ -102,7 +102,7 @@ public:
     BehaviourResult bulletAvoidance() {
         Vector2F direction = Vector2F::cart();
         int bulletCount = 0;
-        m_scene.forEachObjectOfType<Bullet>([&](Bullet &bullet, int id) {
+        m_scene.getObjectStorage().forEachObjectOfType<Bullet>([&](Bullet &bullet, int id) {
             if ((bullet.getBasicDetails().m_posCurr - getBasicDetails().m_posCurr).magnitude2() <
                 bulletAvoidanceDistance * bulletAvoidanceDistance) {
                 bulletCount++;

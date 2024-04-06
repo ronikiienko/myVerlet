@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SFML/Graphics/VertexArray.hpp>
-#include "Scene.h"
+#include "Scene/Scene.h"
 
 class DebugGraphics {
 private:

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Scene.h"
+#include "../Scene/Scene.h"
 
 class ExplosionHandler {
 private:
@@ -9,7 +9,7 @@ public:
     explicit ExplosionHandler(Scene& scene) : m_scene(scene) {}
 
     void launch(Vector2F position, float strength, float radius) {
-        m_scene.forEachBasicDetails([&position, &strength, &radius](BasicDetails& object, int i){
+        m_scene.getObjectStorage().forEachBasicDetails([&position, &strength, &radius](BasicDetails& object, int i){
             Vector2F direction = object.m_posCurr - position;
             float distance = direction.magnitude();
             if (distance <= radius) {
