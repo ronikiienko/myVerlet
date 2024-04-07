@@ -1,13 +1,21 @@
 #pragma once
 
-#include <SFML/Graphics/Color.hpp>
+#include "BasicStickDetails.h"
+
+class BasicStickDetails;
 
 class BaseStick {
+    BasicStickDetails* m_basicStickDetails;
 public:
-    int m_id1;
-    int m_id2;
-    float m_length;
-    sf::Color m_color = sf::Color::White;
+    [[nodiscard]] BasicStickDetails& getBasicStickDetails() const {
+        return *m_basicStickDetails;
+    }
 
-    BaseStick(int id1, int id2, float length) : m_id1(id1), m_id2(id2), m_length(length){}
+    int m_id;
+    virtual void v_onTick() = 0;
+    virtual void v_onInit() = 0;
+
+    virtual ~BaseStick() = default;
+
+    friend class StickStorage;
 };

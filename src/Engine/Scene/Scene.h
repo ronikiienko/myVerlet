@@ -52,6 +52,7 @@ public:
                    ThreadPool &threadPool, PerformanceMonitor &performanceMonitor,
                    int maxObjectsNum, Vector2I size) :
             m_os(maxObjectsNum),
+            m_stickStorage(maxObjectsNum),
             m_sizeF(Vector2F::fromOther(size)),
             m_sizeI(size),
             m_camera(cameraMaxWorldViewSize, cameraPosition, window, inputBus),
