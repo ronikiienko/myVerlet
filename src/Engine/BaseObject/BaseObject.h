@@ -78,9 +78,9 @@ struct ObjectContext {
 class BaseObject {
 private:
     BasicDetails* m_basicDetails = nullptr;
+    int m_id = -1;
 public:
     Scene& m_scene;
-    int m_id = -1;
     [[nodiscard]] BasicDetails& getBasicDetails() const {
 //        if (m_scene == nullptr) throw std::runtime_error("Getting scene but it's not initialized yet. Call this method only after or inside onInit()");
         return *m_basicDetails;
