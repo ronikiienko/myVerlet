@@ -22,7 +22,7 @@ private:
     int m_subStepsCallbackCounter = 0;
 
     void constrainSticks() {
-        m_scene.getStickStorage().forEachStick([this](BasicStickDetails& stick, int i) {
+        m_scene.getStickStorage().forEachBasicStickDetails([this](BasicStickDetails& stick, int i) {
             BasicDetails &obj1 = m_scene.getObjectStorage().getBasicDetails(stick.m_id1);
             BasicDetails &obj2 = m_scene.getObjectStorage().getBasicDetails(stick.m_id2);
             const Vector2 vectorBetween = obj1.m_posCurr - obj2.m_posCurr;

@@ -14,6 +14,17 @@ public:
     void forEachStick(const T &callback, int start = 0, int end = -1) {
         // as i've discovered.. std::function HAS overhead. It was taking around 2 fps. So, i use T here. for performance-critical code parts better to not use std::function
         if (end == -1) {
+            end = getSticksCount();
+        }
+
+        for (int i = start; i < end; i++) {
+            callback(*m_sticks[i], i);
+        }
+    }
+
+    template<typename T>
+    void forEachBasicStickDetails(const T &callback, int start = 0, int end = -1) {
+        if (end == -1) {
             end = static_cast<int>(m_basicSticksDetails.size());
         }
 
@@ -21,6 +32,7 @@ public:
             callback(m_basicSticksDetails[i], i);
         }
     }
+
 
     template<typename T>
     std::weak_ptr<BaseStick> addStick(T&& object, int id1, int id2, float length) {

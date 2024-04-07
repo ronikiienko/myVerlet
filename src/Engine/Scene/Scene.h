@@ -81,9 +81,16 @@ public:
     }
 
     void runTicks() {
+        m_performanceMonitor.start("objects ticks");
         m_os.forEachObject([](BaseObject &object, int ind) {
             object.v_onTick();
         });
+        m_performanceMonitor.end("objects ticks");
+        m_performanceMonitor.start("sticks ticks");
+        m_stickStorage.forEachStick([](BaseStick &stick, int id) {
+            stick.v_onTick();
+        });
+        m_performanceMonitor.end("sticks ticks");
     }
 
     template<typename T>
