@@ -11,5 +11,10 @@ BaseObject::BaseObject(ObjectContext objectContext) : m_scene(objectContext.m_sc
 }
 
 void BaseObject::toggleRotation(bool enabled) {
-    m_scene.getObjectStorage().toggleObjectRotation(this, enabled);
+#ifdef IT_IS_DEBUG
+    if (m_id == -1) {
+        throw std::runtime_error("Id is not set in BaseObject.");
+    }
+#endif
+    m_scene.getObjectStorage().toggleObjectRotation(m_id, enabled);
 }

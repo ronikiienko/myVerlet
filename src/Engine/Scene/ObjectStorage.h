@@ -61,6 +61,14 @@ public:
         }
     }
 
+    void toggleObjectRotation(int index, bool enabled) {
+        if (enabled) {
+            m_objectsWithRotation.insert(index);
+        } else {
+            m_objectsWithRotation.remove(index);
+        }
+    }
+
     template<typename T>
     std::weak_ptr<BaseObject> addObject(T &&object, Vector2F position) {
         if (m_objects.size() + 1 > m_maxObjectsNum) {
@@ -74,6 +82,7 @@ public:
 
         int index = static_cast<int>(m_objects.size()) - 1;
         m_basicDetails[index].m_parent = m_objects[index].get();
+        m_objects[index]->m_id = index;
         m_objects[index]->v_onInit();
         m_objectTypesIndexLists[typeid(T)].insert(index);
         return {m_objects[index]};
