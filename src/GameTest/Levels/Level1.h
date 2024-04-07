@@ -27,8 +27,9 @@ public:
     }
 
     void v_onInit() override {
-        Shooter m_playerShooter{m_scene, m_gen};
-        std::weak_ptr<BaseObject> playerGeneralPtr = m_scene.getObjectStorage().addObject(Player{m_inputBus, m_gen, m_eventBus, m_playerShooter}, Vector2F::cart(100, 100));
+        Shooter playerShooter{m_scene, m_gen};
+        CameraFollowing cameraFollowing{m_scene.getCamera()};
+        std::weak_ptr<BaseObject> playerGeneralPtr = m_scene.getObjectStorage().addObject(Player{m_inputBus, m_gen, m_eventBus, playerShooter, cameraFollowing}, Vector2F::cart(100, 100));
         std::weak_ptr<Player> playerPtr = std::static_pointer_cast<Player>(playerGeneralPtr.lock());
         for (int i = 0; i < 100; i++) {
             m_scene.getObjectStorage().addObject(Enemy{playerPtr, m_gen, m_eventBus}, m_randomPositionGenerator.get());

@@ -9,7 +9,7 @@
 
 class Player : public BaseObject {
 private:
-    InputBus& m_inputBus;
+    InputBus &m_inputBus;
 
     IBHandle m_keyPressHandle;
     IBHandle m_keyReleaseHandle;
@@ -25,17 +25,20 @@ private:
 
     bool m_isShooting = false;
 
-    RNGf& m_gen;
+    RNGf &m_gen;
 
     Shooter m_shooter;
 
-    CameraFollowing m_cameraFollowing{getScene().getCamera()};
+    CameraFollowing m_cameraFollowing;
 
     int m_bulletsLeft = 1000;
 
-    EventBus& m_eventBus;
+    EventBus &m_eventBus;
 public:
-    explicit Player(InputBus& inputBus, RNGf& gen, EventBus& eventBus, Shooter& shooter) : m_inputBus(inputBus), m_shooter(shooter), m_gen(gen), m_eventBus(eventBus) {}
+    explicit Player(InputBus &inputBus, RNGf &gen, EventBus &eventBus, Shooter &shooter,
+                    CameraFollowing &cameraFollowing) : m_inputBus(inputBus), m_shooter(shooter), m_gen(gen),
+                                                        m_eventBus(eventBus),
+                                                        m_cameraFollowing(cameraFollowing) {}
 
     void v_onTick() override {
         m_cameraFollowing.follow(getBasicDetails().m_posCurr);
@@ -55,13 +58,15 @@ public:
         getBasicDetails().accelerate(acceleration);
         m_shooter.tick();
         if (m_isShooting && m_bulletsLeft > 0) {
-            bool didShoot = m_shooter.tryShoot(getBasicDetails().m_posCurr, getScene().getCamera().screenPosToWorldPos(sf::Mouse::getPosition(getScene().getCamera().getWindow())), Bullet{});
+            bool didShoot = m_shooter.tryShoot(getBasicDetails().m_posCurr, getScene().getCamera().screenPosToWorldPos(
+                    sf::Mouse::getPosition(getScene().getCamera().getWindow())), Bullet{});
             if (didShoot) {
                 m_bulletsLeft--;
                 m_eventBus.emit(GameEvents::PlayerBulletCountUpdate{m_bulletsLeft});
             }
         }
     };
+
     void v_onInit() override {
         m_cameraFollowing.setTransitionCoefficient(0.1);
         m_shooter.setSpread(Angle::fromDegrees(5));
@@ -107,5 +112,6 @@ public:
             }
         });
     };
-    void v_onCollision(BaseObject* ptr) override {};
+
+    void v_onCollision(BaseObject *ptr) override {};
 };
