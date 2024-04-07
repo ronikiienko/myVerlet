@@ -51,6 +51,8 @@ set(SOURCES src/main.cpp
         src/GameTest/UiRenderer.h
         src/GameTest/Entities/Food.h
         src/Engine/Scene/ObjectStorage.h
+        src/Engine/Scene/BaseStick/BaseStick.h
+        src/Engine/Scene/StickStorage.h
 )
 
 project(${PROJECT_NAME})

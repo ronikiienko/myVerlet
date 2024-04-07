@@ -12,6 +12,7 @@
 #include "../utils/ThreadPool.h"
 #include "../utils/SparseSet.h"
 #include "ObjectStorage.h"
+#include "StickStorage.h"
 
 enum BOUNDARY_TYPE {
     SOLID = 10,
@@ -21,6 +22,7 @@ enum BOUNDARY_TYPE {
 class Scene {
 private:
     ObjectStorage m_os;
+    StickStorage m_stickStorage;
 
     Vector2F m_sizeF;
     Vector2I m_sizeI;
@@ -59,6 +61,10 @@ public:
 
     ObjectStorage &getObjectStorage() {
         return m_os;
+    }
+
+    StickStorage &getStickStorage() {
+        return m_stickStorage;
     }
 
     Camera &getCamera() {
