@@ -15,15 +15,27 @@ public:
     BasicStickDetails(int id1, int id2, float length) : m_id1(id1), m_id2(id2), m_length(length){}
 };
 
-class BasicStickDetails;
-
 class BaseStick {
 private:
     BasicStickDetails* m_basicStickDetails = nullptr;
     int m_id = -1;
 public:
     [[nodiscard]] BasicStickDetails& getBasicStickDetails() const {
+#ifdef IT_IS_DEBUG
+        if (m_id == -1 || m_scene == nullptr) {
+            throw std::runtime_error("Trying to get stick basic details, but it's not initialized.");
+        }
+#endif
         return *m_basicStickDetails;
+    }
+
+    [[nodiscard]] int getId() const {
+#ifdef IT_IS_DEBUG
+        if (m_id == -1) {
+            throw std::runtime_error("Trying to get stick id, but it's not set.");
+            }
+#endif
+        return m_id;
     }
 
     virtual void v_onTick() = 0;
