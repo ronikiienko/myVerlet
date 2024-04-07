@@ -231,4 +231,8 @@ public:
             std::cout << i.first.name() << " " << i.second.size() << std::endl;
         }
     }
+
+    int getMaxObjectsCount() const {
+        return m_maxObjectsNum;
+    }
 };

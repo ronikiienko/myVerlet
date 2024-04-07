@@ -9,6 +9,12 @@ private:
     std::vector<BasicStickDetails> m_basicSticksDetails;
     std::vector<std::shared_ptr<BaseStick>> m_sticks;
     std::set<int, std::greater<>> m_sticksToRemove;
+    std::vector<std::set<int>> m_sticksOfObjects; // each index is object id, each set contains stick ids of this object
+    ObjectStorage &m_objectStorage;
+
+    void markStickForRemoval(int index) {
+        m_sticksToRemove.insert(index);
+    }
 public:
     template<typename T>
     void forEachStick(const T &callback, int start = 0, int end = -1) {
@@ -35,7 +41,7 @@ public:
 
 
     template<typename T>
-    std::weak_ptr<BaseStick> addStick(T&& object, int id1, int id2, float length) {
+    std::weak_ptr<BaseStick> addStick(T &&object, int id1, int id2, float length) {
         if (m_sticks.size() + 1 > m_maxSticksNum) {
             throw std::runtime_error("StickStorage: max sticks num reached");
         }
@@ -57,8 +63,43 @@ public:
         return static_cast<int>(m_basicSticksDetails.size());
     }
 
-    explicit StickStorage(int maxSticksNum) : m_maxSticksNum(maxSticksNum) {
+    void removeStick(int index) {
+        markStickForRemoval(index);
+    }
+
+    void removeMarkedSticks() {
+        if (m_sticksToRemove.empty()) {
+            return;
+        }
+
+        for (const auto &i : m_sticksToRemove) {
+            int lastIndex = getSticksCount() - 1;
+            if (i > lastIndex || i < 0) {
+                throw std::runtime_error("StickStorage: trying to remove stick with invalid index");
+            }
+
+            if (i == lastIndex) {
+                m_sticks.pop_back();
+                m_basicSticksDetails.pop_back();
+            }
+
+            if (i < lastIndex) {
+                std::swap(m_sticks[i], m_sticks[lastIndex]);
+                std::swap(m_basicSticksDetails[i], m_basicSticksDetails[lastIndex]);
+                m_sticks.pop_back();
+                m_basicSticksDetails.pop_back();
+                m_sticks[i]->m_basicStickDetails = &m_basicSticksDetails[i];
+                m_sticks[i]->m_id = i;
+            }
+        }
+        m_sticksToRemove.clear();
+    }
+
+    explicit StickStorage(int maxSticksNum, ObjectStorage &objectStorage) :
+            m_maxSticksNum(maxSticksNum),
+            m_objectStorage(objectStorage) {
         m_sticks.reserve(m_maxSticksNum);
         m_basicSticksDetails.reserve(m_maxSticksNum);
+        m_sticksOfObjects.resize(objectStorage.getObjectsCount());
     }
 };
