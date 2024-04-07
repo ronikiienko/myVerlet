@@ -80,8 +80,8 @@ public:
     [[nodiscard]] BasicDetails &getBasicDetails() const {
 #ifdef IT_IS_DEBUG
         if (m_id == -1 || m_scene == nullptr) {
-        throw std::runtime_error("Trying to get basic details, but it's not initialized.");
-    }
+            throw std::runtime_error("Trying to get basic details, but it's not initialized.");
+        }
 #endif
         return *m_basicDetails;
     };
@@ -89,8 +89,8 @@ public:
     [[nodiscard]] int getId() const {
 #ifdef IT_IS_DEBUG
         if (m_id == -1) {
-        throw std::runtime_error("Trying to get object id, but it's not set.");
-    }
+            throw std::runtime_error("Trying to get object id, but it's not set.");
+        }
 #endif
         return m_id;
     }
@@ -98,8 +98,8 @@ public:
     [[nodiscard]] Scene &getScene() const {
 #ifdef IT_IS_DEBUG
         if (m_id == -1 || m_scene == nullptr) {
-        throw std::runtime_error("Trying to get scene, but it's not set.");
-    }
+            throw std::runtime_error("Trying to get scene, but it's not set.");
+        }
 #endif
         return *m_scene;
     }
