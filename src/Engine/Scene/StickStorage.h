@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include "BaseStick/BasicStickDetails.h"
+#include "BaseStick/BaseStick.h"
 
 class StickStorage {
 private:
@@ -45,7 +45,7 @@ public:
         return static_cast<int>(m_basicSticksDetails.size());
     }
 
-    StickStorage(int maxSticksNum) : m_maxSticksNum(maxSticksNum) {
+    explicit StickStorage(int maxSticksNum) : m_maxSticksNum(maxSticksNum) {
         m_sticks.reserve(m_maxSticksNum);
         m_basicSticksDetails.reserve(m_maxSticksNum);
     }
