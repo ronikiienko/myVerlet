@@ -102,7 +102,7 @@ public:
     void updateSticksArray() {
         m_sticksVertexArray.resize(m_scene.getStickStorage().getSticksCount() * 4);
         m_threadPool.dispatch(m_scene.getStickStorage().getSticksCount(), [this](int start, int end) {
-            m_scene.getStickStorage().forEachStick([this](BasicStickDetails &stick, int index) {
+            m_scene.getStickStorage().forEachBasicStickDetails([this](BasicStickDetails &stick, int index) {
                 Vector2F pos1 = m_scene.getObjectStorage().getBasicDetails(stick.m_id1).m_posCurr;
                 Vector2F pos2 = m_scene.getObjectStorage().getBasicDetails(stick.m_id2).m_posCurr;
 
