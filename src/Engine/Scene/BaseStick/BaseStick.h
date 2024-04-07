@@ -22,7 +22,7 @@ private:
 public:
     [[nodiscard]] BasicStickDetails& getBasicStickDetails() const {
 #ifdef IT_IS_DEBUG
-        if (m_id == -1 || m_scene == nullptr) {
+        if (m_id == -1) {
             throw std::runtime_error("Trying to get stick basic details, but it's not initialized.");
         }
 #endif
