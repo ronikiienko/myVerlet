@@ -21,6 +21,23 @@ private:
     int m_subStepsCallbackInterval = 1;
     int m_subStepsCallbackCounter = 0;
 
+    void constrainSticks() {
+        m_scene.getStickStorage().forEachStick([this](BaseStick& stick, int i) {
+            BasicDetails &obj1 = m_scene.getObjectStorage().getBasicDetails(stick.m_id1);
+            BasicDetails &obj2 = m_scene.getObjectStorage().getBasicDetails(stick.m_id2);
+            const Vector2 vectorBetween = obj1.m_posCurr - obj2.m_posCurr;
+            const float distanceBetween = vectorBetween.magnitude();
+
+            const float diff = distanceBetween - stick.m_length;
+            const float moveRatio = (diff / distanceBetween) / 2;
+
+            const Vector2 offset = vectorBetween * moveRatio;
+
+            if (!obj1.m_isPinned) obj1.m_posCurr -= offset;
+            if (!obj2.m_isPinned) obj2.m_posCurr += offset;
+        });
+    }
+
     void updatePositionsConstraint(float dt) {
         const Vector2F size = m_scene.getSizeF();
         const int objectsCount = m_scene.getObjectStorage().getObjectsCount();
@@ -161,6 +178,9 @@ public:
                 }
                 m_subStepsCallbackCounter++;
                 m_performanceMonitor.end("collisions");
+                m_performanceMonitor.start("constrainSticks");
+                constrainSticks();
+                m_performanceMonitor.end("constrainSticks");
             }
         }
     }
@@ -243,7 +263,7 @@ public:
 
 //    void applyGravity() {
 //        m_threadPool.dispatch(m_scene.getObjectsCount(), [this](int start, int end) {
-//            m_scene.forEachObject([](BaseObject& object, int i) {
+//            m_scene.forEachStick([](BaseObject& object, int i) {
 //                if (!object.m_isPinned) object.accelerate(m_gravity);
 //            }, start, end);
 //        });
@@ -253,7 +273,7 @@ public:
 //        const Rectangle bounds = m_scene.getSizeF();
 //        const int m_objectsCount = m_scene.getObjectsCount();
 //        m_threadPool.dispatch(m_objectsCount, [this, &bounds](int start, int end) {
-//            m_scene.forEachObject([&bounds](BaseObject& object, int i) {
+//            m_scene.forEachStick([&bounds](BaseObject& object, int i) {
 //                // problem was that for example: m_scene is 100x100. Then both m_objects are outside of field on same m_direction, like obj1(101.256, 102.399) and obj2(105.936, 110.87). both will be pushed to (100,100) resulting in zero distance.
 //                // offset is trying to fix this problem
 //                const float offset = static_cast<float>(i) * 1e-6f;
@@ -279,7 +299,7 @@ public:
 //    }
 //    void updatePositions(float dt) {
 //        m_threadPool.dispatch(m_scene.getObjectsCount(), [this, dt](int start, int end) {
-//            m_scene.forEachObject([dt](BaseObject& object, int i) {
+//            m_scene.forEachStick([dt](BaseObject& object, int i) {
 //                if (!object.m_isPinned) object.update(dt);
 //            }, start, end);
 //        });
@@ -311,7 +331,7 @@ public:
 //    void rebuildGrid() {
 //        m_grid.clear();
 //        m_threadPool.dispatch(m_scene.getObjectsCount(), [this](int start, int end){
-//            m_scene.forEachObject([this](BaseObject& object, int i) {
+//            m_scene.forEachStick([this](BaseObject& object, int i) {
 //                m_grid.insert(i, object.m_posCurr.m_x, object.m_posCurr.m_y);
 //            }, start, end);
 //        });
