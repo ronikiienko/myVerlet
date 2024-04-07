@@ -80,7 +80,7 @@ public:
         return m_sizeI;
     }
 
-    void runObjectTicks() {
+    void runTicks() {
         m_os.forEachObject([](BaseObject &object, int ind) {
             object.v_onTick();
         });

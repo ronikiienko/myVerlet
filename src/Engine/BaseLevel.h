@@ -56,7 +56,7 @@ private:
         m_window.display();
 
         m_performanceMonitor.start("object ticks");
-        m_scene.runObjectTicks();
+        m_scene.runTicks();
         m_performanceMonitor.end("object ticks");
 
         m_performanceMonitor.start("level tick");
