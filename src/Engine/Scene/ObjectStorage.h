@@ -138,6 +138,7 @@ public:
                 m_objects.pop_back();
                 m_basicDetails.pop_back();
                 m_objects[i]->m_basicDetails = &m_basicDetails[i];
+                m_objects[i]->m_id = i;
             }
         }
 

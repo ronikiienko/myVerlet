@@ -4,7 +4,7 @@
 // Created by ronik on 29/01/2024.
 //
 void BaseObject::destroy() {
-    m_scene.getObjectStorage().removeObject(this);
+    m_scene.getObjectStorage().removeObject(m_id);
 }
 
 BaseObject::BaseObject(ObjectContext objectContext) : m_scene(objectContext.m_scene) {
