@@ -22,4 +22,8 @@ public:
     void addStick(BaseStick stick) {
         m_baseSticks.push_back(stick);
     }
+
+    [[nodiscard]] int getSticksCount() const {
+        return static_cast<int>(m_baseSticks.size());
+    }
 };

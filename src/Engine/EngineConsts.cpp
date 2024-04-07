@@ -6,6 +6,7 @@ namespace engineDefaults {
     extern const float rotationCircleRadius = 0.5;
 
     extern const float objectsRadius = 2;
+    extern const float stickThickness = 1;
     extern const float objectsRadiusSquared = objectsRadius * objectsRadius;
     extern const float twoObjectsRadius = objectsRadius + objectsRadius;
     extern const float twoObjectsRadiusSquared = twoObjectsRadius * twoObjectsRadius;

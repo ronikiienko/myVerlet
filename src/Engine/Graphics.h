@@ -15,6 +15,7 @@ private:
     sf::RenderWindow &m_window;
     sf::VertexArray m_objectVertexArray;
     sf::VertexArray m_rotationsVertexArray;
+    sf::VertexArray m_sticksVertexArray;
     ThreadPool &m_threadPool;
     sf::Texture m_objectTexture;
     PerformanceMonitor &m_performanceMonitor;
@@ -28,6 +29,7 @@ public:
             : m_scene(scene), m_window(window), m_threadPool(threadPool), m_performanceMonitor(performanceMonitor) {
         m_objectVertexArray.setPrimitiveType(sf::Quads);
         m_rotationsVertexArray.setPrimitiveType(sf::Quads);
+        m_sticksVertexArray.setPrimitiveType(sf::Quads);
         // TODO somehow organise resources, because now path depends on where executable is. Same for fonts in performance monitor
         if (!m_objectTexture.loadFromFile("./res/circle.png")) {
             throw std::runtime_error("Could not load circle texture file");
@@ -97,6 +99,38 @@ public:
         });
     }
 
+    void updateSticksArray() {
+        m_sticksVertexArray.resize(m_scene.getStickStorage().getSticksCount() * 4);
+        m_threadPool.dispatch(m_scene.getStickStorage().getSticksCount(), [this](int start, int end) {
+            m_scene.getStickStorage().forEachStick([this](BaseStick &stick, int index) {
+                Vector2F pos1 = m_scene.getObjectStorage().getBasicDetails(stick.m_id1).m_posCurr;
+                Vector2F pos2 = m_scene.getObjectStorage().getBasicDetails(stick.m_id2).m_posCurr;
+
+                Vector2F diff = pos2 - pos1;
+                Vector2F perp = diff.perpClockwise().normalize();
+
+
+                const int ind = index * 4;
+
+                Vector2F p1 = pos1 + perp * engineDefaults::stickThickness / 2;
+                Vector2F p2 = pos2 + perp * engineDefaults::stickThickness / 2;
+                Vector2F p3 = pos2 - perp * engineDefaults::stickThickness / 2;
+                Vector2F p4 = pos1 - perp * engineDefaults::stickThickness / 2;
+
+
+                m_sticksVertexArray[ind].position = {p1.m_x, p1.m_y};
+                m_sticksVertexArray[ind + 1].position = {p2.m_x, p2.m_y};
+                m_sticksVertexArray[ind + 2].position = {p3.m_x, p3.m_y};
+                m_sticksVertexArray[ind + 3].position = {p4.m_x, p4.m_y};
+
+                m_sticksVertexArray[ind].color = stick.m_color;
+                m_sticksVertexArray[ind + 1].color = stick.m_color;
+                m_sticksVertexArray[ind + 2].color = stick.m_color;
+                m_sticksVertexArray[ind + 3].color = stick.m_color;
+            }, start, end);
+        });
+    }
+
     void updateWalls() {
         float wallsThickness = 40;
 
@@ -138,7 +172,11 @@ public:
         m_performanceMonitor.start("rotations");
         updateRotationsArray();
         m_performanceMonitor.end("rotations");
+        m_performanceMonitor.start("sticks");
+        updateSticksArray();
+        m_performanceMonitor.end("sticks");
         m_performanceMonitor.start("draw");
+        m_window.draw(m_sticksVertexArray);
         m_window.draw(m_objectVertexArray, &m_objectTexture);
         m_window.draw(m_rotationsVertexArray, &m_objectTexture);
         m_performanceMonitor.end("draw");
