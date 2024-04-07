@@ -8,7 +8,7 @@ class BaseObject;
 
 class BasicDetails {
 public:
-    BaseObject* m_parent = nullptr;
+    BaseObject *m_parent = nullptr;
     Vector2F m_posCurr, m_posOld, m_acceleration = Vector2F::cart();
     sf::Color m_color = sf::Color::White;
     bool m_isPinned = false;
@@ -20,7 +20,7 @@ public:
         m_posOld = m_posCurr - v;
     }
 
-    [[nodiscard]] const Vector2F getVelocity()const {
+    [[nodiscard]] const Vector2F getVelocity() const {
         return m_posCurr - m_posOld;
     }
 
@@ -35,6 +35,7 @@ public:
     void pin() {
         m_isPinned = true;
     }
+
     void unpin() {
         m_isPinned = false;
     }
@@ -70,34 +71,52 @@ public:
 
 class Scene;
 
-struct ObjectContext {
-    explicit ObjectContext(Scene& scene) : m_scene(scene) {};
-    Scene& m_scene;
-};
-
 class BaseObject {
 private:
-    BasicDetails* m_basicDetails = nullptr;
+    BasicDetails *m_basicDetails = nullptr;
     int m_id = -1;
+    Scene *m_scene = nullptr;
 public:
-    Scene& m_scene;
-    [[nodiscard]] BasicDetails& getBasicDetails() const {
-//        if (m_scene == nullptr) throw std::runtime_error("Getting scene but it's not initialized yet. Call this method only after or inside onInit()");
+    [[nodiscard]] BasicDetails &getBasicDetails() const {
+#ifdef IT_IS_DEBUG
+        if (m_id == -1 || m_scene == nullptr) {
+        throw std::runtime_error("Trying to get basic details, but it's not initialized.");
+    }
+#endif
         return *m_basicDetails;
     };
+
+    [[nodiscard]] int getId() const {
+#ifdef IT_IS_DEBUG
+        if (m_id == -1) {
+        throw std::runtime_error("Trying to get object id, but it's not set.");
+    }
+#endif
+        return m_id;
+    }
+
+    [[nodiscard]] Scene &getScene() const {
+#ifdef IT_IS_DEBUG
+        if (m_id == -1 || m_scene == nullptr) {
+        throw std::runtime_error("Trying to get scene, but it's not set.");
+    }
+#endif
+        return *m_scene;
+    }
+
     virtual void v_onTick() = 0;
+
     virtual void v_onInit() = 0;
 
     // Important note: this method can be called many times for same collision. It doesn't check if objects were colliding in previous frame.
     // Also, it can be called after object is destroyed (because destruction is delayed to the end of the frame, so during subSteps it can be called).
-    virtual void v_onCollision(BaseObject* ptr) = 0;
+    virtual void v_onCollision(BaseObject *ptr) = 0;
 
-    void destroy();
+    void destroy() const;
+
     void toggleRotation(bool enabled);
 
     virtual ~BaseObject() = default;
-
-    explicit BaseObject(ObjectContext);
 
     friend class ObjectStorage;
 };

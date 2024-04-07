@@ -5,7 +5,7 @@
 #include "./IDamageable.h"
 class Food : public BaseObject, public IDamageable {
 public:
-    explicit Food(ObjectContext context) : BaseObject(context) {}
+    explicit Food()= default;
 
     void v_onTick() override {};
     void v_onInit() override {

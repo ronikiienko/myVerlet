@@ -15,5 +15,5 @@ class Bullet : public BaseObject {
         destroy();
     };
 public:
-    explicit Bullet(ObjectContext context) : BaseObject(context) {}
+    explicit Bullet() = default;
 };

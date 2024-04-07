@@ -11,6 +11,7 @@
 class ObjectStorage {
 private:
     int m_maxObjectsNum;
+    Scene *m_scene;
     std::vector<std::shared_ptr<BaseObject>> m_objects;
     std::set<int, std::greater<>> m_objectsToRemove;
     SparseSet m_objectsWithRotation;
@@ -45,8 +46,9 @@ private:
 
 public:
 
-    explicit ObjectStorage(int maxObjectsNum) :
+    explicit ObjectStorage(int maxObjectsNum, Scene* scene) :
             m_maxObjectsNum(maxObjectsNum),
+            m_scene(scene),
             m_objectsWithRotation(maxObjectsNum) {
         m_objects.reserve(maxObjectsNum);
         m_basicDetails.reserve(maxObjectsNum);
@@ -77,6 +79,7 @@ public:
 
         m_basicDetails.emplace_back(position);
         object.m_basicDetails = &m_basicDetails.back();
+        object.m_scene = m_scene;
 
         m_objects.push_back(std::make_shared<T>(std::forward<T>(object)));
 

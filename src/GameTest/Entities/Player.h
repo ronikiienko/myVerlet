@@ -29,13 +29,13 @@ private:
 
     Shooter m_shooter;
 
-    CameraFollowing m_cameraFollowing{m_scene.getCamera()};
+    CameraFollowing m_cameraFollowing{getScene().getCamera()};
 
     int m_bulletsLeft = 1000;
 
     EventBus& m_eventBus;
 public:
-    explicit Player(ObjectContext context, InputBus& inputBus, RNGf& gen, EventBus& eventBus) : BaseObject(context), m_inputBus(inputBus), m_shooter(m_scene, m_gen), m_gen(gen), m_eventBus(eventBus) {}
+    explicit Player(InputBus& inputBus, RNGf& gen, EventBus& eventBus, Shooter& shooter) : m_inputBus(inputBus), m_shooter(shooter), m_gen(gen), m_eventBus(eventBus) {}
 
     void v_onTick() override {
         m_cameraFollowing.follow(getBasicDetails().m_posCurr);
@@ -55,7 +55,7 @@ public:
         getBasicDetails().accelerate(acceleration);
         m_shooter.tick();
         if (m_isShooting && m_bulletsLeft > 0) {
-            bool didShoot = m_shooter.tryShoot(getBasicDetails().m_posCurr, m_scene.getCamera().screenPosToWorldPos(sf::Mouse::getPosition(m_scene.getCamera().getWindow())), Bullet{m_scene.getObjectContext()});
+            bool didShoot = m_shooter.tryShoot(getBasicDetails().m_posCurr, getScene().getCamera().screenPosToWorldPos(sf::Mouse::getPosition(getScene().getCamera().getWindow())), Bullet{});
             if (didShoot) {
                 m_bulletsLeft--;
                 m_eventBus.emit(GameEvents::PlayerBulletCountUpdate{m_bulletsLeft});

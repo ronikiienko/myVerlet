@@ -40,17 +40,16 @@ private:
 
     EventBus &m_eventBus;
 public:
-    explicit Enemy(ObjectContext context, std::weak_ptr<Player> playerPtr, RNGf &gen, EventBus &eventBus) : BaseObject(
-            context), m_playerPtr(std::move(playerPtr)), m_gen(gen), m_eventBus(eventBus) {}
+    explicit Enemy(std::weak_ptr<Player> playerPtr, RNGf &gen, EventBus &eventBus) : m_playerPtr(std::move(playerPtr)), m_gen(gen), m_eventBus(eventBus) {}
 
     BehaviourResult wallAvoidance() {
         float weight;
         Vector2F wallAvoidanceDirection = Vector2F::cart();
 
-        float toLeft = m_scene.getDistanceToLeft(getBasicDetails().m_posCurr);
-        float toRight = m_scene.getDistanceToRight(getBasicDetails().m_posCurr);
-        float toTop = m_scene.getDistanceToTop(getBasicDetails().m_posCurr);
-        float toBottom = m_scene.getDistanceToBottom(getBasicDetails().m_posCurr);
+        float toLeft = getScene().getDistanceToLeft(getBasicDetails().m_posCurr);
+        float toRight = getScene().getDistanceToRight(getBasicDetails().m_posCurr);
+        float toTop = getScene().getDistanceToTop(getBasicDetails().m_posCurr);
+        float toBottom = getScene().getDistanceToBottom(getBasicDetails().m_posCurr);
 
         float xWeight = 0;
         float yWeight = 0;
@@ -102,7 +101,7 @@ public:
     BehaviourResult bulletAvoidance() {
         Vector2F direction = Vector2F::cart();
         int bulletCount = 0;
-        m_scene.getObjectStorage().forEachObjectOfType<Bullet>([&](Bullet &bullet, int id) {
+        getScene().getObjectStorage().forEachObjectOfType<Bullet>([&](Bullet &bullet, int id) {
             if ((bullet.getBasicDetails().m_posCurr - getBasicDetails().m_posCurr).magnitude2() <
                 bulletAvoidanceDistance * bulletAvoidanceDistance) {
                 bulletCount++;
@@ -120,7 +119,7 @@ public:
     BehaviourResult foodSearching() {
         float nearestDistance = -10;
         Food *nearestFood = nullptr;
-        m_scene.forEachInRadius(getBasicDetails().m_posCurr, 32, [&](BaseObject *object, int id) {
+        getScene().forEachInRadius(getBasicDetails().m_posCurr, 32, [&](BaseObject *object, int id) {
             if (auto food = dynamic_cast<Food *>(object)) {
                 float distance = (food->getBasicDetails().m_posCurr - getBasicDetails().m_posCurr).magnitude2();
                 if (distance > nearestDistance) {

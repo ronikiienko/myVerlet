@@ -51,7 +51,7 @@ public:
     explicit Scene(float cameraMaxWorldViewSize, Vector2F cameraPosition, InputBus &inputBus, sf::RenderWindow &window,
                    ThreadPool &threadPool, PerformanceMonitor &performanceMonitor,
                    int maxObjectsNum, Vector2I size) :
-            m_os(maxObjectsNum),
+            m_os(maxObjectsNum, this),
             m_stickStorage(maxObjectsNum),
             m_sizeF(Vector2F::fromOther(size)),
             m_sizeI(size),
@@ -172,10 +172,6 @@ public:
 //        });
         m_performanceMonitor.end("m_grid build");
     }
-
-    ObjectContext getObjectContext() {
-        return ObjectContext{*this};
-    };
 
     Vector2F &getGravity() {
         return m_gravity;

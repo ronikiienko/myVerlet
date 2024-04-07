@@ -27,16 +27,17 @@ public:
     }
 
     void v_onInit() override {
-        std::weak_ptr<BaseObject> playerGeneralPtr = m_scene.getObjectStorage().addObject(Player{m_scene.getObjectContext(), m_inputBus, m_gen, m_eventBus}, Vector2F::cart(100, 100));
+        Shooter m_playerShooter{m_scene, m_gen};
+        std::weak_ptr<BaseObject> playerGeneralPtr = m_scene.getObjectStorage().addObject(Player{m_inputBus, m_gen, m_eventBus, m_playerShooter}, Vector2F::cart(100, 100));
         std::weak_ptr<Player> playerPtr = std::static_pointer_cast<Player>(playerGeneralPtr.lock());
         for (int i = 0; i < 100; i++) {
-            m_scene.getObjectStorage().addObject(Enemy{m_scene.getObjectContext(), playerPtr, m_gen, m_eventBus}, m_randomPositionGenerator.get());
+            m_scene.getObjectStorage().addObject(Enemy{playerPtr, m_gen, m_eventBus}, m_randomPositionGenerator.get());
         }
         for (int i = 0; i < 0; i++) {
-            m_scene.getObjectStorage().addObject(EmptyObject{m_scene.getObjectContext()}, m_randomPositionGenerator.get());
+            m_scene.getObjectStorage().addObject(EmptyObject{}, m_randomPositionGenerator.get());
         }
         for (int i = 0; i < 100; i++) {
-            m_scene.getObjectStorage().addObject(Food{m_scene.getObjectContext()}, m_randomPositionGenerator.get());
+            m_scene.getObjectStorage().addObject(Food{}, m_randomPositionGenerator.get());
         }
 
         m_keyPressHandle = m_inputBus.addEventListener(sf::Event::KeyPressed,[this](sf::Event event) {
