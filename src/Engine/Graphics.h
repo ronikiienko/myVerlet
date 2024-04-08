@@ -172,9 +172,9 @@ public:
         m_performanceMonitor.start("rotations");
         updateRotationsArray();
         m_performanceMonitor.end("rotations");
-        m_performanceMonitor.start("sticks");
+        m_performanceMonitor.start("sticks drawing");
         updateSticksArray();
-        m_performanceMonitor.end("sticks");
+        m_performanceMonitor.end("sticks drawing");
         m_performanceMonitor.start("draw");
         m_window.draw(m_sticksVertexArray);
         m_window.draw(m_objectVertexArray, &m_objectTexture);

@@ -178,10 +178,11 @@ public:
                 }
                 m_subStepsCallbackCounter++;
                 m_performanceMonitor.end("collisions");
-                m_performanceMonitor.start("constrainSticks");
-                constrainSticks();
-                m_performanceMonitor.end("constrainSticks");
+
             }
+            m_performanceMonitor.start("constrainSticks");
+            constrainSticks();
+            m_performanceMonitor.end("constrainSticks");
         }
     }
 
