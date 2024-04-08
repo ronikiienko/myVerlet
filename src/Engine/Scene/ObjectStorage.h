@@ -17,6 +17,8 @@ private:
     SparseSet m_objectsWithRotation;
     std::vector<BasicDetails> m_basicDetails;
     std::unordered_map<std::type_index, std::set<int>> m_objectTypesIndexLists;
+    int m_callbackIdCounter = 0;
+    std::unordered_map<int, std::function<void(int, int)>> m_elementTransferCallbacks;
 
     void markObjectForRemoval(int index) {
         m_objectsToRemove.insert(index);
@@ -52,6 +54,16 @@ public:
             m_objectsWithRotation(maxObjectsNum) {
         m_objects.reserve(maxObjectsNum);
         m_basicDetails.reserve(maxObjectsNum);
+    }
+
+    template<typename T>
+    int addElementTransferCallback(T callback) {
+        m_elementTransferCallbacks[m_callbackIdCounter] = callback;
+        return m_callbackIdCounter++;
+    }
+
+    void removeElementTransferCallback(int id) {
+        m_elementTransferCallbacks.erase(id);
     }
 
     void toggleObjectRotation(BaseObject *ptr, bool enabled) {
@@ -112,6 +124,10 @@ public:
             }
 
             if (i == lastIndex) {
+                for (const auto &callback: m_elementTransferCallbacks) {
+                    callback.second(i, -1);
+                }
+
                 // this actually works. typeid(removedObjectRef) returns the type of the derived object, not BaseObject
                 // be cautious, that if I would use typeid directly on pointer, it would return BaseObject for any derived object
                 BaseObject &removedObjectRef = *(m_objects[i].get());
@@ -142,6 +158,11 @@ public:
                 m_basicDetails.pop_back();
                 m_objects[i]->m_basicDetails = &m_basicDetails[i];
                 m_objects[i]->m_id = i;
+
+                for (const auto &callback: m_elementTransferCallbacks) {
+                    callback.second(lastIndex, i);
+                    callback.second(i, -1);
+                }
             }
         }
 

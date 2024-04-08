@@ -11,6 +11,7 @@ private:
     std::set<int, std::greater<>> m_sticksToRemove;
     std::vector<std::set<int>> m_sticksOfObjects; // each index is object id, each set contains stick ids of this object
     ObjectStorage &m_objectStorage;
+    int m_elementTransferCallbackId = -1;
 
     void markStickForRemoval(int index) {
         m_sticksToRemove.insert(index);
@@ -107,5 +108,24 @@ public:
         m_sticks.reserve(m_maxSticksNum);
         m_basicSticksDetails.reserve(m_maxSticksNum);
         m_sticksOfObjects.resize(objectStorage.getMaxObjectsCount());
+        m_elementTransferCallbackId = m_objectStorage.addElementTransferCallback([this](int id, int newId) {
+            if (newId == -1) {
+                for (int stickId : m_sticksOfObjects[id]) {
+                    removeStick(stickId);
+                }
+            } else {
+                for (int stickId: m_sticksOfObjects[id]) {
+                    if (m_basicSticksDetails[stickId].m_id1 == id) {
+                        m_basicSticksDetails[stickId].m_id1 = newId;
+                    } else {
+                        m_basicSticksDetails[stickId].m_id2 = newId;
+                    }
+                }
+            }
+        });
+    }
+
+    ~StickStorage() {
+        m_objectStorage.removeElementTransferCallback(m_elementTransferCallbackId);
     }
 };
