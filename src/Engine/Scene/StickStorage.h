@@ -41,20 +41,23 @@ public:
 
 
     template<typename T>
-    std::weak_ptr<BaseStick> addStick(T &&object, int id1, int id2, float length) {
+    std::weak_ptr<BaseStick> addStick(T &&stick, int id1, int id2, float length) {
         if (m_sticks.size() + 1 > m_maxSticksNum) {
             throw std::runtime_error("StickStorage: max sticks num reached");
         }
 
         m_basicSticksDetails.emplace_back(id1, id2, length);
-        object.m_basicStickDetails = &m_basicSticksDetails.back();
+        stick.m_basicStickDetails = &m_basicSticksDetails.back();
 
-        m_sticks.push_back(std::make_shared<T>(std::forward<T>(object)));
+        m_sticks.push_back(std::make_shared<T>(std::forward<T>(stick)));
 
         int index = static_cast<int>(m_sticks.size() - 1);
         m_basicSticksDetails[index].m_parent = m_sticks[index].get();
         m_sticks[index]->m_id = index;
         m_sticks[index]->v_onInit();
+
+        m_sticksOfObjects[id1].insert(index);
+        m_sticksOfObjects[id2].insert(index);
 
         return {m_sticks[index]};
     }
@@ -100,6 +103,6 @@ public:
             m_objectStorage(objectStorage) {
         m_sticks.reserve(m_maxSticksNum);
         m_basicSticksDetails.reserve(m_maxSticksNum);
-        m_sticksOfObjects.resize(objectStorage.getObjectsCount());
+        m_sticksOfObjects.resize(objectStorage.getMaxObjectsCount());
     }
 };
