@@ -81,6 +81,9 @@ public:
                 throw std::runtime_error("StickStorage: trying to remove stick with invalid index");
             }
 
+            m_sticksOfObjects[m_basicSticksDetails[i].m_id1].erase(i);
+            m_sticksOfObjects[m_basicSticksDetails[i].m_id2].erase(i);
+
             if (i == lastIndex) {
                 m_sticks.pop_back();
                 m_basicSticksDetails.pop_back();
