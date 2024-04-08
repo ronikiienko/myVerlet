@@ -79,7 +79,7 @@ public:
         for (const auto &i : m_sticksToRemove) {
             int lastIndex = getSticksCount() - 1;
             if (i > lastIndex || i < 0) {
-                throw std::runtime_error("StickStorage: trying to remove stick with invalid index");
+                throw std::runtime_error( "StickStorage: trying to remove stick with invalid index" + std::to_string(i));
             }
 
             m_sticksOfObjects[m_basicSticksDetails[i].m_id1].erase(i);
@@ -91,6 +91,12 @@ public:
             }
 
             if (i < lastIndex) {
+                m_sticksOfObjects[m_basicSticksDetails[lastIndex].m_id1].erase(lastIndex);
+                m_sticksOfObjects[m_basicSticksDetails[lastIndex].m_id2].erase(lastIndex);
+
+                m_sticksOfObjects[m_basicSticksDetails[lastIndex].m_id1].insert(i);
+                m_sticksOfObjects[m_basicSticksDetails[lastIndex].m_id2].insert(i);
+
                 std::swap(m_sticks[i], m_sticks[lastIndex]);
                 std::swap(m_basicSticksDetails[i], m_basicSticksDetails[lastIndex]);
                 m_sticks.pop_back();
@@ -108,24 +114,27 @@ public:
         m_sticks.reserve(m_maxSticksNum);
         m_basicSticksDetails.reserve(m_maxSticksNum);
         m_sticksOfObjects.resize(objectStorage.getMaxObjectsCount());
-        m_elementTransferCallbackId = m_objectStorage.addElementTransferCallback([this](int id, int newId) {
-            if (newId == -1) {
-                for (int stickId : m_sticksOfObjects[id]) {
-                    removeStick(stickId);
-                }
-            } else {
-                for (int stickId: m_sticksOfObjects[id]) {
-                    if (m_basicSticksDetails[stickId].m_id1 == id) {
-                        m_basicSticksDetails[stickId].m_id1 = newId;
-                    } else {
-                        m_basicSticksDetails[stickId].m_id2 = newId;
-                    }
+        m_elementTransferCallbackId = m_objectStorage.addSwapAndPopCallback([this](int removedId, int lastId) {
+            for (int stickId: m_sticksOfObjects[lastId]) {
+                if (m_basicSticksDetails[stickId].m_id1 == lastId) {
+                    m_basicSticksDetails[stickId].m_id1 = removedId;
+                } else if (m_basicSticksDetails[stickId].m_id2 == lastId) {
+                    m_basicSticksDetails[stickId].m_id2 = removedId;
                 }
             }
+            for (int stickId: m_sticksOfObjects[removedId]) {
+                if (m_basicSticksDetails[stickId].m_id1 == removedId) {
+                    m_basicSticksDetails[stickId].m_id1 = lastId;
+                } else if (m_basicSticksDetails[stickId].m_id2 == removedId) {
+                    m_basicSticksDetails[stickId].m_id2 = lastId;
+                }
+                removeStick(stickId);
+            }
+            std::swap(m_sticksOfObjects[removedId], m_sticksOfObjects[lastId]);
         });
     }
 
     ~StickStorage() {
-        m_objectStorage.removeElementTransferCallback(m_elementTransferCallbackId);
+        m_objectStorage.removeSwapAndPopCallback(m_elementTransferCallbackId);
     }
 };

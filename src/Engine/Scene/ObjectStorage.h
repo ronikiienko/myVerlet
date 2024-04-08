@@ -18,7 +18,7 @@ private:
     std::vector<BasicDetails> m_basicDetails;
     std::unordered_map<std::type_index, std::set<int>> m_objectTypesIndexLists;
     int m_callbackIdCounter = 0;
-    std::unordered_map<int, std::function<void(int, int)>> m_elementTransferCallbacks;
+    std::unordered_map<int, std::function<void(int, int)>> m_swapAndPopCallbacks;
 
     void markObjectForRemoval(int index) {
         m_objectsToRemove.insert(index);
@@ -57,16 +57,17 @@ public:
     }
 
     // callback should receive two int's.
-    // First is index of object that is being transferred to different index/removed, second is index of object that it is transferred to
-    // if second is -1, then object is being removed
+    // First is index that was removed
+    // Second is last index
+    // That's because when ObjectStorage removes object it swaps it with last object and pops it
     template<typename T>
-    int addElementTransferCallback(T callback) {
-        m_elementTransferCallbacks[m_callbackIdCounter] = callback;
+    int addSwapAndPopCallback(T callback) {
+        m_swapAndPopCallbacks[m_callbackIdCounter] = callback;
         return m_callbackIdCounter++;
     }
 
-    void removeElementTransferCallback(int id) {
-        m_elementTransferCallbacks.erase(id);
+    void removeSwapAndPopCallback(int id) {
+        m_swapAndPopCallbacks.erase(id);
     }
 
     void toggleObjectRotation(BaseObject *ptr, bool enabled) {
@@ -126,11 +127,11 @@ public:
                 throw std::runtime_error("Trying to remove object that does not exist");
             }
 
-            if (i == lastIndex) {
-                for (const auto &callback: m_elementTransferCallbacks) {
-                    callback.second(i, -1);
-                }
+            for (const auto &callback: m_swapAndPopCallbacks) {
+                callback.second(i, lastIndex);
+            }
 
+            if (i == lastIndex) {
                 // this actually works. typeid(removedObjectRef) returns the type of the derived object, not BaseObject
                 // be cautious, that if I would use typeid directly on pointer, it would return BaseObject for any derived object
                 BaseObject &removedObjectRef = *(m_objects[i].get());
@@ -161,11 +162,6 @@ public:
                 m_basicDetails.pop_back();
                 m_objects[i]->m_basicDetails = &m_basicDetails[i];
                 m_objects[i]->m_id = i;
-
-                for (const auto &callback: m_elementTransferCallbacks) {
-                    callback.second(lastIndex, i);
-                    callback.second(i, -1);
-                }
             }
         }
 
