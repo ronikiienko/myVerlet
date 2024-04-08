@@ -11,10 +11,11 @@ public:
     BaseObject *m_parent = nullptr;
     Vector2F m_posCurr, m_posOld, m_acceleration = Vector2F::cart();
     sf::Color m_color = sf::Color::White;
-    bool m_isPinned = false;
     float m_mass = 1;
-    bool m_isCollisionOn = true;
     Vector2F m_direction = Vector2F::polar(1, Angle::fromDegrees(0));
+    bool m_isCollisionOn = true;
+    bool m_isPinned = false;
+    bool m_isRemoved = false;
 
     void setVelocity(Vector2F v) {
         m_posOld = m_posCurr - v;

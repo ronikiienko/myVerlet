@@ -154,7 +154,7 @@ private:
                 float weightRatio = obj1.m_mass / (obj1.m_mass + obj2.m_mass);
                 const float delta = m_collisionRestitution * (dist - engineDefaults::twoObjectsRadius);
                 // Update positions
-                if (obj1.m_isCollisionOn && obj2.m_isCollisionOn) {
+                if (obj1.m_isCollisionOn && obj2.m_isCollisionOn && !obj1.m_isRemoved && !obj2.m_isRemoved) {
                     if (!obj1.m_isPinned) obj1.m_posCurr -= normal * delta * (1 - weightRatio);
                     if (!obj2.m_isPinned) obj2.m_posCurr += normal * delta * weightRatio;
                     // TODO i should not call onCollision from here. because it is called from different threads. then removing other object from onCollision would be very risky

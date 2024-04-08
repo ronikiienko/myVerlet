@@ -23,6 +23,7 @@ private:
 
     void markObjectForRemoval(int index) {
         m_mutex.lock();
+        m_basicDetails[index].m_isRemoved = true;
         m_objectsToRemove.insert(index);
         m_mutex.unlock();
     }

@@ -61,10 +61,18 @@ public:
                 m_objectVertexArray[ind + 2].texCoords = {m_textureSize, m_textureSize};
                 m_objectVertexArray[ind + 3].texCoords = {0.0f, m_textureSize};
 
-                m_objectVertexArray[ind].color = object.m_color;
-                m_objectVertexArray[ind + 1].color = object.m_color;
-                m_objectVertexArray[ind + 2].color = object.m_color;
-                m_objectVertexArray[ind + 3].color = object.m_color;
+                if (object.m_isRemoved) {
+                    m_objectVertexArray[ind].color = sf::Color(0, 0, 0, 0);
+                    m_objectVertexArray[ind + 1].color = sf::Color(0, 0, 0, 0);
+                    m_objectVertexArray[ind + 2].color = sf::Color(0, 0, 0, 0);
+                    m_objectVertexArray[ind + 3].color = sf::Color(0, 0, 0, 0);
+                } else {
+                    m_objectVertexArray[ind].color = object.m_color;
+                    m_objectVertexArray[ind + 1].color = object.m_color;
+                    m_objectVertexArray[ind + 2].color = object.m_color;
+                    m_objectVertexArray[ind + 3].color = object.m_color;
+                }
+
             }, start, end);
         });
     }
