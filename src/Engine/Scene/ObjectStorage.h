@@ -56,6 +56,9 @@ public:
         m_basicDetails.reserve(maxObjectsNum);
     }
 
+    // callback should receive two int's.
+    // First is index of object that is being transferred to different index/removed, second is index of object that it is transferred to
+    // if second is -1, then object is being removed
     template<typename T>
     int addElementTransferCallback(T callback) {
         m_elementTransferCallbacks[m_callbackIdCounter] = callback;
