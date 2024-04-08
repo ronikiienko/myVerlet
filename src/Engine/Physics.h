@@ -29,7 +29,7 @@ private:
             const float distanceBetween = vectorBetween.magnitude();
 
             const float stretch = distanceBetween - stick.m_length;
-            if (stretch < stick.m_minStretch || stretch > stick.m_maxStretch) {
+            if (stretch > stick.m_maxStretch) {
                 m_scene.getStickStorage().removeStick(i);
             }
 
