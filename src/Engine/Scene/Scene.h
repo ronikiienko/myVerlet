@@ -17,6 +17,7 @@
 enum BOUNDARY_TYPE {
     SOLID = 10,
     WRAP = 11,
+    REMOVE = 12
 };
 
 class Scene {

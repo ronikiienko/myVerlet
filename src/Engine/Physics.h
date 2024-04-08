@@ -102,6 +102,34 @@ private:
                             object.setVelocity(oldVelocity);
                         }
                     }
+                        break;
+                    case BOUNDARY_TYPE::REMOVE: {
+                        // problem was that for example: m_scene is 100x100. Then both m_objects are outside of field on same m_direction, like obj1(101.256, 102.399) and obj2(105.936, 110.87). both will be pushed to (100,100) resulting in zero distance.
+                        // offset is trying to fix this problem
+                        const float offset = static_cast<float>(i) * 1e-6f;
+
+                        const Vector2F newVelocity = object.getVelocity() * m_wallsDamping;
+                        if (object.m_posCurr.m_x < minX) {
+                            object.m_posCurr.m_x = minX + offset;
+                            object.m_posOld.m_x = object.m_posCurr.m_x + newVelocity.m_x;
+                            m_scene.getObjectStorage().removeObject(i);
+                        } else if (object.m_posCurr.m_x > maxX) {
+                            object.m_posCurr.m_x = maxX - offset;
+                            object.m_posOld.m_x = object.m_posCurr.m_x + newVelocity.m_x;
+                            m_scene.getObjectStorage().removeObject(i);
+                        }
+
+                        if (object.m_posCurr.m_y < minY) {
+                            object.m_posCurr.m_y = minY + offset;
+                            object.m_posOld.m_y = object.m_posCurr.m_y + newVelocity.m_y;
+                            m_scene.getObjectStorage().removeObject(i);
+                        } else if (object.m_posCurr.m_y > maxY) {
+                            object.m_posCurr.m_y = maxY - offset;
+                            object.m_posOld.m_y = object.m_posCurr.m_y + newVelocity.m_y;
+                            m_scene.getObjectStorage().removeObject(i);
+                        }
+                    }
+                        break;
                 }
             }, start, end);
         });
