@@ -19,9 +19,12 @@ private:
     std::unordered_map<std::type_index, std::set<int>> m_objectTypesIndexLists;
     int m_callbackIdCounter = 0;
     std::unordered_map<int, std::function<void(int, int)>> m_swapAndPopCallbacks;
+    std::mutex m_mutex;
 
     void markObjectForRemoval(int index) {
+        m_mutex.lock();
         m_objectsToRemove.insert(index);
+        m_mutex.unlock();
     }
 
     int getIndexByPtr(BaseObject *ptr) {
