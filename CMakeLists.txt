@@ -54,6 +54,7 @@ set(SOURCES src/main.cpp
         src/Engine/Scene/BaseStick/BaseStick.h
         src/Engine/Scene/StickStorage.h
         src/Engine/Modules/PerformanceTest/EmptyStick.h
+        src/Engine/Modules/PerformanceTest/Drawing.h
 )
 
 project(${PROJECT_NAME})
