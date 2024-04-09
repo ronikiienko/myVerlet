@@ -3,15 +3,15 @@
 namespace engineDefaults {
     extern const Vector2I windowSize = Vector2I::cart(800, 800);
 
-    extern const float rotationCircleRadius = 0.5;
+    extern const float rotationCircleRadius = 0.25;
 
-    extern const float objectsRadius = 2;
-    extern const float stickThickness = 1;
+    extern const float objectsRadius = 1;
+    extern const float stickThickness = 0.5;
     extern const float objectsRadiusSquared = objectsRadius * objectsRadius;
     extern const float twoObjectsRadius = objectsRadius + objectsRadius;
     extern const float twoObjectsRadiusSquared = twoObjectsRadius * twoObjectsRadius;
 
-    extern const Vector2I worldSize = Vector2I::cart(2400, 1800);
+    extern const Vector2I worldSize = Vector2I::cart(1200, 900);
     extern const int maxObjectsNum = 200000;
     extern const Vector2F gravity = Vector2F::cart(0, 0);
     extern const int physicsSubSteps = 8;
