@@ -111,8 +111,10 @@ public:
         m_sticksVertexArray.resize(m_scene.getStickStorage().getSticksCount() * 4);
         m_threadPool.dispatch(m_scene.getStickStorage().getSticksCount(), [this](int start, int end) {
             m_scene.getStickStorage().forEachBasicStickDetails([this](BasicStickDetails &stick, int index) {
-                Vector2F pos1 = m_scene.getObjectStorage().getBasicDetails(stick.m_id1).m_posCurr;
-                Vector2F pos2 = m_scene.getObjectStorage().getBasicDetails(stick.m_id2).m_posCurr;
+                BasicDetails& obj1 = m_scene.getObjectStorage().getBasicDetails(stick.m_id1);
+                BasicDetails& obj2 = m_scene.getObjectStorage().getBasicDetails(stick.m_id2);
+                Vector2F pos1 = obj1.m_posCurr;
+                Vector2F pos2 = obj2.m_posCurr;
 
                 Vector2F diff = pos2 - pos1;
                 Vector2F perp = diff.perpClockwise().normalize();
@@ -130,11 +132,17 @@ public:
                 m_sticksVertexArray[ind + 1].position = {p2.m_x, p2.m_y};
                 m_sticksVertexArray[ind + 2].position = {p3.m_x, p3.m_y};
                 m_sticksVertexArray[ind + 3].position = {p4.m_x, p4.m_y};
-
-                m_sticksVertexArray[ind].color = stick.m_color;
-                m_sticksVertexArray[ind + 1].color = stick.m_color;
-                m_sticksVertexArray[ind + 2].color = stick.m_color;
-                m_sticksVertexArray[ind + 3].color = stick.m_color;
+                if (obj1.m_isRemoved || obj2.m_isRemoved) {
+                    m_sticksVertexArray[ind].color = sf::Color(0, 0, 0, 0);
+                    m_sticksVertexArray[ind + 1].color = sf::Color(0, 0, 0, 0);
+                    m_sticksVertexArray[ind + 2].color = sf::Color(0, 0, 0, 0);
+                    m_sticksVertexArray[ind + 3].color = sf::Color(0, 0, 0, 0);
+                } else {
+                    m_sticksVertexArray[ind].color = stick.m_color;
+                    m_sticksVertexArray[ind + 1].color = stick.m_color;
+                    m_sticksVertexArray[ind + 2].color = stick.m_color;
+                    m_sticksVertexArray[ind + 3].color = stick.m_color;
+                }
             }, start, end);
         });
     }
