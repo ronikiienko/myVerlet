@@ -10,6 +10,7 @@ enum class DrawingMode {
     ERASING,
     BRIDGE,
     NONE,
+    MOVE
 };
 
 class Drawing {
@@ -25,18 +26,26 @@ private:
     DrawingMode m_drawingMode = DrawingMode::NONE;
     Vector2F m_bridgeStart;
     Vector2F m_bridgeEnd;
+    int m_movedObject = -1;
+    bool m_isInitiallyPinned = false;
 public:
     explicit Drawing(Scene &scene, InputBus& inputBus, RNGf& gen) : m_scene(scene), m_inputBus(inputBus), m_gen(gen) {
         m_keyPressHandle = m_inputBus.addEventListener(sf::Event::KeyPressed, [this](const sf::Event &event) {
-            std::cout << "Key pressed" << std::endl;
             if (event.key.code == sf::Keyboard::T) {
                 m_drawingMode = DrawingMode::CREATING;
+                std::cout << "Creating mode" << std::endl;
             } else if (event.key.code == sf::Keyboard::Y) {
                 m_drawingMode = DrawingMode::ERASING;
+                std::cout << "Erasing mode" << std::endl;
             } else if (event.key.code == sf::Keyboard::U) {
                 m_drawingMode = DrawingMode::BRIDGE;
+                std::cout << "Bridge mode" << std::endl;
             } else if (event.key.code == sf::Keyboard::I) {
                 m_drawingMode = DrawingMode::NONE;
+                std::cout << "None mode" << std::endl;
+            } else if (event.key.code == sf::Keyboard::O) {
+                m_drawingMode = DrawingMode::MOVE;
+                std::cout << "Move mode" << std::endl;
             }
         });
         m_mousePressHandle = m_inputBus.addEventListener(sf::Event::MouseButtonPressed, [this](const sf::Event &event) {
@@ -45,8 +54,21 @@ public:
                 if (m_drawingMode == DrawingMode::BRIDGE) {
                     m_bridgeStart = m_scene.getCamera().screenPosToWorldPos(
                             sf::Mouse::getPosition(m_scene.getCamera().getWindow()));
+                    m_isActive = true;
+                } else if (m_drawingMode == DrawingMode::MOVE) {
+                    Vector2F mousePos = m_scene.getCamera().screenPosToWorldPos(
+                            sf::Mouse::getPosition(m_scene.getCamera().getWindow()));
+                    m_scene.getObjectStorage().forEachBasicDetails([this, &mousePos](BasicDetails& object, int i){
+                        Vector2F dist = mousePos - object.m_posCurr;
+                        float distMagnitude = dist.magnitude();
+                        if (distMagnitude < engineDefaults::objectsRadius * 2) {
+                            m_movedObject = i;
+                        }
+                        m_isInitiallyPinned = object.m_isPinned;
+                    });
+                } else {
+                    m_isActive = true;
                 }
-                m_isActive = true;
             }
         });
         m_mouseReleaseHandle = m_inputBus.addEventListener(sf::Event::MouseButtonReleased, [this](const sf::Event &event) {
@@ -55,9 +77,14 @@ public:
                     float bridgeDensity = 10;
                     m_bridgeEnd = m_scene.getCamera().screenPosToWorldPos(
                             sf::Mouse::getPosition(m_scene.getCamera().getWindow()));
-                    spawnBridge(m_bridgeStart, m_bridgeEnd, 4, 4);
+                    spawnBridge(m_bridgeStart, m_bridgeEnd, 2, 1);
+                    m_isActive = false;
+                } else if (m_drawingMode == DrawingMode::MOVE && m_movedObject != -1) {
+                    m_scene.getObjectStorage().getBasicDetails(m_movedObject).m_isPinned = m_isInitiallyPinned;
+                    m_movedObject = -1;
+                } else {
+                    m_isActive = false;
                 }
-                m_isActive = false;
             }
         });
     }
@@ -116,6 +143,12 @@ public:
             } else if (m_drawingMode == DrawingMode::BRIDGE) {
 
             }
+        }
+        if (m_movedObject != -1) {
+            Vector2F mousePos = m_scene.getCamera().screenPosToWorldPos(
+                    sf::Mouse::getPosition(m_scene.getCamera().getWindow()));
+            m_scene.getObjectStorage().getBasicDetails(m_movedObject).setPosition(mousePos);
+            m_scene.getObjectStorage().getBasicDetails(m_movedObject).pin();
         }
     }
 };
