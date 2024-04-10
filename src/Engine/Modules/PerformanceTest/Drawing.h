@@ -67,8 +67,8 @@ public:
                         float distMagnitude = dist.magnitude();
                         if (distMagnitude < engineDefaults::objectsRadius) {
                             m_movedObject = i;
+                            m_isInitiallyPinned = object.m_isPinned;
                         }
-                        m_isInitiallyPinned = object.m_isPinned;
                     });
                 } else if (m_drawingMode == DrawingMode::PINNING){
                     Vector2F mousePos = m_scene.getCamera().screenPosToWorldPos(
