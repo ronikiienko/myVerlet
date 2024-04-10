@@ -29,6 +29,11 @@ public:
         setVelocity(getVelocity() + v);
     }
 
+    void setPosition(Vector2F pos) {
+        m_posCurr = pos;
+        m_posOld = pos;
+    }
+
     void accelerate(Vector2F a) {
         m_acceleration += a;
     }
