@@ -23,23 +23,27 @@ private:
 
     void constrainSticks() {
         m_scene.getStickStorage().forEachBasicStickDetails([this](BasicStickDetails& stick, int i) {
+
             BasicDetails &obj1 = m_scene.getObjectStorage().getBasicDetails(stick.m_id1);
             BasicDetails &obj2 = m_scene.getObjectStorage().getBasicDetails(stick.m_id2);
-            const Vector2 vectorBetween = obj1.m_posCurr - obj2.m_posCurr;
-            const float distanceBetween = vectorBetween.magnitude();
 
-            const float stretch = distanceBetween - stick.m_length;
-            if (stretch > stick.m_maxStretch) {
-                m_scene.getStickStorage().removeStick(i);
+            if (!obj1.m_isRemoved && !obj2.m_isRemoved) {
+                const Vector2 vectorBetween = obj1.m_posCurr - obj2.m_posCurr;
+                const float distanceBetween = vectorBetween.magnitude();
+
+                const float stretch = distanceBetween - stick.m_length;
+                if (stretch > stick.m_maxStretch) {
+                    m_scene.getStickStorage().removeStick(i);
+                }
+
+                const float diff = distanceBetween - stick.m_length;
+                const float moveRatio = (diff / distanceBetween) / 2;
+
+                const Vector2 offset = vectorBetween * moveRatio;
+
+                if (!obj1.m_isPinned) obj1.m_posCurr -= offset;
+                if (!obj2.m_isPinned) obj2.m_posCurr += offset;
             }
-
-            const float diff = distanceBetween - stick.m_length;
-            const float moveRatio = (diff / distanceBetween) / 2;
-
-            const Vector2 offset = vectorBetween * moveRatio;
-
-            if (!obj1.m_isPinned) obj1.m_posCurr -= offset;
-            if (!obj2.m_isPinned) obj2.m_posCurr += offset;
         });
     }
 
