@@ -10,7 +10,8 @@ enum class DrawingMode {
     ERASING,
     BRIDGE,
     NONE,
-    MOVE
+    MOVE,
+    PINNING
 };
 
 class Drawing {
@@ -46,6 +47,9 @@ public:
             } else if (event.key.code == sf::Keyboard::O) {
                 m_drawingMode = DrawingMode::MOVE;
                 std::cout << "Move mode" << std::endl;
+            } else if (event.key.code == sf::Keyboard::P) {
+                m_drawingMode = DrawingMode::PINNING;
+                std::cout << "Pinning mode" << std::endl;
             }
         });
         m_mousePressHandle = m_inputBus.addEventListener(sf::Event::MouseButtonPressed, [this](const sf::Event &event) {
@@ -61,12 +65,22 @@ public:
                     m_scene.getObjectStorage().forEachBasicDetails([this, &mousePos](BasicDetails& object, int i){
                         Vector2F dist = mousePos - object.m_posCurr;
                         float distMagnitude = dist.magnitude();
-                        if (distMagnitude < engineDefaults::objectsRadius * 2) {
+                        if (distMagnitude < engineDefaults::objectsRadius) {
                             m_movedObject = i;
                         }
                         m_isInitiallyPinned = object.m_isPinned;
                     });
-                } else {
+                } else if (m_drawingMode == DrawingMode::PINNING){
+                    Vector2F mousePos = m_scene.getCamera().screenPosToWorldPos(
+                            sf::Mouse::getPosition(m_scene.getCamera().getWindow()));
+                    m_scene.getObjectStorage().forEachBasicDetails([this, &mousePos](BasicDetails& object, int i){
+                        Vector2F dist = mousePos - object.m_posCurr;
+                        float distMagnitude = dist.magnitude();
+                        if (distMagnitude < engineDefaults::objectsRadius) {
+                            object.m_isPinned = !object.m_isPinned;
+                        }
+                    });
+                }else {
                     m_isActive = true;
                 }
             }
