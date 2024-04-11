@@ -2,7 +2,7 @@
 
 #include <typeindex>
 #include "../utils/SparseSet.h"
-#include "../BaseObject/BaseObject.h"
+#include "BaseObject/BaseObject.h"
 #include "../utils/Grid.h"
 #include <bits/shared_ptr.h>
 #include <set>

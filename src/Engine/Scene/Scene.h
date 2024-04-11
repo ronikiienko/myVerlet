@@ -4,7 +4,7 @@
 #include <bits/shared_ptr.h>
 #include <set>
 #include <typeindex>
-#include "../BaseObject/BaseObject.h"
+#include "BaseObject/BaseObject.h"
 #include "../EngineConsts.h"
 #include "../utils/Grid.h"
 #include "../Camera.h"

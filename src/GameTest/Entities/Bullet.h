@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../Engine/BaseObject/BaseObject.h"
+#include "../../Engine/Scene/BaseObject/BaseObject.h"
 #include "IDamageable.h"
 
 class Bullet : public BaseObject {

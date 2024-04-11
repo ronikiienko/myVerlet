@@ -1,5 +1,5 @@
 #include "BaseObject.h"
-#include "../Scene/Scene.h"
+#include "../Scene.h"
 
 //
 // Created by ronik on 29/01/2024.

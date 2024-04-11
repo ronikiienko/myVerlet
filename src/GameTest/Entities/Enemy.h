@@ -2,7 +2,7 @@
 
 #include <utility>
 
-#include "../../Engine/BaseObject/BaseObject.h"
+#include "../../Engine/Scene/BaseObject/BaseObject.h"
 #include "../../Engine/InputBus/InputBus.h"
 #include "IDamageable.h"
 #include "Food.h"

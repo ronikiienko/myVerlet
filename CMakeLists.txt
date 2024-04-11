@@ -6,7 +6,7 @@ set(SOURCES src/main.cpp
         src/Engine/utils/Vector.h
         src/Engine/Graphics.h
         src/Engine/Scene/Scene.h
-        src/Engine/BaseObject/BaseObject.h
+        src/Engine/Scene/BaseObject/BaseObject.h
         src/Engine/Physics.h
         src/Engine/utils/Rand.h
         src/Engine/utils/Rectangle.h
@@ -34,7 +34,7 @@ set(SOURCES src/main.cpp
         src/GameTest/Events.h
         src/Engine/Modules/Shooter.h
         src/Engine/Modules/PerformanceTest/PerformanceTest.h
-        src/Engine/BaseObject/BaseObject.cpp
+        src/Engine/Scene/BaseObject/BaseObject.cpp
         src/Engine/SoundManager/SoundManager.h
         src/Engine/SoundManager/SMHandle.h
         src/Engine/SoundManager/SMHandle.cpp
