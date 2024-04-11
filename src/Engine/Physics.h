@@ -31,14 +31,15 @@ private:
                 const Vector2 vectorBetween = obj1.m_posCurr - obj2.m_posCurr;
                 const float distanceBetween = vectorBetween.magnitude();
 
-                const float stretch = distanceBetween - stick.m_length;
-                if (stretch > stick.m_maxStretch) {
+                const float overstretchDistance = distanceBetween - stick.m_length;
+                const float stretchRatio = distanceBetween / stick.m_length;
+
+                stick.m_currentStretch = stretchRatio;
+                if (stretchRatio > stick.m_maxStretch) {
                     m_scene.getStickStorage().removeStick(i);
                 }
 
-                const float diff = distanceBetween - stick.m_length;
-                const float moveRatio = (diff / distanceBetween) / 2;
-
+                const float moveRatio = (overstretchDistance / distanceBetween) / 2;
                 const Vector2 offset = vectorBetween * moveRatio * stick.m_stiffness;
 
                 if (!obj1.m_isPinned) obj1.m_posCurr -= offset;

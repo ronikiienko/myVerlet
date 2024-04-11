@@ -12,6 +12,7 @@ public:
     float m_length;
     float m_maxStretch = 100;
     float m_stiffness = 1;
+    float m_currentStretch = 1;
     sf::Color m_color = sf::Color::White;
 
     BasicStickDetails(int id1, int id2, float length) : m_id1(id1), m_id2(id2), m_length(length){}

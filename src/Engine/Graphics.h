@@ -122,10 +122,13 @@ public:
 
                 const int ind = index * 4;
 
-                Vector2F p1 = pos1 + perp * engineDefaults::stickThickness / 2;
-                Vector2F p2 = pos2 + perp * engineDefaults::stickThickness / 2;
-                Vector2F p3 = pos2 - perp * engineDefaults::stickThickness / 2;
-                Vector2F p4 = pos1 - perp * engineDefaults::stickThickness / 2;
+                float currentHalfThickness = std::min(engineDefaults::stickThickness / stick.m_currentStretch, engineDefaults::stickThickness) / 2;
+                Vector2F thicknessPerp = perp * currentHalfThickness;
+
+                Vector2F p1 = pos1 + thicknessPerp;
+                Vector2F p2 = pos2 + thicknessPerp;
+                Vector2F p3 = pos2 - thicknessPerp;
+                Vector2F p4 = pos1 - thicknessPerp;
 
 
                 m_sticksVertexArray[ind].position = {p1.m_x, p1.m_y};
