@@ -11,11 +11,13 @@ enum class DrawingMode {
     BRIDGE,
     NONE,
     MOVE,
-    PINNING
+    PINNING,
+    EXPLOSION
 };
 
 class Drawing {
 private:
+    ExplosionHandler& m_explosionHandler;
     Scene &m_scene;
     InputBus &m_inputBus;
     IBHandle m_keyPressHandle;
@@ -30,7 +32,7 @@ private:
     int m_movedObject = -1;
     bool m_isInitiallyPinned = false;
 public:
-    explicit Drawing(Scene &scene, InputBus& inputBus, RNGf& gen) : m_scene(scene), m_inputBus(inputBus), m_gen(gen) {
+    explicit Drawing(Scene &scene, InputBus& inputBus, RNGf& gen, ExplosionHandler& explosionHandler) : m_scene(scene), m_inputBus(inputBus), m_gen(gen), m_explosionHandler(explosionHandler) {
         m_keyPressHandle = m_inputBus.addEventListener(sf::Event::KeyPressed, [this](const sf::Event &event) {
             if (event.key.code == sf::Keyboard::T) {
                 m_drawingMode = DrawingMode::CREATING;
@@ -50,6 +52,9 @@ public:
             } else if (event.key.code == sf::Keyboard::P) {
                 m_drawingMode = DrawingMode::PINNING;
                 std::cout << "Pinning mode" << std::endl;
+            } else if (event.key.code == sf::Keyboard::L) {
+                m_drawingMode = DrawingMode::EXPLOSION;
+                std::cout << "Explosion mode" << std::endl;
             }
         });
         m_mousePressHandle = m_inputBus.addEventListener(sf::Event::MouseButtonPressed, [this](const sf::Event &event) {
@@ -80,7 +85,11 @@ public:
                             object.m_isPinned = !object.m_isPinned;
                         }
                     });
-                }else {
+                } else if (m_drawingMode == DrawingMode::EXPLOSION) {
+                    Vector2F mousePos = m_scene.getCamera().screenPosToWorldPos(
+                            sf::Mouse::getPosition(m_scene.getCamera().getWindow()));
+                    m_explosionHandler.launch(mousePos, 2, 100);
+                } else {
                     m_isActive = true;
                 }
             }

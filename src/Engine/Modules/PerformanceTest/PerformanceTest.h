@@ -63,47 +63,18 @@ class PerformanceTest : public BaseLevel {
     RNGf m_gen{10};
     RandomPositionGenerator m_randomPositionGenerator{m_scene, m_gen};
     CameraControls m_cameraControls{m_scene, m_inputBus};
-    Drawing m_drawing{m_scene, m_inputBus, m_gen};
+    Drawing m_drawing{m_scene, m_inputBus, m_gen, m_explosionHandler};
 public:
     explicit PerformanceTest(LevelContext levelContext) : BaseLevel(levelContext, 200000, Vector2I::cart(1000, 1000),
                                                                     600) {
     }
 
     void v_onInit() override {
-        m_scene.setBoundaryType(BOUNDARY_TYPE::REMOVE);
-        m_scene.setGravity(Vector2F::cart(0, 0.01));
-//         spawn many triangles
-//        int numberOfTriangles = 10000;
-//        for (int i = 0; i < numberOfTriangles * 3; i++) {
-//            m_scene.getObjectStorage().addObject(EmptyObject{}, m_randomPositionGenerator.get());
-//        }
+//        m_scene.setGravity(Vector2F::cart(0, 0.01));
+        for (int i = 0; i < 150000; i++) {
+            m_scene.getObjectStorage().addObject(EmptyObject{}, m_randomPositionGenerator.get());
+        };
 //
-//        for (int i = 0; i < numberOfTriangles; i++) {
-//            m_scene.getStickStorage().addStick(EmptyStick{}, i * 3, i * 3 + 1, 20);
-//            m_scene.getStickStorage().addStick(EmptyStick{}, i * 3 + 1, i * 3 + 2, 20);
-//            m_scene.getStickStorage().addStick(EmptyStick{}, i * 3 + 2, i * 3, 20);
-//        }
-
-        // spawn cloth
-//        int clothSize = 50;
-//        for (int i = 0; i < clothSize; i++) {
-//            for (int j = 0; j < clothSize; j++) {
-//                m_scene.getObjectStorage().addObject(EmptyObject{}, Vector2F::cart(i * 20, j * 20));
-//            }
-//        }
-
-
-
-//        m_scene.setCollisionsEnabled(false);
-//        for (int i = 0; i < 60000; i++) {
-//            m_scene.getObjectStorage().addObject(EmptyObject{}, m_randomPositionGenerator.get());
-//        };
-//        m_scene.getStickStorage().addStick(EmptyStick{}, 0, 1, 20);
-//        m_scene.getStickStorage().addStick(EmptyStick{}, 1, 2, 20);
-//        m_scene.getStickStorage().addStick(EmptyStick{}, 2, 0, 20);
-//        for (int i = 1; i < 60000; i++) {
-//            m_scene.getStickStorage().addStick(EmptyStick{}, i, i - 1, 10);
-//        }
     }
 
     void v_onTick() override {
