@@ -39,7 +39,7 @@ private:
                 const float diff = distanceBetween - stick.m_length;
                 const float moveRatio = (diff / distanceBetween) / 2;
 
-                const Vector2 offset = vectorBetween * moveRatio;
+                const Vector2 offset = vectorBetween * moveRatio * stick.m_stiffness;
 
                 if (!obj1.m_isPinned) obj1.m_posCurr -= offset;
                 if (!obj2.m_isPinned) obj2.m_posCurr += offset;
