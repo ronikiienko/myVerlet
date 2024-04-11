@@ -12,7 +12,8 @@ enum class DrawingMode {
     NONE,
     MOVE,
     PINNING,
-    EXPLOSION
+    EXPLOSION,
+    CONNECTING
 };
 
 class Drawing {
@@ -31,6 +32,7 @@ private:
     Vector2F m_bridgeEnd;
     int m_movedObject = -1;
     bool m_isInitiallyPinned = false;
+    int m_firstConnected = -1;
 public:
     explicit Drawing(Scene &scene, InputBus& inputBus, RNGf& gen, ExplosionHandler& explosionHandler) : m_scene(scene), m_inputBus(inputBus), m_gen(gen), m_explosionHandler(explosionHandler) {
         m_keyPressHandle = m_inputBus.addEventListener(sf::Event::KeyPressed, [this](const sf::Event &event) {
@@ -55,6 +57,10 @@ public:
             } else if (event.key.code == sf::Keyboard::L) {
                 m_drawingMode = DrawingMode::EXPLOSION;
                 std::cout << "Explosion mode" << std::endl;
+            } else if (event.key.code == sf::Keyboard::K) {
+                m_drawingMode = DrawingMode::CONNECTING;
+                std::cout << "Connecting mode" << std::endl;
+                m_firstConnected = -1;
             }
         });
         m_mousePressHandle = m_inputBus.addEventListener(sf::Event::MouseButtonPressed, [this](const sf::Event &event) {
@@ -89,6 +95,30 @@ public:
                     Vector2F mousePos = m_scene.getCamera().screenPosToWorldPos(
                             sf::Mouse::getPosition(m_scene.getCamera().getWindow()));
                     m_explosionHandler.launch(mousePos, 2, 100);
+                } else if (m_drawingMode == DrawingMode::CONNECTING) {
+                    if (m_firstConnected == -1) {
+                        Vector2F mousePos = m_scene.getCamera().screenPosToWorldPos(
+                                sf::Mouse::getPosition(m_scene.getCamera().getWindow()));
+                        m_scene.getObjectStorage().forEachBasicDetails([this, &mousePos](BasicDetails& object, int i){
+                            Vector2F dist = mousePos - object.m_posCurr;
+                            float distMagnitude = dist.magnitude();
+                            if (distMagnitude < engineDefaults::objectsRadius) {
+                                m_firstConnected = i;
+                            }
+                        });
+                    } else {
+                        Vector2F mousePos = m_scene.getCamera().screenPosToWorldPos(
+                                sf::Mouse::getPosition(m_scene.getCamera().getWindow()));
+                        m_scene.getObjectStorage().forEachBasicDetails([this, &mousePos](BasicDetails& object, int i){
+                            Vector2F dist = mousePos - object.m_posCurr;
+                            float distMagnitude = dist.magnitude();
+                            if (distMagnitude < engineDefaults::objectsRadius) {
+                                float stickLength = (object.m_posCurr - m_scene.getObjectStorage().getBasicDetails(m_firstConnected).m_posCurr).magnitude();
+                                m_scene.getStickStorage().addStick(EmptyStick{}, m_firstConnected, i, stickLength);
+                                m_firstConnected = -1;
+                            }
+                        });
+                    }
                 } else {
                     m_isActive = true;
                 }
