@@ -3,15 +3,14 @@
 #include <unordered_map>
 #include <string>
 #include <stdexcept>
-#include "SFML/System/Clock.hpp"
-#include "SFML/Graphics/RenderWindow.hpp"
-#include "SFML/Graphics/Font.hpp"
-#include "SFML/Graphics/Text.hpp"
-#include "Scene/Scene.h"
+#include <chrono>
 
 class PerformanceMonitor {
 private:
-    std::unordered_map<std::string, sf::Clock> m_clocks;
+    using Clock = std::chrono::high_resolution_clock;
+    using TimePoint = std::chrono::time_point<Clock>;
+
+    std::unordered_map<std::string, TimePoint> m_clocks;
     std::unordered_map<std::string, long long> m_times;
     std::string m_string = "uninitialized";
 
@@ -44,19 +43,14 @@ public:
     }
 
     void start(const std::string &label) {
-        if (!m_clocks.count(label)) {
-            m_clocks.insert({label, sf::Clock{}});
-        }
-        sf::Clock &clock = m_clocks.find(label)->second;
-        clock.restart();
+        m_clocks[label] = Clock::now();
     }
 
     void end(const std::string &label) {
         if (!m_clocks.count(label)) {
             throw std::runtime_error("Trying to end timer that wasn't started (PerformanceMonitor)" + label);
         }
-        sf::Clock &clock = m_clocks.find(label)->second;
-        const long long elapsed = clock.restart().asMicroseconds();
+        const long long elapsed = std::chrono::duration_cast<std::chrono::microseconds>(Clock::now() - m_clocks[label]).count();
 
         if (!m_times.count(label)) {
             m_times.insert({label, 0.0f});
