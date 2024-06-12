@@ -30,6 +30,8 @@ struct Cell {
 
 struct IdGrid {
 private:
+    // when it's same cell, i probably perform unneeded operation
+    // when i run callback(id1, id2) and also callback(id2, id1)
     template<typename Callback>
     void eachInCellWithEachInAnotherCell(const Cell &cell1, const Cell &cell2, const Callback &callback) {
         for (int i = 0; i < cell1.activeCount; i++) {
